@@ -21,6 +21,10 @@ class TeamMarkdownDocumentBuilder:
         self.rows.append("# The plan\n")
         self.rows.append(plan_prompt.strip())
 
+    def append_team_member_subtitle(self):
+        self.rows.append("*Roles Needed & Example People*")
+        self.rows.append("")
+
     def append_role(self, entry: dict, role_index: int):
         self.rows.append(f"\n## {role_index}. {entry['category']}")
         if 'contract_type' in entry:
@@ -91,6 +95,7 @@ if __name__ == "__main__":
         team_review = json.load(f)
 
     builder2 = TeamMarkdownDocumentBuilder()
+    builder2.append_team_member_subtitle()
     builder2.append_plan_prompt(plan_prompt)
     builder2.append_separator()
     builder2.append_roles(roles_list)

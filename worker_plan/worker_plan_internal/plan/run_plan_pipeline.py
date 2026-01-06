@@ -2001,6 +2001,7 @@ class TeamMarkdownTask(PlanTask):
 
         # Combine the team members and the review into a Markdown document.
         builder = TeamMarkdownDocumentBuilder()
+        builder.append_team_member_subtitle()
         builder.append_roles(team_member_list)
         builder.append_separator()
         builder.append_full_review(review_team_json)

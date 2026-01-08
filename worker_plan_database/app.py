@@ -6,6 +6,7 @@ PROMPT> PLANEXE_WORKER_ID=1 python -m app.py
 """
 from datetime import UTC, datetime
 import os
+import shutil
 import sys
 import time
 import logging
@@ -610,6 +611,15 @@ def process_pending_tasks() -> bool:
         with app.app_context():
             WorkerItem.upsert_heartbeat(worker_id=WORKER_ID)
         return False # We didn't process a task. Sleep for a long time to avoid busy-waiting.
+    finally:
+        # Clean up the run_id_dir after the pipeline has completed and data is stored in the database.
+        # This prevents the "run" directory from accumulating old session data.
+        if run_id_dir.exists():
+            try:
+                shutil.rmtree(run_id_dir)
+                logger.info(f"Cleaned up run_id_dir: {run_id_dir!r}")
+            except Exception as cleanup_error:
+                logger.warning(f"Failed to clean up run_id_dir {run_id_dir!r}: {cleanup_error}")
 
 def startup_worker():
     with app.app_context():

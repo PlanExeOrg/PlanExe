@@ -160,3 +160,10 @@ I'm considering using mkdocs instead.
 
 Get rid of some of the many user prompt logging statements, so the log.txt is less noisy.
 These user prompts are saved to the `track_activity.jsonl` file already. So having them in the log.txt is redundant.
+
+
+## SSL when connecting with the database
+
+I can't afford the pro plan to have a dedicated Postgres server.
+Currently when connecting to Railway, it's via a TCP Proxy and it's unencrypted.
+Either upgrade to pro, or use SSL certificates within the "database_postgres" Dockerfile.

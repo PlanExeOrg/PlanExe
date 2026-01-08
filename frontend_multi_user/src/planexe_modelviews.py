@@ -23,10 +23,12 @@ class TaskItemView(ModelView):
         'progress_message',
         'user_id',
         'parameters',
+        'view_plan',
         'generated_report_html',
         'run_zip_snapshot',
     ]
     column_labels = {
+        'view_plan': 'View Plan',
         'generated_report_html': 'Report',
         'run_zip_snapshot': 'Run Zip',
     }
@@ -36,6 +38,9 @@ class TaskItemView(ModelView):
     column_formatters = {
         'id': lambda v, c, m, p: str(m.id)[:8] if m.id else '',
         'prompt': lambda v, c, m, p: m.prompt[:100] + '...' if m.prompt and len(m.prompt) > 100 else m.prompt,
+        'view_plan': lambda v, c, m, p: Markup(
+            f'<a href="/viewplan?run_id={m.id}" target="_blank">View</a>'
+        ) if m.generated_report_html else '—',
         'generated_report_html': lambda v, c, m, p: Markup(
             f'<a href="{url_for("download_task_report", task_id=str(m.id))}">Download ({len(m.generated_report_html.encode("utf-8")) / 1024:.1f} KB)</a>'
         ) if m.generated_report_html else '—',

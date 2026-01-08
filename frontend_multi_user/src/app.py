@@ -1049,33 +1049,6 @@ class MyFlaskApp:
                 message = "Exception, see log for details."
                 return render_template(template, topic=topic, output=None, error=message)
 
-        @self.app.route('/demo_eventsource')
-        @login_required
-        def demo_eventsource():
-            return render_template('demo_eventsource.html')
-
-        @self.app.route('/demo_eventsource/stream')
-        @login_required
-        def demo_eventsource_stream():
-            def event_stream():
-                start_time = time.time()
-                count = 0
-                try:
-                    while time.time() - start_time < 30:  # Run for 30 seconds
-                        time.sleep(1)  # Send an event every second
-                        count += 1
-                        # CRITICAL: Ensure you have two newlines at the end of each message
-                        yield f"data: Message number {count}\n\n"
-                    # Send a final message to indicate completion
-                    yield f"data: Stream completed after {count} messages\n\n"
-                except GeneratorExit:
-                    # Client disconnected, stop the stream
-                    logger.info("Client disconnected from demo_eventsource stream")
-                    return
-            response = Response(event_stream(), mimetype='text/event-stream')
-            response.headers['X-Accel-Buffering'] = 'no'  # Disable Nginx buffering
-            return response
-
     def _run_job(self, job: JobState):
         """Run the actual job in a subprocess"""
         

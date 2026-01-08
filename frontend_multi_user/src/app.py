@@ -1076,69 +1076,6 @@ class MyFlaskApp:
             response.headers['X-Accel-Buffering'] = 'no'  # Disable Nginx buffering
             return response
 
-        @self.app.route('/troubleshoot_truncation_echo', methods=['POST'])
-        @nocache
-        def troubleshoot_truncation_echo():
-            """Echo endpoint to test parameter truncation. Returns JSON with parameter's echoed values."""
-            try:
-                # Gather the parameters from the request.form (POST) or JSON
-                if request.is_json:
-                    request_data = request.get_json()
-                    if request_data is None:
-                        logger.error(f"endpoint /troubleshoot_truncation_echo. Invalid JSON data received")
-                        return jsonify({"error": "Invalid JSON data"}), 400
-                    parameters = request_data
-                else:
-                    # Handle form data
-                    request_form = request.form
-                    parameters = {key: value for key, value in request_form.items()}
-                
-                # Calculate lengths for all parameters
-                result_byte_length = {}
-                result_echo = {}
-                
-                # Copy all parameters to result_echo first
-                result_echo = parameters.copy()
-                
-                # Only process string values for byte length calculation
-                for key, value in parameters.items():
-                    if not isinstance(value, str):
-                        continue
-                    
-                    # Calculate byte length using UTF-8 encoding, handling invalid surrogates
-                    try:
-                        byte_length = len(value.encode('utf-8'))
-                    except UnicodeEncodeError as e:
-                        # Handle invalid surrogate characters by replacing them
-                        logger.warning(f"Invalid surrogate character detected in parameter {key}: {e}")
-                        safe_value = value.encode('utf-8', errors='replace').decode('utf-8')
-                        byte_length = len(safe_value.encode('utf-8'))
-                        result_echo[key] = safe_value
-                    
-                    should_override = False
-                    range_start = 4000
-                    range_end = 9000
-                    override_value = 1234
-                    if should_override and byte_length >= range_start and byte_length <= range_end:
-                        logger.info(f"endpoint /troubleshoot_truncation_echo. Parameter {key} is between {range_start} and {range_end} bytes. Simulating truncation by truncating content to {override_value} bytes.")
-                        byte_length = override_value
-                        result_echo[key] = value[:byte_length]
-
-                    result_byte_length[key] = byte_length
-                
-                logger.info(f"endpoint /troubleshoot_truncation_echo. Parameter lengths: {result_byte_length}")
-                return jsonify(result_echo), 200
-                
-            except Exception as e:
-                logger.error(f"Error in troubleshoot_truncation_echo: {e}")
-                return jsonify({"error": str(e)}), 500
-
-        @self.app.route('/troubleshoot_truncation', methods=['GET'])
-        @nocache
-        def troubleshoot_truncation():
-            """UI endpoint to test if form/json parameters gets truncated around 4000 bytes by the server. However no truncation was detected. The test is done by gradually increasing content length."""
-            return render_template('troubleshoot_truncation.html')
-
     def _run_job(self, job: JobState):
         """Run the actual job in a subprocess"""
         

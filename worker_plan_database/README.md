@@ -16,3 +16,23 @@ Subclass of the `worker_plan` service that runs the PlanExe pipeline with a Post
 - Logs stream to stdout with [12-factor style logging](https://12factor.net/logs). Configure with `PLANEXE_LOG_LEVEL` (defaults to `INFO`).
 - Volumes mounted in compose: `./run` (pipeline output), `.env`, `llm_config.json`
 - Entrypoint: `python -m worker_plan_database.app`
+
+## Run locally with a venv
+
+For a faster edit/run loop without Docker. Work from inside `worker_plan_database` so its dependencies stay isolated:
+
+```bash
+cd worker_plan_database
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -e ../worker_plan
+pip install -r requirements.txt
+export PYTHONPATH=$PWD/..:$PYTHONPATH
+export PLANEXE_WORKER_ID=local
+python -m worker_plan_database.app
+```
+
+Run `deactivate` when you are done with the venv.
+
+The `PYTHONPATH` addition allows imports of `database_api` and `worker_plan_database` modules. The `pyrightconfig.json` configures the same paths for editor/IDE support.

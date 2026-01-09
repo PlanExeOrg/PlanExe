@@ -1,0 +1,19 @@
+{
+  "venvPath": ".",
+  "venv": ".venv",
+  "extraPaths": [
+    "..",
+    "../worker_plan",
+    "src"
+  ],
+  "executionEnvironments": [
+    {
+      "root": ".",
+      "extraPaths": [
+        "..",
+        "../worker_plan",
+        "src"
+      ]
+    }
+  ]
+}

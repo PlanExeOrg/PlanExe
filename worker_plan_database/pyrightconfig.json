@@ -1,18 +1,6 @@
 {
-  "pythonVersion": "3.13",
-  "venvPath": ".",
-  "venv": ".venv",
   "extraPaths": [
     "../worker_plan",
     ".."
-  ],
-  "executionEnvironments": [
-    {
-      "root": ".",
-      "extraPaths": [
-        "../worker_plan",
-        ".."
-      ]
-    }
   ]
 }

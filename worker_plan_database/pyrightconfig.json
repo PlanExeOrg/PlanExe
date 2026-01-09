@@ -1,5 +1,6 @@
 {
-  "venvPath": ".",
+  "pythonVersion": "3.13",
+  "venvPath": "/Users/neoneye/git/PlanExeGroup/PlanExe/worker_plan_database",
   "venv": ".venv",
   "extraPaths": [
     "../worker_plan",

@@ -2,8 +2,7 @@
 
 I assume that you are a python developer.
 
-- The `Gradio` UI is primary UI for PlanExe. This is the recommended way to use PlanExe.
-- The `Flask` UI is a new UI that I'm making for PlanExe. It's work in progress and is currently less capable than the `Gradio` UI.
+You need several open terminals to do development on this project.
 
 ### Step 1 - Clone repo
 
@@ -11,52 +10,31 @@ I assume that you are a python developer.
 git clone https://github.com/neoneye/PlanExe.git
 ```
 
-### Step 2 - Create and activate a virtual environment.
+### Step 2 - `open_dir_server`
 
-You have multiple options.
+In a new terminal: 
+Follow the [`open_dir_server`](../open_dir_server/README.md) instructions.
 
-#### Option 2A - macOS or Linux
+### Step 3 - `worker_plan`
 
-```bash
-cd PlanExe
-python3 -m venv venv
-source venv/bin/activate
+In a new terminal: 
+Follow the [`worker_plan`](../worker_plan/README.md) instructions.
+
+### Step 4 - `frontend_single_user`
+
+In a new terminal: 
+Follow the [`frontend_single_user`](../frontend_single_user/README.md) instructions.
+
+### Step 5 - Tests
+
+In a new terminal: 
+Run the tests to ensure that the project works correctly.
+```
+PROMPT> python test.py
+snip lots of output snip
+Ran 117 tests in 0.059s
+
+OK
 ```
 
-#### Option 2B - Windows
-
-```bash
-cd PlanExe
-python3 -m venv venv
-.venv\Scripts\activate
-```
-
-### Step 3 - Install PlanExe's UI
-
-You have multiple options.
-
-#### Option 3A - Install Gradio UI
-
-```bash
-(venv) pip install '.[gradio-ui]'
-```
-
-#### Option 3C - Install everything for non-developers
-
-```bash
-(venv) pip install '.[gradio-ui]'
-```
-
-#### Option 3D - Install everything for a developer
-
-```bash
-(venv) pip install -e '.[gradio-ui]'
-```
-
-### Step 4 - Running PlanExe
-
-```bash
-(venv) python -m worker_plan_internal.plan.app_text2plan
-```
-
-Follow any on-screen instructions or open the specified URL in your web browser.
+### Now PlanExe have been installed.

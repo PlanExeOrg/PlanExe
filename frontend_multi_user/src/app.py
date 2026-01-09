@@ -614,7 +614,7 @@ class MyFlaskApp:
         if env_debug is not None:
             debug = env_debug.lower() in ("1", "true", "yes", "on")
         host = os.environ.get("PLANEXE_FRONTEND_MULTIUSER_HOST", host)
-        port_str = os.environ.get("PLANEXE_FRONTEND_MULTIUSER_APP_PORT") or os.environ.get("PLANEXE_FRONTEND_MULTIUSER_PORT")
+        port_str = os.environ.get("PLANEXE_FRONTEND_MULTIUSER_PORT")
         if port_str:
             port = int(port_str)
         self.app.run(debug=debug, host=host, port=port)

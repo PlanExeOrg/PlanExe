@@ -28,10 +28,6 @@ source .venv/bin/activate
 pip install --upgrade pip
 pip install -e .
 export PYTHONPATH=$PWD/..:$PWD/../worker_plan:$PYTHONPATH
-export PLANEXE_FRONTEND_MULTIUSER_DB_HOST=localhost
-export PLANEXE_FRONTEND_MULTIUSER_DB_PORT=${PLANEXE_POSTGRES_PORT:-5432}
-export PLANEXE_FRONTEND_MULTIUSER_ADMIN_USERNAME=username
-export PLANEXE_FRONTEND_MULTIUSER_ADMIN_PASSWORD=password
 python src/app.py
 ```
 

@@ -21,9 +21,12 @@ logger = logging.getLogger(__name__)
 app = FastAPI(title="PlanExe Host Opener", version="0.1.0")
 
 RUN_BASE_ENV = os.environ.get("PLANEXE_HOST_RUN_DIR")
-if not RUN_BASE_ENV:
-    raise RuntimeError("PLANEXE_HOST_RUN_DIR must be set to the host run directory.")
-ALLOWED_BASE = Path(RUN_BASE_ENV).expanduser().resolve()
+if RUN_BASE_ENV:
+    ALLOWED_BASE = Path(RUN_BASE_ENV).expanduser().resolve()
+else:
+    # Default to ../worker_plan/run relative to this file (i.e., PlanExe/worker_plan/run)
+    ALLOWED_BASE = (Path(__file__).parent.parent / "worker_plan" / "run").resolve()
+    logger.info("PLANEXE_HOST_RUN_DIR not set, defaulting to %s", ALLOWED_BASE)
 
 HOST = os.environ.get("PLANEXE_OPEN_DIR_SERVER_HOST", "127.0.0.1")
 PORT = int(os.environ.get("PLANEXE_OPEN_DIR_SERVER_PORT", "5100"))

@@ -22,7 +22,7 @@ python app.py
 Environment variables (`PLANEXE_` prefixed):
 - `PLANEXE_OPEN_DIR_SERVER_HOST` (default `127.0.0.1`)
 - `PLANEXE_OPEN_DIR_SERVER_PORT` (default `5100`)
-- `PLANEXE_HOST_RUN_DIR`: required; only allow opening paths under this directory.
+- `PLANEXE_HOST_RUN_DIR`: optional; only allow opening paths under this directory. Defaults to `PlanExe/worker_plan/run`.
 
 Frontend configuration:
 - Set `PLANEXE_OPEN_DIR_SERVER_URL` so the container can reach the host service (e.g., `http://host.docker.internal:5100`).

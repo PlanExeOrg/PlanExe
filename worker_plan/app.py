@@ -494,7 +494,7 @@ def start_background_tasks() -> None:
 
 if __name__ == "__main__":
     import uvicorn
-    from worker_plan_internal.utils.planexe_dotenv import PlanExeDotEnv
+    from worker_plan_api.planexe_dotenv import PlanExeDotEnv
 
     # Load .env file if available and update os.environ before reading config
     dotenv = PlanExeDotEnv.load()

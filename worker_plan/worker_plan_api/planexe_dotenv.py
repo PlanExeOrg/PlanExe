@@ -1,7 +1,7 @@
 """
 Load PlanExe's environment, combining the OS environment and optional .env file values.
 
-PROMPT> python -m worker_plan_internal.utils.planexe_dotenv
+PROMPT> python -m worker_plan_api.planexe_dotenv
 """
 from dataclasses import dataclass
 import os
@@ -55,8 +55,8 @@ class PlanExeDotEnv:
         count_after = len(os.environ)
         logger.debug(f"PlanExeDotEnv.update_os_environ() Updated os.environ with the .env file content. number of items before: {count_before}, number of items after: {count_after}")
 
-    def get(self, key: str) -> Optional[str]:
-        return self.dotenv_dict.get(key)
+    def get(self, key: str, default: Optional[str] = None) -> Optional[str]:
+        return self.dotenv_dict.get(key, default)
 
     def get_absolute_path_to_file(self, key: str) -> Optional[Path]:
         """

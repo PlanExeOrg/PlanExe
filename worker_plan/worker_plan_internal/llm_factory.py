@@ -5,8 +5,8 @@ PROMPT> python -m worker_plan_internal.llm_factory
 """
 import logging
 from typing import Optional, Any
-from worker_plan_internal.utils.planexe_dotenv import PlanExeDotEnv
-from worker_plan_internal.utils.planexe_config import PlanExeConfig, PlanExeConfigError
+from worker_plan_api.planexe_dotenv import PlanExeDotEnv
+from worker_plan_api.planexe_config import PlanExeConfig, PlanExeConfigError
 from worker_plan_internal.utils.planexe_llmconfig import PlanExeLLMConfig
 from llama_index.core.llms.llm import LLM
 # from llama_index.llms.mistralai import MistralAI

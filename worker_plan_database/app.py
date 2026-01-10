@@ -123,7 +123,7 @@ try:
     from worker_plan_api.start_time import StartTime
     from worker_plan_api.plan_file import PlanFile
     from worker_plan_internal.plan.filenames import FilenameEnum
-    from worker_plan_internal.utils.planexe_dotenv import PlanExeDotEnv
+    from worker_plan_api.planexe_dotenv import PlanExeDotEnv
     from worker_plan_internal.llm_util.llm_executor import PipelineStopRequested
     from worker_plan_internal.llm_util.track_activity import TrackActivity
     from worker_plan_internal.plan.filenames import ExtraFilenameEnum

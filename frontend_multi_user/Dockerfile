@@ -10,7 +10,6 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 WORKDIR /app
 
 # Copy application code and supporting files
-COPY worker_plan/worker_plan_internal /app/worker_plan_internal
 COPY worker_plan/worker_plan_api /app/worker_plan_api
 COPY database_api /app/database_api
 COPY frontend_multi_user /app/frontend_multi_user

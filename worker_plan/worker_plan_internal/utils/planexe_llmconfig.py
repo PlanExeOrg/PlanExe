@@ -7,8 +7,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict
 import json
-from worker_plan_internal.utils.planexe_config import PlanExeConfig
-from worker_plan_internal.utils.planexe_dotenv import PlanExeDotEnv
+from worker_plan_api.planexe_config import PlanExeConfig
+from worker_plan_api.planexe_dotenv import PlanExeDotEnv
 import logging
 
 logger = logging.getLogger(__name__)

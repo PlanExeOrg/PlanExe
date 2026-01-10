@@ -494,5 +494,14 @@ def start_background_tasks() -> None:
 
 if __name__ == "__main__":
     import uvicorn
+    from worker_plan_internal.utils.planexe_dotenv import PlanExeDotEnv
 
-    uvicorn.run("worker_plan.app:app", host="0.0.0.0", port=8000, reload=False)
+    # Load .env file if available and update os.environ before reading config
+    dotenv = PlanExeDotEnv.load()
+    dotenv.update_os_environ()
+
+    host = os.environ.get("PLANEXE_WORKER_HOST", "0.0.0.0")
+    port = int(os.environ.get("PLANEXE_WORKER_PORT", "8000"))
+
+    logger.info("Starting worker_plan on %s:%s", host, port)
+    uvicorn.run("worker_plan.app:app", host=host, port=port, reload=False)

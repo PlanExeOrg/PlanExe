@@ -16,10 +16,10 @@ source .venv/bin/activate
 pip install --upgrade pip
 pip install -e .
 export PYTHONPATH=$PWD/..:$PYTHONPATH  # ensure the local package (sibling folder name worker_plan) is on the path
-export PLANEXE_CONFIG_PATH=$(dirname "$(pwd)")
-export PLANEXE_RUN_DIR=$(dirname "$(pwd)")/run
-.venv/bin/python -m uvicorn worker_plan.app:app --host localhost --port 8000
+python -m worker_plan.app
 ```
+
+The app reads configuration from the `.env` file (located in the project root or `PLANEXE_CONFIG_PATH`). Host and port default to `localhost:8000` and can be overridden via `PLANEXE_WORKER_HOST` and `PLANEXE_WORKER_PORT`.
 
 The frontend can then point at `http://localhost:8000` via `PLANEXE_WORKER_PLAN_URL`.
 
@@ -34,6 +34,8 @@ If you must stay on Python 3.14, expect source builds and potential failures; ex
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
+| `PLANEXE_WORKER_HOST` | `0.0.0.0` | Host address the worker binds to (only when running via `python -m worker_plan.app`). |
+| `PLANEXE_WORKER_PORT` | `8000` | Port the worker listens on (only when running via `python -m worker_plan.app`). |
 | `PLANEXE_RUN_DIR` | `run` | Directory under which run output folders are created. |
 | `PLANEXE_HOST_RUN_DIR` | *(unset)* | Optional host path base returned in `display_run_dir` to hint where runs live on the host. |
 | `PLANEXE_CONFIG_PATH` | `.` | Working directory for the pipeline; used as the `cwd` when spawning `worker_plan_internal.plan.run_plan_pipeline`. |

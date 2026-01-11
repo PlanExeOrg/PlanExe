@@ -69,30 +69,21 @@ psql -h localhost -p 5433 -U planexe -d planexe
 - Database: Postgres runs in `database_postgres` and listens on host `${PLANEXE_POSTGRES_PORT:-5432}` mapped to container `5432`; data is persisted in the named volume `database_postgres_data`.
 - Multiuser UI: binds to container port `5000`, exposed on host `${PLANEXE_FRONTEND_MULTIUSER_PORT:-5001}`.
 
-## One-shot env setup (avoid manual exports)
-Run once per terminal session to emit exports for `PLANEXE_OPEN_DIR_SERVER_URL` and related values:
-```bash
-eval "$(python setup_env.py)"
-```
-This keeps `.env` reserved for secrets while still seeding the shell for Docker commands.
-
 ## Host opener (Open Output Dir)
-Because Docker containers cannot launch host apps, the `Open Output Dir` button needs a host-side service:
+Because Docker containers cannot launch host apps, the `Open Output Dir` button needs a host-side service.
+
+Set these environment variables before starting:
+- `PLANEXE_OPEN_DIR_SERVER_URL` so the container can reach the host opener:
+  - macOS/Windows (Docker Desktop): `http://host.docker.internal:5100`
+  - Linux: `http://172.17.0.1:5100` (or add `host.docker.internal` pointing to the bridge IP).
+- `PLANEXE_HOST_RUN_DIR`: optional; defaults to `PlanExe/run` on the host. Set an absolute path if you relocate the run directory.
 
 1) Start host opener **before** Docker (on the host):
 ```bash
-eval "$(python setup_env.py)"
 cd open_dir_server
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 python app.py
 ```
-2) Configure the frontend container to call it:
-- Set `PLANEXE_OPEN_DIR_SERVER_URL` so the container can reach the host opener (containers cannot guess this URL):
-  - macOS/Windows (Docker Desktop): `http://host.docker.internal:5100`
-  - Linux: often `http://172.17.0.1:5100` or add `host.docker.internal` in `/etc/hosts` pointing to the docker bridge IP.
-  - If you override host/port for the opener, reflect that in the URL.
-- Provide the variable via your shell env, `.env`, or docker compose environment for `frontend_single_user`.
-  - macOS (zsh default shell): `export PLANEXE_OPEN_DIR_SERVER_URL=http://host.docker.internal:5100` then `docker compose up`
-  - macOS example (`.env`): add `PLANEXE_OPEN_DIR_SERVER_URL=http://host.docker.internal:5100` then `docker compose up`
+2) Provide `PLANEXE_OPEN_DIR_SERVER_URL` via your shell env, `.env`, or docker compose environment for `frontend_single_user`.

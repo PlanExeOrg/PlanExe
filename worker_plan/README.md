@@ -11,11 +11,11 @@ For a faster edit/run loop without Docker. Work from inside `worker_plan` so its
 
 ```bash
 cd worker_plan
-python3.13 -m venv .venv  # or your Python 3.13 path
+python3.13 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
 pip install -e .
-export PYTHONPATH=$PWD/..:$PYTHONPATH  # ensure the local package (sibling folder name worker_plan) is on the path
+export PYTHONPATH=$PWD/..:$PYTHONPATH
 python -m worker_plan.app
 ```
 

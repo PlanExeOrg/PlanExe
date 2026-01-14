@@ -223,11 +223,20 @@ services:
       PLANEXE_POSTGRES_DB: ${PLANEXE_POSTGRES_DB:-planexe}
       PLANEXE_POSTGRES_USER: ${PLANEXE_POSTGRES_USER:-planexe}
       PLANEXE_POSTGRES_PASSWORD: ${PLANEXE_POSTGRES_PASSWORD:-planexe}
+      PLANEXE_MCP_HTTP_HOST: "0.0.0.0"
+      PLANEXE_MCP_HTTP_PORT: "8001"
+      PLANEXE_MCP_API_KEY: ${PLANEXE_MCP_API_KEY:-}
     volumes:
       - ./run:/app/run
-    stdin_open: true
-    tty: true
+    ports:
+      - "${PLANEXE_MCP_HTTP_PORT:-8001}:8001"
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/healthcheck').read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
 
 volumes:
   database_postgres_data:

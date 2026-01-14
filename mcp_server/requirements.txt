@@ -5,3 +5,5 @@ psycopg2-binary>=2.9.10
 python-dotenv>=1.0.0
 sqlalchemy-utils>=0.41.1
 pydantic>=2.0.0
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0

@@ -13,17 +13,85 @@ This MCP server provides a standardized interface for AI agents and developer to
 - **Artifact Management**: List, read, and write artifacts (plans, reports, etc.)
 - **Event Streaming**: Subscribe to execution events
 
-## Docker Usage
+## Docker Usage (Recommended)
 
-Build and run the MCP server:
+Build and run the MCP server with HTTP endpoints:
 
 ```bash
 docker compose up --build mcp_server
 ```
 
-The MCP server communicates over stdio (standard input/output) following the MCP protocol. Configure your MCP client to connect to this server.
+The MCP server exposes HTTP endpoints on port `8001` (or `${PLANEXE_MCP_HTTP_PORT}`). Set `PLANEXE_MCP_API_KEY` in your `.env` file or environment to enable API key authentication.
+
+### Connecting via HTTP/URL
+
+After starting with Docker, configure your MCP client (e.g., LM Studio) to connect via HTTP:
+
+**Local Docker (development):**
+
+```json
+{
+  "mcpServers": {
+    "planexe": {
+      "url": "http://localhost:8001/mcp",
+      "headers": {
+        "X-API-Key": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+**Railway/Cloud deployment:**
+
+```json
+{
+  "mcpServers": {
+    "planexe": {
+      "url": "https://your-app.up.railway.app/mcp",
+      "headers": {
+        "X-API-Key": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+**Alternative header format** (also supported):
+
+```json
+{
+  "mcpServers": {
+    "planexe": {
+      "url": "https://your-app.up.railway.app/mcp",
+      "headers": {
+        "API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+Set `PLANEXE_MCP_API_KEY` to the same value you use in the `X-API-Key` or `API_KEY` header.
+
+### Available HTTP Endpoints
+
+- `POST /mcp` - Main MCP endpoint (recommended)
+- `POST /mcp/tools/call` - Alternative endpoint for tool calls
+- `GET /mcp/tools` - List available tools
+- `GET /healthcheck` - Health check endpoint
+- `GET /docs` - OpenAPI documentation (Swagger UI)
 
 ## Environment Variables
+
+### HTTP Server Configuration
+
+- `PLANEXE_MCP_API_KEY`: **Required for production**. API key for authentication. Clients must provide this in the `X-API-Key` header.
+- `PLANEXE_MCP_HTTP_HOST`: HTTP server host (default: `0.0.0.0`)
+- `PLANEXE_MCP_HTTP_PORT`: HTTP server port (default: `8001`). Railway will override with `PORT` env var.
+- `PORT`: Railway-provided port (takes precedence over `PLANEXE_MCP_HTTP_PORT`)
+
+### Database Configuration
 
 The MCP server uses the same database configuration as other PlanExe services:
 
@@ -59,9 +127,9 @@ The MCP server maps MCP concepts to PlanExe's database models:
 
 The server reads task state and progress from the database, and manages artifacts in the shared run directory that `worker_plan_database` uses.
 
-## Connecting from LM Studio (or other MCP clients)
+## Connecting via stdio (Local Development)
 
-The MCP server communicates over stdio. To connect from LM Studio or other MCP clients, you need to run it locally (outside Docker).
+For local development, you can run the MCP server over stdio instead of HTTP. This is useful for testing but requires local Python setup.
 
 ### Setup
 
@@ -207,8 +275,13 @@ export PYTHONPATH=$PWD/..:$PYTHONPATH
 python -m mcp_server.app
 ```
 
+## Railway Deployment
+
+See `railway.md` for Railway-specific deployment instructions. The server automatically detects Railway's `PORT` environment variable and binds to it.
+
 ## Notes
 
 - The MCP server communicates with `worker_plan_database` indirectly via the database. It doesn't make HTTP calls.
 - Artifact writes are rejected while a run is active (strict policy per spec).
-- Session IDs use the format `pxe_{task_uuid}` for compatibility.
+- Session IDs use the format `pxe_{YYYY_MM_DD}__{short_uuid}` for compatibility.
+- **Security**: Always set `PLANEXE_MCP_API_KEY` in production deployments to prevent unauthorized access.

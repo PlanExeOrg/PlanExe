@@ -22,4 +22,5 @@ RUN set -eux; \
 # Ensure output directory exists (mounted in docker-compose).
 RUN mkdir -p /app/run
 
-CMD ["python", "-m", "mcp_server.app"]
+# Default to HTTP server mode (can be overridden with PLANEXE_MCP_MODE env var)
+CMD ["python", "-m", "mcp_server.http_server"]

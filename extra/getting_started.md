@@ -4,9 +4,10 @@ This guide shows new users how to launch the `frontend_single_user` UI with Dock
 
 ## 1. Prerequisites
 
-Install Docker with Docker Compose.
+Install [Docker](https://www.docker.com/).
 
 Create an account on [OpenRouter](https://openrouter.ai/) and top up around 5 USD in credits (paid models works, the free models are unreliable).
+It cost around 0.1 USD to generate a plan, when using PlanExe's default settings.
 
 ## 2. Clone the repo
 ```bash

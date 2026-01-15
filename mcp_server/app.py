@@ -20,7 +20,7 @@ from typing import Any, Optional
 from urllib.parse import quote_plus
 from io import BytesIO
 import httpx
-from sqlalchemy import cast
+from sqlalchemy import cast, inspect, text
 from sqlalchemy.dialects.postgresql import JSONB
 
 # Load .env file early
@@ -51,7 +51,7 @@ except ImportError as e:
 from database_api.planexe_db_singleton import db
 from database_api.model_taskitem import TaskItem, TaskState
 from database_api.model_event import EventItem, EventType
-from flask import Flask
+from flask import Flask, has_app_context
 
 # Initialize Flask app for database access
 app = Flask(__name__)
@@ -79,6 +79,18 @@ else:
 app.config['SQLALCHEMY_DATABASE_URI'] = sqlalchemy_database_uri
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 280, 'pool_pre_ping': True}
 db.init_app(app)
+
+def ensure_taskitem_stop_columns() -> None:
+    insp = inspect(db.engine)
+    columns = {col["name"] for col in insp.get_columns("task_item")}
+    with db.engine.begin() as conn:
+        if "stop_requested" not in columns:
+            conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS stop_requested BOOLEAN"))
+        if "stop_requested_timestamp" not in columns:
+            conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS stop_requested_timestamp TIMESTAMP"))
+
+with app.app_context():
+    ensure_taskitem_stop_columns()
 
 # MCP Server setup
 mcp_server = Server("planexe-mcp-server")
@@ -136,8 +148,7 @@ class SessionEventsRequest(BaseModel):
 # Helper functions
 def find_task_by_session_id(session_id: str) -> Optional[TaskItem]:
     """Find TaskItem by session_id stored in parameters."""
-    with app.app_context():
-        # Search for task with matching _mcp_session_id in parameters
+    def _query() -> Optional[TaskItem]:
         query = db.session.query(TaskItem)
         if db.engine.dialect.name == "postgresql":
             tasks = query.filter(
@@ -150,6 +161,11 @@ def find_task_by_session_id(session_id: str) -> Optional[TaskItem]:
         if tasks:
             return tasks[0]
         return None
+
+    if has_app_context():
+        return _query()
+    with app.app_context():
+        return _query()
 
 def get_task_id_for_session(session_id: str) -> Optional[str]:
     """Get the task_id (run_id) for a session."""
@@ -449,6 +465,8 @@ async def handle_session_start(arguments: dict[str, Any]) -> list[TextContent]:
         task.progress_percentage = 0.0
         task.progress_message = "Starting..."
         task.last_seen_timestamp = datetime.now(UTC)
+        task.stop_requested = False
+        task.stop_requested_timestamp = None
         db.session.commit()
         
         run_id = f"run_{str(task.id).replace('-', '_')}"
@@ -487,6 +505,8 @@ async def handle_session_status(arguments: dict[str, Any]) -> list[TextContent]:
         
         run_id = f"run_{str(task.id).replace('-', '_')}"
         state = get_task_state_mapping(task.state)
+        if task.state == TaskState.processing and task.stop_requested:
+            state = "stopping"
         
         # Collect artifacts from worker_plan
         run_id = get_task_id_for_session(session_id)
@@ -543,12 +563,12 @@ async def handle_session_stop(arguments: dict[str, Any]) -> list[TextContent]:
                 text=json.dumps({"error": {"code": "SESSION_NOT_FOUND", "message": f"Session not found: {session_id}"}})
             )]
         
-        # For now, we can't actually stop a running task (worker_plan_database manages that)
-        # We mark it as failed or set a flag
-        if task.state == TaskState.processing:
-            # In a real implementation, we'd signal the worker to stop
-            # For now, we'll just note that stop was requested
-            logger.info(f"Stop requested for session {session_id}, but worker_plan_database manages task lifecycle")
+        if task.state in (TaskState.pending, TaskState.processing):
+            task.stop_requested = True
+            task.stop_requested_timestamp = datetime.now(UTC)
+            task.progress_message = "Stop requested by user."
+            db.session.commit()
+            logger.info("Stop requested for session %s; stop flag set on task %s.", session_id, task.id)
         
         response = {
             "state": "stopped",
@@ -582,6 +602,8 @@ async def handle_session_resume(arguments: dict[str, Any]) -> list[TextContent]:
         task.progress_percentage = 0.0
         task.progress_message = "Resuming..."
         task.last_seen_timestamp = datetime.now(UTC)
+        task.stop_requested = False
+        task.stop_requested_timestamp = None
         db.session.commit()
         
         run_id = f"run_{str(task.id).replace('-', '_')}"

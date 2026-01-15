@@ -21,6 +21,8 @@ class TaskItemView(ModelView):
         'prompt',
         'progress_percentage',
         'progress_message',
+        'stop_requested',
+        'stop_requested_timestamp',
         'user_id',
         'parameters',
         'view_plan',

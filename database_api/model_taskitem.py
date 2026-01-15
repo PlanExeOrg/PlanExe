@@ -40,6 +40,12 @@ class TaskItem(db.Model):
     # If the task is not active, it will be stopped.
     last_seen_timestamp = db.Column(db.DateTime, nullable=True, default=lambda: datetime.now(UTC))
 
+    # Stop requests from external callers (e.g., MCP or admin tools).
+    stop_requested = db.Column(db.Boolean, nullable=True, default=False)
+
+    # When a stop was requested (UTC).
+    stop_requested_timestamp = db.Column(db.DateTime, nullable=True, default=None)
+
     # Identifies who invoked the /run endpoint, that is charged credits for generating the plan.
     user_id = db.Column(db.String(256))
 

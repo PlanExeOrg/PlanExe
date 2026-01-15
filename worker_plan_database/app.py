@@ -17,7 +17,7 @@ import uuid
 import io
 import zipfile
 import requests
-from sqlalchemy import inspect, text
+from sqlalchemy import inspect, text, or_
 
 # Load .env file early, before any imports that require environment variables (e.g., machai.py).
 # This allows configuration via .env file instead of shell exports.
@@ -177,6 +177,10 @@ def ensure_taskitem_artifact_columns() -> None:
             conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS generated_report_html TEXT"))
         if "run_zip_snapshot" not in columns:
             conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS run_zip_snapshot BYTEA"))
+        if "stop_requested" not in columns:
+            conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS stop_requested BOOLEAN"))
+        if "stop_requested_timestamp" not in columns:
+            conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS stop_requested_timestamp TIMESTAMP"))
 
 def worker_process_started() -> None:
     planexe_worker_id = os.environ.get("PLANEXE_WORKER_ID")
@@ -266,12 +270,23 @@ class ServerExecutePipeline(ExecutePipeline):
             if task is None:
                 logger.error(f"Task with ID {self.task_id!r} not found in database, while running the pipeline. This is an inconsistency.")
                 raise Exception(f"Task with ID {self.task_id!r} not found in database, while running the pipeline. This is an inconsistency.")
+            stop_requested = bool(task.stop_requested)
 
         if task.last_seen_timestamp is None:
             # A new TaskItem is supposed to have a last_seen_timestamp.
             # If it doesn't have a last_seen_timestamp, it's an inconsistency that should be fixed.
             logger.error(f"Task with ID {self.task_id!r} has no last_seen_timestamp. This is an inconsistency.")
             raise Exception(f"Task with ID {self.task_id!r} has no last_seen_timestamp. This is an inconsistency.")
+
+        if stop_requested:
+            logger.info("Stopping task %s because a stop was requested.", self.task_id)
+            with app.app_context():
+                update_task_progress_with_retry(
+                    task_id=self.task_id,
+                    progress_percentage=parameters.progress.progress_percentage,
+                    progress_message="Stop requested by user.",
+                )
+            raise PipelineStopRequested(f"Stopping task {self.task_id!r} because a stop was requested.")
 
         # Detect if the browser has been inactive for N seconds.
         # Make last_seen_timestamp timezone-aware if it isn't already
@@ -417,21 +432,14 @@ def execute_pipeline_for_job(task_id: str, user_id: str, run_id_dir: Path, speed
         "WORKER_ID": str(WORKER_ID)
     }
 
-    if pipeline_instance.has_report_file:
-        machai_error_message = None
-    elif pipeline_instance.has_stop_flag_file:
-        machai_error_message = 'Inactive for too long, navigated away from the progress bar page, or closed the browser.'
-    elif pipeline_instance.has_pipeline_complete_file:
-        machai_error_message = 'Internal error. The pipeline complete file was found, but no report file was found.'
-    else:
-        machai_error_message = 'Error. Unable to generate the report. Likely reasons: censorship, restricted content.'
-
     # Persist artifacts to the TaskItem record.
+    stop_requested = False
     with app.app_context():
         task = db.session.get(TaskItem, task_id)
         if task is None:
             logger.error("Task %s not found while attempting to store report/zip.", task_id)
         else:
+            stop_requested = bool(task.stop_requested)
             task.generated_report_html = report_html if pipeline_instance.has_report_file else None
             task.run_zip_snapshot = run_zip_bytes
             try:
@@ -439,6 +447,20 @@ def execute_pipeline_for_job(task_id: str, user_id: str, run_id_dir: Path, speed
             except Exception as exc:
                 logger.error("Failed to store report/zip for task %s: %s", task_id, exc, exc_info=True)
                 db.session.rollback()
+
+    event_context["stop_requested"] = str(stop_requested)
+
+    if pipeline_instance.has_report_file:
+        machai_error_message = None
+    elif pipeline_instance.has_stop_flag_file:
+        if stop_requested:
+            machai_error_message = 'Stopped by user.'
+        else:
+            machai_error_message = 'Inactive for too long, navigated away from the progress bar page, or closed the browser.'
+    elif pipeline_instance.has_pipeline_complete_file:
+        machai_error_message = 'Internal error. The pipeline complete file was found, but no report file was found.'
+    else:
+        machai_error_message = 'Error. Unable to generate the report. Likely reasons: censorship, restricted content.'
 
     # Update the TaskItem state to completed or failed
     with app.app_context():
@@ -503,6 +525,7 @@ def process_pending_tasks() -> bool:
                 # skip it and try the next one, instead of waiting.
                 task_to_claim = db.session.query(TaskItem)\
                     .filter(TaskItem.state == TaskState.pending)\
+                    .filter(or_(TaskItem.stop_requested.is_(False), TaskItem.stop_requested.is_(None)))\
                     .order_by(TaskItem.timestamp_created.asc())\
                     .with_for_update(skip_locked=True)\
                     .first()

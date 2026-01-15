@@ -204,6 +204,10 @@ class MyFlaskApp:
                     conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS generated_report_html TEXT"))
                 if "run_zip_snapshot" not in columns:
                     conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS run_zip_snapshot BYTEA"))
+                if "stop_requested" not in columns:
+                    conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS stop_requested BOOLEAN"))
+                if "stop_requested_timestamp" not in columns:
+                    conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS stop_requested_timestamp TIMESTAMP"))
 
         def _seed_initial_records() -> None:
             # Add initial records if the table is empty

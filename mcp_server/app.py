@@ -430,6 +430,21 @@ async def handle_session_create(arguments: dict[str, Any]) -> list[TextContent]:
         parameters = dict(task.parameters or {})
         parameters["_mcp_session_id"] = session_id
         task.parameters = parameters
+        event_context = {
+            "task_id": str(task.id),
+            "session_id": session_id,
+            "prompt": task.prompt,
+            "user_id": task.user_id,
+            "config": req.config,
+            "metadata": req.metadata,
+            "parameters": task.parameters,
+        }
+        event = EventItem(
+            event_type=EventType.TASK_PENDING,
+            message="Enqueued task via MCP",
+            context=event_context
+        )
+        db.session.add(event)
         db.session.commit()
         
         response = {
@@ -467,6 +482,7 @@ async def handle_session_start(arguments: dict[str, Any]) -> list[TextContent]:
         task.last_seen_timestamp = datetime.now(UTC)
         task.stop_requested = False
         task.stop_requested_timestamp = None
+
         db.session.commit()
         
         run_id = f"run_{str(task.id).replace('-', '_')}"

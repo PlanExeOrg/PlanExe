@@ -131,6 +131,19 @@ Can I obtain relevant info via MCP?, when I instead could provide a longer initi
 
 # Tertiary issues
 
+## Capture reasoning response
+
+Currently I only capture the final response, without any reasoning.
+I want to capture the reasoning, since it may be helpful for troubleshooting.
+Or for other AIs to assess the reasoning steps leading up to the response.
+
+
+## Token counting
+
+So that I can see how much does it cost to generate a plan.
+Reasoning models. How many tokens are spent on reasoning vs generating the final response.
+
+
 ## Debugging
 
 Get step-by-step debugging working again.
@@ -140,11 +153,6 @@ Now that I have switched to Docker, I have multiple python projects in the same 
 ## GitHub CI that runs tests
 
 The hard thing is getting the venv's working.
-
-
-## Token counting
-
-So that I can see how much does it cost to generate a plan.
 
 
 ## Table of content

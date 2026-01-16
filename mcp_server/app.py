@@ -22,13 +22,14 @@ from io import BytesIO
 import httpx
 from sqlalchemy import cast, inspect, text
 from sqlalchemy.dialects.postgresql import JSONB
+from mcp.server import Server
+from mcp.server.stdio import stdio_server
+from mcp.types import Tool, TextContent
+from pydantic import BaseModel
 
 # Load .env file early
-from dotenv import load_dotenv
-_module_dir = Path(__file__).parent
-_dotenv_loaded = load_dotenv(_module_dir / ".env")
-if not _dotenv_loaded:
-    load_dotenv(_module_dir.parent / ".env")
+from mcp_server.dotenv_utils import load_planexe_dotenv
+_dotenv_loaded, _dotenv_paths = load_planexe_dotenv(Path(__file__).parent)
 
 # Configure logging
 logging.basicConfig(
@@ -36,16 +37,11 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-
-try:
-    from mcp.server import Server
-    from mcp.server.stdio import stdio_server
-    from mcp.types import Tool, TextContent
-    from pydantic import BaseModel
-except ImportError as e:
-    logger.error(f"Failed to import MCP dependencies: {e}")
-    logger.error("Please install: pip install mcp")
-    sys.exit(1)
+if not _dotenv_loaded:
+    logger.warning(
+        "No .env file found; searched: %s",
+        ", ".join(str(path) for path in _dotenv_paths),
+    )
 
 # Database imports
 from database_api.planexe_db_singleton import db

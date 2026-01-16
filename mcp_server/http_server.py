@@ -18,12 +18,12 @@ from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from mcp.server.fastmcp import FastMCP
+from mcp.types import ContentBlock, TextContent
 
 # Load .env file early
-from dotenv import find_dotenv, load_dotenv
-_DOTENV_PATH = find_dotenv(usecwd=True)
-if _DOTENV_PATH:
-    load_dotenv(_DOTENV_PATH)
+from mcp_server.dotenv_utils import load_planexe_dotenv
+_dotenv_loaded, _dotenv_paths = load_planexe_dotenv()
 
 # Configure logging
 logging.basicConfig(
@@ -31,16 +31,11 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-if not _DOTENV_PATH:
-    logger.warning("No .env file found; continuing without loading environment overrides.")
-
-try:
-    from mcp.server.fastmcp import FastMCP
-    from mcp.types import ContentBlock, TextContent
-except ImportError as e:
-    logger.error(f"Failed to import MCP dependencies: {e}")
-    logger.error("Please install: pip install mcp")
-    sys.exit(1)
+if not _dotenv_loaded:
+    logger.warning(
+        "No .env file found; searched: %s",
+        ", ".join(str(path) for path in _dotenv_paths),
+    )
 
 # Import MCP tool handlers from app.py
 from mcp_server.app import (

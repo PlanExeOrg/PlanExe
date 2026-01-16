@@ -376,7 +376,7 @@ def _register_tools(server: FastMCP) -> None:
     )(artifact_read)
     server.tool(
         name="planexe.report.read",
-        description="Reads the generated report (FilenameEnum.REPORT)",
+        description="Reads the generated report (FilenameEnum.REPORT), chunked by default",
     )(report_read)
     server.tool(
         name="planexe.artifact.write",

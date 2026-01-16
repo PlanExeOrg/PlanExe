@@ -118,7 +118,7 @@ See `extra/mcp-spec1.md` for full specification. Available tools:
 - `planexe.session.resume` - Resume execution
 - `planexe.artifact.list` - List artifacts
 - `planexe.artifact.read` - Read an artifact
-- `planexe.report.read` - Read the generated report (FilenameEnum.REPORT)
+- `planexe.report.read` - Read the generated report (FilenameEnum.REPORT), chunked by default
 - `planexe.artifact.write` - Write/edit an artifact
 - `planexe.session.events` - Get incremental events
 

@@ -1,12 +1,16 @@
 import asyncio
+import json
 import unittest
 import zipfile
 from io import BytesIO
+from unittest.mock import AsyncMock, patch
 
 from mcp_server.app import (
     REPORT_FILENAME,
+    REPORT_READ_DEFAULT_BYTES,
     build_report_artifact_uri,
     extract_file_from_zip_bytes,
+    handle_report_read,
     handle_list_tools,
     list_files_from_zip_bytes,
 )
@@ -36,6 +40,21 @@ class TestReportTool(unittest.TestCase):
 
         report_bytes = extract_file_from_zip_bytes(zip_bytes, REPORT_FILENAME)
         self.assertEqual(report_bytes, b"<html>ok</html>")
+
+    def test_report_read_defaults_to_chunk(self):
+        content_bytes = b"a" * (REPORT_READ_DEFAULT_BYTES + 10)
+        with patch("mcp_server.app.get_task_id_for_session", return_value="task-id"):
+            with patch(
+                "mcp_server.app.fetch_artifact_from_worker_plan",
+                new=AsyncMock(return_value=content_bytes),
+            ):
+                result = asyncio.run(handle_report_read({"session_id": "pxe_2025_01_01__abcd1234"}))
+
+        payload = json.loads(result[0].text)
+        self.assertEqual(payload["range"]["start"], 0)
+        self.assertEqual(payload["range"]["length"], REPORT_READ_DEFAULT_BYTES)
+        self.assertTrue(payload["truncated"])
+        self.assertEqual(payload["next_range"]["start"], REPORT_READ_DEFAULT_BYTES)
 
 
 if __name__ == "__main__":

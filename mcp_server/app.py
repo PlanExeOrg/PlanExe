@@ -98,6 +98,8 @@ BASE_DIR_RUN = Path(os.environ.get("PLANEXE_RUN_DIR", Path(__file__).parent.pare
 WORKER_PLAN_URL = os.environ.get("PLANEXE_WORKER_PLAN_URL", "http://worker_plan:8000")
 
 REPORT_FILENAME = "030-report.html"
+REPORT_READ_DEFAULT_BYTES = 200_000
+REPORT_READ_MAX_BYTES = 1_000_000
 
 SPEED_VS_DETAIL_DEFAULT = "ping_llm"
 SPEED_VS_DETAIL_VALUES = (
@@ -458,12 +460,15 @@ async def handle_list_tools() -> list[Tool]:
         ),
         Tool(
             name="planexe.report.read",
-            description="Reads the generated report (FilenameEnum.REPORT)",
+            description="Reads the generated report (FilenameEnum.REPORT), chunked by default",
             inputSchema={
                 "type": "object",
                 "properties": {
                     "session_id": {"type": "string"},
-                    "range": {"type": "object"},
+                    "range": {
+                        "type": "object",
+                        "description": "Optional byte range. Defaults to first 200k bytes, max 1MB.",
+                    },
                 },
                 "required": ["session_id"],
             },
@@ -916,8 +921,49 @@ async def handle_artifact_read(arguments: dict[str, Any]) -> list[TextContent]:
 async def handle_report_read(arguments: dict[str, Any]) -> list[TextContent]:
     """Handle planexe.report.read"""
     req = ReportReadRequest(**arguments)
-    artifact_uri = build_report_artifact_uri(req.session_id)
-    return await handle_artifact_read({"artifact_uri": artifact_uri, "range": req.range})
+    session_id = req.session_id
+    run_id = get_task_id_for_session(session_id)
+    if not run_id:
+        return [TextContent(
+            type="text",
+            text=json.dumps({"error": {"code": "SESSION_NOT_FOUND", "message": f"Session not found: {session_id}"}})
+        )]
+
+    content_bytes = await fetch_artifact_from_worker_plan(run_id, REPORT_FILENAME)
+    if content_bytes is None:
+        artifact_uri = build_report_artifact_uri(session_id)
+        return [TextContent(
+            type="text",
+            text=json.dumps({"error": {"code": "INVALID_ARTIFACT_URI", "message": f"Artifact not found: {artifact_uri}"}})
+        )]
+
+    total_size = len(content_bytes)
+    content_hash = compute_sha256(content_bytes)
+
+    range_request = req.range or {"start": 0, "length": REPORT_READ_DEFAULT_BYTES}
+    start = max(int(range_request.get("start", 0)), 0)
+    length = int(range_request.get("length", total_size))
+    if length < 0:
+        length = 0
+    if length > REPORT_READ_MAX_BYTES:
+        length = REPORT_READ_MAX_BYTES
+    end = min(start + length, total_size)
+    sliced_bytes = content_bytes[start:end]
+
+    truncated = end < total_size
+    response = {
+        "artifact_uri": build_report_artifact_uri(session_id),
+        "content_type": "text/html",
+        "sha256": content_hash,
+        "content": sliced_bytes.decode("utf-8", errors="replace"),
+        "total_size": total_size,
+        "range": {"start": start, "length": len(sliced_bytes)},
+        "truncated": truncated,
+    }
+    if truncated:
+        response["next_range"] = {"start": end, "length": min(length, total_size - end)}
+
+    return [TextContent(type="text", text=json.dumps(response))]
 
 async def handle_artifact_write(arguments: dict[str, Any]) -> list[TextContent]:
     """Handle planexe.artifact.write"""

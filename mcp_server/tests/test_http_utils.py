@@ -23,6 +23,5 @@ class TestHttpUtils(unittest.TestCase):
         self.assertFalse(changed)
         self.assertEqual(stripped, payload)
 
-
 if __name__ == "__main__":
     unittest.main()

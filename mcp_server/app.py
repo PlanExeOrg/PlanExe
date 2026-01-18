@@ -24,7 +24,7 @@ from sqlalchemy import cast, inspect, text
 from sqlalchemy.dialects.postgresql import JSONB
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-from mcp.types import Tool, TextContent
+from mcp.types import CallToolResult, Tool, TextContent
 from pydantic import BaseModel
 
 # Load .env file early
@@ -574,7 +574,7 @@ async def handle_call_tool(name: str, arguments: dict[str, Any]) -> list[TextCon
             text=json.dumps({"error": {"code": "INTERNAL_ERROR", "message": str(e)}})
         )]
 
-async def handle_session_create(arguments: dict[str, Any]) -> list[TextContent]:
+async def handle_session_create(arguments: dict[str, Any]) -> CallToolResult:
     """Handle planexe.session.create"""
     req = SessionCreateRequest(**arguments)
     
@@ -625,7 +625,11 @@ async def handle_session_create(arguments: dict[str, Any]) -> list[TextContent]:
             "created_at": task.timestamp_created.isoformat() + "Z",
         }
     
-    return [TextContent(type="text", text=json.dumps(response))]
+    return CallToolResult(
+        content=[TextContent(type="text", text=json.dumps(response))],
+        structuredContent=response,
+        isError=False,
+    )
 
 async def handle_session_start(arguments: dict[str, Any]) -> list[TextContent]:
     """Handle planexe.session.start"""
@@ -665,7 +669,7 @@ async def handle_session_start(arguments: dict[str, Any]) -> list[TextContent]:
     
     return [TextContent(type="text", text=json.dumps(response))]
 
-async def handle_session_status(arguments: dict[str, Any]) -> list[TextContent]:
+async def handle_session_status(arguments: dict[str, Any]) -> CallToolResult:
     """Handle planexe.session.status"""
     req = SessionStatusRequest(**arguments)
     session_id = req.session_id
@@ -673,10 +677,17 @@ async def handle_session_status(arguments: dict[str, Any]) -> list[TextContent]:
     with app.app_context():
         task = find_task_by_session_id(session_id)
         if task is None:
-            return [TextContent(
-                type="text",
-                text=json.dumps({"error": {"code": "SESSION_NOT_FOUND", "message": f"Session not found: {session_id}"}})
-            )]
+            response = {
+                "error": {
+                    "code": "SESSION_NOT_FOUND",
+                    "message": f"Session not found: {session_id}",
+                }
+            }
+            return CallToolResult(
+                content=[TextContent(type="text", text=json.dumps(response))],
+                structuredContent=response,
+                isError=False,
+            )
         
         # Determine phase based on progress
         progress_pct = float(task.progress_percentage) if task.progress_percentage else 0.0
@@ -736,7 +747,11 @@ async def handle_session_status(arguments: dict[str, Any]) -> list[TextContent]:
             "warnings": [],
         }
     
-    return [TextContent(type="text", text=json.dumps(response))]
+    return CallToolResult(
+        content=[TextContent(type="text", text=json.dumps(response))],
+        structuredContent=response,
+        isError=False,
+    )
 
 async def handle_session_stop(arguments: dict[str, Any]) -> list[TextContent]:
     """Handle planexe.session.stop"""
@@ -955,7 +970,7 @@ async def handle_artifact_read(arguments: dict[str, Any]) -> list[TextContent]:
     
     return [TextContent(type="text", text=json.dumps(response))]
 
-async def handle_report_read(arguments: dict[str, Any]) -> list[TextContent]:
+async def handle_report_read(arguments: dict[str, Any]) -> CallToolResult:
     """Handle planexe.report.read / planexe.get.result."""
     req = ReportReadRequest(**arguments)
     session_id = req.session_id
@@ -967,30 +982,37 @@ async def handle_report_read(arguments: dict[str, Any]) -> list[TextContent]:
         )]
 
     if task.state in (TaskState.pending, TaskState.processing) or task.state is None:
-        return [TextContent(type="text", text=json.dumps({"state": "running"}))]
+        response = {"state": "running"}
+        return CallToolResult(
+            content=[TextContent(type="text", text=json.dumps(response))],
+            structuredContent=response,
+            isError=False,
+        )
     if task.state == TaskState.failed:
         message = task.progress_message or "Plan generation failed."
-        return [TextContent(
-            type="text",
-            text=json.dumps({"state": "failed", "error": {"code": "generation_failed", "message": message}})
-        )]
+        response = {"state": "failed", "error": {"code": "generation_failed", "message": message}}
+        return CallToolResult(
+            content=[TextContent(type="text", text=json.dumps(response))],
+            structuredContent=response,
+            isError=False,
+        )
 
     run_id = str(task.id)
     content_bytes = await fetch_artifact_from_worker_plan(run_id, REPORT_FILENAME)
     if content_bytes is None:
         artifact_uri = build_report_artifact_uri(session_id)
-        return [TextContent(
-            type="text",
-            text=json.dumps(
-                {
-                    "state": "failed",
-                    "error": {
-                        "code": "artifact_not_found",
-                        "message": f"Artifact not found: {artifact_uri}",
-                    },
-                }
-            )
-        )]
+        response = {
+            "state": "failed",
+            "error": {
+                "code": "artifact_not_found",
+                "message": f"Artifact not found: {artifact_uri}",
+            },
+        }
+        return CallToolResult(
+            content=[TextContent(type="text", text=json.dumps(response))],
+            structuredContent=response,
+            isError=False,
+        )
 
     total_size = len(content_bytes)
     content_hash = compute_sha256(content_bytes)
@@ -1028,7 +1050,11 @@ async def handle_report_read(arguments: dict[str, Any]) -> list[TextContent]:
         if truncated:
             response["next_range"] = {"start": end, "length": min(length, total_size - end)}
 
-    return [TextContent(type="text", text=json.dumps(response))]
+    return CallToolResult(
+        content=[TextContent(type="text", text=json.dumps(response))],
+        structuredContent=response,
+        isError=False,
+    )
 
 async def handle_artifact_write(arguments: dict[str, Any]) -> list[TextContent]:
     """Handle planexe.artifact.write"""

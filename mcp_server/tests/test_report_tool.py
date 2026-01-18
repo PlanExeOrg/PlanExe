@@ -55,7 +55,7 @@ class TestReportTool(unittest.TestCase):
             ):
                 result = asyncio.run(handle_report_read({"session_id": session_id}))
 
-        payload = json.loads(result[0].text)
+        payload = result.structuredContent
         self.assertEqual(payload["state"], "ready")
         self.assertEqual(payload["download_size"], len(content_bytes))
         self.assertEqual(payload["content_type"], "text/html; charset=utf-8")
@@ -74,7 +74,7 @@ class TestReportTool(unittest.TestCase):
                     handle_report_read({"session_id": "pxe_2025_01_01__abcd1234", "range": {}})
                 )
 
-        payload = json.loads(result[0].text)
+        payload = result.structuredContent
         self.assertEqual(payload["range"]["start"], 0)
         self.assertEqual(payload["range"]["length"], REPORT_READ_DEFAULT_BYTES)
         self.assertTrue(payload["truncated"])

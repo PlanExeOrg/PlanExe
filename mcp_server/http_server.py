@@ -19,7 +19,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from mcp.server.fastmcp import FastMCP
-from mcp.types import ContentBlock, TextContent
+from mcp.types import CallToolResult, ContentBlock, TextContent
 
 from mcp_server.http_utils import strip_redundant_content
 
@@ -237,6 +237,20 @@ def _parse_error_from_text(text: Any) -> Optional[dict[str, Any]]:
 def _normalize_tool_result(result: Any) -> tuple[list[dict[str, Any]], Optional[dict[str, Any]]]:
     if isinstance(result, tuple) and len(result) == 2:
         result = result[0]
+    if isinstance(result, CallToolResult):
+        content_blocks = result.content
+        content = extract_text_content(content_blocks)
+        error = None
+        for item in content:
+            if isinstance(item, dict) and "error" in item:
+                error = item["error"]
+                break
+            if isinstance(item, dict) and "text" in item:
+                parsed_error = _parse_error_from_text(item["text"])
+                if parsed_error:
+                    error = parsed_error
+                    break
+        return content, error
     if isinstance(result, ContentBlock):
         content_blocks: Sequence[Any] = [result]
     elif isinstance(result, list):
@@ -264,7 +278,7 @@ async def session_create(
     idea: str,
     config: dict[str, Any] | None = None,
     metadata: dict[str, Any] | None = None,
-) -> list[TextContent]:
+) -> CallToolResult:
     return await handle_session_create({"idea": idea, "config": config, "metadata": metadata})
 
 
@@ -276,7 +290,7 @@ async def session_start(
     return await handle_session_start({"session_id": session_id, "target": target, "inputs": inputs})
 
 
-async def session_status(session_id: str) -> list[TextContent]:
+async def session_status(session_id: str) -> CallToolResult:
     return await handle_session_status({"session_id": session_id})
 
 
@@ -324,12 +338,12 @@ async def artifact_read(
 async def report_read(
     session_id: str,
     range: dict[str, int] | None = None,
-) -> list[TextContent]:
+) -> CallToolResult:
     return await handle_report_read({"session_id": session_id, "range": range})
 
 async def get_result(
     session_id: str,
-) -> list[TextContent]:
+) -> CallToolResult:
     return await handle_report_read({"session_id": session_id})
 
 

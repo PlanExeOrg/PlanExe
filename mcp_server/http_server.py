@@ -21,6 +21,8 @@ from pydantic import BaseModel
 from mcp.server.fastmcp import FastMCP
 from mcp.types import ContentBlock, TextContent
 
+from mcp_server.http_utils import strip_redundant_content
+
 # Load .env file early
 from mcp_server.dotenv_utils import load_planexe_dotenv
 _dotenv_loaded, _dotenv_paths = load_planexe_dotenv()
@@ -473,7 +475,27 @@ async def enforce_api_key(
     if error_response:
         return error_response
 
-    return await call_next(request)
+    response = await call_next(request)
+    if request.url.path.startswith("/mcp"):
+        content_type = response.headers.get("content-type", "")
+        if content_type.startswith("application/json"):
+            body = getattr(response, "body", None)
+            if body:
+                try:
+                    payload = json.loads(body)
+                except json.JSONDecodeError:
+                    return response
+                stripped_payload, changed = strip_redundant_content(payload)
+                if changed:
+                    headers = dict(response.headers)
+                    headers.pop("content-length", None)
+                    return JSONResponse(
+                        status_code=response.status_code,
+                        content=stripped_payload,
+                        headers=headers,
+                        background=response.background,
+                    )
+    return response
 
 
 async def call_tool_via_registry(

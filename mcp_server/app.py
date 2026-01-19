@@ -349,7 +349,7 @@ ERROR_SCHEMA = {
     },
     "required": ["code", "message"],
 }
-SESSION_CREATE_OUTPUT_SCHEMA = {
+TASK_CREATE_OUTPUT_SCHEMA = {
     "type": "object",
     "properties": {
         "task_id": {"type": "string"},
@@ -357,7 +357,7 @@ SESSION_CREATE_OUTPUT_SCHEMA = {
     },
     "required": ["task_id", "created_at"],
 }
-SESSION_STATUS_OUTPUT_SCHEMA = {
+TASK_STATUS_OUTPUT_SCHEMA = {
     "oneOf": [
         {
             "type": "object",
@@ -488,7 +488,7 @@ async def handle_list_tools() -> list[Tool]:
         Tool(
             name="planexe_create",
             description="Creates a new session and output namespace",
-            outputSchema=SESSION_CREATE_OUTPUT_SCHEMA,
+            outputSchema=TASK_CREATE_OUTPUT_SCHEMA,
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -516,7 +516,7 @@ async def handle_list_tools() -> list[Tool]:
         Tool(
             name="planexe_status",
             description="Returns run status and progress",
-            outputSchema=SESSION_STATUS_OUTPUT_SCHEMA,
+            outputSchema=TASK_STATUS_OUTPUT_SCHEMA,
             inputSchema={
                 "type": "object",
                 "properties": {

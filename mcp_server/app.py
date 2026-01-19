@@ -137,10 +137,6 @@ class ReportReadRequest(BaseModel):
     session_id: str
     range: Optional[dict[str, int]] = None
 
-class SessionEventsRequest(BaseModel):
-    session_id: str
-    since: Optional[str] = None
-
 # Helper functions
 def find_task_by_session_id(session_id: str) -> Optional[TaskItem]:
     """Find TaskItem by session_id stored in parameters."""
@@ -600,18 +596,6 @@ async def handle_list_tools() -> list[Tool]:
                 "required": ["session_id"],
             },
         ),
-        Tool(
-            name="planexe.session.events",
-            description="Provides incremental events for a session since a cursor",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "session_id": {"type": "string"},
-                    "since": {"type": "string"},
-                },
-                "required": ["session_id"],
-            },
-        ),
     ]
 
 @mcp_server.call_tool()
@@ -630,8 +614,6 @@ async def handle_call_tool(name: str, arguments: dict[str, Any]) -> list[TextCon
             return await handle_report_read(arguments)
         elif name == "planexe.get.result":
             return await handle_report_read(arguments)
-        elif name == "planexe.session.events":
-            return await handle_session_events(arguments)
         else:
             return [TextContent(
                 type="text",
@@ -941,53 +923,6 @@ async def handle_report_read(arguments: dict[str, Any]) -> CallToolResult:
         structuredContent=response,
         isError=False,
     )
-
-async def handle_session_events(arguments: dict[str, Any]) -> list[TextContent]:
-    """Handle planexe.session.events"""
-    req = SessionEventsRequest(**arguments)
-    session_id = req.session_id
-    
-    with app.app_context():
-        task = find_task_by_session_id(session_id)
-        if task is None:
-            return [TextContent(
-                type="text",
-                text=json.dumps({"error": {"code": "SESSION_NOT_FOUND", "message": f"Session not found: {session_id}"}})
-            )]
-        
-        # Query events for this task
-        since_id = int(req.since.replace("cursor_", "")) if req.since and req.since.startswith("cursor_") else 0
-        
-        events_query = db.session.query(EventItem).filter(
-            EventItem.context.contains({"task_id": str(task.id)})
-        ).filter(EventItem.id > since_id).order_by(EventItem.id.asc())
-        
-        events = events_query.all()
-        
-        event_list = []
-        for event in events:
-            event_type_map = {
-                EventType.TASK_PROCESSING: "run_started",
-                EventType.TASK_COMPLETED: "run_completed",
-                EventType.TASK_FAILED: "run_failed",
-                EventType.TASK_PENDING: "run_started",
-            }
-            
-            mcp_event_type = event_type_map.get(event.event_type, "log")
-            event_list.append({
-                "ts": event.timestamp.isoformat() + "Z",
-                "type": mcp_event_type,
-                "data": event.context or {},
-            })
-        
-        cursor = f"cursor_{events[-1].id}" if events else (req.since or "cursor_0")
-        
-        response = {
-            "cursor": cursor,
-            "events": event_list,
-        }
-    
-    return [TextContent(type="text", text=json.dumps(response))]
 
 async def main():
     """Main entry point for MCP server."""

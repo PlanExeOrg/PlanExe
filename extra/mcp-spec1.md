@@ -256,71 +256,7 @@ Required semantics
 
 ⸻
 
-7. Event Streaming (v1 Strongly Recommended)
-
-7.1 planexe.session.events
-
-Provides incremental events for a session since a cursor.
-This can be implemented as:
-	•	long-poll,
-	•	SSE,
-	•	WebSocket,
-	•	or “poll since cursor”.
-
-Request
-
-{
-  "session_id": "pxe_...",
-  "since": "cursor_123"
-}
-
-Response
-
-{
-  "cursor": "cursor_147",
-  "events": [
-    {
-      "ts": "2026-01-14T12:41:00Z",
-      "type": "phase_changed",
-      "data": { "phase": "validating" }
-    },
-    {
-      "ts": "2026-01-14T12:41:05Z",
-      "type": "artifact_created",
-      "data": {
-        "path": "validation_report.html",
-        "artifact_uri": "planexe://sessions/pxe_.../out/validation_report.html",
-        "kind": "audit_report"
-      }
-    },
-    {
-      "ts": "2026-01-14T12:41:10Z",
-      "type": "log",
-      "data": {
-        "level": "info",
-        "msg": "Running PlanExe Self Audit…"
-      }
-    }
-  ]
-}
-
-7.2 Event types (v1)
-	•	run_started
-	•	run_stopped
-	•	run_completed
-	•	run_failed
-	•	phase_changed
-	•	progress_updated
-	•	task_started (optional if Luigi detail exposed)
-	•	task_completed (optional)
-	•	artifact_created
-	•	artifact_updated
-	•	artifact_deleted (optional)
-	•	log
-
-⸻
-
-8. Targets and Phases
+7. Targets and Phases
 
 8.1 Standard targets
 
@@ -407,11 +343,7 @@ At minimum:
 13.1 Responsiveness
 	•	session.status must return within < 250ms under normal load.
 
-13.2 Event throughput
-	•	session.events should support 1–5 events/sec typical
-	•	must tolerate log bursts without breaking clients (batching allowed)
-
-13.3 Large artifacts
+13.2 Large artifacts
 	•	server SHOULD impose max read size per call (e.g., 2–10MB)
 
 ⸻

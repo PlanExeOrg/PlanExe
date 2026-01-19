@@ -118,7 +118,6 @@ See `extra/mcp-spec1.md` for full specification. Available tools:
 - `planexe.session.stop` - Stop active run
 - `planexe.report.read` - Get report download metadata (optional chunked fallback via range)
 - `planexe.get.result` - Get report download metadata
-- `planexe.session.events` - Get incremental events
 
 Download flow: call `planexe.get.result` (or `planexe.report.read`) to obtain the
 `download_path`/`download_url`, then fetch the report via

@@ -49,7 +49,6 @@ from mcp_server.app import (
     handle_session_status,
     handle_session_stop,
     handle_report_read,
-    handle_session_events,
     resolve_task_for_session,
 )
 
@@ -378,13 +377,6 @@ async def get_result(
     return await handle_report_read({"session_id": session_id})
 
 
-async def session_events(
-    session_id: str,
-    since: str | None = None,
-) -> list[TextContent]:
-    return await handle_session_events({"session_id": session_id, "since": since})
-
-
 def _register_tools(server: FastMCP) -> None:
     server.tool(
         name="planexe.session.create",
@@ -410,10 +402,6 @@ def _register_tools(server: FastMCP) -> None:
         name="planexe.get.result",
         description="Returns download metadata for the generated report",
     )(get_result)
-    server.tool(
-        name="planexe.session.events",
-        description="Provides incremental events for a session since a cursor",
-    )(session_events)
 
 
 fastmcp_server = FastMCP(

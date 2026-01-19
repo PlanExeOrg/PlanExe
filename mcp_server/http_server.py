@@ -367,7 +367,7 @@ def _register_tools(server: FastMCP) -> None:
         description="Returns run status and progress",
     )(session_status)
     server.tool(
-        name="planexe.session.stop",
+        name="planexe_stop",
         description="Stops the active run",
     )(session_stop)
     server.tool(

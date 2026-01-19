@@ -533,7 +533,7 @@ async def handle_list_tools() -> list[Tool]:
             },
         ),
         Tool(
-            name="planexe.session.stop",
+            name="planexe_stop",
             description="Stops the active run",
             inputSchema={
                 "type": "object",
@@ -566,7 +566,7 @@ async def handle_call_tool(name: str, arguments: dict[str, Any]) -> list[TextCon
             return await handle_session_create(arguments)
         elif name == "planexe_status":
             return await handle_session_status(arguments)
-        elif name == "planexe.session.stop":
+        elif name == "planexe_stop":
             return await handle_session_stop(arguments)
         elif name == "planexe.get.result":
             return await handle_report_read(arguments)
@@ -716,7 +716,7 @@ async def handle_session_status(arguments: dict[str, Any]) -> CallToolResult:
     )
 
 async def handle_session_stop(arguments: dict[str, Any]) -> list[TextContent]:
-    """Handle planexe.session.stop"""
+    """Handle planexe_stop"""
     req = SessionStopRequest(**arguments)
     session_id = req.session_id
     

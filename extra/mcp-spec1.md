@@ -108,7 +108,7 @@ Sessions may exist independent of active runs.
 	•	failed (resumable depending on failure type)
 
 5.3 Allowed transitions
-	•	running → stopped via session.stop
+	•	running → stopped via planexe_stop
 	•	running → completed via normal success
 	•	running → failed via error
 
@@ -200,7 +200,7 @@ Notes
 
 ⸻
 
-6.3 planexe.session.stop
+6.3 planexe_stop
 
 Stops the active run.
 
@@ -379,7 +379,7 @@ planexe_status({ "session_id": "pxe_..." })
 
 Stop
 
-planexe.session.stop({ "session_id": "pxe_...", "mode": "graceful" })
+planexe_stop({ "session_id": "pxe_...", "mode": "graceful" })
 
 ⸻
 

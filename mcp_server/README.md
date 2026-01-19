@@ -8,10 +8,9 @@ This MCP server provides a standardized interface for AI agents and developer to
 
 ## Features
 
-- **Session Management**: Create, start, stop, and resume plan generation sessions
+- **Task Management**: Create and stop plan generation tasks
 - **Progress Tracking**: Real-time status and progress updates
-- **Artifact Management**: List, read, and write artifacts (plans, reports, etc.)
-- **Event Streaming**: Subscribe to execution events
+- **Report Retrieval**: Get report download metadata and fetch the report
 
 ## Docker Usage (Recommended)
 
@@ -112,9 +111,9 @@ The MCP server uses the same database configuration as other PlanExe services:
 
 See `extra/mcp-spec1.md` for full specification. Available tools:
 
-- `planexe_create` - Create a new session
-- `planexe_status` - Get run status and progress
-- `planexe_stop` - Stop active run
+- `planexe_create` - Create a new task
+- `planexe_status` - Get task status and progress
+- `planexe_stop` - Stop an active task
 - `planexe_result` - Get report download metadata
 
 Download flow: call `planexe_result` to obtain the `download_url`, then fetch the
@@ -124,9 +123,9 @@ report via `GET /download/{task_id}/030-report.html` (API key required if config
 
 The MCP server maps MCP concepts to PlanExe's database models:
 
-- **Session** → `TaskItem` (each session corresponds to a TaskItem)
+- **Task** → `TaskItem` (each task corresponds to a TaskItem)
 - **Run** → Execution of a TaskItem by `worker_plan_database`
-- **Artifacts** → Files fetched from `worker_plan` via HTTP API
+- **Report** → HTML report fetched from `worker_plan` via HTTP API
 
 The server reads task state and progress from the database, and fetches artifacts from `worker_plan` via HTTP instead of accessing the run directory directly. This allows the MCP server to work without mounting the run directory, making it compatible with Railway and other cloud platforms that don't support shared volumes across services.
 
@@ -284,7 +283,7 @@ See `railway.md` for Railway-specific deployment instructions. The server automa
 
 ## Notes
 
-- The MCP server communicates with `worker_plan_database` indirectly via the database for session/task management.
+- The MCP server communicates with `worker_plan_database` indirectly via the database for task management.
 - Artifacts are fetched from `worker_plan` via HTTP instead of accessing the run directory directly. This avoids needing a shared volume mount, making it compatible with Railway and other cloud platforms.
 - For artifacts:
   - `report.html` is fetched efficiently via the dedicated `/runs/{run_id}/report` endpoint

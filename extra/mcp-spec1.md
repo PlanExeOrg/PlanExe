@@ -18,7 +18,7 @@ The interface is designed to support:
 2. Goals
 
 2.1 Functional goals
-	•	Session-based orchestration: each run is associated with a session ID.
+	•	Task-based orchestration: each run is associated with a task ID.
 	•	Long-running execution: starts asynchronously; clients poll or subscribe to events.
 	•	Artifact-first workflow: outputs are exposed as file-like artifacts.
 	•	Stop / Resume with minimal recompute:
@@ -51,20 +51,20 @@ The interface is designed to support:
 
 4.1 Core entities
 
-Session
+Task
 A long-lived container for a PlanExe project run.
 
 Key properties
 	•	task_id: stable unique identifier
-	•	output_dir: artifact root namespace for session
+	•	output_dir: artifact root namespace for task
 	•	config: immutable run configuration (models, runtime limits, Luigi params)
 	•	created_at, updated_at
 
 Run
-A single execution attempt inside a session (e.g., after a resume).
+A single execution attempt inside a task (e.g., after a resume).
 
 Key properties
-	•	run_id: monotonic per session (run_0001, run_0002…)
+	•	run_id: monotonic per task (run_0001, run_0002…)
 	•	state: running | stopped | completed | failed
 	•	phase: high-level stage (e.g., generating_plan, validating, exporting)
 	•	progress: computed progress metrics
@@ -75,7 +75,7 @@ A file-like output managed by PlanExe.
 
 Key properties
 	•	artifact_uri: stable URI
-	•	path: path relative to session output root
+	•	path: path relative to task output root
 	•	size, updated_at
 	•	content_type: text/markdown, text/html, application/json, etc.
 	•	sha256: content hash for optimistic locking and invalidation
@@ -93,10 +93,10 @@ Key properties
 
 5. State Machine
 
-5.1 Session states
+5.1 Task states
 
-Sessions may exist independent of active runs.
-	•	created: session initialized, no run started
+Tasks may exist independent of active runs.
+	•	created: task initialized, no run started
 	•	active: at least one run exists, may be running or stopped
 	•	archived: optional; immutable, no new runs allowed
 
@@ -113,7 +113,7 @@ Sessions may exist independent of active runs.
 	•	running → failed via error
 
 Invalid
-	•	completed → running (new run must be triggered by creating a new session)
+	•	completed → running (new run must be triggered by creating a new task)
 	•	running → running (no concurrent runs in v1)
 
 ⸻
@@ -124,7 +124,7 @@ All tool names below are normative.
 
 6.1 planexe_create
 
-Creates a new session and output namespace.
+Creates a new task and output namespace.
 
 Request
 
@@ -154,7 +154,7 @@ Response
 
 Behavior
 	•	Must be idempotent only if client supplies an optional client_request_id (optional extension).
-	•	Session config is immutable after creation in v1.
+	•	Task config is immutable after creation in v1.
 
 ⸻
 
@@ -249,9 +249,9 @@ Recommended phases:
 
 10. Concurrency & Locking
 
-10.1 Single active run per session
+10.1 Single active run per task
 
-In v1, sessions MUST enforce:
+In v1, tasks MUST enforce:
 	•	at most one run in running state.
 
 ⸻
@@ -268,13 +268,13 @@ Example:
 {
   "error": {
     "code": "RUN_ALREADY_ACTIVE",
-    "message": "A run is currently active for this session.",
+    "message": "A run is currently active for this task.",
     "details": { "run_id": "run_0001" }
   }
 }
 
 11.1 Required error codes
-	•	SESSION_NOT_FOUND
+	•	TASK_NOT_FOUND
 	•	RUN_NOT_FOUND
 	•	RUN_ALREADY_ACTIVE
 	•	RUN_NOT_ACTIVE
@@ -290,13 +290,13 @@ Example:
 12. Security & Isolation
 
 12.1 Sandbox constraints
-	•	All artifacts must live under session-scoped storage.
+	•	All artifacts must live under task-scoped storage.
 	•	Artifact URIs must not permit path traversal.
 
 12.2 Access control
 
 At minimum:
-	•	session must be scoped to a user identity (metadata.user_id)
+	•	task must be scoped to a user identity (metadata.user_id)
 	•	callers without permission must receive PERMISSION_DENIED
 
 12.3 Sensitive data handling
@@ -362,14 +362,14 @@ Clients must ignore unknown fields and unknown event types.
 	•	If models are stochastic, test pipeline correctness, not identical bytes
 
 17.3 Load tests (recommended)
-	•	multiple sessions concurrently, one run each
+	•	multiple tasks concurrently, one run each
 	•	event streaming stability under heavy log output
 
 ⸻
 
 Appendix A — Example End-to-End Flow
 
-Create session
+Create task
 
 planexe_create({ "idea": "...", "config": {...} })
 
@@ -390,4 +390,4 @@ If you want richer Luigi integration later:
 	•	planexe.task.invalidate (rerun subtree)
 	•	planexe.export.bundle (zip all artifacts)
 	•	planexe.validate.only (audit without regeneration)
-	•	planexe.session.archive (freeze session)
+	•	planexe.task.archive (freeze task)

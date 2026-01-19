@@ -487,7 +487,7 @@ async def handle_list_tools() -> list[Tool]:
     return [
         Tool(
             name="planexe_create",
-            description="Creates a new session and output namespace",
+            description="Creates a new task and output namespace",
             outputSchema=TASK_CREATE_OUTPUT_SCHEMA,
             inputSchema={
                 "type": "object",
@@ -583,7 +583,7 @@ async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
         parameters = dict(req.config or {})
         parameters["speed_vs_detail"] = resolve_speed_vs_detail(parameters)
 
-        # Create a new TaskItem (which represents a session in our model)
+        # Create a new TaskItem (which represents a task in our model)
         task = TaskItem(
             prompt=req.idea,
             state=TaskState.pending,
@@ -639,7 +639,7 @@ async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
         if task is None:
             response = {
                 "error": {
-                    "code": "SESSION_NOT_FOUND",
+                    "code": "TASK_NOT_FOUND",
                     "message": f"Task not found: {task_id}",
                 }
             }
@@ -718,7 +718,7 @@ async def handle_task_stop(arguments: dict[str, Any]) -> list[TextContent]:
         if task is None:
             return [TextContent(
                 type="text",
-                text=json.dumps({"error": {"code": "SESSION_NOT_FOUND", "message": f"Task not found: {task_id}"}})
+                text=json.dumps({"error": {"code": "TASK_NOT_FOUND", "message": f"Task not found: {task_id}"}})
             )]
         
         if task.state in (TaskState.pending, TaskState.processing):
@@ -742,7 +742,7 @@ async def handle_report_read(arguments: dict[str, Any]) -> CallToolResult:
     if task is None:
         response = {
             "error": {
-                "code": "SESSION_NOT_FOUND",
+                "code": "TASK_NOT_FOUND",
                 "message": f"Task not found: {task_id}",
             }
         }

@@ -203,40 +203,40 @@ class ErrorDetail(BaseModel):
     message: str
 
 
-class SessionCreateOutput(BaseModel):
+class TaskCreateOutput(BaseModel):
     task_id: str
     created_at: str
 
 
-class SessionStatusProgressTask(BaseModel):
+class TaskStatusProgressTask(BaseModel):
     name: str
     pct: float
 
 
-class SessionStatusProgress(BaseModel):
+class TaskStatusProgress(BaseModel):
     overall: float
-    current_task: SessionStatusProgressTask
+    current_task: TaskStatusProgressTask
 
 
-class SessionStatusTiming(BaseModel):
+class TaskStatusTiming(BaseModel):
     started_at: str | None
     elapsed_sec: float
 
 
-class SessionStatusArtifact(BaseModel):
+class TaskStatusArtifact(BaseModel):
     path: str
     updated_at: str
 
 
-class SessionStatusOutput(BaseModel):
+class TaskStatusOutput(BaseModel):
     task_id: str | None = None
     state: Literal["stopped", "running", "completed", "failed", "stopping"] | None = None
     phase: (
         Literal["initializing", "generating_plan", "validating", "exporting", "finalizing"] | None
     ) = None
-    progress: SessionStatusProgress | None = None
-    timing: SessionStatusTiming | None = None
-    latest_artifacts: list[SessionStatusArtifact] | None = None
+    progress: TaskStatusProgress | None = None
+    timing: TaskStatusTiming | None = None
+    latest_artifacts: list[TaskStatusArtifact] | None = None
     warnings: list[str] | None = None
     error: ErrorDetail | None = None
 
@@ -330,19 +330,19 @@ def _normalize_tool_result(result: Any) -> tuple[list[dict[str, Any]], Optional[
     return content, error
 
 
-async def session_create(
+async def task_create(
     idea: str,
     config: dict[str, Any] | None = None,
     metadata: dict[str, Any] | None = None,
-) -> Annotated[CallToolResult, SessionCreateOutput]:
+) -> Annotated[CallToolResult, TaskCreateOutput]:
     return await handle_task_create({"idea": idea, "config": config, "metadata": metadata})
 
 
-async def session_status(task_id: str) -> Annotated[CallToolResult, SessionStatusOutput]:
+async def task_status(task_id: str) -> Annotated[CallToolResult, TaskStatusOutput]:
     return await handle_task_status({"task_id": task_id})
 
 
-async def session_stop(
+async def task_stop(
     task_id: str,
     mode: str = "graceful",
 ) -> list[TextContent]:
@@ -358,16 +358,16 @@ async def get_result(
 def _register_tools(server: FastMCP) -> None:
     server.tool(
         name="planexe_create",
-        description="Creates a new session and output namespace",
-    )(session_create)
+        description="Creates a new task and output namespace",
+    )(task_create)
     server.tool(
         name="planexe_status",
         description="Returns run status and progress",
-    )(session_status)
+    )(task_status)
     server.tool(
         name="planexe_stop",
         description="Stops the active run",
-    )(session_stop)
+    )(task_stop)
     server.tool(
         name="planexe_result",
         description="Returns download metadata for the generated report",

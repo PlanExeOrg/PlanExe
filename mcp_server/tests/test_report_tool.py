@@ -10,7 +10,6 @@ from database_api.model_taskitem import TaskState
 from mcp_server.app import (
     REPORT_FILENAME,
     REPORT_READ_DEFAULT_BYTES,
-    build_report_artifact_uri,
     extract_file_from_zip_bytes,
     handle_report_read,
     handle_list_tools,
@@ -19,11 +18,6 @@ from mcp_server.app import (
 
 
 class TestReportTool(unittest.TestCase):
-    def test_report_artifact_uri(self):
-        task_id = "pxe_2025_01_01__abcd1234"
-        expected_uri = f"planexe://sessions/{task_id}/out/{REPORT_FILENAME}"
-        self.assertEqual(build_report_artifact_uri(task_id), expected_uri)
-
     def test_report_tool_listed(self):
         tools = asyncio.run(handle_list_tools())
         tool_names = {tool.name for tool in tools}

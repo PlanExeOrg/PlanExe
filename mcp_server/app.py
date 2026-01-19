@@ -331,9 +331,6 @@ def resolve_speed_vs_detail(config: Optional[dict[str, Any]]) -> str:
         return value
     return SPEED_VS_DETAIL_DEFAULT
 
-def build_report_artifact_uri(task_id: str) -> str:
-    return f"planexe://sessions/{task_id}/out/{REPORT_FILENAME}"
-
 def build_report_download_path(task_id: str) -> str:
     return f"/download/{task_id}/{REPORT_FILENAME}"
 
@@ -774,12 +771,11 @@ async def handle_report_read(arguments: dict[str, Any]) -> CallToolResult:
     run_id = str(task.id)
     content_bytes = await fetch_artifact_from_worker_plan(run_id, REPORT_FILENAME)
     if content_bytes is None:
-        artifact_uri = build_report_artifact_uri(task_id)
         response = {
             "state": "failed",
             "error": {
-                "code": "artifact_not_found",
-                "message": f"Artifact not found: {artifact_uri}",
+                "code": "content_unavailable",
+                "message": "content_bytes is None",
             },
         }
         return CallToolResult(

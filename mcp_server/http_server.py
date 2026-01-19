@@ -205,7 +205,6 @@ class ErrorDetail(BaseModel):
 
 class SessionCreateOutput(BaseModel):
     session_id: str
-    output_dir_uri: str
     created_at: str
 
 

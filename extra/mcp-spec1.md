@@ -150,7 +150,6 @@ Response
 
 {
   "session_id": "pxe_2026_01_14__abcd1234",
-  "output_dir_uri": "planexe://sessions/pxe_.../out",
   "created_at": "2026-01-14T12:34:56Z"
 }
 

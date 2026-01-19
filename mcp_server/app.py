@@ -357,10 +357,9 @@ SESSION_CREATE_OUTPUT_SCHEMA = {
     "type": "object",
     "properties": {
         "session_id": {"type": "string"},
-        "output_dir_uri": {"type": "string"},
         "created_at": {"type": "string"},
     },
-    "required": ["session_id", "output_dir_uri", "created_at"],
+    "required": ["session_id", "created_at"],
 }
 SESSION_STATUS_OUTPUT_SCHEMA = {
     "oneOf": [
@@ -611,8 +610,6 @@ async def handle_session_create(arguments: dict[str, Any]) -> CallToolResult:
         date_str = datetime.now(UTC).strftime("%Y_%m_%d")
         short_uuid = str(task.id).replace("-", "")[:8]
         session_id = f"pxe_{date_str}__{short_uuid}"
-        output_dir_uri = f"planexe://sessions/{session_id}/out"
-        
         # Store session_id mapping in task parameters for later lookup
         parameters = dict(task.parameters or {})
         parameters["_mcp_session_id"] = session_id
@@ -636,7 +633,6 @@ async def handle_session_create(arguments: dict[str, Any]) -> CallToolResult:
         
         response = {
             "session_id": session_id,
-            "output_dir_uri": output_dir_uri,
             "created_at": task.timestamp_created.isoformat() + "Z",
         }
     

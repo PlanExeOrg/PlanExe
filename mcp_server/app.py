@@ -428,7 +428,6 @@ REPORT_RANGE_SCHEMA = {
 REPORT_READY_OUTPUT_SCHEMA = {
     "type": "object",
     "properties": {
-        "state": {"const": "ready"},
         "content_type": {"type": "string"},
         "sha256": {"type": "string"},
         "download_size": {"type": "integer"},
@@ -440,7 +439,6 @@ REPORT_READY_OUTPUT_SCHEMA = {
         "next_range": REPORT_RANGE_SCHEMA,
     },
     "required": [
-        "state",
         "content_type",
         "sha256",
         "download_size",
@@ -455,13 +453,8 @@ REPORT_RESULT_OUTPUT_SCHEMA = {
         },
         {
             "type": "object",
-            "properties": {"state": {"const": "running"}},
-            "required": ["state"],
-        },
-        {
-            "type": "object",
-            "properties": {"state": {"const": "failed"}, "error": ERROR_SCHEMA},
-            "required": ["state", "error"],
+            "properties": {},
+            "additionalProperties": False,
         },
         REPORT_READY_OUTPUT_SCHEMA,
     ]
@@ -746,7 +739,7 @@ async def handle_report_read(arguments: dict[str, Any]) -> CallToolResult:
         )
 
     if task.state in (TaskState.pending, TaskState.processing) or task.state is None:
-        response = {"state": "running"}
+        response = {}
         return CallToolResult(
             content=[TextContent(type="text", text=json.dumps(response))],
             structuredContent=response,
@@ -754,7 +747,7 @@ async def handle_report_read(arguments: dict[str, Any]) -> CallToolResult:
         )
     if task.state == TaskState.failed:
         message = task.progress_message or "Plan generation failed."
-        response = {"state": "failed", "error": {"code": "generation_failed", "message": message}}
+        response = {"error": {"code": "generation_failed", "message": message}}
         return CallToolResult(
             content=[TextContent(type="text", text=json.dumps(response))],
             structuredContent=response,
@@ -765,7 +758,6 @@ async def handle_report_read(arguments: dict[str, Any]) -> CallToolResult:
     content_bytes = await fetch_artifact_from_worker_plan(run_id, REPORT_FILENAME)
     if content_bytes is None:
         response = {
-            "state": "failed",
             "error": {
                 "code": "content_unavailable",
                 "message": "content_bytes is None",
@@ -780,7 +772,6 @@ async def handle_report_read(arguments: dict[str, Any]) -> CallToolResult:
     total_size = len(content_bytes)
     content_hash = compute_sha256(content_bytes)
     response = {
-        "state": "ready",
         "content_type": REPORT_CONTENT_TYPE,
         "sha256": content_hash,
         "download_size": total_size,

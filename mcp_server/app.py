@@ -635,7 +635,7 @@ async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
             return CallToolResult(
                 content=[TextContent(type="text", text=json.dumps(response))],
                 structuredContent=response,
-                isError=False,
+                isError=True,
             )
         
         progress_pct = float(task.progress_percentage) if task.progress_percentage else 0.0
@@ -702,7 +702,7 @@ async def handle_task_stop(arguments: dict[str, Any]) -> CallToolResult:
             return CallToolResult(
                 content=[TextContent(type="text", text=json.dumps(response))],
                 structuredContent=response,
-                isError=False,
+                isError=True,
             )
         
         if task.state in (TaskState.pending, TaskState.processing):
@@ -737,7 +737,7 @@ async def handle_report_read(arguments: dict[str, Any]) -> CallToolResult:
         return CallToolResult(
             content=[TextContent(type="text", text=json.dumps(response))],
             structuredContent=response,
-            isError=False,
+            isError=True,
         )
 
     if task.state in (TaskState.pending, TaskState.processing) or task.state is None:

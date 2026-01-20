@@ -227,21 +227,11 @@ class TaskStatusOutput(BaseModel):
     error: ErrorDetail | None = None
 
 
-class ReportRange(BaseModel):
-    start: int
-    length: int
-
-
 class ReportResultOutput(BaseModel):
     content_type: str | None = None
     sha256: str | None = None
     download_size: int | None = None
     download_url: str | None = None
-    content: str | None = None
-    total_size: int | None = None
-    range: ReportRange | None = None
-    truncated: bool | None = None
-    next_range: ReportRange | None = None
     error: ErrorDetail | None = None
 
 

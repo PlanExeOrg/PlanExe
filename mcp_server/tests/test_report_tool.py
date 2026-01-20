@@ -10,7 +10,6 @@ from unittest.mock import AsyncMock, patch
 from database_api.model_taskitem import TaskState
 from mcp_server.app import (
     REPORT_FILENAME,
-    REPORT_READ_DEFAULT_BYTES,
     extract_file_from_zip_bytes,
     handle_report_read,
     handle_list_tools,
@@ -40,7 +39,7 @@ class TestReportTool(unittest.TestCase):
 
     def test_report_read_defaults_to_metadata(self):
         task_id = str(uuid.uuid4())
-        content_bytes = b"a" * (REPORT_READ_DEFAULT_BYTES + 10)
+        content_bytes = b"a" * 10
         task = SimpleNamespace(id="task-id", state=TaskState.completed, progress_message=None)
         with patch("mcp_server.app.resolve_task_for_task_id", return_value=task):
             with patch(
@@ -55,24 +54,6 @@ class TestReportTool(unittest.TestCase):
         self.assertNotIn("download_path", payload)
         self.assertNotIn("content", payload)
         self.assertNotIn("state", payload)
-
-    def test_report_read_chunked_range(self):
-        content_bytes = b"a" * (REPORT_READ_DEFAULT_BYTES + 10)
-        task = SimpleNamespace(id="task-id", state=TaskState.completed, progress_message=None)
-        with patch("mcp_server.app.resolve_task_for_task_id", return_value=task):
-            with patch(
-                "mcp_server.app.fetch_artifact_from_worker_plan",
-                new=AsyncMock(return_value=content_bytes),
-            ):
-                result = asyncio.run(
-                    handle_report_read({"task_id": str(uuid.uuid4()), "range": {}})
-                )
-
-        payload = result.structuredContent
-        self.assertEqual(payload["range"]["start"], 0)
-        self.assertEqual(payload["range"]["length"], REPORT_READ_DEFAULT_BYTES)
-        self.assertTrue(payload["truncated"])
-        self.assertEqual(payload["next_range"]["start"], REPORT_READ_DEFAULT_BYTES)
 
 
 if __name__ == "__main__":

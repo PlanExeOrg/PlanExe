@@ -98,8 +98,6 @@ BASE_DIR_RUN = Path(os.environ.get("PLANEXE_RUN_DIR", Path(__file__).parent.pare
 WORKER_PLAN_URL = os.environ.get("PLANEXE_WORKER_PLAN_URL", "http://worker_plan:8000")
 
 REPORT_FILENAME = "030-report.html"
-REPORT_READ_DEFAULT_BYTES = 200_000
-REPORT_READ_MAX_BYTES = 1_000_000
 REPORT_CONTENT_TYPE = "text/html; charset=utf-8"
 
 SPEED_VS_DETAIL_DEFAULT = "ping_llm"
@@ -129,7 +127,6 @@ class TaskStopRequest(BaseModel):
 
 class ReportReadRequest(BaseModel):
     task_id: str
-    range: Optional[dict[str, int]] = None
 
 # Helper functions
 def find_task_by_task_id(task_id: str) -> Optional[TaskItem]:
@@ -380,14 +377,6 @@ TASK_STATUS_OUTPUT_SCHEMA = {
         },
     ]
 }
-REPORT_RANGE_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "start": {"type": "integer", "minimum": 0},
-        "length": {"type": "integer", "minimum": 0},
-    },
-    "required": ["start", "length"],
-}
 REPORT_READY_OUTPUT_SCHEMA = {
     "type": "object",
     "properties": {
@@ -395,11 +384,6 @@ REPORT_READY_OUTPUT_SCHEMA = {
         "sha256": {"type": "string"},
         "download_size": {"type": "integer"},
         "download_url": {"type": "string"},
-        "content": {"type": "string"},
-        "total_size": {"type": "integer"},
-        "range": REPORT_RANGE_SCHEMA,
-        "truncated": {"type": "boolean"},
-        "next_range": REPORT_RANGE_SCHEMA,
     },
     "required": [
         "content_type",
@@ -733,28 +717,6 @@ async def handle_report_read(arguments: dict[str, Any]) -> CallToolResult:
     download_url = build_report_download_url(str(task.id))
     if download_url:
         response["download_url"] = download_url
-
-    if req.range is not None:
-        range_request = req.range or {"start": 0, "length": REPORT_READ_DEFAULT_BYTES}
-        start = max(int(range_request.get("start", 0)), 0)
-        length_value = range_request.get("length")
-        if length_value is None:
-            length_value = REPORT_READ_DEFAULT_BYTES
-        length = int(length_value)
-        if length < 0:
-            length = 0
-        if length > REPORT_READ_MAX_BYTES:
-            length = REPORT_READ_MAX_BYTES
-        end = min(start + length, total_size)
-        sliced_bytes = content_bytes[start:end]
-
-        truncated = end < total_size
-        response["content"] = sliced_bytes.decode("utf-8", errors="replace")
-        response["total_size"] = total_size
-        response["range"] = {"start": start, "length": len(sliced_bytes)}
-        response["truncated"] = truncated
-        if truncated:
-            response["next_range"] = {"start": end, "length": min(length, total_size - end)}
 
     return CallToolResult(
         content=[TextContent(type="text", text=json.dumps(response))],

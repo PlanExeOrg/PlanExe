@@ -406,7 +406,6 @@ TASK_STATUS_OUTPUT_SCHEMA = {
                         "required": ["path", "updated_at"],
                     },
                 },
-                "warnings": {"type": "array", "items": {"type": "string"}},
             },
             "required": [
                 "task_id",
@@ -414,7 +413,6 @@ TASK_STATUS_OUTPUT_SCHEMA = {
                 "progress",
                 "timing",
                 "latest_artifacts",
-                "warnings",
             ],
         },
     ]
@@ -676,7 +674,6 @@ async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
                 "elapsed_sec": (datetime.now(UTC) - created_at).total_seconds() if created_at else 0,
             },
             "latest_artifacts": latest_artifacts[:10],  # Limit to 10 most recent
-            "warnings": [],
         }
     
     return CallToolResult(

@@ -234,7 +234,6 @@ class TaskStatusOutput(BaseModel):
     progress: TaskStatusProgress | None = None
     timing: TaskStatusTiming | None = None
     latest_artifacts: list[TaskStatusArtifact] | None = None
-    warnings: list[str] | None = None
     error: ErrorDetail | None = None
 
 

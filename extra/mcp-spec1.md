@@ -187,8 +187,7 @@ Response
       "path": "plan.md",
       "updated_at": "2026-01-14T12:43:11Z"
     }
-  ],
-  "warnings": ["string"]
+  ]
 }
 
 Notes

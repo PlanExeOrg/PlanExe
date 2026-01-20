@@ -605,9 +605,12 @@ async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
         db.session.add(event)
         db.session.commit()
         
+        created_at = task.timestamp_created
+        if created_at and created_at.tzinfo is None:
+            created_at = created_at.replace(tzinfo=UTC)
         response = {
             "task_id": task_id,
-            "created_at": task.timestamp_created.isoformat() + "Z",
+            "created_at": created_at.replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         }
     
     return CallToolResult(
@@ -650,9 +653,10 @@ async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
             if files_list:
                 for file_name in files_list[:10]:  # Limit to 10 most recent
                     if file_name != "log.txt":
+                        updated_at = datetime.now(UTC).replace(microsecond=0)
                         files.append({
                             "path": file_name,
-                            "updated_at": datetime.now(UTC).isoformat() + "Z",  # Approximate
+                            "updated_at": updated_at.isoformat().replace("+00:00", "Z"),  # Approximate
                         })
         
         created_at = task.timestamp_created
@@ -670,7 +674,11 @@ async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
                 },
             },
             "timing": {
-                "started_at": created_at.isoformat().replace("+00:00", "Z") if created_at else None,
+                "started_at": (
+                    created_at.replace(microsecond=0).isoformat().replace("+00:00", "Z")
+                    if created_at
+                    else None
+                ),
                 "elapsed_sec": (datetime.now(UTC) - created_at).total_seconds() if created_at else 0,
             },
             "files": files[:10],  # Limit to 10 most recent

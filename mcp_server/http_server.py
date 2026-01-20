@@ -208,16 +208,6 @@ class TaskCreateOutput(BaseModel):
     created_at: str
 
 
-class TaskStatusProgressTask(BaseModel):
-    name: str
-    pct: float
-
-
-class TaskStatusProgress(BaseModel):
-    overall: float
-    current_task: TaskStatusProgressTask
-
-
 class TaskStatusTiming(BaseModel):
     started_at: str | None
     elapsed_sec: float
@@ -231,7 +221,7 @@ class TaskStatusFile(BaseModel):
 class TaskStatusOutput(BaseModel):
     task_id: str | None = None
     state: Literal["stopped", "running", "completed", "failed", "stopping"] | None = None
-    progress: TaskStatusProgress | None = None
+    progress_percent: int | None = None
     timing: TaskStatusTiming | None = None
     files: list[TaskStatusFile] | None = None
     error: ErrorDetail | None = None

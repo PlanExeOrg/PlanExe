@@ -23,9 +23,8 @@ The interface is designed to support:
 	•	Artifact-first workflow: outputs are exposed as file-like artifacts.
 	•	Stop / Resume with minimal recompute:
 	•	on resume, only invalidated downstream tasks regenerate.
-	•	Fine-grained progress reporting:
-	•	overall progress
-	•	current Luigi task (or logical task)
+	•	Progress reporting:
+	•	progress_percent
 	•	Editable artifacts:
 	•	user edits a generated file
 	•	pipeline continues from that point, producing dependent outputs
@@ -65,7 +64,7 @@ A single execution attempt inside a task (e.g., after a resume).
 Key properties
 	•	run_id: monotonic per task (run_0001, run_0002…)
 	•	state: running | stopped | completed | failed
-	•	progress: computed progress metrics
+	•	progress_percent: computed progress percentage (integer)
 	•	started_at, ended_at
 
 Artifact
@@ -170,13 +169,7 @@ Response
 {
   "task_id": "pxe_...",
   "state": "running",
-  "progress": {
-    "overall": 0.62,
-    "current_task": {
-      "name": "WriteDetailedPlan",
-      "pct": 0.33
-    }
-  },
+  "progress_percent": 62,
   "timing": {
     "started_at": "2026-01-14T12:35:10Z",
     "elapsed_sec": 512
@@ -190,7 +183,7 @@ Response
 }
 
 Notes
-	•	progress.overall must be within [0,1].
+	•	progress_percent must be an integer within [0,100].
 
 ⸻
 
@@ -313,7 +306,7 @@ To match your UI behavior:
 Progress bars
 
 Use:
-	•	task_status.progress.overall
+	•	task_status.progress_percent
 	•	or progress_updated events
 
 ⸻

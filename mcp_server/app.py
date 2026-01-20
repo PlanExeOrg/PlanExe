@@ -372,21 +372,7 @@ TASK_STATUS_OUTPUT_SCHEMA = {
                     "type": "string",
                     "enum": ["stopped", "running", "completed", "failed", "stopping"],
                 },
-                "progress": {
-                    "type": "object",
-                    "properties": {
-                        "overall": {"type": "number"},
-                        "current_task": {
-                            "type": "object",
-                            "properties": {
-                                "name": {"type": "string"},
-                                "pct": {"type": "number"},
-                            },
-                            "required": ["name", "pct"],
-                        },
-                    },
-                    "required": ["overall", "current_task"],
-                },
+                "progress_percent": {"type": "integer"},
                 "timing": {
                     "type": "object",
                     "properties": {
@@ -410,7 +396,7 @@ TASK_STATUS_OUTPUT_SCHEMA = {
             "required": [
                 "task_id",
                 "state",
-                "progress",
+                "progress_percent",
                 "timing",
                 "files",
             ],
@@ -632,11 +618,15 @@ async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
                 isError=True,
             )
         
-        progress_pct = float(task.progress_percentage) if task.progress_percentage else 0.0
+        progress_percent = (
+            int(round(float(task.progress_percentage))) if task.progress_percentage else 0
+        )
         
         state = get_task_state_mapping(task.state)
         if task.state == TaskState.processing and task.stop_requested:
             state = "stopping"
+        if task.state == TaskState.completed:
+            progress_percent = 100
         
         # Collect files from worker_plan
         task_uuid = get_task_uuid_for_task_id(task_id)
@@ -659,13 +649,7 @@ async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
         response = {
             "task_id": task_id,
             "state": state,
-            "progress": {
-                "overall": progress_pct / 100.0,
-                "current_task": {
-                    "name": task.progress_message or "Unknown",
-                    "pct": progress_pct / 100.0,
-                },
-            },
+            "progress_percent": progress_percent,
             "timing": {
                 "started_at": (
                     created_at.replace(microsecond=0).isoformat().replace("+00:00", "Z")

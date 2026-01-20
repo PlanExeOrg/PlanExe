@@ -4,7 +4,7 @@ PlanExe MCP Interface Specification (v1.0)
 
 This document specifies a Model Context Protocol (MCP) interface for PlanExe that enables AI agents and client UIs to:
 	1.	Create and run long-running plan generation workflows.
-	2.	Receive real-time progress updates (phases, task status, log output).
+	2.	Receive real-time progress updates (task status, log output).
 	3.	List, read, and edit artifacts produced in an output directory.
 	4.	Stop and resume execution with Luigi-aware incremental recomputation.
 
@@ -25,7 +25,6 @@ The interface is designed to support:
 	•	on resume, only invalidated downstream tasks regenerate.
 	•	Fine-grained progress reporting:
 	•	overall progress
-	•	phase
 	•	current Luigi task (or logical task)
 	•	Editable artifacts:
 	•	user edits a generated file
@@ -66,7 +65,6 @@ A single execution attempt inside a task (e.g., after a resume).
 Key properties
 	•	run_id: monotonic per task (run_0001, run_0002…)
 	•	state: running | stopped | completed | failed
-	•	phase: high-level stage (e.g., generating_plan, validating, exporting)
 	•	progress: computed progress metrics
 	•	started_at, ended_at
 
@@ -173,7 +171,6 @@ Response
 {
   "task_id": "pxe_...",
   "state": "running",
-  "phase": "generating_plan",
   "progress": {
     "overall": 0.62,
     "current_task": {
@@ -196,7 +193,6 @@ Response
 
 Notes
 	•	progress.overall must be within [0,1].
-	•	phase must be stable and enumerable.
 
 ⸻
 
@@ -223,7 +219,7 @@ Required semantics
 
 ⸻
 
-7. Targets and Phases
+7. Targets
 
 8.1 Standard targets
 
@@ -233,19 +229,6 @@ The following targets MUST be supported:
 	•	build_plan_and_validate
 
 Targets map to Luigi “final tasks”.
-
-8.2 Standard phases
-
-Phases MUST be enumerable and stable (for UI progress bars).
-
-Recommended phases:
-	•	initializing
-	•	generating_plan
-	•	validating
-	•	exporting
-	•	finalizing
-
-⸻
 
 10. Concurrency & Locking
 
@@ -333,7 +316,6 @@ Progress bars
 
 Use:
 	•	task_status.progress.overall
-	•	task_status.phase
 	•	or progress_updated events
 
 ⸻

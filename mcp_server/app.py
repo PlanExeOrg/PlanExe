@@ -372,16 +372,6 @@ TASK_STATUS_OUTPUT_SCHEMA = {
                     "type": "string",
                     "enum": ["stopped", "running", "completed", "failed", "stopping"],
                 },
-                "phase": {
-                    "type": "string",
-                    "enum": [
-                        "initializing",
-                        "generating_plan",
-                        "validating",
-                        "exporting",
-                        "finalizing",
-                    ],
-                },
                 "progress": {
                     "type": "object",
                     "properties": {
@@ -421,7 +411,6 @@ TASK_STATUS_OUTPUT_SCHEMA = {
             "required": [
                 "task_id",
                 "state",
-                "phase",
                 "progress",
                 "timing",
                 "latest_artifacts",
@@ -649,18 +638,7 @@ async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
                 isError=False,
             )
         
-        # Determine phase based on progress
         progress_pct = float(task.progress_percentage) if task.progress_percentage else 0.0
-        if progress_pct == 0.0:
-            phase = "initializing"
-        elif progress_pct < 50.0:
-            phase = "generating_plan"
-        elif progress_pct < 90.0:
-            phase = "validating"
-        elif progress_pct < 100.0:
-            phase = "exporting"
-        else:
-            phase = "finalizing"
         
         state = get_task_state_mapping(task.state)
         if task.state == TaskState.processing and task.stop_requested:
@@ -686,7 +664,6 @@ async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
         response = {
             "task_id": task_id,
             "state": state,
-            "phase": phase,
             "progress": {
                 "overall": progress_pct / 100.0,
                 "current_task": {

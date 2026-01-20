@@ -231,9 +231,6 @@ class TaskStatusArtifact(BaseModel):
 class TaskStatusOutput(BaseModel):
     task_id: str | None = None
     state: Literal["stopped", "running", "completed", "failed", "stopping"] | None = None
-    phase: (
-        Literal["initializing", "generating_plan", "validating", "exporting", "finalizing"] | None
-    ) = None
     progress: TaskStatusProgress | None = None
     timing: TaskStatusTiming | None = None
     latest_artifacts: list[TaskStatusArtifact] | None = None

@@ -112,29 +112,33 @@ REPORT_CONTENT_TYPE = "text/html; charset=utf-8"
 ZIP_SNAPSHOT_MAX_BYTES = 100_000_000
 
 SPEED_VS_DETAIL_DEFAULT = "ping_llm"
+SPEED_VS_DETAIL_DEFAULT_ALIAS = "ping"
 SPEED_VS_DETAIL_VALUES = (
     "ping_llm",
     "fast_but_skip_details",
     "all_details_but_slow",
 )
+SPEED_VS_DETAIL_INPUT_VALUES = (
+    "ping",
+    "fast",
+    "all",
+)
 SPEED_VS_DETAIL_ALIASES = {
+    "ping": "ping_llm",
     "fast": "fast_but_skip_details",
     "all": "all_details_but_slow",
-    "ping": "ping_llm",
 }
 
 # Pydantic models for request/response validation
 class TaskCreateRequest(BaseModel):
     idea: str
-    config: Optional[dict[str, Any]] = None
-    metadata: Optional[dict[str, Any]] = None
+    speed_vs_detail: Optional[str] = None
 
 class TaskStatusRequest(BaseModel):
     task_id: str
 
 class TaskStopRequest(BaseModel):
     task_id: str
-    mode: str = "graceful"
 
 class ReportReadRequest(BaseModel):
     task_id: str
@@ -445,6 +449,17 @@ def resolve_speed_vs_detail(config: Optional[dict[str, Any]]) -> str:
         return value
     return SPEED_VS_DETAIL_DEFAULT
 
+def _merge_task_create_config(
+    config: Optional[dict[str, Any]],
+    speed_vs_detail: Optional[str],
+) -> Optional[dict[str, Any]]:
+    merged = dict(config or {})
+    if isinstance(speed_vs_detail, str):
+        candidate = speed_vs_detail.strip()
+        if candidate and "speed_vs_detail" not in merged and "speed" not in merged:
+            merged["speed_vs_detail"] = candidate
+    return merged or None
+
 def build_report_download_path(task_id: str) -> str:
     return f"/download/{task_id}/{REPORT_FILENAME}"
 
@@ -489,22 +504,14 @@ TASK_CREATE_INPUT_SCHEMA = {
     "type": "object",
     "properties": {
         "idea": {"type": "string", "description": "The idea/prompt for the plan"},
-        "config": {
-            "type": "object",
-            "description": "Optional configuration",
-            "properties": {
-                "speed_vs_detail": {
-                    "type": "string",
-                    "enum": list(SPEED_VS_DETAIL_VALUES),
-                    "description": (
-                        "Defaults to ping_llm. Aliases: fast -> fast_but_skip_details, "
-                        "all -> all_details_but_slow."
-                    ),
-                }
-            },
-            "additionalProperties": True,
+        "speed_vs_detail": {
+            "type": "string",
+            "enum": list(SPEED_VS_DETAIL_INPUT_VALUES),
+            "default": SPEED_VS_DETAIL_DEFAULT_ALIAS,
+            "description": (
+                "Defaults to ping (alias for ping_llm). Options: ping, fast, all."
+            ),
         },
-        "metadata": {"type": "object", "description": "Optional metadata including user_id"},
     },
     "required": ["idea"],
 }
@@ -519,7 +526,6 @@ TASK_STOP_INPUT_SCHEMA = {
     "type": "object",
     "properties": {
         "task_id": {"type": "string"},
-        "mode": {"type": "string", "default": "graceful"},
     },
     "required": ["task_id"],
 }
@@ -541,7 +547,14 @@ class ToolDefinition:
 TOOL_DEFINITIONS = [
     ToolDefinition(
         name="task_create",
-        description="Creates a new task and output namespace",
+        description=(
+            "Creates a new task and output namespace. speed_vs_detail modes: "
+            "'all' runs the full pipeline with all details (slower, higher token usage/cost). "
+            "'fast' runs the full pipeline with minimal work per step (faster, fewer details), "
+            "useful to verify the pipeline is working. "
+            "'ping' runs the pipeline entrypoint and makes a single LLM call to verify the "
+            "worker_plan_database is processing tasks and can reach the LLM."
+        ),
         input_schema=TASK_CREATE_INPUT_SCHEMA,
         output_schema=TASK_CREATE_OUTPUT_SCHEMA,
     ),
@@ -600,11 +613,12 @@ async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
     """Handle task_create"""
     req = TaskCreateRequest(**arguments)
 
+    merged_config = _merge_task_create_config(None, req.speed_vs_detail)
     response = await asyncio.to_thread(
         _create_task_sync,
         req.idea,
-        req.config,
-        req.metadata,
+        merged_config,
+        None,
     )
     return CallToolResult(
         content=[TextContent(type="text", text=json.dumps(response))],

@@ -12,12 +12,12 @@ import sys
 from collections import defaultdict, deque
 from contextlib import asynccontextmanager, suppress
 from time import monotonic
-from typing import Annotated, Any, Awaitable, Callable, Optional, Sequence
+from typing import Annotated, Any, Awaitable, Callable, Literal, Optional, Sequence
 
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from mcp.server.fastmcp import FastMCP
 from mcp.types import CallToolResult, ContentBlock, TextContent
 
@@ -69,6 +69,12 @@ HTTP_PORT = int(os.environ.get("PORT") or os.environ.get("PLANEXE_MCP_HTTP_PORT"
 MAX_BODY_BYTES = int(os.environ.get("PLANEXE_MCP_MAX_BODY_BYTES", "1048576"))
 RATE_LIMIT_REQUESTS = int(os.environ.get("PLANEXE_MCP_RATE_LIMIT", "60"))
 RATE_LIMIT_WINDOW_SECONDS = float(os.environ.get("PLANEXE_MCP_RATE_WINDOW_SECONDS", "60"))
+
+SpeedVsDetailInput = Literal[
+    "ping",
+    "fast",
+    "all",
+]
 
 
 def _split_csv_env(value: Optional[str]) -> list[str]:
@@ -275,10 +281,21 @@ def _normalize_tool_result(result: Any) -> tuple[list[dict[str, Any]], Optional[
 
 async def task_create(
     idea: str,
-    config: dict[str, Any] | None = None,
-    metadata: dict[str, Any] | None = None,
+    speed_vs_detail: Annotated[
+        SpeedVsDetailInput,
+        Field(
+            description=(
+                "Defaults to ping (alias for ping_llm). Options: ping, fast, all."
+            ),
+        ),
+    ] = "ping",
 ) -> Annotated[CallToolResult, TaskCreateOutput]:
-    return await handle_task_create({"idea": idea, "config": config, "metadata": metadata})
+    return await handle_task_create(
+        {
+            "idea": idea,
+            "speed_vs_detail": speed_vs_detail,
+        }
+    )
 
 
 async def task_status(task_id: str) -> Annotated[CallToolResult, TaskStatusOutput]:
@@ -287,9 +304,8 @@ async def task_status(task_id: str) -> Annotated[CallToolResult, TaskStatusOutpu
 
 async def task_stop(
     task_id: str,
-    mode: str = "graceful",
 ) -> CallToolResult:
-    return await handle_task_stop({"task_id": task_id, "mode": mode})
+    return await handle_task_stop({"task_id": task_id})
 
 
 async def get_result(

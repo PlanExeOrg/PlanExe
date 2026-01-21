@@ -54,6 +54,7 @@ from mcp_server.tool_models import (
     ReportReadyOutput,
     TaskCreateOutput,
     TaskStatusSuccess,
+    TaskStopOutput,
 )
 
 # Initialize Flask app for database access
@@ -483,6 +484,7 @@ TASK_STATUS_OUTPUT_SCHEMA = {
         TASK_STATUS_SUCCESS_SCHEMA,
     ]
 }
+TASK_STOP_OUTPUT_SCHEMA = TaskStopOutput.model_json_schema()
 REPORT_READY_OUTPUT_SCHEMA = ReportReadyOutput.model_json_schema()
 TASK_RESULT_OUTPUT_SCHEMA = {
     "oneOf": [
@@ -568,6 +570,7 @@ TOOL_DEFINITIONS = [
         name="task_stop",
         description="Stops the plan that is currently being created.",
         input_schema=TASK_STOP_INPUT_SCHEMA,
+        output_schema=TASK_STOP_OUTPUT_SCHEMA,
     ),
     ToolDefinition(
         name="task_result",

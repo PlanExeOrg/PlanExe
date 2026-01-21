@@ -26,6 +26,7 @@ from mcp_server.tool_models import (
     ReportResultOutput,
     TaskCreateOutput,
     TaskStatusOutput,
+    TaskStopOutput,
 )
 
 # Load .env file early
@@ -304,7 +305,7 @@ async def task_status(task_id: str) -> Annotated[CallToolResult, TaskStatusOutpu
 
 async def task_stop(
     task_id: str,
-) -> CallToolResult:
+) -> Annotated[CallToolResult, TaskStopOutput]:
     return await handle_task_stop({"task_id": task_id})
 
 

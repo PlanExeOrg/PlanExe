@@ -40,6 +40,11 @@ class TaskStatusOutput(BaseModel):
     error: ErrorDetail | None = None
 
 
+class TaskStopOutput(BaseModel):
+    state: Literal["stopped"] | None = None
+    error: ErrorDetail | None = None
+
+
 class ReportReadyOutput(BaseModel):
     content_type: str
     sha256: str

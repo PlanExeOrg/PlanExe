@@ -484,7 +484,7 @@ TASK_STATUS_OUTPUT_SCHEMA = {
     ]
 }
 REPORT_READY_OUTPUT_SCHEMA = ReportReadyOutput.model_json_schema()
-REPORT_RESULT_OUTPUT_SCHEMA = {
+TASK_RESULT_OUTPUT_SCHEMA = {
     "oneOf": [
         {
             "type": "object",
@@ -548,7 +548,7 @@ TOOL_DEFINITIONS = [
     ToolDefinition(
         name="task_create",
         description=(
-            "Creates a new task and output namespace. speed_vs_detail modes: "
+            "Start creating a new plan. speed_vs_detail modes: "
             "'all' runs the full pipeline with all details (slower, higher token usage/cost). "
             "'fast' runs the full pipeline with minimal work per step (faster, fewer details), "
             "useful to verify the pipeline is working. "
@@ -560,20 +560,20 @@ TOOL_DEFINITIONS = [
     ),
     ToolDefinition(
         name="task_status",
-        description="Returns run status and progress",
+        description="Returns status and progress of the plan currently being created.",
         input_schema=TASK_STATUS_INPUT_SCHEMA,
         output_schema=TASK_STATUS_OUTPUT_SCHEMA,
     ),
     ToolDefinition(
         name="task_stop",
-        description="Stops the active run",
+        description="Stops the plan that is currently being created.",
         input_schema=TASK_STOP_INPUT_SCHEMA,
     ),
     ToolDefinition(
         name="task_result",
-        description="Returns download metadata for the generated report",
+        description="Returns download link for the created plan.",
         input_schema=TASK_RESULT_INPUT_SCHEMA,
-        output_schema=REPORT_RESULT_OUTPUT_SCHEMA,
+        output_schema=TASK_RESULT_OUTPUT_SCHEMA,
     ),
 ]
 

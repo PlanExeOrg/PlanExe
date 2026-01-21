@@ -62,7 +62,6 @@ Run
 A single execution attempt inside a task (e.g., after a resume).
 
 Key properties
-	•	run_id: monotonic per task (run_0001, run_0002…)
 	•	state: running | stopped | completed | failed
 	•	progress_percent: computed progress percentage (integer)
 	•	started_at, ended_at
@@ -120,25 +119,13 @@ All tool names below are normative.
 
 6.1 task_create
 
-Creates a new task and output namespace.
+Start creating a new plan. speed_vs_detail modes: 'all' runs the full pipeline with all details (slower, higher token usage/cost). 'fast' runs the full pipeline with minimal work per step (faster, fewer details), useful to verify the pipeline is working. 'ping' runs the pipeline entrypoint and makes a single LLM call to verify the worker_plan_database is processing tasks and can reach the LLM.
 
 Request
 
 {
   "idea": "string",
-  "config": {
-    "planner_model": "string",
-    "validator_model": "string",
-    "max_runtime_sec": 7200,
-    "luigi": {
-      "workers": 4,
-      "scheduler": "local"
-    }
-  },
-  "metadata": {
-    "user_id": "string",
-    "tags": ["string"]
-  }
+  "speed_vs_detail": "ping"
 }
 
 Response

@@ -31,9 +31,9 @@ class TestTaskStatusTool(unittest.TestCase):
         self.assertIsInstance(result.structuredContent, dict)
         self.assertEqual(result.structuredContent["task_id"], task_id)
         self.assertIn("state", result.structuredContent)
-        self.assertIn("progress_percent", result.structuredContent)
-        self.assertIsInstance(result.structuredContent["progress_percent"], int)
-        self.assertEqual(result.structuredContent["progress_percent"], 100)
+        self.assertIn("progress_percentage", result.structuredContent)
+        self.assertIsInstance(result.structuredContent["progress_percentage"], float)
+        self.assertEqual(result.structuredContent["progress_percentage"], 100.0)
 
 
 if __name__ == "__main__":

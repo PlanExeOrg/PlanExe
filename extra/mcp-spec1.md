@@ -24,7 +24,7 @@ The interface is designed to support:
 	•	Stop / Resume with minimal recompute:
 	•	on resume, only invalidated downstream tasks regenerate.
 	•	Progress reporting:
-	•	progress_percent
+	•	progress_percentage
 	•	Editable artifacts:
 	•	user edits a generated file
 	•	pipeline continues from that point, producing dependent outputs
@@ -63,7 +63,7 @@ A single execution attempt inside a task (e.g., after a resume).
 
 Key properties
 	•	state: running | stopped | completed | failed
-	•	progress_percent: computed progress percentage (integer)
+	•	progress_percentage: computed progress percentage (float)
 	•	started_at, ended_at
 
 Artifact
@@ -156,7 +156,7 @@ Response
 {
   "task_id": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1",
   "state": "running",
-  "progress_percent": 62,
+  "progress_percentage": 62.0,
   "timing": {
     "started_at": "2026-01-14T12:35:10Z",
     "elapsed_sec": 512
@@ -170,7 +170,7 @@ Response
 }
 
 Notes
-	•	progress_percent must be an integer within [0,100].
+	•	progress_percentage must be a float within [0,100].
 
 ⸻
 
@@ -293,7 +293,7 @@ To match your UI behavior:
 Progress bars
 
 Use:
-	•	task_status.progress_percent
+	•	task_status.progress_percentage
 	•	or progress_updated events
 
 ⸻

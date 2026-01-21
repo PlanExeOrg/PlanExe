@@ -721,14 +721,14 @@ async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
             isError=True,
         )
 
-    progress_percent = int(round(float(task_snapshot.get("progress_percentage") or 0)))
+    progress_percentage = float(task_snapshot.get("progress_percentage") or 0.0)
 
     task_state = task_snapshot["state"]
     state = get_task_state_mapping(task_state)
     if task_state == TaskState.processing and task_snapshot["stop_requested"]:
         state = "stopping"
     if task_state == TaskState.completed:
-        progress_percent = 100
+        progress_percentage = 100.0
 
     # Collect files from worker_plan
     task_uuid = task_snapshot["id"]
@@ -751,7 +751,7 @@ async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
     response = {
         "task_id": task_uuid,
         "state": state,
-        "progress_percent": progress_percent,
+        "progress_percentage": progress_percentage,
         "timing": {
             "started_at": (
                 created_at.replace(microsecond=0).isoformat().replace("+00:00", "Z")

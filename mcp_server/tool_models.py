@@ -26,7 +26,7 @@ class TaskStatusFile(BaseModel):
 class TaskStatusSuccess(BaseModel):
     task_id: str
     state: Literal["stopped", "running", "completed", "failed", "stopping"]
-    progress_percent: int
+    progress_percentage: float
     timing: TaskStatusTiming
     files: list[TaskStatusFile]
 
@@ -34,7 +34,7 @@ class TaskStatusSuccess(BaseModel):
 class TaskStatusOutput(BaseModel):
     task_id: str | None = None
     state: Literal["stopped", "running", "completed", "failed", "stopping"] | None = None
-    progress_percent: int | None = None
+    progress_percentage: float | None = None
     timing: TaskStatusTiming | None = None
     files: list[TaskStatusFile] | None = None
     error: ErrorDetail | None = None

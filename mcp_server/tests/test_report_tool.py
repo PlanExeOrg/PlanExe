@@ -8,6 +8,7 @@ from unittest.mock import AsyncMock, patch
 from database_api.model_taskitem import TaskState
 from mcp_server.app import (
     REPORT_FILENAME,
+    ZIP_CONTENT_TYPE,
     extract_file_from_zip_bytes,
     handle_report_read,
     handle_list_tools,
@@ -56,6 +57,25 @@ class TestReportTool(unittest.TestCase):
         self.assertNotIn("download_path", payload)
         self.assertNotIn("content", payload)
         self.assertNotIn("state", payload)
+
+    def test_report_read_zip(self):
+        task_id = str(uuid.uuid4())
+        content_bytes = b"zipdata"
+        task_snapshot = {
+            "id": "task-id",
+            "state": TaskState.completed,
+            "progress_message": None,
+        }
+        with patch("mcp_server.app._get_task_for_report_sync", return_value=task_snapshot):
+            with patch(
+                "mcp_server.app.fetch_zip_from_worker_plan",
+                new=AsyncMock(return_value=content_bytes),
+            ):
+                result = asyncio.run(handle_report_read({"task_id": task_id, "artifact": "zip"}))
+
+        payload = result.structuredContent
+        self.assertEqual(payload["download_size"], len(content_bytes))
+        self.assertEqual(payload["content_type"], ZIP_CONTENT_TYPE)
 
 
 if __name__ == "__main__":

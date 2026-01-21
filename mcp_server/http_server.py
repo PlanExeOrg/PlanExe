@@ -50,7 +50,10 @@ from mcp_server.app import (
     REPORT_CONTENT_TYPE,
     REPORT_FILENAME,
     TOOL_DEFINITIONS,
+    ZIP_CONTENT_TYPE,
+    ZIP_FILENAME,
     fetch_artifact_from_worker_plan,
+    fetch_zip_from_worker_plan,
     handle_task_create,
     handle_task_status,
     handle_task_stop,
@@ -75,6 +78,10 @@ SpeedVsDetailInput = Literal[
     "ping",
     "fast",
     "all",
+]
+ResultArtifactInput = Literal[
+    "report",
+    "zip",
 ]
 
 
@@ -311,8 +318,12 @@ async def task_stop(
 
 async def get_result(
     task_id: str,
+    artifact: Annotated[
+        ResultArtifactInput,
+        Field(description="Download artifact type: report or zip."),
+    ] = "report",
 ) -> Annotated[CallToolResult, ReportResultOutput]:
-    return await handle_report_read({"task_id": task_id})
+    return await handle_report_read({"task_id": task_id, "artifact": artifact})
 
 
 def _register_tools(server: FastMCP) -> None:
@@ -488,11 +499,18 @@ async def list_tools(fastmcp_server: FastMCP = Depends(_get_fastmcp)) -> dict[st
 @app.get("/download/{task_id}/{filename}")
 async def download_report(task_id: str, filename: str) -> Response:
     """Download the generated report HTML for a task."""
-    if filename != REPORT_FILENAME:
+    if filename not in (REPORT_FILENAME, ZIP_FILENAME):
         raise HTTPException(status_code=404, detail="Report not found")
     task = await asyncio.to_thread(resolve_task_for_task_id, task_id)
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found")
+    if filename == ZIP_FILENAME:
+        content_bytes = await fetch_zip_from_worker_plan(str(task.id))
+        if content_bytes is None:
+            raise HTTPException(status_code=404, detail="Report not found")
+        headers = {"Content-Disposition": f'attachment; filename="{task_id}.zip"'}
+        return Response(content=content_bytes, media_type=ZIP_CONTENT_TYPE, headers=headers)
+
     content_bytes = await fetch_artifact_from_worker_plan(str(task.id), REPORT_FILENAME)
     if content_bytes is None:
         raise HTTPException(status_code=404, detail="Report not found")

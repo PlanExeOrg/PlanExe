@@ -110,6 +110,8 @@ WORKER_PLAN_URL = os.environ.get("PLANEXE_WORKER_PLAN_URL", "http://worker_plan:
 
 REPORT_FILENAME = "030-report.html"
 REPORT_CONTENT_TYPE = "text/html; charset=utf-8"
+ZIP_FILENAME = "run.zip"
+ZIP_CONTENT_TYPE = "application/zip"
 ZIP_SNAPSHOT_MAX_BYTES = 100_000_000
 
 SPEED_VS_DETAIL_DEFAULT = "ping_llm"
@@ -143,6 +145,7 @@ class TaskStopRequest(BaseModel):
 
 class ReportReadRequest(BaseModel):
     task_id: str
+    artifact: Optional[str] = None
 
 # Helper functions
 def find_task_by_task_id(task_id: str) -> Optional[TaskItem]:
@@ -316,6 +319,13 @@ def fetch_report_from_db(task_id: str) -> Optional[bytes]:
         return task.generated_report_html.encode("utf-8")
     return None
 
+def fetch_zip_snapshot(task_id: str) -> Optional[bytes]:
+    """Fetch the zip snapshot stored in the TaskItem."""
+    task = get_task_by_id(task_id)
+    if task and task.run_zip_snapshot is not None:
+        return task.run_zip_snapshot
+    return None
+
 def fetch_file_from_zip_snapshot(task_id: str, file_path: str) -> Optional[bytes]:
     """Fetch a file from the TaskItem zip snapshot."""
     task = get_task_by_id(task_id)
@@ -422,6 +432,54 @@ async def fetch_file_list_from_worker_plan(run_id: str) -> Optional[list[str]]:
         logger.error(f"Error fetching file list from worker_plan: {e}", exc_info=True)
         return None
 
+async def fetch_zip_from_worker_plan(run_id: str) -> Optional[bytes]:
+    """Fetch the zip snapshot from worker_plan via HTTP."""
+    try:
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            async with client.stream("GET", f"{WORKER_PLAN_URL}/runs/{run_id}/zip") as response:
+                if response.status_code != 200:
+                    logger.warning("Worker plan returned %s for zip: %s", response.status_code, run_id)
+                else:
+                    zip_too_large = False
+                    content_length = response.headers.get("content-length")
+                    if content_length:
+                        try:
+                            if int(content_length) > ZIP_SNAPSHOT_MAX_BYTES:
+                                logger.warning(
+                                    "Zip snapshot too large (%s bytes) for run %s; skipping.",
+                                    content_length,
+                                    run_id,
+                                )
+                                zip_too_large = True
+                        except ValueError:
+                            logger.warning(
+                                "Invalid Content-Length for zip snapshot: %s", content_length
+                            )
+                    if not zip_too_large:
+                        buffer = BytesIO()
+                        size = 0
+                        async for chunk in response.aiter_bytes():
+                            size += len(chunk)
+                            if size > ZIP_SNAPSHOT_MAX_BYTES:
+                                logger.warning(
+                                    "Zip snapshot exceeded max size (%s bytes) for run %s; skipping.",
+                                    ZIP_SNAPSHOT_MAX_BYTES,
+                                    run_id,
+                                )
+                                zip_too_large = True
+                                break
+                            buffer.write(chunk)
+                        if not zip_too_large:
+                            return buffer.getvalue()
+
+            snapshot_bytes = await asyncio.to_thread(fetch_zip_snapshot, run_id)
+            if snapshot_bytes is not None:
+                return snapshot_bytes
+            return None
+    except Exception as e:
+        logger.error(f"Error fetching zip from worker_plan: {e}", exc_info=True)
+        return None
+
 def compute_sha256(content: str | bytes) -> str:
     """Compute SHA256 hash of content."""
     if isinstance(content, str):
@@ -469,6 +527,15 @@ def build_report_download_url(task_id: str) -> Optional[str]:
     if not base_url:
         return None
     return f"{base_url.rstrip('/')}{build_report_download_path(task_id)}"
+
+def build_zip_download_path(task_id: str) -> str:
+    return f"/download/{task_id}/{ZIP_FILENAME}"
+
+def build_zip_download_url(task_id: str) -> Optional[str]:
+    base_url = os.environ.get("PLANEXE_MCP_PUBLIC_BASE_URL")
+    if not base_url:
+        return None
+    return f"{base_url.rstrip('/')}{build_zip_download_path(task_id)}"
 
 # Output schemas for MCP tools.
 ERROR_SCHEMA = ErrorDetail.model_json_schema()
@@ -535,6 +602,12 @@ TASK_RESULT_INPUT_SCHEMA = {
     "type": "object",
     "properties": {
         "task_id": {"type": "string"},
+        "artifact": {
+            "type": "string",
+            "enum": ["report", "zip"],
+            "default": "report",
+            "description": "Download artifact type: report or zip.",
+        },
     },
     "required": ["task_id"],
 }
@@ -574,7 +647,7 @@ TOOL_DEFINITIONS = [
     ),
     ToolDefinition(
         name="task_result",
-        description="Returns download link for the created plan.",
+        description="Returns download metadata for the report or zip snapshot.",
         input_schema=TASK_RESULT_INPUT_SCHEMA,
         output_schema=TASK_RESULT_OUTPUT_SCHEMA,
     ),
@@ -733,6 +806,9 @@ async def handle_report_read(arguments: dict[str, Any]) -> CallToolResult:
     """Handle task_result."""
     req = ReportReadRequest(**arguments)
     task_id = req.task_id
+    artifact = req.artifact.strip().lower() if isinstance(req.artifact, str) else "report"
+    if artifact not in ("report", "zip"):
+        artifact = "report"
     task_snapshot = await asyncio.to_thread(_get_task_for_report_sync, task_id)
     if task_snapshot is None:
         response = {
@@ -765,6 +841,38 @@ async def handle_report_read(arguments: dict[str, Any]) -> CallToolResult:
         )
 
     run_id = task_snapshot["id"]
+    if artifact == "zip":
+        content_bytes = await fetch_zip_from_worker_plan(run_id)
+        if content_bytes is None:
+            response = {
+                "error": {
+                    "code": "content_unavailable",
+                    "message": "zip content_bytes is None",
+                },
+            }
+            return CallToolResult(
+                content=[TextContent(type="text", text=json.dumps(response))],
+                structuredContent=response,
+                isError=False,
+            )
+
+        total_size = len(content_bytes)
+        content_hash = compute_sha256(content_bytes)
+        response = {
+            "content_type": ZIP_CONTENT_TYPE,
+            "sha256": content_hash,
+            "download_size": total_size,
+        }
+        download_url = build_zip_download_url(run_id)
+        if download_url:
+            response["download_url"] = download_url
+
+        return CallToolResult(
+            content=[TextContent(type="text", text=json.dumps(response))],
+            structuredContent=response,
+            isError=False,
+        )
+
     content_bytes = await fetch_artifact_from_worker_plan(run_id, REPORT_FILENAME)
     if content_bytes is None:
         response = {

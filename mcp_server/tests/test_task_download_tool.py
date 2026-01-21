@@ -10,17 +10,17 @@ from mcp_server.app import (
     REPORT_FILENAME,
     ZIP_CONTENT_TYPE,
     extract_file_from_zip_bytes,
-    handle_report_read,
+    handle_task_download,
     handle_list_tools,
     list_files_from_zip_bytes,
 )
 
 
-class TestReportTool(unittest.TestCase):
-    def test_report_tool_listed(self):
+class TestTaskDownloadTool(unittest.TestCase):
+    def test_task_download_tool_listed(self):
         tools = asyncio.run(handle_list_tools())
         tool_names = {tool.name for tool in tools}
-        self.assertIn("task_result", tool_names)
+        self.assertIn("task_download", tool_names)
 
     def test_zip_helpers(self):
         buffer = BytesIO()
@@ -49,7 +49,7 @@ class TestReportTool(unittest.TestCase):
                 "mcp_server.app.fetch_artifact_from_worker_plan",
                 new=AsyncMock(return_value=content_bytes),
             ):
-                result = asyncio.run(handle_report_read({"task_id": task_id}))
+                result = asyncio.run(handle_task_download({"task_id": task_id}))
 
         payload = result.structuredContent
         self.assertEqual(payload["download_size"], len(content_bytes))
@@ -71,7 +71,7 @@ class TestReportTool(unittest.TestCase):
                 "mcp_server.app.fetch_zip_from_worker_plan",
                 new=AsyncMock(return_value=content_bytes),
             ):
-                result = asyncio.run(handle_report_read({"task_id": task_id, "artifact": "zip"}))
+                result = asyncio.run(handle_task_download({"task_id": task_id, "artifact": "zip"}))
 
         payload = result.structuredContent
         self.assertEqual(payload["download_size"], len(content_bytes))

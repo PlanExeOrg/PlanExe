@@ -23,8 +23,8 @@ from mcp.types import CallToolResult, ContentBlock, TextContent
 
 from mcp_server.http_utils import strip_redundant_content
 from mcp_server.tool_models import (
-    ReportResultOutput,
     TaskCreateOutput,
+    TaskDownloadOutput,
     TaskStatusOutput,
     TaskStopOutput,
 )
@@ -57,7 +57,7 @@ from mcp_server.app import (
     handle_task_create,
     handle_task_status,
     handle_task_stop,
-    handle_report_read,
+    handle_task_download,
     resolve_task_for_task_id,
 )
 
@@ -316,14 +316,14 @@ async def task_stop(
     return await handle_task_stop({"task_id": task_id})
 
 
-async def get_result(
+async def task_download(
     task_id: str,
     artifact: Annotated[
         ResultArtifactInput,
         Field(description="Download artifact type: report or zip."),
     ] = "report",
-) -> Annotated[CallToolResult, ReportResultOutput]:
-    return await handle_report_read({"task_id": task_id, "artifact": artifact})
+) -> Annotated[CallToolResult, TaskDownloadOutput]:
+    return await handle_task_download({"task_id": task_id, "artifact": artifact})
 
 
 def _register_tools(server: FastMCP) -> None:
@@ -331,7 +331,7 @@ def _register_tools(server: FastMCP) -> None:
         "task_create": task_create,
         "task_status": task_status,
         "task_stop": task_stop,
-        "task_result": get_result,
+        "task_download": task_download,
     }
     for tool in TOOL_DEFINITIONS:
         handler = handler_map.get(tool.name)

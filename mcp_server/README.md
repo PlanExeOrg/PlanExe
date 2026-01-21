@@ -1,6 +1,6 @@
 # PlanExe MCP Server
 
-Model Context Protocol (MCP) interface for PlanExe. Implements the MCP specification defined in `extra/mcp-spec1.md`.
+Model Context Protocol (MCP) interface for PlanExe. Implements the MCP specification defined in `extra/planexe_mcp_interface.md`.
 
 ## Overview
 
@@ -109,7 +109,7 @@ The MCP server uses the same database configuration as other PlanExe services:
 
 ## MCP Tools
 
-See `extra/mcp-spec1.md` for full specification. Available tools:
+See `extra/planexe_mcp_interface.md` for full specification. Available tools:
 
 - `task_create` - Create a new task
 - `task_status` - Get task status and progress

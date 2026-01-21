@@ -105,7 +105,7 @@ Service: `mcp_server` (MCP interface)
 - Volumes: `run/` (rw for artifact access).
 - Entrypoint: `python -m mcp_server.app` (runs the MCP server over stdio).
 - Communication: the server communicates over stdio (standard input/output) following the MCP protocol. Configure your MCP client to connect to this container. The container runs with `stdin_open: true` and `tty: true` to enable stdio communication.
-- MCP tools: implements the specification in `extra/mcp-spec1.md` including session management, artifact operations, and event streaming.
+- MCP tools: implements the specification in `extra/planexe_mcp_interface.md` including session management, artifact operations, and event streaming.
 
 Usage notes
 -----------

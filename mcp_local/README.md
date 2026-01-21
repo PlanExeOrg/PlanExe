@@ -15,6 +15,21 @@ Unlike the `PlanExe/mcp_server` that runs in the cloud and has no disk access.
 `task_download` calls the remote MCP tool `task_file_info` to obtain a download URL,
 then downloads the file locally into `PLANEXE_PATH`.
 
+## Debugging with MCP Inspector
+
+Run the MCP inspector with the local script and environment variables:
+
+```bash
+npx @modelcontextprotocol/inspector \
+  -e "PLANEXE_URL"="http://localhost:8001/mcp" \
+  -e "PLANEXE_API_KEY"="insert-your-api-key-here" \
+  -e "PLANEXE_PATH"="/Users/your-name/Desktop" \
+  --transport stdio \
+  uv run --with mcp /absolute/path/to/PlanExe/mcp_local/planexe_mcp_local.py
+```
+
+Then click "Connect", open "Tools", and use "List Tools" or invoke individual tools.
+
 Here is what I imagine what it will be like:
 
 ### Development on localhost

@@ -12,6 +12,7 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
+from urllib.error import HTTPError
 from urllib.parse import urljoin, urlparse
 from urllib.request import Request, urlopen
 
@@ -80,25 +81,51 @@ def _get_download_base_url() -> str:
 
 
 def _build_headers() -> dict[str, str]:
-    headers = {"Content-Type": "application/json"}
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    }
     api_key = _get_env("PLANEXE_API_KEY")
     if api_key:
         headers["Authorization"] = f"Bearer {api_key}"
     return headers
 
 
+def _http_request_with_redirects(
+    method: str,
+    url: str,
+    body: Optional[bytes],
+    headers: dict[str, str],
+    max_redirects: int = 5,
+) -> bytes:
+    for _ in range(max_redirects + 1):
+        request = Request(url, data=body, method=method, headers=headers)
+        try:
+            with urlopen(request, timeout=60) as response:
+                return response.read()
+        except HTTPError as exc:
+            if exc.code in (301, 302, 303, 307, 308):
+                location = exc.headers.get("Location")
+                if not location:
+                    raise
+                url = urljoin(url, location)
+                if exc.code == 303:
+                    method = "GET"
+                    body = None
+                continue
+            raise
+    raise HTTPError(url, 310, "Too many redirects", None, None)
+
+
 def _http_json_request(method: str, url: str, payload: dict[str, Any]) -> dict[str, Any]:
     body = json.dumps(payload).encode("utf-8")
-    request = Request(url, data=body, method=method, headers=_build_headers())
-    with urlopen(request, timeout=60) as response:
-        response_body = response.read().decode("utf-8")
-    return json.loads(response_body) if response_body else {}
+    response_body = _http_request_with_redirects(method, url, body, _build_headers())
+    decoded = response_body.decode("utf-8") if response_body else ""
+    return json.loads(decoded) if decoded else {}
 
 
 def _http_get_bytes(url: str) -> bytes:
-    request = Request(url, method="GET", headers=_build_headers())
-    with urlopen(request, timeout=60) as response:
-        return response.read()
+    return _http_request_with_redirects("GET", url, None, _build_headers())
 
 
 def _extract_payload(content: list[dict[str, Any]]) -> dict[str, Any]:
@@ -116,12 +143,49 @@ def _extract_payload(content: list[dict[str, Any]]) -> dict[str, Any]:
     return {}
 
 
+def _call_remote_tool_rpc(
+    tool: str,
+    arguments: dict[str, Any],
+) -> tuple[dict[str, Any], Optional[dict[str, Any]]]:
+    mcp_base_url = _get_mcp_base_url()
+    payload = {
+        "jsonrpc": "2.0",
+        "id": "1",
+        "method": "tools/call",
+        "params": {"name": tool, "arguments": arguments},
+    }
+    response = _http_json_request("POST", mcp_base_url, payload)
+    error = response.get("error")
+    if error:
+        return {}, error
+    result = response.get("result")
+    if isinstance(result, dict):
+        structured = result.get("structuredContent")
+        if isinstance(structured, dict):
+            if result.get("isError") and "error" in structured:
+                return {}, structured.get("error")
+            return structured, None
+        content = result.get("content", [])
+        if isinstance(content, list):
+            return _extract_payload(content), None
+    return {}, None
+
+
 def _call_remote_tool(tool: str, arguments: dict[str, Any]) -> tuple[dict[str, Any], Optional[dict[str, Any]]]:
     mcp_base_url = _get_mcp_base_url()
     url = f"{mcp_base_url}/tools/call"
     payload = {"tool": tool, "arguments": arguments}
     try:
         response = _http_json_request("POST", url, payload)
+    except HTTPError as exc:
+        if exc.code == 404:
+            try:
+                return _call_remote_tool_rpc(tool, arguments)
+            except Exception as rpc_exc:
+                logger.error("Remote MCP JSON-RPC failed: %s", rpc_exc)
+                return {}, {"code": "REMOTE_ERROR", "message": str(rpc_exc)}
+        logger.error("Remote MCP request failed: %s", exc)
+        return {}, {"code": "REMOTE_ERROR", "message": f"{exc} ({url})"}
     except Exception as exc:
         logger.error("Remote MCP request failed: %s", exc)
         return {}, {"code": "REMOTE_ERROR", "message": str(exc)}
@@ -129,7 +193,10 @@ def _call_remote_tool(tool: str, arguments: dict[str, Any]) -> tuple[dict[str, A
     if error:
         return {}, error
     content = response.get("content", [])
-    return _extract_payload(content), None
+    payload = _extract_payload(content)
+    if isinstance(payload, dict) and isinstance(payload.get("error"), dict):
+        return {}, payload["error"]
+    return payload, None
 
 
 def _hash_sha256(content: bytes) -> str:
@@ -310,7 +377,9 @@ async def handle_list_tools() -> list[Tool]:
     ]
 
 
-def _wrap_response(payload: dict[str, Any], is_error: bool = False) -> CallToolResult:
+def _wrap_response(payload: dict[str, Any], is_error: Optional[bool] = None) -> CallToolResult:
+    if is_error is None:
+        is_error = isinstance(payload.get("error"), dict)
     return CallToolResult(
         content=[TextContent(type="text", text=json.dumps(payload))],
         structuredContent=payload,
@@ -319,13 +388,16 @@ def _wrap_response(payload: dict[str, Any], is_error: bool = False) -> CallToolR
 
 
 @mcp_server.call_tool()
-async def handle_call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
+async def handle_call_tool(name: str, arguments: dict[str, Any]) -> CallToolResult:
     handler = TOOL_HANDLERS.get(name)
     if handler is None:
         response = {"error": {"code": "INVALID_TOOL", "message": f"Unknown tool: {name}"}}
-        return [TextContent(type="text", text=json.dumps(response))]
-    result = await handler(arguments)
-    return result.content
+        return CallToolResult(
+            content=[TextContent(type="text", text=json.dumps(response))],
+            structuredContent=response,
+            isError=True,
+        )
+    return await handler(arguments)
 
 
 async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:

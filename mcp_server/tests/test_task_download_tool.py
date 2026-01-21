@@ -77,6 +77,25 @@ class TestTaskDownloadTool(unittest.TestCase):
         self.assertEqual(payload["download_size"], len(content_bytes))
         self.assertEqual(payload["content_type"], ZIP_CONTENT_TYPE)
 
+    def test_report_read_zip_for_failed_task(self):
+        task_id = str(uuid.uuid4())
+        content_bytes = b"zipdata"
+        task_snapshot = {
+            "id": "task-id",
+            "state": TaskState.failed,
+            "progress_message": "Stopped",
+        }
+        with patch("mcp_server.app._get_task_for_report_sync", return_value=task_snapshot):
+            with patch(
+                "mcp_server.app.fetch_zip_from_worker_plan",
+                new=AsyncMock(return_value=content_bytes),
+            ):
+                result = asyncio.run(handle_task_download({"task_id": task_id, "artifact": "zip"}))
+
+        payload = result.structuredContent
+        self.assertEqual(payload["download_size"], len(content_bytes))
+        self.assertEqual(payload["content_type"], ZIP_CONTENT_TYPE)
+
 
 if __name__ == "__main__":
     unittest.main()

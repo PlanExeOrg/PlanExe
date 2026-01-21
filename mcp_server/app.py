@@ -819,33 +819,20 @@ async def handle_task_download(arguments: dict[str, Any]) -> CallToolResult:
             isError=True,
         )
 
-    task_state = task_snapshot["state"]
-    if task_state in (TaskState.pending, TaskState.processing) or task_state is None:
-        response = {}
-        return CallToolResult(
-            content=[TextContent(type="text", text=json.dumps(response))],
-            structuredContent=response,
-            isError=False,
-        )
-    if task_state == TaskState.failed:
-        message = task_snapshot["progress_message"] or "Plan generation failed."
-        response = {"error": {"code": "generation_failed", "message": message}}
-        return CallToolResult(
-            content=[TextContent(type="text", text=json.dumps(response))],
-            structuredContent=response,
-            isError=False,
-        )
-
     run_id = task_snapshot["id"]
     if artifact == "zip":
         content_bytes = await fetch_zip_from_worker_plan(run_id)
         if content_bytes is None:
-            response = {
-                "error": {
-                    "code": "content_unavailable",
-                    "message": "zip content_bytes is None",
-                },
-            }
+            task_state = task_snapshot["state"]
+            if task_state in (TaskState.pending, TaskState.processing) or task_state is None:
+                response = {}
+            else:
+                response = {
+                    "error": {
+                        "code": "content_unavailable",
+                        "message": "zip content_bytes is None",
+                    },
+                }
             return CallToolResult(
                 content=[TextContent(type="text", text=json.dumps(response))],
                 structuredContent=response,
@@ -863,6 +850,23 @@ async def handle_task_download(arguments: dict[str, Any]) -> CallToolResult:
         if download_url:
             response["download_url"] = download_url
 
+        return CallToolResult(
+            content=[TextContent(type="text", text=json.dumps(response))],
+            structuredContent=response,
+            isError=False,
+        )
+
+    task_state = task_snapshot["state"]
+    if task_state in (TaskState.pending, TaskState.processing) or task_state is None:
+        response = {}
+        return CallToolResult(
+            content=[TextContent(type="text", text=json.dumps(response))],
+            structuredContent=response,
+            isError=False,
+        )
+    if task_state == TaskState.failed:
+        message = task_snapshot["progress_message"] or "Plan generation failed."
+        response = {"error": {"code": "generation_failed", "message": message}}
         return CallToolResult(
             content=[TextContent(type="text", text=json.dumps(response))],
             structuredContent=response,

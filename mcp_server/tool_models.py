@@ -45,14 +45,14 @@ class TaskStopOutput(BaseModel):
     error: ErrorDetail | None = None
 
 
-class TaskDownloadReadyOutput(BaseModel):
+class TaskFileInfoReadyOutput(BaseModel):
     content_type: str
     sha256: str
     download_size: int
     download_url: str | None = None
 
 
-class TaskDownloadOutput(BaseModel):
+class TaskFileInfoOutput(BaseModel):
     content_type: str | None = None
     sha256: str | None = None
     download_size: int | None = None

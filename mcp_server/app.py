@@ -51,7 +51,7 @@ from database_api.model_event import EventItem, EventType
 from flask import Flask, has_app_context
 from mcp_server.tool_models import (
     ErrorDetail,
-    TaskDownloadReadyOutput,
+    TaskFileInfoReadyOutput,
     TaskCreateOutput,
     TaskStatusSuccess,
     TaskStopOutput,
@@ -143,7 +143,7 @@ class TaskStatusRequest(BaseModel):
 class TaskStopRequest(BaseModel):
     task_id: str
 
-class TaskDownloadRequest(BaseModel):
+class TaskFileInfoRequest(BaseModel):
     task_id: str
     artifact: Optional[str] = None
 
@@ -552,8 +552,8 @@ TASK_STATUS_OUTPUT_SCHEMA = {
     ]
 }
 TASK_STOP_OUTPUT_SCHEMA = TaskStopOutput.model_json_schema()
-TASK_DOWNLOAD_READY_OUTPUT_SCHEMA = TaskDownloadReadyOutput.model_json_schema()
-TASK_DOWNLOAD_OUTPUT_SCHEMA = {
+TASK_FILE_INFO_READY_OUTPUT_SCHEMA = TaskFileInfoReadyOutput.model_json_schema()
+TASK_FILE_INFO_OUTPUT_SCHEMA = {
     "oneOf": [
         {
             "type": "object",
@@ -565,7 +565,7 @@ TASK_DOWNLOAD_OUTPUT_SCHEMA = {
             "properties": {},
             "additionalProperties": False,
         },
-        TASK_DOWNLOAD_READY_OUTPUT_SCHEMA,
+        TASK_FILE_INFO_READY_OUTPUT_SCHEMA,
     ]
 }
 
@@ -598,7 +598,7 @@ TASK_STOP_INPUT_SCHEMA = {
     },
     "required": ["task_id"],
 }
-TASK_DOWNLOAD_INPUT_SCHEMA = {
+TASK_FILE_INFO_INPUT_SCHEMA = {
     "type": "object",
     "properties": {
         "task_id": {"type": "string"},
@@ -646,10 +646,10 @@ TOOL_DEFINITIONS = [
         output_schema=TASK_STOP_OUTPUT_SCHEMA,
     ),
     ToolDefinition(
-        name="task_download",
-        description="Returns download metadata for the report or zip snapshot.",
-        input_schema=TASK_DOWNLOAD_INPUT_SCHEMA,
-        output_schema=TASK_DOWNLOAD_OUTPUT_SCHEMA,
+        name="task_file_info",
+        description="Returns file metadata for the report or zip snapshot, so the user can download the file.",
+        input_schema=TASK_FILE_INFO_INPUT_SCHEMA,
+        output_schema=TASK_FILE_INFO_OUTPUT_SCHEMA,
     ),
 ]
 
@@ -798,9 +798,9 @@ async def handle_task_stop(arguments: dict[str, Any]) -> CallToolResult:
         isError=False,
     )
 
-async def handle_task_download(arguments: dict[str, Any]) -> CallToolResult:
-    """Handle task_download."""
-    req = TaskDownloadRequest(**arguments)
+async def handle_task_file_info(arguments: dict[str, Any]) -> CallToolResult:
+    """Handle task_file_info."""
+    req = TaskFileInfoRequest(**arguments)
     task_id = req.task_id
     artifact = req.artifact.strip().lower() if isinstance(req.artifact, str) else "report"
     if artifact not in ("report", "zip"):
@@ -908,7 +908,7 @@ TOOL_HANDLERS = {
     "task_create": handle_task_create,
     "task_status": handle_task_status,
     "task_stop": handle_task_stop,
-    "task_download": handle_task_download,
+    "task_file_info": handle_task_file_info,
 }
 
 async def main():

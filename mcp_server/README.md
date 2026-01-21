@@ -114,9 +114,9 @@ See `extra/planexe_mcp_interface.md` for full specification. Available tools:
 - `task_create` - Create a new task
 - `task_status` - Get task status and progress
 - `task_stop` - Stop an active task
-- `task_download` - Get download metadata for report or zip
+- `task_file_info` - Get file metadata for report or zip
 
-Download flow: call `task_download` to obtain the `download_url`, then fetch the
+Download flow: call `task_file_info` to obtain the `download_url`, then fetch the
 report via `GET /download/{task_id}/030-report.html` (API key required if configured).
 
 ## Debugging tools

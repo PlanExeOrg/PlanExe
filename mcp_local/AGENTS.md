@@ -19,5 +19,6 @@ to the remote PlanExe MCP server (`mcp_server`) over HTTP.
 
 ## Env vars
 - `PLANEXE_URL`: Base URL for the remote MCP server (e.g., `http://localhost:8001/mcp`).
-- `PLANEXE_API_KEY`: API key passed as `Authorization: Bearer ...` if provided.
+- `PLANEXE_MCP_API_KEY`: API key passed as `Authorization: Bearer ...` if provided.
+- `PLANEXE_API_KEY`: Legacy alias (fallback).
 - `PLANEXE_PATH`: Local directory where downloads are saved.

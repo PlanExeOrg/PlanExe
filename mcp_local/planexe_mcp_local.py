@@ -80,12 +80,16 @@ def _get_download_base_url() -> str:
     return base_url
 
 
+def _get_api_key() -> Optional[str]:
+    return _get_env("PLANEXE_MCP_API_KEY") or _get_env("PLANEXE_API_KEY")
+
+
 def _build_headers() -> dict[str, str]:
     headers = {
         "Content-Type": "application/json",
         "Accept": "application/json",
     }
-    api_key = _get_env("PLANEXE_API_KEY")
+    api_key = _get_api_key()
     if api_key:
         headers["Authorization"] = f"Bearer {api_key}"
     return headers

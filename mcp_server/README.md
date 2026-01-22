@@ -10,7 +10,16 @@ This MCP server provides a standardized interface for AI agents and developer to
 
 - **Task Management**: Create and stop plan generation tasks
 - **Progress Tracking**: Real-time status and progress updates
-- **Report Retrieval**: Get report download metadata and fetch the report
+- **File Metadata**: Get report/zip metadata and download URLs
+
+## Client Choice Guide
+
+- **Use `mcp_server` directly (HTTP)**: If you are running in the cloud or you do
+  not need files saved to the local filesystem.
+- **Use `mcp_local` (proxy)**: Recommended when you want artifacts downloaded to
+  your local disk (`PLANEXE_PATH`). The proxy forwards MCP calls to this server
+  and handles file downloads locally.
+- **Recommended flow**: Docker (`mcp_server`) → `mcp_local` → MCP client (LM Studio/Claude).
 
 ## Docker Usage (Recommended)
 
@@ -75,8 +84,8 @@ Set `PLANEXE_MCP_API_KEY` to the same value you use in `Authorization: Bearer <k
 
 ### Available HTTP Endpoints
 
-- `POST /mcp` - Main MCP endpoint (recommended)
-- `POST /mcp/tools/call` - Alternative endpoint for tool calls
+- `POST /mcp` - Main MCP JSON-RPC endpoint (recommended)
+- `POST /mcp/tools/call` - Alternative HTTP wrapper for tool calls
 - `GET /mcp/tools` - List available tools
 - `GET /healthcheck` - Health check endpoint
 - `GET /docs` - OpenAPI documentation (Swagger UI)
@@ -115,6 +124,8 @@ See `extra/planexe_mcp_interface.md` for full specification. Available tools:
 - `task_status` - Get task status and progress
 - `task_stop` - Stop an active task
 - `task_file_info` - Get file metadata for report or zip
+
+Note: `task_download` is a synthetic tool provided by `mcp_local`, not by this server.
 
 Download flow: call `task_file_info` to obtain the `download_url`, then fetch the
 report via `GET /download/{task_id}/030-report.html` (API key required if configured).
@@ -155,9 +166,11 @@ The MCP server maps MCP concepts to PlanExe's database models:
 
 The server reads task state and progress from the database, and fetches artifacts from `worker_plan` via HTTP instead of accessing the run directory directly. This allows the MCP server to work without mounting the run directory, making it compatible with Railway and other cloud platforms that don't support shared volumes across services.
 
-## Connecting via stdio (Local Development)
+## Connecting via stdio (Advanced / Contributor Mode)
 
-For local development, you can run the MCP server over stdio instead of HTTP. This is useful for testing but requires local Python setup.
+For local development, you can run the MCP server over stdio instead of HTTP. This is
+useful for testing but requires local Python + Postgres setup. For most users, the
+recommended flow is Docker (server) + `mcp_local` (client).
 
 ### Setup
 
@@ -186,7 +199,6 @@ export PLANEXE_POSTGRES_PORT=5432  # Or your mapped port (e.g., 5433 if you set 
 export PLANEXE_POSTGRES_DB=planexe
 export PLANEXE_POSTGRES_USER=planexe
 export PLANEXE_POSTGRES_PASSWORD=planexe
-export PLANEXE_RUN_DIR=./run
 ```
 
    **Note**: The `PYTHONPATH` environment variable in the LM Studio config (see below) ensures that the `database_api` module can be imported. Make sure the path points to the PlanExe repository root (where `database_api/` is located).
@@ -210,8 +222,7 @@ Add the following to your LM Studio MCP servers configuration file:
         "PLANEXE_POSTGRES_PORT": "5432",
         "PLANEXE_POSTGRES_DB": "planexe",
         "PLANEXE_POSTGRES_USER": "planexe",
-        "PLANEXE_POSTGRES_PASSWORD": "planexe",
-        "PLANEXE_RUN_DIR": "/absolute/path/to/PlanExe/run"
+        "PLANEXE_POSTGRES_PASSWORD": "planexe"
       }
     }
   }
@@ -237,8 +248,7 @@ Add the following to your LM Studio MCP servers configuration file:
         "PLANEXE_POSTGRES_PORT": "5432",
         "PLANEXE_POSTGRES_DB": "planexe",
         "PLANEXE_POSTGRES_USER": "planexe",
-        "PLANEXE_POSTGRES_PASSWORD": "planexe",
-        "PLANEXE_RUN_DIR": "/absolute/path/to/PlanExe/run"
+        "PLANEXE_POSTGRES_PASSWORD": "planexe"
       }
     }
   }

@@ -659,6 +659,82 @@ TOOL_DEFINITIONS = [
 ]
 
 # MCP Tool implementations
+def _format_error_text(code: Optional[str], message: Optional[str]) -> str:
+    if code and message:
+        return f"Error {code}: {message}"
+    if message:
+        return f"Error: {message}"
+    if code:
+        return f"Error {code}."
+    return "Error."
+
+
+def _format_task_create_summary(response: dict[str, Any]) -> str:
+    task_id = response.get("task_id")
+    created_at = response.get("created_at")
+    parts = []
+    if task_id:
+        parts.append(f"Task created: {task_id}.")
+    else:
+        parts.append("Task created.")
+    if created_at:
+        parts.append(f"Created at {created_at}.")
+    parts.append("Poll with task_status for progress.")
+    return " ".join(parts)
+
+
+def _format_task_status_summary(response: dict[str, Any]) -> str:
+    task_id = response.get("task_id") or "unknown"
+    state = response.get("state") or "unknown"
+    progress = response.get("progress_percentage")
+    progress_text = ""
+    if isinstance(progress, (int, float)):
+        progress_text = f" ({round(progress)}%)"
+
+    if state == "completed":
+        summary = f"Task {task_id} completed."
+    elif state == "failed":
+        summary = f"Task {task_id} failed."
+    elif state == "stopping":
+        summary = f"Task {task_id} stopping{progress_text}."
+    elif state == "running":
+        summary = f"Task {task_id} running{progress_text}."
+    elif state == "stopped":
+        summary = f"Task {task_id} stopped."
+    else:
+        summary = f"Task {task_id}: {state}{progress_text}."
+
+    files = response.get("files")
+    if isinstance(files, list) and files:
+        summary = f"{summary} Files available: {len(files)}."
+    return summary
+
+
+def _format_task_stop_summary(task_id: str) -> str:
+    return f"Stop requested for task {task_id}."
+
+
+def _format_task_file_info_summary(
+    task_id: str,
+    artifact: str,
+    response: dict[str, Any],
+) -> str:
+    artifact_label = "Zip" if artifact == "zip" else "Report"
+    if not response:
+        return f"{artifact_label} not ready yet for task {task_id}."
+    error = response.get("error")
+    if isinstance(error, dict):
+        return _format_error_text(error.get("code"), error.get("message"))
+
+    size = response.get("download_size")
+    summary = f"{artifact_label} ready for task {task_id}."
+    if isinstance(size, (int, float)):
+        summary = f"{summary} Size: {int(size)} bytes."
+    if response.get("download_url"):
+        summary = f"{summary} Download URL available."
+    return summary
+
+
 @mcp_server.list_tools()
 async def handle_list_tools() -> list[Tool]:
     """List all available MCP tools."""
@@ -678,16 +754,18 @@ async def handle_call_tool(name: str, arguments: dict[str, Any]) -> list[TextCon
     try:
         handler = TOOL_HANDLERS.get(name)
         if handler is None:
+            error_text = _format_error_text("INVALID_TOOL", f"Unknown tool: {name}")
             return [TextContent(
                 type="text",
-                text=json.dumps({"error": {"code": "INVALID_TOOL", "message": f"Unknown tool: {name}"}})
+                text=error_text,
             )]
         return await handler(arguments)
     except Exception as e:
         logger.error(f"Error handling tool {name}: {e}", exc_info=True)
+        error_text = _format_error_text("INTERNAL_ERROR", str(e))
         return [TextContent(
             type="text",
-            text=json.dumps({"error": {"code": "INTERNAL_ERROR", "message": str(e)}})
+            text=error_text,
         )]
 
 async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
@@ -701,8 +779,9 @@ async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
         merged_config,
         None,
     )
+    summary = _format_task_create_summary(response)
     return CallToolResult(
-        content=[TextContent(type="text", text=json.dumps(response))],
+        content=[TextContent(type="text", text=summary)],
         structuredContent=response,
         isError=False,
     )
@@ -720,8 +799,12 @@ async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
                 "message": f"Task not found: {task_id}",
             }
         }
+        error_text = _format_error_text(
+            response["error"].get("code"),
+            response["error"].get("message"),
+        )
         return CallToolResult(
-            content=[TextContent(type="text", text=json.dumps(response))],
+            content=[TextContent(type="text", text=error_text)],
             structuredContent=response,
             isError=True,
         )
@@ -768,8 +851,9 @@ async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
         "files": files[:10],  # Limit to 10 most recent
     }
 
+    summary = _format_task_status_summary(response)
     return CallToolResult(
-        content=[TextContent(type="text", text=json.dumps(response))],
+        content=[TextContent(type="text", text=summary)],
         structuredContent=response,
         isError=False,
     )
@@ -787,8 +871,12 @@ async def handle_task_stop(arguments: dict[str, Any]) -> CallToolResult:
                 "message": f"Task not found: {task_id}",
             }
         }
+        error_text = _format_error_text(
+            response["error"].get("code"),
+            response["error"].get("message"),
+        )
         return CallToolResult(
-            content=[TextContent(type="text", text=json.dumps(response))],
+            content=[TextContent(type="text", text=error_text)],
             structuredContent=response,
             isError=True,
         )
@@ -797,8 +885,9 @@ async def handle_task_stop(arguments: dict[str, Any]) -> CallToolResult:
         "state": "stopped",
     }
 
+    summary = _format_task_stop_summary(task_id)
     return CallToolResult(
-        content=[TextContent(type="text", text=json.dumps(response))],
+        content=[TextContent(type="text", text=summary)],
         structuredContent=response,
         isError=False,
     )
@@ -818,8 +907,12 @@ async def handle_task_file_info(arguments: dict[str, Any]) -> CallToolResult:
                 "message": f"Task not found: {task_id}",
             }
         }
+        error_text = _format_error_text(
+            response["error"].get("code"),
+            response["error"].get("message"),
+        )
         return CallToolResult(
-            content=[TextContent(type="text", text=json.dumps(response))],
+            content=[TextContent(type="text", text=error_text)],
             structuredContent=response,
             isError=True,
         )
@@ -838,8 +931,9 @@ async def handle_task_file_info(arguments: dict[str, Any]) -> CallToolResult:
                         "message": "zip content_bytes is None",
                     },
                 }
+            summary = _format_task_file_info_summary(task_id, artifact, response)
             return CallToolResult(
-                content=[TextContent(type="text", text=json.dumps(response))],
+                content=[TextContent(type="text", text=summary)],
                 structuredContent=response,
                 isError=False,
             )
@@ -855,8 +949,9 @@ async def handle_task_file_info(arguments: dict[str, Any]) -> CallToolResult:
         if download_url:
             response["download_url"] = download_url
 
+        summary = _format_task_file_info_summary(task_id, artifact, response)
         return CallToolResult(
-            content=[TextContent(type="text", text=json.dumps(response))],
+            content=[TextContent(type="text", text=summary)],
             structuredContent=response,
             isError=False,
         )
@@ -864,16 +959,18 @@ async def handle_task_file_info(arguments: dict[str, Any]) -> CallToolResult:
     task_state = task_snapshot["state"]
     if task_state in (TaskState.pending, TaskState.processing) or task_state is None:
         response = {}
+        summary = _format_task_file_info_summary(task_id, artifact, response)
         return CallToolResult(
-            content=[TextContent(type="text", text=json.dumps(response))],
+            content=[TextContent(type="text", text=summary)],
             structuredContent=response,
             isError=False,
         )
     if task_state == TaskState.failed:
         message = task_snapshot["progress_message"] or "Plan generation failed."
         response = {"error": {"code": "generation_failed", "message": message}}
+        summary = _format_task_file_info_summary(task_id, artifact, response)
         return CallToolResult(
-            content=[TextContent(type="text", text=json.dumps(response))],
+            content=[TextContent(type="text", text=summary)],
             structuredContent=response,
             isError=False,
         )
@@ -886,8 +983,9 @@ async def handle_task_file_info(arguments: dict[str, Any]) -> CallToolResult:
                 "message": "content_bytes is None",
             },
         }
+        summary = _format_task_file_info_summary(task_id, artifact, response)
         return CallToolResult(
-            content=[TextContent(type="text", text=json.dumps(response))],
+            content=[TextContent(type="text", text=summary)],
             structuredContent=response,
             isError=False,
         )
@@ -903,8 +1001,9 @@ async def handle_task_file_info(arguments: dict[str, Any]) -> CallToolResult:
     if download_url:
         response["download_url"] = download_url
 
+    summary = _format_task_file_info_summary(task_id, artifact, response)
     return CallToolResult(
-        content=[TextContent(type="text", text=json.dumps(response))],
+        content=[TextContent(type="text", text=summary)],
         structuredContent=response,
         isError=False,
     )

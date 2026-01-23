@@ -52,6 +52,82 @@ class TaskDownloadRequest(BaseModel):
     artifact: str = "report"
 
 
+def _format_error_text(code: Optional[str], message: Optional[str]) -> str:
+    if code and message:
+        return f"Error {code}: {message}"
+    if message:
+        return f"Error: {message}"
+    if code:
+        return f"Error {code}."
+    return "Error."
+
+
+def _format_task_create_summary(payload: dict[str, Any]) -> str:
+    task_id = payload.get("task_id")
+    created_at = payload.get("created_at")
+    parts = []
+    if task_id:
+        parts.append(f"Task created: {task_id}.")
+    else:
+        parts.append("Task created.")
+    if created_at:
+        parts.append(f"Created at {created_at}.")
+    parts.append("Poll with task_status for progress.")
+    return " ".join(parts)
+
+
+def _format_task_status_summary(payload: dict[str, Any]) -> str:
+    task_id = payload.get("task_id") or "unknown"
+    state = payload.get("state") or "unknown"
+    progress = payload.get("progress_percentage")
+    progress_text = ""
+    if isinstance(progress, (int, float)):
+        progress_text = f" ({round(progress)}%)"
+
+    if state == "completed":
+        summary = f"Task {task_id} completed."
+    elif state == "failed":
+        summary = f"Task {task_id} failed."
+    elif state == "stopping":
+        summary = f"Task {task_id} stopping{progress_text}."
+    elif state == "running":
+        summary = f"Task {task_id} running{progress_text}."
+    elif state == "stopped":
+        summary = f"Task {task_id} stopped."
+    else:
+        summary = f"Task {task_id}: {state}{progress_text}."
+    return summary
+
+
+def _format_task_stop_summary(task_id: str) -> str:
+    return f"Stop requested for task {task_id}."
+
+
+def _format_task_download_summary(
+    task_id: str,
+    artifact: str,
+    payload: dict[str, Any],
+) -> str:
+    artifact_label = "Zip" if artifact == "zip" else "Report"
+    if not payload:
+        return f"{artifact_label} not ready yet for task {task_id}."
+    error = payload.get("error")
+    if isinstance(error, dict):
+        return _format_error_text(error.get("code"), error.get("message"))
+
+    saved_path = payload.get("saved_path")
+    if isinstance(saved_path, str) and saved_path:
+        return f"{artifact_label} downloaded for task {task_id} to {saved_path}."
+
+    size = payload.get("download_size")
+    summary = f"{artifact_label} ready for task {task_id}."
+    if isinstance(size, (int, float)):
+        summary = f"{summary} Size: {int(size)} bytes."
+    if payload.get("download_url"):
+        summary = f"{summary} Download URL available."
+    return summary
+
+
 def _get_env(name: str, default: Optional[str] = None) -> Optional[str]:
     value = os.environ.get(name)
     return value if value else default
@@ -382,11 +458,15 @@ async def handle_list_tools() -> list[Tool]:
     ]
 
 
-def _wrap_response(payload: dict[str, Any], is_error: Optional[bool] = None) -> CallToolResult:
+def _wrap_response(
+    payload: dict[str, Any],
+    text: str,
+    is_error: Optional[bool] = None,
+) -> CallToolResult:
     if is_error is None:
         is_error = isinstance(payload.get("error"), dict)
     return CallToolResult(
-        content=[TextContent(type="text", text=json.dumps(payload))],
+        content=[TextContent(type="text", text=text)],
         structuredContent=payload,
         isError=is_error,
     )
@@ -412,24 +492,30 @@ async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
         {"idea": req.idea, "speed_vs_detail": req.speed_vs_detail} if req.speed_vs_detail else {"idea": req.idea},
     )
     if error:
-        return _wrap_response({"error": error}, is_error=True)
-    return _wrap_response(payload)
+        error_text = _format_error_text(error.get("code"), error.get("message"))
+        return _wrap_response({"error": error}, error_text, is_error=True)
+    summary = _format_task_create_summary(payload)
+    return _wrap_response(payload, summary)
 
 
 async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
     req = TaskStatusRequest(**arguments)
     payload, error = _call_remote_tool("task_status", {"task_id": req.task_id})
     if error:
-        return _wrap_response({"error": error}, is_error=True)
-    return _wrap_response(payload)
+        error_text = _format_error_text(error.get("code"), error.get("message"))
+        return _wrap_response({"error": error}, error_text, is_error=True)
+    summary = _format_task_status_summary(payload)
+    return _wrap_response(payload, summary)
 
 
 async def handle_task_stop(arguments: dict[str, Any]) -> CallToolResult:
     req = TaskStopRequest(**arguments)
     payload, error = _call_remote_tool("task_stop", {"task_id": req.task_id})
     if error:
-        return _wrap_response({"error": error}, is_error=True)
-    return _wrap_response(payload)
+        error_text = _format_error_text(error.get("code"), error.get("message"))
+        return _wrap_response({"error": error}, error_text, is_error=True)
+    summary = _format_task_stop_summary(req.task_id)
+    return _wrap_response(payload, summary)
 
 
 async def handle_task_download(arguments: dict[str, Any]) -> CallToolResult:
@@ -443,9 +529,11 @@ async def handle_task_download(arguments: dict[str, Any]) -> CallToolResult:
         {"task_id": req.task_id, "artifact": artifact},
     )
     if error:
-        return _wrap_response({"error": error}, is_error=True)
+        error_text = _format_error_text(error.get("code"), error.get("message"))
+        return _wrap_response({"error": error}, error_text, is_error=True)
     if not payload:
-        return _wrap_response(payload)
+        summary = _format_task_download_summary(req.task_id, artifact, payload)
+        return _wrap_response(payload, summary)
 
     download_url = payload.get("download_url")
     if isinstance(download_url, str) and download_url.startswith("/"):
@@ -457,8 +545,10 @@ async def handle_task_download(arguments: dict[str, Any]) -> CallToolResult:
         destination = _choose_output_path(req.task_id, download_url, artifact)
         downloaded_size = _download_to_path(download_url, destination)
     except Exception as exc:
+        error_text = _format_error_text("DOWNLOAD_FAILED", str(exc))
         return _wrap_response(
             {"error": {"code": "DOWNLOAD_FAILED", "message": str(exc)}},
+            error_text,
             is_error=True,
         )
 
@@ -480,7 +570,8 @@ async def handle_task_download(arguments: dict[str, Any]) -> CallToolResult:
             downloaded_size,
         )
 
-    return _wrap_response(payload)
+    summary = _format_task_download_summary(req.task_id, artifact, payload)
+    return _wrap_response(payload, summary)
 
 
 TOOL_HANDLERS = {

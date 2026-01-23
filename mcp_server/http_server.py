@@ -254,6 +254,11 @@ def _normalize_tool_result(result: Any) -> tuple[list[dict[str, Any]], Optional[
         content_blocks = result.content
         content = extract_text_content(content_blocks)
         error = None
+        structured_content = getattr(result, "structuredContent", None)
+        if isinstance(structured_content, dict):
+            structured_error = structured_content.get("error")
+            if isinstance(structured_error, dict):
+                error = structured_error
         for item in content:
             if isinstance(item, dict) and "error" in item:
                 error = item["error"]
@@ -263,6 +268,13 @@ def _normalize_tool_result(result: Any) -> tuple[list[dict[str, Any]], Optional[
                 if parsed_error:
                     error = parsed_error
                     break
+        if error is None and getattr(result, "isError", False):
+            message = None
+            if content:
+                text = content[0].get("text") if isinstance(content[0], dict) else None
+                if isinstance(text, str) and text:
+                    message = text
+            error = {"code": "TOOL_ERROR", "message": message or "Tool call failed."}
         return content, error
     if isinstance(result, ContentBlock):
         content_blocks: Sequence[Any] = [result]

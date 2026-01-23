@@ -6,7 +6,7 @@ from datetime import UTC, datetime
 from unittest.mock import MagicMock, patch
 
 from mcp.types import CallToolResult
-from mcp_server.app import handle_task_create
+from mcp_cloud.app import handle_task_create
 
 
 class TestTaskCreateTool(unittest.TestCase):
@@ -22,10 +22,10 @@ class TestTaskCreateTool(unittest.TestCase):
                 self.parameters = parameters
                 self.timestamp_created = datetime.now(UTC)
 
-        with patch("mcp_server.app.app.app_context", return_value=nullcontext()), patch(
-            "mcp_server.app.db.session", fake_session
+        with patch("mcp_cloud.app.app.app_context", return_value=nullcontext()), patch(
+            "mcp_cloud.app.db.session", fake_session
         ), patch(
-            "mcp_server.app.TaskItem", StubTaskItem
+            "mcp_cloud.app.TaskItem", StubTaskItem
         ):
             result = asyncio.run(handle_task_create(arguments))
 

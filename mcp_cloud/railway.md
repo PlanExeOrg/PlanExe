@@ -1,6 +1,6 @@
-# Railway Configuration for `mcp_server`
+# Railway Configuration for `mcp_cloud`
 
-Deploy the PlanExe MCP Server to Railway as an HTTP service.
+Deploy mcp_cloud (PlanExe MCP cloud service) to Railway as an HTTP service.
 
 ## Required Environment Variables
 

@@ -2,7 +2,7 @@ import unittest
 
 from pydantic import ValidationError
 
-from mcp_server.app import (
+from mcp_cloud.app import (
     SPEED_VS_DETAIL_DEFAULT,
     TaskCreateRequest,
     _merge_task_create_config,

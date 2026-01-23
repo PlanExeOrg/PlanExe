@@ -1,7 +1,8 @@
 """
 PlanExe MCP local proxy.
 
-Runs locally over stdio and forwards tool calls to a remote PlanExe MCP server.
+Runs locally over stdio and forwards tool calls to mcp_cloud, the MCP server
+running in the cloud.
 Downloads artifacts to disk for task_download.
 """
 import asyncio
@@ -342,19 +343,22 @@ TASK_DOWNLOAD_OUTPUT_SCHEMA = {
 TOOL_DEFINITIONS = [
     ToolDefinition(
         name="task_create",
-        description="Create a new task in the remote PlanExe MCP server.",
+        description=(
+            "Start creating a new plan. Plan creation is long-running and "
+            "typically takes 10-20 minutes to finish."
+        ),
         input_schema=TASK_CREATE_INPUT_SCHEMA,
         output_schema=TASK_CREATE_OUTPUT_SCHEMA,
     ),
     ToolDefinition(
         name="task_status",
-        description="Fetch task status from the remote PlanExe MCP server.",
+        description="Returns status and progress of the plan currently being created.",
         input_schema=TASK_STATUS_INPUT_SCHEMA,
         output_schema=TASK_STATUS_OUTPUT_SCHEMA,
     ),
     ToolDefinition(
         name="task_stop",
-        description="Stop a task in the remote PlanExe MCP server.",
+        description="Stops the plan that is currently being created.",
         input_schema=TASK_STOP_INPUT_SCHEMA,
         output_schema=TASK_STOP_OUTPUT_SCHEMA,
     ),
@@ -366,10 +370,10 @@ TOOL_DEFINITIONS = [
     ),
 ]
 
-mcp_server = Server("planexe-mcp-local")
+mcp_local = Server("planexe-mcp-local")
 
 
-@mcp_server.list_tools()
+@mcp_local.list_tools()
 async def handle_list_tools() -> list[Tool]:
     return [
         Tool(
@@ -392,7 +396,7 @@ def _wrap_response(payload: dict[str, Any], is_error: Optional[bool] = None) -> 
     )
 
 
-@mcp_server.call_tool()
+@mcp_local.call_tool()
 async def handle_call_tool(name: str, arguments: dict[str, Any]) -> CallToolResult:
     handler = TOOL_HANDLERS.get(name)
     if handler is None:
@@ -406,7 +410,7 @@ async def handle_call_tool(name: str, arguments: dict[str, Any]) -> CallToolResu
 
 
 async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
-    """Create a task on the remote MCP server via HTTP proxy.
+    """Create a task in mcp_cloud via the local HTTP proxy.
 
     Examples:
         - {"idea": "Write a market research plan"} → task_id + created_at
@@ -432,7 +436,7 @@ async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
 
 
 async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
-    """Fetch status/progress for a task from the remote MCP server.
+    """Fetch status/progress for a task from mcp_cloud.
 
     Examples:
         - {"task_id": "uuid"} → state/progress/timing
@@ -453,7 +457,7 @@ async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
 
 
 async def handle_task_stop(arguments: dict[str, Any]) -> CallToolResult:
-    """Request the remote MCP server to stop a running task.
+    """Request mcp_cloud to stop a running task.
 
     Examples:
         - {"task_id": "uuid"} → stop request acknowledged
@@ -474,7 +478,7 @@ async def handle_task_stop(arguments: dict[str, Any]) -> CallToolResult:
 
 
 async def handle_task_download(arguments: dict[str, Any]) -> CallToolResult:
-    """Download report/zip for a task and save it locally.
+    """Download report/zip for a task from mcp_cloud and save it locally.
 
     Examples:
         - {"task_id": "uuid"} → download report (default)
@@ -550,10 +554,10 @@ TOOL_HANDLERS = {
 async def main() -> None:
     logger.info("Starting PlanExe MCP local proxy using %s", _get_mcp_base_url())
     async with stdio_server() as streams:
-        await mcp_server.run(
+        await mcp_local.run(
             streams[0],
             streams[1],
-            mcp_server.create_initialization_options(),
+            mcp_local.create_initialization_options(),
         )
 
 

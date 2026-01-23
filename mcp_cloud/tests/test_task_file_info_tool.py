@@ -6,7 +6,7 @@ from io import BytesIO
 from unittest.mock import AsyncMock, patch
 
 from database_api.model_taskitem import TaskState
-from mcp_server.app import (
+from mcp_cloud.app import (
     REPORT_FILENAME,
     ZIP_CONTENT_TYPE,
     extract_file_from_zip_bytes,
@@ -44,9 +44,9 @@ class TestTaskFileInfoTool(unittest.TestCase):
             "state": TaskState.completed,
             "progress_message": None,
         }
-        with patch("mcp_server.app._get_task_for_report_sync", return_value=task_snapshot):
+        with patch("mcp_cloud.app._get_task_for_report_sync", return_value=task_snapshot):
             with patch(
-                "mcp_server.app.fetch_artifact_from_worker_plan",
+                "mcp_cloud.app.fetch_artifact_from_worker_plan",
                 new=AsyncMock(return_value=content_bytes),
             ):
                 result = asyncio.run(handle_task_file_info({"task_id": task_id}))
@@ -66,9 +66,9 @@ class TestTaskFileInfoTool(unittest.TestCase):
             "state": TaskState.completed,
             "progress_message": None,
         }
-        with patch("mcp_server.app._get_task_for_report_sync", return_value=task_snapshot):
+        with patch("mcp_cloud.app._get_task_for_report_sync", return_value=task_snapshot):
             with patch(
-                "mcp_server.app.fetch_zip_from_worker_plan",
+                "mcp_cloud.app.fetch_zip_from_worker_plan",
                 new=AsyncMock(return_value=content_bytes),
             ):
                 result = asyncio.run(handle_task_file_info({"task_id": task_id, "artifact": "zip"}))
@@ -85,9 +85,9 @@ class TestTaskFileInfoTool(unittest.TestCase):
             "state": TaskState.failed,
             "progress_message": "Stopped",
         }
-        with patch("mcp_server.app._get_task_for_report_sync", return_value=task_snapshot):
+        with patch("mcp_cloud.app._get_task_for_report_sync", return_value=task_snapshot):
             with patch(
-                "mcp_server.app.fetch_zip_from_worker_plan",
+                "mcp_cloud.app.fetch_zip_from_worker_plan",
                 new=AsyncMock(return_value=content_bytes),
             ):
                 result = asyncio.run(handle_task_file_info({"task_id": task_id, "artifact": "zip"}))

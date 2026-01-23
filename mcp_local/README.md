@@ -3,8 +3,8 @@
 Model Context Protocol (MCP) local proxy for PlanExe.
 
 It runs on the user's computer and provides local disk access for downloads.
-The pipeline still runs on the remote `PlanExe/mcp_server`; this proxy forwards
-tool calls over HTTP and downloads artifacts from `/download/{task_id}/...`.
+The pipeline still runs in `mcp_cloud`, the MCP server running in the cloud; this
+proxy forwards tool calls over HTTP and downloads artifacts from `/download/{task_id}/...`.
 
 ## Tools
 
@@ -17,7 +17,7 @@ tool calls over HTTP and downloads artifacts from `/download/{task_id}/...`.
 remote MCP tool `task_file_info` to obtain a download URL, then downloads the
 file locally into `PLANEXE_PATH`.
 
-## How it talks to mcp_server
+## How it talks to mcp_cloud
 
 - The remote base URL is `PLANEXE_URL` (for example `http://localhost:8001/mcp`).
 - Tool calls prefer the remote HTTP wrapper (`/mcp/tools/call`).

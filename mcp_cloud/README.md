@@ -1,10 +1,10 @@
-# PlanExe MCP Server
+# PlanExe MCP Cloud (mcp_cloud)
 
 Model Context Protocol (MCP) interface for PlanExe. Implements the MCP specification defined in `extra/planexe_mcp_interface.md`.
 
 ## Overview
 
-This MCP server provides a standardized interface for AI agents and developer tools to interact with PlanExe's plan generation workflows. It communicates with `worker_plan_database` via the shared Postgres database (`database_api` models).
+mcp_cloud provides a standardized MCP interface for PlanExe's plan generation workflows. It connects to `worker_plan_database` via the shared Postgres database (`database_api` models).
 
 ## Features
 
@@ -14,22 +14,22 @@ This MCP server provides a standardized interface for AI agents and developer to
 
 ## Client Choice Guide
 
-- **Use `mcp_server` directly (HTTP)**: If you are running in the cloud or you do
+- **Use `mcp_cloud` directly (HTTP)**: If you are running in the cloud or you do
   not need files saved to the local filesystem.
 - **Use `mcp_local` (proxy)**: Recommended when you want artifacts downloaded to
   your local disk (`PLANEXE_PATH`). The proxy forwards MCP calls to this server
   and handles file downloads locally.
-- **Recommended flow**: Docker (`mcp_server`) → `mcp_local` → MCP client (LM Studio/Claude).
+- **Recommended flow**: Docker (`mcp_cloud`) → `mcp_local` → MCP client (LM Studio/Claude).
 
 ## Docker Usage (Recommended)
 
-Build and run the MCP server with HTTP endpoints:
+Build and run mcp_cloud with HTTP endpoints:
 
 ```bash
-docker compose up --build mcp_server
+docker compose up --build mcp_cloud
 ```
 
-The MCP server exposes HTTP endpoints on port `8001` (or `${PLANEXE_MCP_HTTP_PORT}`). Set `PLANEXE_MCP_API_KEY` in your `.env` file or environment to enable API key authentication.
+mcp_cloud exposes HTTP endpoints on port `8001` (or `${PLANEXE_MCP_HTTP_PORT}`). Set `PLANEXE_MCP_API_KEY` in your `.env` file or environment to enable API key authentication.
 
 ### Connecting via HTTP/URL
 
@@ -106,7 +106,7 @@ Set `PLANEXE_MCP_API_KEY` to the same value you use in `Authorization: Bearer <k
 
 ### Database Configuration
 
-The MCP server uses the same database configuration as other PlanExe services:
+mcp_cloud uses the same database configuration as other PlanExe services:
 
 - `SQLALCHEMY_DATABASE_URI`: Full database connection string (takes precedence)
 - `PLANEXE_POSTGRES_HOST`: Database host (default: `database_postgres`)
@@ -158,17 +158,17 @@ Steps:
 
 ## Architecture
 
-The MCP server maps MCP concepts to PlanExe's database models:
+mcp_cloud maps MCP concepts to PlanExe's database models:
 
 - **Task** → `TaskItem` (each task corresponds to a TaskItem)
 - **Run** → Execution of a TaskItem by `worker_plan_database`
 - **Report** → HTML report fetched from `worker_plan` via HTTP API
 
-The server reads task state and progress from the database, and fetches artifacts from `worker_plan` via HTTP instead of accessing the run directory directly. This allows the MCP server to work without mounting the run directory, making it compatible with Railway and other cloud platforms that don't support shared volumes across services.
+mcp_cloud reads task state and progress from the database, and fetches artifacts from `worker_plan` via HTTP instead of accessing the run directory directly. This allows mcp_cloud to work without mounting the run directory, making it compatible with Railway and other cloud platforms that don't support shared volumes across services.
 
 ## Connecting via stdio (Advanced / Contributor Mode)
 
-For local development, you can run the MCP server over stdio instead of HTTP. This is
+For local development, you can run mcp_cloud over stdio instead of HTTP. This is
 useful for testing but requires local Python + Postgres setup. For most users, the
 recommended flow is Docker (server) + `mcp_local` (client).
 
@@ -177,7 +177,7 @@ recommended flow is Docker (server) + `mcp_local` (client).
 1. Install dependencies in a virtual environment:
 
 ```bash
-cd mcp_server
+cd mcp_cloud
 python3.13 -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install --upgrade pip
@@ -211,10 +211,10 @@ Add the following to your LM Studio MCP servers configuration file:
 {
   "mcpServers": {
     "planexe": {
-      "command": "/absolute/path/to/PlanExe/mcp_server/.venv/bin/python",
+      "command": "/absolute/path/to/PlanExe/mcp_cloud/.venv/bin/python",
       "args": [
         "-m",
-        "mcp_server.app"
+        "mcp_cloud.app"
       ],
       "env": {
         "PYTHONPATH": "/absolute/path/to/PlanExe",
@@ -237,10 +237,10 @@ Add the following to your LM Studio MCP servers configuration file:
 {
   "mcpServers": {
     "planexe": {
-      "command": "/absolute/path/to/PlanExe/mcp_server/.venv/bin/python",
+      "command": "/absolute/path/to/PlanExe/mcp_cloud/.venv/bin/python",
       "args": [
         "-m",
-        "mcp_server.app"
+        "mcp_cloud.app"
       ],
       "env": {
         "PYTHONPATH": "/absolute/path/to/PlanExe",
@@ -257,7 +257,7 @@ Add the following to your LM Studio MCP servers configuration file:
 
 **Using Docker** (more complex, but keeps dependencies isolated):
 
-You can use `docker compose exec` to run the MCP server:
+You can use `docker compose exec` to run mcp_cloud:
 
 ```json
 {
@@ -270,23 +270,23 @@ You can use `docker compose exec` to run the MCP server:
         "/absolute/path/to/PlanExe/docker-compose.yml",
         "exec",
         "-T",
-        "mcp_server",
+        "mcp_cloud",
         "python",
         "-m",
-        "mcp_server.app"
+        "mcp_cloud.app"
       ]
     }
   }
 }
 ```
 
-Note: This requires the `mcp_server` container to be running (`docker compose up -d mcp_server`).
+Note: This requires the `mcp_cloud` container to be running (`docker compose up -d mcp_cloud`).
 
 ### Troubleshooting
 
 **Connection issues:**
 - Ensure the database is running and accessible at the configured host/port
-- Check that the `PYTHONPATH` in the LM Studio config points to the PlanExe repository root (containing `database_api/`, `mcp_server/`, etc.)
+- Check that the `PYTHONPATH` in the LM Studio config points to the PlanExe repository root (containing `database_api/`, `mcp_cloud/`, etc.)
 - Verify the Python interpreter path in the `command` field is correct and points to the venv Python
 
 **Import errors:**
@@ -307,10 +307,10 @@ Note: This requires the `mcp_server` container to be running (`docker compose up
 Run locally for testing:
 
 ```bash
-cd mcp_server
+cd mcp_cloud
 source .venv/bin/activate  # If not already activated
 export PYTHONPATH=$PWD/..:$PYTHONPATH
-python -m mcp_server.app
+python -m mcp_cloud.app
 ```
 
 ## Railway Deployment
@@ -319,7 +319,7 @@ See `railway.md` for Railway-specific deployment instructions. The server automa
 
 ## Notes
 
-- The MCP server communicates with `worker_plan_database` indirectly via the database for task management.
+- mcp_cloud communicates with `worker_plan_database` indirectly via the database for task management.
 - Artifacts are fetched from `worker_plan` via HTTP instead of accessing the run directory directly. This avoids needing a shared volume mount, making it compatible with Railway and other cloud platforms.
 - For artifacts:
   - `report.html` is fetched efficiently via the dedicated `/runs/{run_id}/report` endpoint

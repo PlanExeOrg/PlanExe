@@ -12,8 +12,8 @@ Always check the package-level `AGENTS.md` for file-specific rules
 - `frontend_multi_user`: Flask UI (hosted mode) + Postgres.
 - `open_dir_server`: local host opener (security critical).
 - `worker_plan_database`: DB-backed worker that polls tasks.
-- `mcp_server`: MCP stdio server + HTTP wrapper; primary cloud deployment, secondary Docker setup for advanced users, tertiary venv workflow for developers; bridges MCP tools to PlanExe DB/worker_plan.
-- `mcp_local`: local MCP proxy that forwards tool calls to `mcp_server` and downloads artifacts.
+- `mcp_cloud`: MCP stdio server + HTTP wrapper; primary cloud deployment, secondary Docker setup for advanced users, tertiary venv workflow for developers; bridges MCP tools to PlanExe DB/worker_plan.
+- `mcp_local`: local MCP proxy that forwards tool calls to `mcp_cloud` and downloads artifacts.
 
 ## Shared contracts
 - Keep `worker_plan` HTTP endpoints and response shapes backward compatible.

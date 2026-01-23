@@ -1,1 +1,0 @@
-"""PlanExe MCP Server - Model Context Protocol interface for PlanExe."""

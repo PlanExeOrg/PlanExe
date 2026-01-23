@@ -1,5 +1,5 @@
 """
-HTTP server wrapper for PlanExe MCP Server
+HTTP server wrapper for PlanExe MCP Cloud
 
 Provides HTTP/JSON endpoints for MCP tool calls with API key authentication.
 Supports deployment to Railway and other cloud platforms.
@@ -21,15 +21,15 @@ from pydantic import BaseModel, Field
 from mcp.server.fastmcp import FastMCP
 from mcp.types import CallToolResult, ContentBlock, TextContent
 
-from mcp_server.http_utils import strip_redundant_content
-from mcp_server.tool_models import (
+from mcp_cloud.http_utils import strip_redundant_content
+from mcp_cloud.tool_models import (
     TaskCreateOutput,
     TaskFileInfoOutput,
     TaskStatusOutput,
     TaskStopOutput,
 )
 
-from mcp_server.dotenv_utils import load_planexe_dotenv
+from mcp_cloud.dotenv_utils import load_planexe_dotenv
 _dotenv_loaded, _dotenv_paths = load_planexe_dotenv()
 
 logging.basicConfig(
@@ -43,7 +43,7 @@ if not _dotenv_loaded:
         ", ".join(str(path) for path in _dotenv_paths),
     )
 
-from mcp_server.app import (
+from mcp_cloud.app import (
     REPORT_CONTENT_TYPE,
     REPORT_FILENAME,
     TOOL_DEFINITIONS,
@@ -355,7 +355,7 @@ fastmcp_http_app = fastmcp_server.streamable_http_app()
 def _get_fastmcp(request: Request) -> FastMCP:
     fastmcp_server = getattr(request.app.state, "fastmcp_server", None)
     if fastmcp_server is None:
-        raise HTTPException(status_code=503, detail="MCP server not initialized")
+        raise HTTPException(status_code=503, detail="mcp_cloud not initialized")
     return fastmcp_server
 
 
@@ -375,7 +375,7 @@ async def _lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="PlanExe MCP Server (HTTP)",
+    title="PlanExe MCP Cloud (HTTP)",
     description="HTTP wrapper for PlanExe MCP interface",
     version="1.0.0",
     lifespan=_lifespan,
@@ -526,7 +526,7 @@ def healthcheck() -> dict[str, Any]:
 def root() -> dict[str, Any]:
     """Root endpoint with API information."""
     return {
-        "service": "PlanExe MCP Server (HTTP)",
+            "service": "PlanExe MCP Cloud (HTTP)",
         "version": "1.0.0",
         "endpoints": {
             "mcp": "/mcp",

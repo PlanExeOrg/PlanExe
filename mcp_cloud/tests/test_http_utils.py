@@ -1,6 +1,6 @@
 import unittest
 
-from mcp_server.http_utils import strip_redundant_content
+from mcp_cloud.http_utils import strip_redundant_content
 
 
 class TestHttpUtils(unittest.TestCase):

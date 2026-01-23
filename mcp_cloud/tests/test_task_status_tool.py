@@ -6,7 +6,7 @@ from unittest.mock import AsyncMock, patch
 
 from mcp.types import CallToolResult
 from database_api.model_taskitem import TaskState
-from mcp_server.app import handle_task_status
+from mcp_cloud.app import handle_task_status
 
 
 class TestTaskStatusTool(unittest.TestCase):
@@ -20,10 +20,10 @@ class TestTaskStatusTool(unittest.TestCase):
             "timestamp_created": datetime.now(UTC),
         }
         with patch(
-            "mcp_server.app._get_task_status_snapshot_sync",
+            "mcp_cloud.app._get_task_status_snapshot_sync",
             return_value=task_snapshot,
         ), patch(
-            "mcp_server.app.fetch_file_list_from_worker_plan", new=AsyncMock(return_value=[])
+            "mcp_cloud.app.fetch_file_list_from_worker_plan", new=AsyncMock(return_value=[])
         ):
             result = asyncio.run(handle_task_status({"task_id": task_id}))
 

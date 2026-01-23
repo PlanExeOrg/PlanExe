@@ -1,11 +1,11 @@
 # mcp_local agent instructions
 
 Scope: local MCP proxy script that runs on the user's machine and forwards tool calls
-to the remote PlanExe MCP server (`mcp_server`) over HTTP.
+to mcp_cloud, a MCP server running in the cloud, over HTTP.
 
 ## Interaction model
-- The local proxy exposes MCP tools over stdio and forwards requests to the remote
-  MCP server using `PLANEXE_URL` (defaults to the hosted `/mcp` endpoint).
+- The local proxy exposes MCP tools over stdio and forwards requests to mcp_cloud
+  using `PLANEXE_URL` (defaults to the hosted `/mcp` endpoint).
 - Supported tools: `task_create`, `task_status`, `task_stop`, `task_download`.
 - `task_download` calls the remote `task_file_info` tool to obtain a download URL,
   then downloads the artifact to `PLANEXE_PATH` on the local machine.
@@ -18,6 +18,6 @@ to the remote PlanExe MCP server (`mcp_server`) over HTTP.
 - Ensure all tool responses include structured content when an output schema is defined.
 
 ## Env vars
-- `PLANEXE_URL`: Base URL for the remote MCP server (e.g., `http://localhost:8001/mcp`).
+- `PLANEXE_URL`: Base URL for mcp_cloud (e.g., `http://localhost:8001/mcp`).
 - `PLANEXE_MCP_API_KEY`: API key passed as `Authorization: Bearer ...` if provided.
 - `PLANEXE_PATH`: Local directory where downloads are saved.

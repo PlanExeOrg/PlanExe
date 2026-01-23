@@ -1,5 +1,5 @@
 """
-PlanExe MCP Server
+PlanExe MCP Cloud
 
 Implements the Model Context Protocol interface for PlanExe as specified in
  extra/planexe_mcp_interface.md. Communicates with worker_plan_database via the shared
@@ -28,7 +28,7 @@ from mcp.server.stdio import stdio_server
 from mcp.types import CallToolResult, Tool, TextContent
 from pydantic import BaseModel
 
-from mcp_server.dotenv_utils import load_planexe_dotenv
+from mcp_cloud.dotenv_utils import load_planexe_dotenv
 _dotenv_loaded, _dotenv_paths = load_planexe_dotenv(Path(__file__).parent)
 
 logging.basicConfig(
@@ -46,7 +46,7 @@ from database_api.planexe_db_singleton import db
 from database_api.model_taskitem import TaskItem, TaskState
 from database_api.model_event import EventItem, EventType
 from flask import Flask, has_app_context
-from mcp_server.tool_models import (
+from mcp_cloud.tool_models import (
     ErrorDetail,
     TaskFileInfoReadyOutput,
     TaskCreateOutput,
@@ -94,7 +94,7 @@ def ensure_taskitem_stop_columns() -> None:
 with app.app_context():
     ensure_taskitem_stop_columns()
 
-mcp_server = Server("planexe-mcp-server")
+mcp_cloud = Server("planexe-mcp-cloud")
 
 # Base directory for run artifacts (not used directly, fetched via worker_plan HTTP API)
 BASE_DIR_RUN = Path(os.environ.get("PLANEXE_RUN_DIR", Path(__file__).parent.parent / "run")).resolve()
@@ -649,7 +649,7 @@ TOOL_DEFINITIONS = [
     ),
 ]
 
-@mcp_server.list_tools()
+@mcp_cloud.list_tools()
 async def handle_list_tools() -> list[Tool]:
     """List all available MCP tools."""
     return [
@@ -662,7 +662,7 @@ async def handle_list_tools() -> list[Tool]:
         for definition in TOOL_DEFINITIONS
     ]
 
-@mcp_server.call_tool()
+@mcp_cloud.call_tool()
 async def handle_call_tool(name: str, arguments: dict[str, Any]) -> CallToolResult:
     """Dispatch MCP tool calls and return structured JSON errors for unknown tools."""
     try:
@@ -965,17 +965,17 @@ TOOL_HANDLERS = {
 
 async def main():
     """Main entry point for MCP server."""
-    logger.info("Starting PlanExe MCP Server...")
+    logger.info("Starting PlanExe MCP Cloud...")
     
     with app.app_context():
         db.create_all()
         logger.info("Database initialized")
     
     async with stdio_server() as streams:
-        await mcp_server.run(
+        await mcp_cloud.run(
             streams[0],
             streams[1],
-            mcp_server.create_initialization_options()
+            mcp_cloud.create_initialization_options()
         )
 
 if __name__ == "__main__":

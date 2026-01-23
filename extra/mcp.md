@@ -7,11 +7,11 @@ This document lists the MCP tools exposed by PlanExe and example prompts for age
 
 ## Overview
 
-- The primary MCP server runs in the cloud (see `mcp_server`).
+- The primary MCP server runs in the cloud (see `mcp_cloud`).
 - The local MCP proxy (`mcp_local`) forwards calls to the server and adds a local download helper.
 - Tool responses return JSON in both `content.text` and `structuredContent`.
 
-## Tool Catalog, `mcp_server`
+## Tool Catalog, `mcp_cloud`
 
 ### task_create
 

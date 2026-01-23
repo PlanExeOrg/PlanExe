@@ -1,4 +1,4 @@
-# mcp_server agent instructions
+# mcp_cloud agent instructions
 
 Scope: Model Context Protocol (MCP) server that provides a standardized interface
 for AI agents and developer tools to interact with PlanExe. Communicates with
@@ -7,7 +7,7 @@ for AI agents and developer tools to interact with PlanExe. Communicates with
 ## Guidelines
 - Keep database access wired through `database_api.planexe_db_singleton.db`;
   do not create new engine/session instances here.
-- Preserve the startup sequence in `mcp_server/app.py`:
+- Preserve the startup sequence in `mcp_cloud/app.py`:
   `.env` loading, logging setup, Flask app config, then `db.init_app(app)`.
 - Maintain the DB connection logic:
   - Prefer `SQLALCHEMY_DATABASE_URI` when set.
@@ -21,7 +21,7 @@ for AI agents and developer tools to interact with PlanExe. Communicates with
 
 ## MCP Protocol
 - The server communicates over stdio (standard input/output) following the MCP protocol.
-- Tools are registered via `@mcp_server.list_tools()` and handled via `@mcp_server.call_tool()`.
+- Tools are registered via `@mcp_cloud.list_tools()` and handled via `@mcp_cloud.call_tool()`.
 - All tool responses must be JSON-serializable and follow the error model in the spec.
 - Event cursors use format `cursor_{event_id}` for incremental polling.
 

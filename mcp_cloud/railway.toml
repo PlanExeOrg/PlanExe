@@ -2,7 +2,7 @@
 builder = "NIXPACKS"
 
 [deploy]
-startCommand = "python -m mcp_server.http_server"
+startCommand = "python -m mcp_cloud.http_server"
 healthcheckPath = "/healthcheck"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"

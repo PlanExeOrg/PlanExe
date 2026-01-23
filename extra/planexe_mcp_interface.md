@@ -198,8 +198,7 @@ Stops the active run.
 Request
 
 {
-  "task_id": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1",
-  "mode": "graceful"
+  "task_id": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1"
 }
 
 Response
@@ -348,7 +347,7 @@ Appendix A — Example End-to-End Flow
 
 Create task
 
-task_create({ "idea": "...", "config": {...} })
+task_create({ "idea": "..." })
 
 Start run
 
@@ -356,7 +355,7 @@ task_status({ "task_id": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1" })
 
 Stop
 
-task_stop({ "task_id": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1", "mode": "graceful" })
+task_stop({ "task_id": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1" })
 
 ⸻
 

@@ -200,7 +200,6 @@ async def _enforce_body_size(request: Request) -> Optional[JSONResponse]:
     return None
 
 
-# Request/Response models
 class MCPToolCallRequest(BaseModel):
     tool: str
     arguments: dict[str, Any]
@@ -384,7 +383,6 @@ app = FastAPI(
 
 app.mount("/mcp", fastmcp_http_app)
 
-# CORS middleware to allow cross-origin requests
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,

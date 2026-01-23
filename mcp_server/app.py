@@ -130,7 +130,6 @@ SPEED_VS_DETAIL_ALIASES = {
     "all": "all_details_but_slow",
 }
 
-# Pydantic models for request/response validation
 class TaskCreateRequest(BaseModel):
     idea: str
     speed_vs_detail: Optional[SpeedVsDetailInput] = None
@@ -535,7 +534,6 @@ def build_zip_download_url(task_id: str) -> Optional[str]:
         return None
     return f"{base_url.rstrip('/')}{build_zip_download_path(task_id)}"
 
-# Output schemas for MCP tools.
 ERROR_SCHEMA = ErrorDetail.model_json_schema()
 TASK_CREATE_OUTPUT_SCHEMA = TaskCreateOutput.model_json_schema()
 TASK_STATUS_SUCCESS_SCHEMA = TaskStatusSuccess.model_json_schema()

@@ -17,7 +17,7 @@ import zipfile
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 from urllib.parse import quote_plus
 from io import BytesIO
 import httpx
@@ -126,6 +126,11 @@ SPEED_VS_DETAIL_INPUT_VALUES = (
     "fast",
     "all",
 )
+SpeedVsDetailInput = Literal[
+    "ping",
+    "fast",
+    "all",
+]
 SPEED_VS_DETAIL_ALIASES = {
     "ping": "ping_llm",
     "fast": "fast_but_skip_details",
@@ -135,7 +140,7 @@ SPEED_VS_DETAIL_ALIASES = {
 # Pydantic models for request/response validation
 class TaskCreateRequest(BaseModel):
     idea: str
-    speed_vs_detail: Optional[str] = None
+    speed_vs_detail: Optional[SpeedVsDetailInput] = None
 
 class TaskStatusRequest(BaseModel):
     task_id: str

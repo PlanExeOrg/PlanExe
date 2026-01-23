@@ -11,7 +11,7 @@ import logging
 import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 from urllib.error import HTTPError
 from urllib.parse import urljoin, urlparse
 from urllib.request import Request, urlopen
@@ -27,11 +27,16 @@ logger = logging.getLogger(__name__)
 DEFAULT_MCP_URL = "https://your-railway-app.up.railway.app/mcp"
 REPORT_FILENAME = "030-report.html"
 ZIP_FILENAME = "run.zip"
+SpeedVsDetailInput = Literal[
+    "ping",
+    "fast",
+    "all",
+]
 
 
 class TaskCreateRequest(BaseModel):
     idea: str
-    speed_vs_detail: Optional[str] = None
+    speed_vs_detail: Optional[SpeedVsDetailInput] = None
 
 
 class TaskStatusRequest(BaseModel):

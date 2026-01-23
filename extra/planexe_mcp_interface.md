@@ -123,6 +123,23 @@ Start creating a new plan. speed_vs_detail modes: 'all' runs the full pipeline w
 
 Request
 
+Schema
+
+{
+  "type": "object",
+  "properties": {
+    "idea": { "type": "string" },
+    "speed_vs_detail": {
+      "type": "string",
+      "enum": ["ping", "fast", "all"],
+      "default": "ping"
+    }
+  },
+  "required": ["idea"]
+}
+
+Example
+
 {
   "idea": "string",
   "speed_vs_detail": "ping"

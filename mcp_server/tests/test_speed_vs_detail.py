@@ -1,7 +1,10 @@
 import unittest
 
+from pydantic import ValidationError
+
 from mcp_server.app import (
     SPEED_VS_DETAIL_DEFAULT,
+    TaskCreateRequest,
     _merge_task_create_config,
     resolve_speed_vs_detail,
 )
@@ -34,6 +37,17 @@ class TestResolveSpeedVsDetail(unittest.TestCase):
     def test_merge_task_create_config_ignores_blank(self):
         merged = _merge_task_create_config({}, "   ")
         self.assertIsNone(merged)
+
+
+class TestTaskCreateRequest(unittest.TestCase):
+    def test_speed_vs_detail_accepts_enum(self):
+        for value in ("ping", "fast", "all"):
+            req = TaskCreateRequest(idea="demo", speed_vs_detail=value)
+            self.assertEqual(req.speed_vs_detail, value)
+
+    def test_speed_vs_detail_rejects_invalid(self):
+        with self.assertRaises(ValidationError):
+            TaskCreateRequest(idea="demo", speed_vs_detail="slow")
 
 
 if __name__ == "__main__":

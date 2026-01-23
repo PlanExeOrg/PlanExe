@@ -32,7 +32,6 @@ from pydantic import BaseModel
 from mcp_server.dotenv_utils import load_planexe_dotenv
 _dotenv_loaded, _dotenv_paths = load_planexe_dotenv(Path(__file__).parent)
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -44,7 +43,6 @@ if not _dotenv_loaded:
         ", ".join(str(path) for path in _dotenv_paths),
     )
 
-# Database imports
 from database_api.planexe_db_singleton import db
 from database_api.model_taskitem import TaskItem, TaskState
 from database_api.model_event import EventItem, EventType
@@ -99,13 +97,11 @@ def ensure_taskitem_stop_columns() -> None:
 with app.app_context():
     ensure_taskitem_stop_columns()
 
-# MCP Server setup
 mcp_server = Server("planexe-mcp-server")
 
 # Base directory for run artifacts (not used directly, fetched via worker_plan HTTP API)
 BASE_DIR_RUN = Path(os.environ.get("PLANEXE_RUN_DIR", Path(__file__).parent.parent / "run")).resolve()
 
-# Worker plan HTTP API URL
 WORKER_PLAN_URL = os.environ.get("PLANEXE_WORKER_PLAN_URL", "http://worker_plan:8000")
 
 REPORT_FILENAME = "030-report.html"
@@ -152,7 +148,6 @@ class TaskFileInfoRequest(BaseModel):
     task_id: str
     artifact: Optional[str] = None
 
-# Helper functions
 def find_task_by_task_id(task_id: str) -> Optional[TaskItem]:
     """Find TaskItem by MCP task_id (UUID), with legacy fallback."""
     task = get_task_by_id(task_id)
@@ -658,7 +653,7 @@ TOOL_DEFINITIONS = [
     ),
 ]
 
-# MCP Tool implementations
+# Formatting helpers for human-readable tool responses.
 def _format_error_text(code: Optional[str], message: Optional[str]) -> str:
     if code and message:
         return f"Error {code}: {message}"
@@ -750,7 +745,7 @@ async def handle_list_tools() -> list[Tool]:
 
 @mcp_server.call_tool()
 async def handle_call_tool(name: str, arguments: dict[str, Any]) -> CallToolResult:
-    """Handle tool calls."""
+    """Dispatch MCP tool calls and standardize errors for unknown tools."""
     try:
         handler = TOOL_HANDLERS.get(name)
         if handler is None:

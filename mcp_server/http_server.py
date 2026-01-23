@@ -33,7 +33,6 @@ from mcp_server.tool_models import (
 from mcp_server.dotenv_utils import load_planexe_dotenv
 _dotenv_loaded, _dotenv_paths = load_planexe_dotenv()
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -45,7 +44,6 @@ if not _dotenv_loaded:
         ", ".join(str(path) for path in _dotenv_paths),
     )
 
-# Import MCP tool handlers from app.py
 from mcp_server.app import (
     REPORT_CONTENT_TYPE,
     REPORT_FILENAME,
@@ -61,7 +59,6 @@ from mcp_server.app import (
     resolve_task_for_task_id,
 )
 
-# API key validation
 REQUIRED_API_KEY = os.environ.get("PLANEXE_MCP_API_KEY")
 if not REQUIRED_API_KEY:
     logger.warning(

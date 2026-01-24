@@ -8,7 +8,7 @@ mcp_cloud provides a standardized MCP interface for PlanExe's plan generation wo
 
 ## Features
 
-- **Task Management**: Create and stop plan generation tasks
+- **Task Management**: MCP tasks/get/result/cancel for long-running runs
 - **Progress Tracking**: Real-time status and progress updates
 - **File Metadata**: Get report/zip metadata and download URLs
 
@@ -120,15 +120,20 @@ mcp_cloud uses the same database configuration as other PlanExe services:
 
 See `extra/planexe_mcp_interface.md` for full specification. Available tools:
 
-- `task_create` - Create a new task
-- `task_status` - Get task status and progress
-- `task_stop` - Stop an active task
-- `task_file_info` - Get file metadata for report or zip
+- `plan_generate` - Generate a new plan (supports MCP task augmentation)
+- `task_file_info` - Get file metadata for report or zip (legacy helper)
+- Legacy wrappers: `task_create`, `task_status`, `task_stop`
 
 Note: `task_download` is a synthetic tool provided by `mcp_local`, not by this server.
 
 Download flow: call `task_file_info` to obtain the `download_url`, then fetch the
 report via `GET /download/{task_id}/030-report.html` (API key required if configured).
+
+MCP task methods exposed:
+- `tasks/get`
+- `tasks/result`
+- `tasks/cancel`
+- `tasks/list` (optional)
 
 ## Debugging tools
 

@@ -8,10 +8,9 @@ proxy forwards tool calls over HTTP and downloads artifacts from `/download/{tas
 
 ## Tools
 
-`task_create` - Initiate creation of a plan.
-`task_status` - Get status and progress about the creation of a plan.
-`task_stop` - Abort creation of a plan.
-`task_download` - Download the plan, either html report or a zip with everything, and save it to disk.
+`plan_generate` - Generate a new plan (supports MCP task augmentation).
+Legacy wrappers: `task_create`, `task_status`, `task_stop`.
+`task_download` - Download the plan (HTML report or zip), and save it to disk.
 
 `task_download` is a synthetic tool provided by the local proxy. It calls the
 remote MCP tool `task_file_info` to obtain a download URL, then downloads the

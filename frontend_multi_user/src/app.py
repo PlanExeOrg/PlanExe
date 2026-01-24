@@ -208,6 +208,12 @@ class MyFlaskApp:
                     conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS stop_requested BOOLEAN"))
                 if "stop_requested_timestamp" not in columns:
                     conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS stop_requested_timestamp TIMESTAMP"))
+                if "timestamp_updated" not in columns:
+                    conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS timestamp_updated TIMESTAMP"))
+                if "task_ttl_ms" not in columns:
+                    conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS task_ttl_ms INTEGER"))
+                if "task_expires_at" not in columns:
+                    conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS task_expires_at TIMESTAMP"))
 
         def _seed_initial_records() -> None:
             # Add initial records if the table is empty

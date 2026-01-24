@@ -1,4 +1,4 @@
-PlanExe MCP Interface Specification (v1.0)
+PlanExe MCP Interface Specification (v2.0)
 
 1. Purpose
 
@@ -103,7 +103,7 @@ Tasks may exist independent of active runs.
 	•	failed (resumable depending on failure type)
 
 5.3 Allowed transitions
-	•	running → stopped via task_stop
+	•	running → cancelled via tasks/cancel
 	•	running → completed via normal success
 	•	running → failed via error
 
@@ -113,13 +113,13 @@ Invalid
 
 ⸻
 
-6. MCP Tools (v1 Required)
+6. MCP Tools (v2 Required)
 
 All tool names below are normative.
 
-6.1 task_create
+6.1 plan_generate
 
-Start creating a new plan. speed_vs_detail modes: 'all' runs the full pipeline with all details (slower, higher token usage/cost). 'fast' runs the full pipeline with minimal work per step (faster, fewer details), useful to verify the pipeline is working. 'ping' runs the pipeline entrypoint and makes a single LLM call to verify the worker_plan_database is processing tasks and can reach the LLM.
+Generate a new plan. This tool supports MCP task augmentation (Run as task).
 
 Request
 
@@ -133,7 +133,8 @@ Schema
       "type": "string",
       "enum": ["ping", "fast", "all"],
       "default": "ping"
-    }
+    },
+    "idempotency_key": { "type": "string" }
   },
   "required": ["idea"]
 }
@@ -142,78 +143,63 @@ Example
 
 {
   "idea": "string",
-  "speed_vs_detail": "ping"
+  "speed_vs_detail": "ping",
+  "idempotency_key": "optional-key"
 }
 
-Response
+Response (sync)
 
 {
   "task_id": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1",
-  "created_at": "2026-01-14T12:34:56Z"
+  "status": "completed",
+  "progress_percentage": 100.0,
+  "report": {
+    "content_type": "text/html; charset=utf-8",
+    "sha256": "…",
+    "download_size": 1234,
+    "download_url": "https://…"
+  }
 }
+
+Response (task-augmented)
+
+If the client supplies `task` in the MCP `tools/call` params, the server returns
+a CreateTaskResult containing a Task object (see MCP Tasks Protocol).
 
 Behavior
-	•	Must be idempotent only if client supplies an optional client_request_id (optional extension).
-	•	Task config is immutable after creation in v1.
+	•	Idempotency is supported via `idempotency_key` (dedupe by user_id + key).
+	•	Task config is immutable after creation.
 
 ⸻
 
-6.2 task_status
+6.2 Legacy wrappers (optional)
 
-Returns run status and progress. Used for progress bars and UI states.
-
-Request
-
-{
-  "task_id": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1"
-}
-
-Response
-
-{
-  "task_id": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1",
-  "state": "running",
-  "progress_percentage": 62.0,
-  "timing": {
-    "started_at": "2026-01-14T12:35:10Z",
-    "elapsed_sec": 512
-  },
-  "files": [
-    {
-      "path": "plan.md",
-      "updated_at": "2026-01-14T12:43:11Z"
-    }
-  ]
-}
-
-Notes
-	•	progress_percentage must be a float within [0,100].
+For backwards compatibility, these remain available but are not task-augmentable:
+	•	task_create
+	•	task_status
+	•	task_stop
 
 ⸻
 
-6.3 task_stop
+7. MCP Tasks Protocol
 
-Stops the active run.
+Servers declare tasks capability during initialization. Supported methods:
+	•	tasks/get
+	•	tasks/result
+	•	tasks/cancel
+	•	(optional) tasks/list
 
-Request
+Task statuses follow MCP:
+	•	working
+	•	completed
+	•	failed
+	•	cancelled
+	•	input_required
 
-{
-  "task_id": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1"
-}
+Tasks include a TTL (milliseconds since creation). Expired, terminal tasks may be
+removed during cleanup sweeps.
 
-Response
-
-{
-  "state": "stopped"
-}
-
-Required semantics
-	•	Must stop workers cleanly where possible.
-	•	Must persist enough Luigi state to resume incrementally.
-
-⸻
-
-7. Targets
+8. Targets
 
 8.1 Standard targets
 
@@ -285,7 +271,7 @@ At minimum:
 13. Performance Requirements
 
 13.1 Responsiveness
-	•	task_status must return within < 250ms under normal load.
+	•	tasks/get must return within < 250ms under normal load.
 
 13.2 Large artifacts
 	•	server SHOULD impose max read size per call (e.g., 2–10MB)
@@ -309,7 +295,7 @@ To match your UI behavior:
 Progress bars
 
 Use:
-	•	task_status.progress_percentage
+	•	tasks/get.status + progress_percentage
 	•	or progress_updated events
 
 ⸻
@@ -373,20 +359,20 @@ Notes
 
 The following tools remove common UX friction without expanding the core model.
 
-19.1 task_list (or task_recent)
+19.1 tasks/list
 Return a short list of recent tasks so agents can recover if they lost a task_id.
 
 Notes
 	•	Default limit: 5–10 tasks.
-	•	Include task_id, created_at, state, and prompt summary.
+	•	Include taskId, createdAt, status, and prompt summary.
 
 19.2 task_wait
 Blocking helper that polls internally until the task completes or times out.
-Returns the final task_status payload plus suggested next steps.
+Returns the final tasks/result payload plus suggested next steps.
 
 Notes
 	•	Inputs: task_id, timeout_sec (optional), poll_interval_sec (optional).
-	•	Outputs: same as task_status + next_steps (string or list).
+	•	Outputs: same as tasks/result + next_steps (string or list).
 
 19.3 task_get_latest
 Simplest recovery: return the most recently created task for the caller.
@@ -400,23 +386,27 @@ Return the tail of recent log lines for troubleshooting failures.
 
 Notes
 	•	Inputs: task_id, max_lines (optional), since_cursor (optional).
-	•	Useful when task_status shows failed but no context.
+	•	Useful when tasks/get shows failed but no context.
 
 ⸻
 
 Appendix A — Example End-to-End Flow
 
-Create task
+Create task (task-augmented tool call)
 
-task_create({ "idea": "..." })
+tools/call { name: "plan_generate", arguments: { "idea": "..." }, task: { "ttl": 43200000 } }
 
-Start run
+Check status
 
-task_status({ "task_id": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1" })
+tasks/get { "taskId": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1" }
 
-Stop
+Wait for result
 
-task_stop({ "task_id": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1" })
+tasks/result { "taskId": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1" }
+
+Cancel
+
+tasks/cancel { "taskId": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1" }
 
 ⸻
 

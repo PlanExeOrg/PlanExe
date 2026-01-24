@@ -8,6 +8,23 @@ class ErrorDetail(BaseModel):
     message: str
 
 
+class TaskArtifactInfo(BaseModel):
+    content_type: str
+    sha256: str
+    download_size: int
+    download_url: str | None = None
+
+
+class PlanGenerateOutput(BaseModel):
+    task_id: str
+    status: Literal["working", "completed", "failed", "cancelled", "input_required"]
+    progress_percentage: float | None = None
+    message: str | None = None
+    report: TaskArtifactInfo | None = None
+    zip: TaskArtifactInfo | None = None
+    error: ErrorDetail | None = None
+
+
 class TaskCreateOutput(BaseModel):
     task_id: str
     created_at: str

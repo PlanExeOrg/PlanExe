@@ -40,6 +40,9 @@ class TaskItem(db.Model):
     # If the task is not active, it will be stopped.
     last_seen_timestamp = db.Column(db.DateTime, nullable=True, default=lambda: datetime.now(UTC))
 
+    # When the task state/progress was last updated (UTC).
+    timestamp_updated = db.Column(db.DateTime, nullable=True, default=lambda: datetime.now(UTC))
+
     # Stop requests from external callers (e.g., MCP or admin tools).
     stop_requested = db.Column(db.Boolean, nullable=True, default=False)
 
@@ -57,6 +60,12 @@ class TaskItem(db.Model):
 
     # A zip archive of the run directory for this task (stored for both success and failure).
     run_zip_snapshot = db.Column(db.LargeBinary, nullable=True)
+
+    # Task TTL in milliseconds (used by MCP task cleanup).
+    task_ttl_ms = db.Column(db.Integer, nullable=True, default=None)
+
+    # When this task expires (UTC). Used for cleanup after terminal state.
+    task_expires_at = db.Column(db.DateTime, nullable=True, default=None)
 
     def __repr__(self):
         return f"{self.id}: {self.timestamp_created}, {self.state}, {self.prompt!r}, parameters: {self.parameters!r}"

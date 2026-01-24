@@ -13,13 +13,13 @@ This document lists the MCP tools exposed by PlanExe and example prompts for age
 
 ## Tool Catalog, `mcp_cloud`
 
-### task_create
+### plan_generate
 
-Create a new plan task.
+Generate a new plan. This tool supports MCP task augmentation (Run as task).
 
 Example prompt:
 ```
-Create a plan for: Weekly meetup for humans where participants are randomly paired every 5 minutes...
+Generate a plan for: Weekly meetup for humans where participants are randomly paired every 5 minutes...
 ```
 
 Example call:
@@ -27,40 +27,13 @@ Example call:
 {"idea": "Weekly meetup for humans where participants are randomly paired every 5 minutes..."}
 ```
 
-Optional argument:
+Optional arguments:
 ```
 speed_vs_detail: "ping" | "fast" | "all"
+idempotency_key: "<string>"
 ```
 
-### task_status
-
-Fetch status/progress and recent files for a task.
-
-Example prompt:
-```
-Get status for task 2d57a448-1b09-45aa-ad37-e69891ff6ec7.
-```
-
-Example call:
-```json
-{"task_id": "2d57a448-1b09-45aa-ad37-e69891ff6ec7"}
-```
-
-### task_stop
-
-Request an active task to stop.
-
-Example prompt:
-```
-Stop task 2d57a448-1b09-45aa-ad37-e69891ff6ec7.
-```
-
-Example call:
-```json
-{"task_id": "2d57a448-1b09-45aa-ad37-e69891ff6ec7"}
-```
-
-### task_file_info
+### task_file_info (legacy)
 
 Return download metadata for report or zip artifacts.
 
@@ -78,6 +51,25 @@ Available artifacts:
 ```
 "report" | "zip"
 ```
+
+### Legacy wrappers
+
+These are kept for older clients and are not task-augmentable:
+```
+task_create
+task_status
+task_stop
+```
+
+## MCP Tasks Protocol
+
+When calling `plan_generate`, clients may request a task-augmented run by adding
+`task` in the MCP `tools/call` request params. The server exposes:
+
+- `tasks/get` - fetch task status + poll interval
+- `tasks/result` - wait until the task reaches a terminal status and return the tool result
+- `tasks/cancel` - request cancellation
+- `tasks/list` (optional)
 
 ## Tool Catalog, `mcp_local`
 
@@ -99,26 +91,31 @@ Example call:
 
 ## Typical Flow
 
-### 1) Create a plan
+### 1) Start a plan as a task
 
 Prompt:
 ```
-Create a plan for this idea: Weekly meetup for humans where participants are randomly paired every 5 minutes...
+Generate a plan for this idea: Weekly meetup for humans where participants are randomly paired every 5 minutes...
 ```
 
-### 2) Get status
-
-Prompt:
-```
-Get status for my latest task.
-```
-
-Tool call:
+Tool call (task-augmented):
 ```json
-{"task_id": "<task_id_from_task_create>"}
+{"name": "plan_generate", "arguments": {"idea": "Weekly meetup for humans where participants are randomly paired every 5 minutes..."}, "task": {"ttl": 43200000}}
 ```
 
-### 3) Download the report
+### 2) Check status or wait for result
+
+Status:
+```json
+{"taskId": "<task_id_from_create_task_result>"}
+```
+
+Result (blocks until terminal):
+```json
+{"taskId": "<task_id_from_create_task_result>"}
+```
+
+### 3) Download the report (local proxy)
 
 Prompt:
 ```
@@ -127,5 +124,5 @@ Download the report for my task.
 
 Tool call:
 ```json
-{"task_id": "<task_id_from_task_create>", "artifact": "report"}
+{"task_id": "<task_id_from_create_task_result>", "artifact": "report"}
 ```

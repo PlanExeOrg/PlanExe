@@ -35,3 +35,7 @@ class TestTaskItemModel(unittest.TestCase):
             self.assertTrue(hasattr(fetched, "stop_requested"))
             self.assertTrue(hasattr(fetched, "stop_requested_timestamp"))
             self.assertFalse(bool(fetched.stop_requested))
+            self.assertTrue(hasattr(fetched, "timestamp_updated"))
+            self.assertIsNotNone(fetched.timestamp_updated)
+            self.assertTrue(hasattr(fetched, "task_ttl_ms"))
+            self.assertTrue(hasattr(fetched, "task_expires_at"))

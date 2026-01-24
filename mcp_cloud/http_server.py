@@ -23,6 +23,7 @@ from mcp.types import CallToolResult, ContentBlock, TextContent
 
 from mcp_cloud.http_utils import strip_redundant_content
 from mcp_cloud.tool_models import (
+    PlanGenerateOutput,
     TaskCreateOutput,
     TaskFileInfoOutput,
     TaskStatusOutput,
@@ -51,6 +52,11 @@ from mcp_cloud.app import (
     ZIP_FILENAME,
     fetch_artifact_from_worker_plan,
     fetch_zip_from_worker_plan,
+    handle_plan_generate,
+    handle_tasks_cancel,
+    handle_tasks_get,
+    handle_tasks_list,
+    handle_tasks_result,
     handle_task_create,
     handle_task_status,
     handle_task_stop,
@@ -203,6 +209,8 @@ async def _enforce_body_size(request: Request) -> Optional[JSONResponse]:
 class MCPToolCallRequest(BaseModel):
     tool: str
     arguments: dict[str, Any]
+    task: Optional[dict[str, Any]] = None
+    meta: Optional[dict[str, Any]] = None
 
 
 class MCPToolCallResponse(BaseModel):
@@ -301,6 +309,30 @@ async def task_create(
     )
 
 
+async def plan_generate(
+    idea: str,
+    speed_vs_detail: Annotated[
+        SpeedVsDetailInput,
+        Field(
+            description=(
+                "Defaults to ping (alias for ping_llm). Options: ping, fast, all."
+            ),
+        ),
+    ] = "ping",
+    idempotency_key: Annotated[
+        Optional[str],
+        Field(description="Optional key to dedupe repeated requests."),
+    ] = None,
+) -> Annotated[CallToolResult, PlanGenerateOutput]:
+    arguments = {
+        "idea": idea,
+        "speed_vs_detail": speed_vs_detail,
+    }
+    if idempotency_key:
+        arguments["idempotency_key"] = idempotency_key
+    return await handle_plan_generate(arguments)
+
+
 async def task_status(task_id: str) -> Annotated[CallToolResult, TaskStatusOutput]:
     return await handle_task_status({"task_id": task_id})
 
@@ -323,6 +355,7 @@ async def task_file_info(
 
 def _register_tools(server: FastMCP) -> None:
     handler_map = {
+        "plan_generate": plan_generate,
         "task_create": task_create,
         "task_status": task_status,
         "task_stop": task_stop,
@@ -333,10 +366,34 @@ def _register_tools(server: FastMCP) -> None:
         if handler is None:
             logger.warning("No HTTP handler registered for tool %s", tool.name)
             continue
-        server.tool(
-            name=tool.name,
-            description=tool.description,
-        )(handler)
+        try:
+            if tool.task_support:
+                server.tool(
+                    name=tool.name,
+                    description=tool.description,
+                    execution={"taskSupport": tool.task_support},
+                )(handler)
+            else:
+                server.tool(
+                    name=tool.name,
+                    description=tool.description,
+                )(handler)
+        except TypeError:
+            server.tool(
+                name=tool.name,
+                description=tool.description,
+            )(handler)
+
+
+def _register_task_methods(server: FastMCP) -> None:
+    registrar = getattr(server, "register_method", None) or getattr(server, "method", None)
+    if registrar is None:
+        logger.warning("FastMCP does not support method registration for tasks.")
+        return
+    registrar("tasks/get")(handle_tasks_get)
+    registrar("tasks/result")(handle_tasks_result)
+    registrar("tasks/cancel")(handle_tasks_cancel)
+    registrar("tasks/list")(handle_tasks_list)
 
 
 fastmcp_server = FastMCP(
@@ -349,6 +406,7 @@ fastmcp_server = FastMCP(
     stateless_http=True,
 )
 _register_tools(fastmcp_server)
+_register_task_methods(fastmcp_server)
 fastmcp_http_app = fastmcp_server.streamable_http_app()
 
 
@@ -465,6 +523,14 @@ async def call_tool(
 
     This endpoint wraps the stdio-based MCP tool handlers for HTTP access.
     """
+    if payload.task:
+        return MCPToolCallResponse(
+            content=[],
+            error={
+                "code": "TASKS_NOT_SUPPORTED",
+                "message": "Task-augmented calls must use the JSON-RPC /mcp endpoint.",
+            },
+        )
     return await call_tool_via_registry(fastmcp_server, payload.tool, payload.arguments)
 
 
@@ -487,6 +553,8 @@ async def list_tools(fastmcp_server: FastMCP = Depends(_get_fastmcp)) -> dict[st
             tool_entry["annotations"] = tool.annotations
         if tool.icons:
             tool_entry["icons"] = tool.icons
+        if getattr(tool, "execution", None):
+            tool_entry["execution"] = tool.execution
         sanitized.append(tool_entry)
     return {"tools": sanitized}
 

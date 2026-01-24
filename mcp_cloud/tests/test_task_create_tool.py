@@ -1,31 +1,30 @@
 import asyncio
 import unittest
 import uuid
-from contextlib import nullcontext
 from datetime import UTC, datetime
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 from mcp.types import CallToolResult
+from database_api.model_taskitem import TaskState
 from mcp_cloud.app import handle_task_create
 
 
 class TestTaskCreateTool(unittest.TestCase):
     def test_task_create_returns_structured_content(self):
-        arguments = {"idea": "xcv", "config": None, "metadata": None}
-        fake_session = MagicMock()
+        arguments = {"idea": "xcv"}
         class StubTaskItem:
-            def __init__(self, prompt: str, state, user_id: str, parameters):
+            def __init__(self):
                 self.id = uuid.uuid4()
-                self.prompt = prompt
-                self.state = state
-                self.user_id = user_id
-                self.parameters = parameters
+                self.state = TaskState.pending
                 self.timestamp_created = datetime.now(UTC)
+                self.timestamp_updated = self.timestamp_created
+                self.stop_requested = False
+                self.task_ttl_ms = None
+                self.progress_message = None
 
-        with patch("mcp_cloud.app.app.app_context", return_value=nullcontext()), patch(
-            "mcp_cloud.app.db.session", fake_session
-        ), patch(
-            "mcp_cloud.app.TaskItem", StubTaskItem
+        with patch(
+            "mcp_cloud.app._create_or_get_task_sync",
+            return_value=(StubTaskItem(), True),
         ):
             result = asyncio.run(handle_task_create(arguments))
 

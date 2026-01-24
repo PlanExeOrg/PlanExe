@@ -183,6 +183,12 @@ def ensure_taskitem_artifact_columns() -> None:
             conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS stop_requested BOOLEAN"))
         if "stop_requested_timestamp" not in columns:
             conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS stop_requested_timestamp TIMESTAMP"))
+        if "timestamp_updated" not in columns:
+            conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS timestamp_updated TIMESTAMP"))
+        if "task_ttl_ms" not in columns:
+            conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS task_ttl_ms INTEGER"))
+        if "task_expires_at" not in columns:
+            conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS task_expires_at TIMESTAMP"))
 
 def worker_process_started() -> None:
     planexe_worker_id = os.environ.get("PLANEXE_WORKER_ID")
@@ -217,6 +223,7 @@ def update_task_state_with_retry(task_id: str, new_state: TaskState, max_retries
                 logger.info(f"Task {task_id!r} already in state {new_state}. No update needed.")
                 return True            
             task.state = new_state
+            task.timestamp_updated = datetime.now(UTC)
             db.session.commit()
             logger.info(f"Updated task {task_id!r} state to {new_state}")
             return True
@@ -241,6 +248,7 @@ def update_task_progress_with_retry(task_id: str, progress_percentage: float, pr
             
             task.progress_percentage = progress_percentage
             task.progress_message = progress_message
+            task.timestamp_updated = datetime.now(UTC)
             db.session.commit()
             logger.debug(f"Updated task {task_id!r} progress to {progress_percentage}%: {progress_message}")
             return True

@@ -24,10 +24,7 @@ from mcp.types import CallToolResult, ContentBlock, TextContent
 from mcp_cloud.http_utils import strip_redundant_content
 from mcp_cloud.tool_models import (
     PlanGenerateOutput,
-    TaskCreateOutput,
     TaskFileInfoOutput,
-    TaskStatusOutput,
-    TaskStopOutput,
 )
 
 from mcp_cloud.dotenv_utils import load_planexe_dotenv
@@ -57,9 +54,6 @@ from mcp_cloud.app import (
     handle_tasks_get,
     handle_tasks_list,
     handle_tasks_result,
-    handle_task_create,
-    handle_task_status,
-    handle_task_stop,
     handle_task_file_info,
     resolve_task_for_task_id,
 )
@@ -290,25 +284,6 @@ def _normalize_tool_result(result: Any) -> tuple[list[dict[str, Any]], Optional[
     return content, error
 
 
-async def task_create(
-    idea: str,
-    speed_vs_detail: Annotated[
-        SpeedVsDetailInput,
-        Field(
-            description=(
-                "Defaults to ping (alias for ping_llm). Options: ping, fast, all."
-            ),
-        ),
-    ] = "ping",
-) -> Annotated[CallToolResult, TaskCreateOutput]:
-    return await handle_task_create(
-        {
-            "idea": idea,
-            "speed_vs_detail": speed_vs_detail,
-        }
-    )
-
-
 async def plan_generate(
     idea: str,
     speed_vs_detail: Annotated[
@@ -333,16 +308,6 @@ async def plan_generate(
     return await handle_plan_generate(arguments)
 
 
-async def task_status(task_id: str) -> Annotated[CallToolResult, TaskStatusOutput]:
-    return await handle_task_status({"task_id": task_id})
-
-
-async def task_stop(
-    task_id: str,
-) -> Annotated[CallToolResult, TaskStopOutput]:
-    return await handle_task_stop({"task_id": task_id})
-
-
 async def task_file_info(
     task_id: str,
     artifact: Annotated[
@@ -356,9 +321,6 @@ async def task_file_info(
 def _register_tools(server: FastMCP) -> None:
     handler_map = {
         "plan_generate": plan_generate,
-        "task_create": task_create,
-        "task_status": task_status,
-        "task_stop": task_stop,
         "task_file_info": task_file_info,
     }
     for tool in TOOL_DEFINITIONS:

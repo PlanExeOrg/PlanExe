@@ -46,23 +46,10 @@ SpeedVsDetailInput = Literal[
 ]
 
 
-class TaskCreateRequest(BaseModel):
-    idea: str
-    speed_vs_detail: Optional[SpeedVsDetailInput] = None
-
-
 class PlanGenerateRequest(BaseModel):
     idea: str
     speed_vs_detail: Optional[SpeedVsDetailInput] = None
     idempotency_key: Optional[str] = None
-
-
-class TaskStatusRequest(BaseModel):
-    task_id: str
-
-
-class TaskStopRequest(BaseModel):
-    task_id: str
 
 
 class TaskDownloadRequest(BaseModel):
@@ -401,31 +388,6 @@ PLAN_GENERATE_INPUT_SCHEMA = {
     "required": ["idea"],
 }
 
-TASK_CREATE_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "idea": {"type": "string"},
-        "speed_vs_detail": {
-            "type": "string",
-            "enum": ["ping", "fast", "all"],
-            "default": "ping",
-        },
-    },
-    "required": ["idea"],
-}
-
-TASK_STATUS_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {"task_id": {"type": "string"}},
-    "required": ["task_id"],
-}
-
-TASK_STOP_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {"task_id": {"type": "string"}},
-    "required": ["task_id"],
-}
-
 TASK_DOWNLOAD_INPUT_SCHEMA = {
     "type": "object",
     "properties": {
@@ -447,32 +409,6 @@ PLAN_GENERATE_OUTPUT_SCHEMA = {
         "error": ERROR_SCHEMA,
     },
     "required": ["task_id", "status"],
-}
-
-TASK_CREATE_OUTPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "task_id": {"type": "string"},
-        "created_at": {"type": "string"},
-    },
-    "required": ["task_id", "created_at"],
-}
-
-TASK_STATUS_OUTPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "task_id": {"type": ["string", "null"]},
-        "state": {"type": ["string", "null"]},
-        "progress_percentage": {"type": ["number", "null"]},
-    },
-}
-
-TASK_STOP_OUTPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "state": {"type": "string"},
-        "error": ERROR_SCHEMA,
-    },
 }
 
 TASK_DOWNLOAD_OUTPUT_SCHEMA = {
@@ -497,30 +433,6 @@ TOOL_DEFINITIONS = [
         input_schema=PLAN_GENERATE_INPUT_SCHEMA,
         output_schema=PLAN_GENERATE_OUTPUT_SCHEMA,
         task_support="optional",
-    ),
-    ToolDefinition(
-        name="task_create",
-        description=(
-            "Start creating a new plan. Plan creation is long-running and "
-            "typically takes 10-20 minutes to finish."
-        ),
-        input_schema=TASK_CREATE_INPUT_SCHEMA,
-        output_schema=TASK_CREATE_OUTPUT_SCHEMA,
-        task_support="forbidden",
-    ),
-    ToolDefinition(
-        name="task_status",
-        description="Returns status and progress of the plan currently being created.",
-        input_schema=TASK_STATUS_INPUT_SCHEMA,
-        output_schema=TASK_STATUS_OUTPUT_SCHEMA,
-        task_support="forbidden",
-    ),
-    ToolDefinition(
-        name="task_stop",
-        description="Stops the plan that is currently being created.",
-        input_schema=TASK_STOP_INPUT_SCHEMA,
-        output_schema=TASK_STOP_OUTPUT_SCHEMA,
-        task_support="forbidden",
     ),
     ToolDefinition(
         name="task_download",
@@ -723,74 +635,6 @@ def _register_mcp_method(server: Server, name: str, handler: Any) -> None:
     registrar(name)(handler)
 
 
-async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
-    """Create a task in mcp_cloud via the local HTTP proxy.
-
-    Examples:
-        - {"idea": "Write a market research plan"} → task_id + created_at
-        - {"idea": "Generate onboarding plan", "speed_vs_detail": "fast"}
-
-    Args:
-        - idea: Prompt/goal for the plan.
-        - speed_vs_detail: Optional mode ("ping" | "fast" | "all").
-
-    Returns:
-        - content: JSON string matching structuredContent.
-        - structuredContent: task_id/created_at payload or error.
-        - isError: True when the remote tool call fails.
-    """
-    req = TaskCreateRequest(**arguments)
-    payload, error = _call_remote_tool(
-        "task_create",
-        {"idea": req.idea, "speed_vs_detail": req.speed_vs_detail} if req.speed_vs_detail else {"idea": req.idea},
-    )
-    if error:
-        return _wrap_response({"error": error}, is_error=True)
-    return _wrap_response(payload)
-
-
-async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
-    """Fetch status/progress for a task from mcp_cloud.
-
-    Examples:
-        - {"task_id": "uuid"} → state/progress/timing
-
-    Args:
-        - task_id: Task UUID returned by task_create.
-
-    Returns:
-        - content: JSON string matching structuredContent.
-        - structuredContent: status payload or error.
-        - isError: True when the remote tool call fails.
-    """
-    req = TaskStatusRequest(**arguments)
-    payload, error = _call_remote_tool("task_status", {"task_id": req.task_id})
-    if error:
-        return _wrap_response({"error": error}, is_error=True)
-    return _wrap_response(payload)
-
-
-async def handle_task_stop(arguments: dict[str, Any]) -> CallToolResult:
-    """Request mcp_cloud to stop a running task.
-
-    Examples:
-        - {"task_id": "uuid"} → stop request acknowledged
-
-    Args:
-        - task_id: Task UUID returned by task_create.
-
-    Returns:
-        - content: JSON string matching structuredContent.
-        - structuredContent: {"state": "stopped"} or error.
-        - isError: True when the remote tool call fails.
-    """
-    req = TaskStopRequest(**arguments)
-    payload, error = _call_remote_tool("task_stop", {"task_id": req.task_id})
-    if error:
-        return _wrap_response({"error": error}, is_error=True)
-    return _wrap_response(payload)
-
-
 async def handle_task_download(arguments: dict[str, Any]) -> CallToolResult:
     """Download report/zip for a task from mcp_cloud and save it locally.
 
@@ -799,7 +643,7 @@ async def handle_task_download(arguments: dict[str, Any]) -> CallToolResult:
         - {"task_id": "uuid", "artifact": "zip"} → download zip
 
     Args:
-        - task_id: Task UUID returned by task_create.
+        - task_id: Task UUID returned by plan_generate.
         - artifact: Optional "report" or "zip".
 
     Returns:
@@ -858,9 +702,6 @@ async def handle_task_download(arguments: dict[str, Any]) -> CallToolResult:
 
 
 TOOL_HANDLERS = {
-    "task_create": handle_task_create,
-    "task_status": handle_task_status,
-    "task_stop": handle_task_stop,
     "task_download": handle_task_download,
 }
 

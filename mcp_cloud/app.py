@@ -62,9 +62,6 @@ from mcp_cloud.tool_models import (
     ErrorDetail,
     PlanGenerateOutput,
     TaskFileInfoReadyOutput,
-    TaskCreateOutput,
-    TaskStatusSuccess,
-    TaskStopOutput,
 )
 
 app = Flask(__name__)
@@ -166,21 +163,10 @@ def _raise_method_not_found(message: str) -> None:
         raise MethodNotFoundError(message)
     raise ValueError(message)
 
-class TaskCreateRequest(BaseModel):
-    idea: str
-    speed_vs_detail: Optional[SpeedVsDetailInput] = None
-
-
 class PlanGenerateRequest(BaseModel):
     idea: str
     speed_vs_detail: Optional[SpeedVsDetailInput] = None
     idempotency_key: Optional[str] = None
-
-class TaskStatusRequest(BaseModel):
-    task_id: str
-
-class TaskStopRequest(BaseModel):
-    task_id: str
 
 class TaskFileInfoRequest(BaseModel):
     task_id: str
@@ -428,39 +414,6 @@ def _create_or_get_task_sync(
         db.session.commit()
         return task, True
 
-def _create_task_sync(
-    idea: str,
-    config: Optional[dict[str, Any]],
-    metadata: Optional[dict[str, Any]],
-) -> dict[str, Any]:
-    user_id = metadata.get("user_id", "mcp_user") if isinstance(metadata, dict) else "mcp_user"
-    task, _created = _create_or_get_task_sync(
-        idea=idea,
-        config=config,
-        user_id=user_id,
-        idempotency_key=None,
-        task_ttl_ms=TASK_TTL_MS_DEFAULT,
-    )
-    created_at = _format_datetime(task.timestamp_created)
-    return {
-        "task_id": str(task.id),
-        "created_at": created_at,
-    }
-
-def _get_task_status_snapshot_sync(task_id: str) -> Optional[dict[str, Any]]:
-    with app.app_context():
-        task = find_task_by_task_id(task_id)
-        if task is None:
-            return None
-        return {
-            "id": str(task.id),
-            "state": task.state,
-            "stop_requested": bool(task.stop_requested),
-            "progress_percentage": task.progress_percentage,
-            "timestamp_created": task.timestamp_created,
-            "timestamp_updated": task.timestamp_updated,
-        }
-
 def _request_task_stop_sync(task_id: str) -> bool:
     with app.app_context():
         task = find_task_by_task_id(task_id)
@@ -695,16 +648,6 @@ def compute_sha256(content: str | bytes) -> str:
     if isinstance(content, str):
         content = content.encode('utf-8')
     return hashlib.sha256(content).hexdigest()
-
-def get_task_state_mapping(task_state: TaskState) -> str:
-    """Map TaskState to MCP run state."""
-    mapping = {
-        TaskState.pending: "stopped",
-        TaskState.processing: "running",
-        TaskState.completed: "completed",
-        TaskState.failed: "failed",
-    }
-    return mapping.get(task_state, "stopped")
 
 def _get_mcp_task_status(task: TaskItem) -> str:
     if task.stop_requested:
@@ -945,19 +888,6 @@ def build_zip_download_url(task_id: str) -> Optional[str]:
 
 ERROR_SCHEMA = ErrorDetail.model_json_schema()
 PLAN_GENERATE_OUTPUT_SCHEMA = PlanGenerateOutput.model_json_schema()
-TASK_CREATE_OUTPUT_SCHEMA = TaskCreateOutput.model_json_schema()
-TASK_STATUS_SUCCESS_SCHEMA = TaskStatusSuccess.model_json_schema()
-TASK_STATUS_OUTPUT_SCHEMA = {
-    "oneOf": [
-        {
-            "type": "object",
-            "properties": {"error": ERROR_SCHEMA},
-            "required": ["error"],
-        },
-        TASK_STATUS_SUCCESS_SCHEMA,
-    ]
-}
-TASK_STOP_OUTPUT_SCHEMA = TaskStopOutput.model_json_schema()
 TASK_FILE_INFO_READY_OUTPUT_SCHEMA = TaskFileInfoReadyOutput.model_json_schema()
 TASK_FILE_INFO_OUTPUT_SCHEMA = {
     "oneOf": [
@@ -996,35 +926,6 @@ PLAN_GENERATE_INPUT_SCHEMA = {
     },
     "required": ["idea"],
 }
-TASK_CREATE_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "idea": {"type": "string", "description": "The idea/prompt for the plan"},
-        "speed_vs_detail": {
-            "type": "string",
-            "enum": list(SPEED_VS_DETAIL_INPUT_VALUES),
-            "default": SPEED_VS_DETAIL_DEFAULT_ALIAS,
-            "description": (
-                "Defaults to ping (alias for ping_llm). Options: ping, fast, all."
-            ),
-        },
-    },
-    "required": ["idea"],
-}
-TASK_STATUS_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "task_id": {"type": "string"},
-    },
-    "required": ["task_id"],
-}
-TASK_STOP_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "task_id": {"type": "string"},
-    },
-    "required": ["task_id"],
-}
 TASK_FILE_INFO_INPUT_SCHEMA = {
     "type": "object",
     "properties": {
@@ -1061,34 +962,6 @@ TOOL_DEFINITIONS = [
         input_schema=PLAN_GENERATE_INPUT_SCHEMA,
         output_schema=PLAN_GENERATE_OUTPUT_SCHEMA,
         task_support="optional",
-    ),
-    ToolDefinition(
-        name="task_create",
-        description=(
-            "Legacy wrapper: start creating a new plan. speed_vs_detail modes: "
-            "'all' runs the full pipeline with all details (slower, higher token usage/cost). "
-            "'fast' runs the full pipeline with minimal work per step (faster, fewer details), "
-            "useful to verify the pipeline is working. "
-            "'ping' runs the pipeline entrypoint and makes a single LLM call to verify the "
-            "worker_plan_database is processing tasks and can reach the LLM."
-        ),
-        input_schema=TASK_CREATE_INPUT_SCHEMA,
-        output_schema=TASK_CREATE_OUTPUT_SCHEMA,
-        task_support="forbidden",
-    ),
-    ToolDefinition(
-        name="task_status",
-        description="Legacy wrapper: returns status and progress of the plan currently being created.",
-        input_schema=TASK_STATUS_INPUT_SCHEMA,
-        output_schema=TASK_STATUS_OUTPUT_SCHEMA,
-        task_support="forbidden",
-    ),
-    ToolDefinition(
-        name="task_stop",
-        description="Legacy wrapper: stops the plan that is currently being created.",
-        input_schema=TASK_STOP_INPUT_SCHEMA,
-        output_schema=TASK_STOP_OUTPUT_SCHEMA,
-        task_support="forbidden",
     ),
     ToolDefinition(
         name="task_file_info",
@@ -1221,137 +1094,6 @@ async def handle_plan_generate(
     payload = await _build_plan_generate_output(task_terminal)
     return _build_call_tool_result(payload)
 
-async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
-    """Create a new PlanExe task and enqueue it for processing.
-
-    Examples:
-        - {"idea": "Draft a 3-day Tokyo itinerary"} → returns task_id + created_at
-        - {"idea": "Generate onboarding plan", "speed_vs_detail": "fast"} → faster run
-
-    Args:
-        - idea: Prompt/goal for the plan.
-        - speed_vs_detail: Optional mode ("ping" | "fast" | "all").
-
-    Returns:
-        - content: JSON string matching structuredContent.
-        - structuredContent: {"task_id": ..., "created_at": ...}
-        - isError: False on success.
-    """
-    req = TaskCreateRequest(**arguments)
-
-    merged_config = _merge_task_create_config(None, req.speed_vs_detail)
-    response = await asyncio.to_thread(
-        _create_task_sync,
-        req.idea,
-        merged_config,
-        None,
-    )
-    return _build_call_tool_result(response)
-
-async def handle_task_status(arguments: dict[str, Any]) -> CallToolResult:
-    """Fetch the current run status, progress, and recent files for a task.
-
-    Examples:
-        - {"task_id": "uuid"} → state/progress/timing + recent files
-
-    Args:
-        - task_id: Task UUID returned by task_create.
-
-    Returns:
-        - content: JSON string matching structuredContent.
-        - structuredContent: status payload or error.
-        - isError: True only when task_id is unknown.
-    """
-    req = TaskStatusRequest(**arguments)
-    task_id = req.task_id
-
-    task_snapshot = await asyncio.to_thread(_get_task_status_snapshot_sync, task_id)
-    if task_snapshot is None:
-        response = {
-            "error": {
-                "code": "TASK_NOT_FOUND",
-                "message": f"Task not found: {task_id}",
-            }
-        }
-        return _build_call_tool_result(response, is_error=True)
-
-    progress_percentage = float(task_snapshot.get("progress_percentage") or 0.0)
-
-    task_state = task_snapshot["state"]
-    state = get_task_state_mapping(task_state)
-    if task_state == TaskState.processing and task_snapshot["stop_requested"]:
-        state = "stopping"
-    if task_state == TaskState.completed:
-        progress_percentage = 100.0
-
-    # Collect files from worker_plan
-    task_uuid = task_snapshot["id"]
-    files = []
-    if task_uuid:
-        files_list = await fetch_file_list_from_worker_plan(task_uuid)
-        if files_list:
-            for file_name in files_list[:10]:  # Limit to 10 most recent
-                if file_name != "log.txt":
-                    updated_at = datetime.now(UTC).replace(microsecond=0)
-                    files.append({
-                        "path": file_name,
-                        "updated_at": updated_at.isoformat().replace("+00:00", "Z"),  # Approximate
-                    })
-
-    created_at = task_snapshot["timestamp_created"]
-    if created_at and created_at.tzinfo is None:
-        created_at = created_at.replace(tzinfo=UTC)
-
-    response = {
-        "task_id": task_uuid,
-        "state": state,
-        "progress_percentage": progress_percentage,
-        "timing": {
-            "started_at": (
-                created_at.replace(microsecond=0).isoformat().replace("+00:00", "Z")
-                if created_at
-                else None
-            ),
-            "elapsed_sec": (datetime.now(UTC) - created_at).total_seconds() if created_at else 0,
-        },
-        "files": files[:10],  # Limit to 10 most recent
-    }
-
-    return _build_call_tool_result(response)
-
-async def handle_task_stop(arguments: dict[str, Any]) -> CallToolResult:
-    """Request the active run for a task to stop.
-
-    Examples:
-        - {"task_id": "uuid"} → stop request accepted
-
-    Args:
-        - task_id: Task UUID returned by task_create.
-
-    Returns:
-        - content: JSON string matching structuredContent.
-        - structuredContent: {"state": "stopped"} or error payload.
-        - isError: True only when task_id is unknown.
-    """
-    req = TaskStopRequest(**arguments)
-    task_id = req.task_id
-
-    found = await asyncio.to_thread(_request_task_stop_sync, task_id)
-    if not found:
-        response = {
-            "error": {
-                "code": "TASK_NOT_FOUND",
-                "message": f"Task not found: {task_id}",
-            }
-        }
-        return _build_call_tool_result(response, is_error=True)
-
-    response = {
-        "state": "stopped",
-    }
-
-    return _build_call_tool_result(response)
-
 async def handle_task_file_info(arguments: dict[str, Any]) -> CallToolResult:
     """Return download metadata for a task's report or zip artifact.
 
@@ -1360,7 +1102,7 @@ async def handle_task_file_info(arguments: dict[str, Any]) -> CallToolResult:
         - {"task_id": "uuid", "artifact": "zip"} → zip metadata
 
     Args:
-        - task_id: Task UUID returned by task_create.
+        - task_id: Task UUID returned by plan_generate.
         - artifact: Optional "report" or "zip".
 
     Returns:
@@ -1504,9 +1246,6 @@ def _register_mcp_method(server: Server, name: str, handler: Any) -> None:
     registrar(name)(handler)
 
 TOOL_HANDLERS = {
-    "task_create": handle_task_create,
-    "task_status": handle_task_status,
-    "task_stop": handle_task_stop,
     "task_file_info": handle_task_file_info,
 }
 

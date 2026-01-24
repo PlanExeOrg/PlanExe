@@ -52,15 +52,6 @@ Available artifacts:
 "report" | "zip"
 ```
 
-### Legacy wrappers
-
-These are kept for older clients and are not task-augmentable:
-```
-task_create
-task_status
-task_stop
-```
-
 ## MCP Tasks Protocol
 
 When calling `plan_generate`, clients may request a task-augmented run by adding
@@ -73,7 +64,7 @@ When calling `plan_generate`, clients may request a task-augmented run by adding
 
 ## Tool Catalog, `mcp_local`
 
-The local proxy exposes the same tools as the server, and adds:
+The local proxy exposes `plan_generate` plus MCP task methods, and adds:
 
 ### task_download
 

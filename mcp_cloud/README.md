@@ -121,8 +121,7 @@ mcp_cloud uses the same database configuration as other PlanExe services:
 See `extra/planexe_mcp_interface.md` for full specification. Available tools:
 
 - `plan_generate` - Generate a new plan (supports MCP task augmentation)
-- `task_file_info` - Get file metadata for report or zip (legacy helper)
-- Legacy wrappers: `task_create`, `task_status`, `task_stop`
+- `task_file_info` - Get file metadata for report or zip (helper for downloads)
 
 Note: `task_download` is a synthetic tool provided by `mcp_local`, not by this server.
 

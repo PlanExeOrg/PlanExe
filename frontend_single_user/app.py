@@ -755,8 +755,8 @@ with gr.Blocks(title="PlanExe") as demo_text2plan:
 
     with gr.Tab("Join the community"):
         gr.Markdown("""
-- [GitHub](https://github.com/neoneye/PlanExe) the source code.
-- [Discord](https://neoneye.github.io/PlanExe-web/discord) join the community. Suggestions, feedback, and questions are welcome.
+- [GitHub](https://github.com/PlanExeOrg/PlanExe) the source code.
+- [Discord](https://planexe.org/discord) join the community. Suggestions, feedback, and questions are welcome.
 """)
     
     # Manage the state of the current user

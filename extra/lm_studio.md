@@ -62,7 +62,7 @@ docker network inspect bridge | awk -F'"' '/Gateway/{print $4}'
 
 Inside PlanExe, when clicking `Submit`, a new `Output Dir` should be created containing a `log.txt`. Open that file and scroll to the bottom, see if there are any error messages about what is wrong.
 
-Report your issue on [Discord](https://neoneye.github.io/PlanExe-web/discord). Please include info about your system, such as: "I'm on macOS with M1 Max with 64 GB.".
+Report your issue on [Discord](https://planexe.org/discord). Please include info about your system, such as: "I'm on macOS with M1 Max with 64 GB.".
 
 Where to look for logs:
 - Host filesystem: `run/<timestamped-output-dir>/log.txt` (mounted from the container).

@@ -11,3 +11,8 @@ PLANEXE_POSTGRES_PASSWORD="${{shared.PLANEXE_POSTGRES_PASSWORD}}"
 ## Volume - None
 
 The `frontend_multi_user` gets initialized via env vars, and doesn't write to disk, so it needs no volume.
+
+## Domain
+
+Configure a `Custom Domain` named `home.planexe.org`, that points to railway.
+Incoming trafic on port 80 gets redirect to target port 5000.

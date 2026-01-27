@@ -77,6 +77,16 @@ In the future I want to do multiple iterations, until the plan is of a reasonabl
 It's up to humans to be skeptic about the plan, does this make sense, check everything.
 There may be issues with: assumptions, numbers, flaws.
 
+**Money:** Currently the LLMs make up numbers.
+Alternate between these: Tweak the plan. Tweak the budget. Repeat.
+Obtain latest market data.
+Obtain info about what resources the user has available.
+Populate a Cost-Breakdown-Structure.
+
+**Gantt in parallel:** Currently the Gantt is waterfall.
+For a team with several people it's possible to do tasks in parallel.
+Obtain info about what resources the user has available, and if they are willing to do tasks in parallel.
+
 ---
 
 # Secondary issues

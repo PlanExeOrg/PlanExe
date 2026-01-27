@@ -3,6 +3,12 @@ The identify_potential_levers.py script creates a list of levers, some of which 
 This script deduplicates the list.
 
 PROMPT> python -m worker_plan_internal.lever.deduplicate_levers
+
+PROBLEM: A frequent problem is that the deduplicated levers is an empty list, despite having multiple input levers.
+002-11-deduplicated_levers_raw.json
+I often see output like this:
+"deduplicated_levers": []
+It's never supposed to be an empty list. It's supposed to be a list of multiple levers. I need to fix this.
 """
 from enum import Enum
 import json

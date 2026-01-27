@@ -16,8 +16,8 @@ Now with docker, I don't have these incompatibility issues.
 However docker have its own issues.
 
 The last version BEFORE the transition to docker is available here
-https://github.com/neoneye/PlanExe/releases/tag/2025-dec-31
+https://github.com/PlanExeOrg/PlanExe/releases/tag/2025-dec-31
 
 The main branch will be docker from now on.
-https://github.com/neoneye/PlanExe/tree/main
+https://github.com/PlanExeOrg/PlanExe/tree/main
 

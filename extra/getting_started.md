@@ -11,7 +11,7 @@ It cost around 0.1 USD to generate a plan, when using PlanExe's default settings
 
 ## 2. Clone the repo
 ```bash
-git clone https://github.com/neoneye/PlanExe.git
+git clone https://github.com/PlanExeOrg/PlanExe.git
 cd PlanExe
 ```
 
@@ -47,4 +47,4 @@ The generated plans are written to `run/<timestamped-output-dir>`.
 - If the UI fails to load or plans don’t start, check worker logs: `docker compose logs -f worker_plan`.
 
 ## Community
-Need help? Join the [PlanExe Discord](https://neoneye.github.io/PlanExe-web/discord).
+Need help? Join the [PlanExe Discord](https://planexe.org/discord).

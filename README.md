@@ -12,10 +12,10 @@
 
 ## Example plans generated with PlanExe
 
-- A business plan for a [Minecraft-themed escape room](https://neoneye.github.io/PlanExe-web/20251016_minecraft_escape_report.html).
-- A business plan for a [Faraday cage manufacturing company](https://neoneye.github.io/PlanExe-web/20250720_faraday_enclosure_report.html).
-- A pilot project for a [Human as-a Service](https://neoneye.github.io/PlanExe-web/20251012_human_as_a_service_protocol_report.html).
-- See more [examples here](https://neoneye.github.io/PlanExe-web/examples/).
+- A business plan for a [Minecraft-themed escape room](https://planexe.org/20251016_minecraft_escape_report.html).
+- A business plan for a [Faraday cage manufacturing company](https://planexe.org/20250720_faraday_enclosure_report.html).
+- A pilot project for a [Human as-a Service](https://planexe.org/20251012_human_as_a_service_protocol_report.html).
+- See more [examples here](https://planexe.org/examples/).
 
 ## What is PlanExe?
 
@@ -62,7 +62,7 @@ You can generate 1 plan for free.
 1. Clone the repo and enter it:
 
 ```bash
-git clone https://github.com/neoneye/PlanExe.git
+git clone https://github.com/PlanExeOrg/PlanExe.git
 cd PlanExe
 ```
 
@@ -126,6 +126,6 @@ You input a vague description of what you want and PlanExe outputs a plan.
 
 For help or feedback.
 
-Join the [PlanExe Discord](https://neoneye.github.io/PlanExe-web/discord).
+Join the [PlanExe Discord](https://planexe.org/discord).
 
 </details>

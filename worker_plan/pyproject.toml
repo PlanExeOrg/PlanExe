@@ -121,7 +121,7 @@ dependencies = [
 
 [project.urls]
 "Homepage" = "https://github.com/neoneye/planexe"
-"Discord" = "https://neoneye.github.io/PlanExe-web/discord.html"
+"Discord" = "https://planexe.org/discord.html"
 
 # Build system configuration
 [build-system]

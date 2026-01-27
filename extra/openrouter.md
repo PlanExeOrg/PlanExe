@@ -13,7 +13,7 @@ I haven't been able to find a `free` model on OpenRouter that works well with Pl
 1) Install Docker (with Docker Compose) — no local Python or pip is needed now.
 2) Clone the repo and enter it:
 ```
-git clone https://github.com/neoneye/PlanExe.git
+git clone https://github.com/PlanExeOrg/PlanExe.git
 cd PlanExe
 ```
 3) Copy `.env.docker-example` to `.env`, then set your API key and pick a default OpenRouter profile so the worker uses the cloud model by default:
@@ -54,7 +54,7 @@ When running in Docker, also check the worker logs for 401/429 or connectivity e
 docker compose logs -f worker_plan
 ```
 
-Report your issue on [Discord](https://neoneye.github.io/PlanExe-web/discord). Please include info about your system, such as: "I'm on macOS with M1 Max with 64 GB.".
+Report your issue on [Discord](https://planexe.org/discord). Please include info about your system, such as: "I'm on macOS with M1 Max with 64 GB.".
 
 ## How to add a new OpenRouter model to `llm_config.json`
 

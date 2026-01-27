@@ -174,7 +174,7 @@ def get_llm(llm_name: Optional[str] = None, **kwargs: Any) -> LLM:
         arguments_extra = {
             "additional_kwargs": {
                 "extra_headers": {
-                    "HTTP-Referer": "https://github.com/neoneye/PlanExe",
+                    "HTTP-Referer": "https://github.com/PlanExeOrg/PlanExe",
                     "X-Title": "PlanExe"
                 }
             }

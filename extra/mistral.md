@@ -12,7 +12,7 @@ Mistral support is not baked into the Docker image by default. You must add the 
 
 1) Install Docker (with Docker Compose), then clone the repo and enter it:
 ```
-git clone https://github.com/neoneye/PlanExe.git
+git clone https://github.com/PlanExeOrg/PlanExe.git
 cd PlanExe
 ```
 2) Enable the Mistral client inside the worker image by editing `worker_plan/pyproject.toml`. Under `[project].dependencies`, add or uncomment these lines:

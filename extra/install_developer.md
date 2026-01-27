@@ -7,7 +7,7 @@ You need several open terminals to do development on this project.
 ### Step 1 - Clone repo
 
 ```bash
-git clone https://github.com/neoneye/PlanExe.git
+git clone https://github.com/PlanExeOrg/PlanExe.git
 ```
 
 ### Step 2 - Prepare `.env` file

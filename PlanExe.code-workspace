@@ -31,6 +31,12 @@
 		{
 			"name": "PlanExe",
 			"path": "."
+		},
+		{
+			"path": "mcp_cloud"
+		},
+		{
+			"path": "mcp_local"
 		}
 	],
 	"settings": {

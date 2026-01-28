@@ -1,4 +1,4 @@
-# PlanExe MCP locally
+# PlanExe MCP locally - Experimental, likely to be changed a lot!
 
 Model Context Protocol (MCP) local proxy for PlanExe.
 

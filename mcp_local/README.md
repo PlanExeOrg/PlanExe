@@ -17,6 +17,14 @@ proxy forwards tool calls over HTTP and downloads artifacts from `/download/{tas
 remote MCP tool `task_file_info` to obtain a download URL, then downloads the
 file locally into `PLANEXE_PATH`.
 
+## Run as task (MCP tasks protocol)
+
+Some MCP clients (e.g. the MCP Inspector) show a **"Run as task"** option for tools. That refers to the MCP **tasks** protocol: a separate mechanism where the client runs a tool in the background using RPC methods like `tasks/run`, `tasks/get`, `tasks/result`, and `tasks/cancel`, instead of a single blocking tool call.
+
+**PlanExe does not use or advertise the MCP tasks protocol.** Our interface is **tool-based** only: the agent calls `task_create` → gets a `task_id` → polls `task_status` → uses `task_download`. That flow is defined in `extra/planexe_mcp_interface.md` and is the intended design.
+
+You should **not** enable "Run as task" for PlanExe. The Python MCP SDK and clients like Cursor do not properly support the tasks protocol (method registration and initialization fail). Use the tools directly: create a task, poll status, then download when done.
+
 ## How it talks to mcp_cloud
 
 - The remote base URL is `PLANEXE_URL` (for example `http://localhost:8001/mcp`).

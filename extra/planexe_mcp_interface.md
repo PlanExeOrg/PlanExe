@@ -43,6 +43,12 @@ The interface is designed to support:
 	•	Implementing a full Luigi UI clone in MCP v1 (optional later).
 	•	Guaranteeing ETA estimates (allowed but must be optional / best-effort).
 
+3.1 MCP tools vs MCP tasks (“Run as task”)
+	The MCP specification defines two different mechanisms:
+	•	**MCP tools** (e.g. task_create, task_status, task_stop): the server exposes named tools; the client calls them and receives a response. PlanExe’s interface is **tool-based**: the agent calls task_create → receives task_id → polls task_status → uses task_download. This document specifies those tools.
+	•	**MCP tasks protocol** (“Run as task” in some UIs): a separate mechanism where the client can run a tool “as a task” using RPC methods such as tasks/run, tasks/get, tasks/result, tasks/cancel, tasks/list, so the tool runs in the background and the client polls for results.
+	PlanExe **does not** use or advertise the MCP tasks protocol. Implementors and clients should use the **tools only**. Do not enable “Run as task” for PlanExe; many clients (e.g. Cursor) and the Python MCP SDK do not support the tasks protocol properly. The intended flow is: call task_create, poll task_status, then call task_download when complete.
+
 ⸻
 
 4. System Model

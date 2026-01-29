@@ -24,6 +24,7 @@ for AI agents and developer tools to interact with PlanExe. Communicates with
 - Tools are registered via `@mcp_cloud.list_tools()` and handled via `@mcp_cloud.call_tool()`.
 - All tool responses must be JSON-serializable and follow the error model in the spec.
 - Event cursors use format `cursor_{event_id}` for incremental polling.
+- **Run as task**: We expose MCP **tools** only (task_create, task_status, task_stop, etc.), not the MCP **tasks** protocol (tasks/get, tasks/result, etc.). Do not advertise the tasks capability or add "Run as task" support; the spec and clients (e.g. Cursor) are aligned on tools-only.
 
 ## mcp_local integration
 - `mcp_local` runs on the user's machine and forwards tool calls to this server over HTTP.

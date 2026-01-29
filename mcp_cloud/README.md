@@ -12,6 +12,10 @@ mcp_cloud provides a standardized MCP interface for PlanExe's plan generation wo
 - **Progress Tracking**: Real-time status and progress updates
 - **File Metadata**: Get report/zip metadata and download URLs
 
+## Run as task (MCP tasks protocol)
+
+MCP has two ways to run long-running work: **tools** (what we use) and the **tasks** protocol ("Run as task" in some UIs). PlanExe uses **tools only**: `task_create`, `task_status`, `task_stop`, `task_download`. The agent creates a task, polls status, then downloads; that is the intended flow per `extra/planexe_mcp_interface.md`. We do not advertise or implement the MCP tasks protocol (tasks/get, tasks/result, etc.). Clients like Cursor do not support it properly—use the tools directly.
+
 ## Client Choice Guide
 
 - **Use `mcp_cloud` directly (HTTP)**: If you are running in the cloud or you do

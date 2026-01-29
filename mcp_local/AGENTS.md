@@ -16,6 +16,7 @@ to mcp_cloud, a MCP server running in the cloud, over HTTP.
   - HTTP wrapper (`/mcp/tools/call`)
   - Streamable MCP JSON-RPC (`/mcp`)
 - Ensure all tool responses include structured content when an output schema is defined.
+- **Run as task**: Do not advertise the MCP **tasks** protocol (tasks/get, tasks/result, tasks/cancel, tasks/list) or add tool-level "Run as task" support. PlanExe’s interface is tool-based only (task_create → task_status → task_download). The MCP tasks protocol is a different, client-driven feature; Cursor and the Python MCP SDK do not support it properly, so we keep tools-only for compatibility.
 
 ## Env vars
 - `PLANEXE_URL`: Base URL for mcp_cloud (e.g., `http://localhost:8001/mcp`).

@@ -123,7 +123,17 @@ Invalid
 
 All tool names below are normative.
 
-6.1 task_create
+6.1 prompt_examples
+
+Returns example prompts that define the baseline for a good prompt. Call this tool before task_create and refine your prompt until it matches that quality. If you create a task with a weaker prompt, the resulting plan will be lower quality than it could be.
+
+Request: no parameters (empty object).
+
+Response: `{ "samples": [ "prompt text 1", "prompt text 2", ... ], "message": "..." }`.
+
+⸻
+
+6.2 task_create
 
 Start creating a new plan. speed_vs_detail modes: 'all' runs the full pipeline with all details (slower, higher token usage/cost). 'fast' runs the full pipeline with minimal work per step (faster, fewer details), useful to verify the pipeline is working. 'ping' runs the pipeline entrypoint and makes a single LLM call to verify the worker_plan_database is processing tasks and can reach the LLM.
 
@@ -179,7 +189,7 @@ Behavior
 
 ⸻
 
-6.2 task_status
+6.3 task_status
 
 Returns run status and progress. Used for progress bars and UI states.
 
@@ -212,7 +222,7 @@ Notes
 
 ⸻
 
-6.3 task_stop
+6.4 task_stop
 
 Stops the active run.
 
@@ -231,16 +241,6 @@ Response
 Required semantics
 	•	Must stop workers cleanly where possible.
 	•	Must persist enough Luigi state to resume incrementally.
-
-⸻
-
-6.4 prompt_examples (optional, v1)
-
-Returns example prompts. Use these as examples for task_create. task_create can also be called with any prompt—short prompts produce less detailed plans.
-
-Request: no parameters (empty object).
-
-Response: `{ "samples": [ "prompt text 1", "prompt text 2", ... ], "message": "..." }`.
 
 ⸻
 

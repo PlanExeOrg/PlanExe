@@ -98,44 +98,15 @@ I'm not making use of it.
 Until 2026-jan-01 I had this limitation: The PythonAnywhere doesn't like long running child processes/threads, anything longer than 5 minutes gets killed. There are always-on workers, but these must not spawn long running processes/threads. I'm considering finding another provider.
 Starting from 2026-jan-01 I’m using Docker and no longer using pythonanywhere, I can start looking into running parallel tasks within Luigi.
 
-With MCP lots of the code use async/await. Make a proof of concept with Luigi+MCP and async/await, and verify that it works in the cloud.
+## MCP on Railway
 
+Doing inference in the cloud cost money.
+If users are to use MCP in the cloud, they will have to pay for it.
 
-## MCP Experiments
+- Scenario A: Users can buy credit via `PLANEXE_MCP_API_KEY`.
+- Scenario B: Users can BYOK (Bring your own key).
 
-I have done MCP hello world, but it's unclear to me how MCP can be used with PlanExe.
-
-### MCP server
-
-Does anyone want a PlanExe MCP server?
-
-**Scenario A** 
-Tool `Create plan`. Input=user prompt. Output=the generated plan.
-However waiting for 15 minutes it quite a long time without any progress.
-
-**Scenario B** 
-Tool `Submit plan`. Input=user prompt. Output=plan id.
-Tool `Status plan creation`. Input=plan id. Output=Pending|Processing percentage|Error|Ok.
-Tool `Get plan`. Input=plan id. Output=the generated plan.
-
-**Scenario C**: I have not seen resources being used successfully, so I'm skeptical that this will work.
-Tool `Enqueue plan`. Input=user prompt. Output=plan id.
-Resource `Status plan creation`. Input=plan id. Output=Pending|Processing|Error|Ok.
-Resource `Get plan`. Input=plan id. Output=the generated plan.
-
-**Scenario D**: I have no experience with notifications.
-Tool `Submit plan`. Input=user prompt. Output=plan id.
-Notification when progress gets updated.
-Tool `Status plan creation`. Input=plan id. Output=Pending|Processing|Error|Ok.
-Tool `Get plan`. Input=plan id. Output=the generated plan.
-
-### MCP Client
-
-Can I obtain relevant info via MCP?, when I instead could provide a longer initial prompt containing details.
-
-- For fact checking using other MCP servers.
-- For obtaining business documents, via file system access or wiki access.
-
+Both scenarios will need user management with login.
 
 ---
 

@@ -201,7 +201,7 @@ Behavior
 
 6.3 task_status
 
-Returns run status and progress. Used for progress bars and UI states.
+Returns run status and progress. Used for progress bars and UI states. **Polling interval:** call at reasonable intervals only (e.g. every 5 minutes); plan generation takes 15–20+ minutes and frequent polling is unnecessary.
 
 Request
 

@@ -731,7 +731,11 @@ TOOL_DEFINITIONS = [
     ),
     ToolDefinition(
         name="task_status",
-        description="Returns status and progress of the plan currently being created.",
+        description=(
+            "Returns status and progress of the plan currently being created. "
+            "Poll at reasonable intervals only (e.g. every 5 minutes): plan generation takes 15–20+ minutes "
+            "and frequent polling is unnecessary."
+        ),
         input_schema=TASK_STATUS_INPUT_SCHEMA,
         output_schema=TASK_STATUS_OUTPUT_SCHEMA,
     ),

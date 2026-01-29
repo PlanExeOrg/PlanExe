@@ -469,8 +469,9 @@ TOOL_DEFINITIONS = [
     ToolDefinition(
         name="task_download",
         description=(
-            "Download the plan output and save it locally. Choose the HTML "
-            "report (default) or a zip of all generated files."
+            "Download the plan output and save it locally (calls task_file_info, then fetches and saves to PLANEXE_PATH). "
+            "Choose the HTML report (default) or a zip of all generated files. "
+            "Prefer this over task_file_info when you want the file on disk."
         ),
         input_schema=TASK_DOWNLOAD_INPUT_SCHEMA,
         output_schema=TASK_DOWNLOAD_OUTPUT_SCHEMA,

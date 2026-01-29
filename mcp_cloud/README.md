@@ -130,7 +130,7 @@ See `extra/planexe_mcp_interface.md` for full specification. Available tools:
 - `task_stop` - Stop an active task
 - `task_file_info` - Get file metadata for report or zip
 
-Note: `task_download` is a synthetic tool provided by `mcp_local`, not by this server.
+Note: `task_download` is a synthetic tool provided by `mcp_local`, not by this server. If your client exposes `task_download`, use it to save the report or zip locally; otherwise use `task_file_info` to get `download_url` and fetch the file yourself.
 
 **Tip**: Call `prompt_examples` to get example prompts to use with task_create. The catalog is the same as in the frontends (`worker_plan.worker_plan_api.PromptCatalog`). When running with `PYTHONPATH` set to the repo root (e.g. stdio setup), the catalog is loaded automatically; otherwise built-in examples are returned.
 

@@ -747,7 +747,11 @@ TOOL_DEFINITIONS = [
     ),
     ToolDefinition(
         name="task_file_info",
-        description="Returns file metadata for the report or zip snapshot, so the user can download the file.",
+        description=(
+            "Returns file metadata (content_type, download_url, download_size) for the report or zip. "
+            "If your client exposes task_download (e.g. mcp_local), use that to save the file locally; "
+            "otherwise use this tool to get download_url and fetch the file yourself."
+        ),
         input_schema=TASK_FILE_INFO_INPUT_SCHEMA,
         output_schema=TASK_FILE_INFO_OUTPUT_SCHEMA,
     ),

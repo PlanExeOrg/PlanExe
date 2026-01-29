@@ -254,6 +254,14 @@ Required semantics
 
 ⸻
 
+6.5 Download flow (task_download vs task_file_info)
+
+**If your client exposes task_download** (e.g. mcp_local): use it to save the report or zip locally; it calls task_file_info under the hood, then fetches and writes to the local save path (e.g. PLANEXE_PATH).
+
+**If you only have task_file_info** (e.g. direct connection to mcp_cloud): call it with task_id and artifact ("report" or "zip"); use the returned download_url to fetch the file (e.g. GET with API key if configured).
+
+⸻
+
 7. Targets
 
 8.1 Standard targets

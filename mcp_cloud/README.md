@@ -124,11 +124,11 @@ mcp_cloud uses the same database configuration as other PlanExe services:
 
 See `extra/planexe_mcp_interface.md` for full specification. Available tools:
 
+- `prompt_catalog_samples` - Return curated example prompts from the catalog (entries with `mcp_example: true`). Use these to see the level of detail that produces good plans before calling `task_create`.
 - `task_create` - Create a new task
 - `task_status` - Get task status and progress
 - `task_stop` - Stop an active task
 - `task_file_info` - Get file metadata for report or zip
-- `prompt_catalog_samples` - Return curated example prompts from the catalog (entries with `mcp_example: true`). Use these to see the level of detail that produces good plans before calling `task_create`.
 
 Note: `task_download` is a synthetic tool provided by `mcp_local`, not by this server.
 

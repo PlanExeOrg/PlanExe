@@ -94,7 +94,16 @@ def ensure_taskitem_stop_columns() -> None:
 with app.app_context():
     ensure_taskitem_stop_columns()
 
-mcp_cloud = Server("planexe-mcp-cloud")
+# Shown in MCP initialize (e.g. Inspector) so clients know what PlanExe does.
+PLANEXE_SERVER_INSTRUCTIONS = (
+    "PlanExe generates rough-draft project plans from a natural-language prompt. "
+    "You describe a large goal (e.g. open a clinic, launch a product, build a moon base)—the kind of project that takes months or years. "
+    "PlanExe produces a structured draft with steps and deliverables (Gantt chart, risk analysis, etc.); the plan is not executable yet, it's a draft to refine. "
+    "Creating a plan is a long-running task (100+ LLM calls). Main output: large HTML file (approx 700KB) and a zip of intermediary files (md, json, csv). "
+    "Call prompt_examples first, then task_create; poll task_status and use task_download or task_file_info when complete."
+)
+
+mcp_cloud = Server("planexe-mcp-cloud", instructions=PLANEXE_SERVER_INSTRUCTIONS)
 
 # Base directory for run artifacts (not used directly, fetched via worker_plan HTTP API)
 BASE_DIR_RUN = Path(os.environ.get("PLANEXE_RUN_DIR", Path(__file__).parent.parent / "run")).resolve()
@@ -708,9 +717,9 @@ TOOL_DEFINITIONS = [
     ToolDefinition(
         name="prompt_examples",
         description=(
-            "Return curated example prompts from the PlanExe prompt catalog (entries marked mcp_example). "
-            "Use these to see the level of detail that produces good plans; iterate with your local LLM "
-            "Use these as examples for task_create."
+            "Call this first to see what a good prompt looks like. "
+            "Returns curated example prompts from the PlanExe catalog (entries marked mcp_example). "
+            "Use them as the level of detail for task_create; short prompts produce less detailed plans."
         ),
         input_schema=PROMPT_EXAMPLES_INPUT_SCHEMA,
         output_schema=PROMPT_EXAMPLES_OUTPUT_SCHEMA,
@@ -718,7 +727,8 @@ TOOL_DEFINITIONS = [
     ToolDefinition(
         name="task_create",
         description=(
-            "Start creating a new plan. Call prompt_examples for example prompts to use with task_create. "
+            "PlanExe turns a plain-English goal into a structured strategic-plan draft (executive summary, Gantt, risk register, governance, etc.) in ~15–20 min. "
+            "Start creating a new plan. Call prompt_examples for example prompts first. "
             "speed_vs_detail modes: "
             "'all' runs the full pipeline with all details (slower, higher token usage/cost). "
             "'fast' runs the full pipeline with minimal work per step (faster, fewer details), "

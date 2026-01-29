@@ -434,9 +434,9 @@ TOOL_DEFINITIONS = [
     ToolDefinition(
         name="prompt_examples",
         description=(
-            "Return curated example prompts from the PlanExe prompt catalog (entries marked mcp_example). "
-            "Use these to see the level of detail that produces good plans; iterate with your local LLM "
-            "Use these as examples for task_create."
+            "Call this first to see what a good prompt looks like. "
+            "Returns curated example prompts from the PlanExe catalog (entries marked mcp_example). "
+            "Use them as the level of detail for task_create; short prompts produce less detailed plans."
         ),
         input_schema=PROMPT_EXAMPLES_INPUT_SCHEMA,
         output_schema=PROMPT_EXAMPLES_OUTPUT_SCHEMA,
@@ -444,7 +444,8 @@ TOOL_DEFINITIONS = [
     ToolDefinition(
         name="task_create",
         description=(
-            "Start creating a new plan. Call prompt_examples for example prompts to use with task_create. "
+            "PlanExe turns a plain-English goal into a structured strategic-plan draft (executive summary, Gantt, risk register, governance, etc.) in ~15–20 min. "
+            "Start creating a new plan. Call prompt_examples for example prompts first. "
             "Runs in the background and usually takes 10-20 minutes to complete."
         ),
         input_schema=TASK_CREATE_INPUT_SCHEMA,
@@ -484,7 +485,7 @@ PLANEXE_SERVER_INSTRUCTIONS = (
     "You describe a large goal (e.g. open a clinic, launch a product, build a moon base)—the kind of project that takes months or years. "
     "PlanExe produces a structured draft with steps and deliverables (Gantt chart, risk analysis, etc.); the plan is not executable yet, it's a draft to refine. "
     "Creating a plan is a long-running task (100+ LLM calls). Main output: large HTML file (approx 700KB) and a zip of intermediary files (md, json, csv). "
-    "Call prompt_examples first, then task_create; poll task_status and use task_download when complete."
+    "Call prompt_examples first, then task_create; poll task_status and use task_download or task_file_info when complete."
 )
 
 mcp_local = Server("planexe-mcp-local", instructions=PLANEXE_SERVER_INSTRUCTIONS)

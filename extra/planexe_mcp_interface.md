@@ -10,6 +10,14 @@ PlanExe is a service that generates **rough-draft project plans** from a natural
 
 The plan is a **project plan**: a DAG of steps (Luigi tasks) that produce artifacts including a Gantt chart, risk analysis, and other project management deliverables. The main output is a large HTML file (approx 700KB) containing many sections. There is also a zip file containing all intermediary files (md, json, csv). Plan quality depends on prompt quality; use the prompt_examples tool to see the baseline before calling task_create.
 
+1.2.1 Agent-facing summary (for server instructions / tool descriptions)
+
+Implementors should expose the following to agents so they understand what PlanExe does:
+
+- **What:** PlanExe turns a plain-English goal into a structured strategic-plan draft (executive summary, Gantt, risk register, governance, etc.) in ~15–20 min. The plan is a draft to refine, not an executable or final document.
+- **Flow:** Call prompt_examples first, then task_create; poll task_status at reasonable intervals (e.g. every 5 min); use task_download or task_file_info when complete.
+- **Output:** Large HTML report (~700KB) and optional zip of intermediate files (md, json, csv).
+
 1.3 Scope of this document
 
 This document specifies a Model Context Protocol (MCP) interface for PlanExe that enables AI agents and client UIs to:

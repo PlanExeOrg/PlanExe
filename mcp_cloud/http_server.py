@@ -353,7 +353,7 @@ fastmcp_server = FastMCP(
     "You describe a large goal (e.g. open a clinic, launch a product, build a moon base)—the kind of project that takes months or years. "
     "PlanExe produces a structured draft with steps and deliverables (Gantt chart, risk analysis, etc.); the plan is not executable yet, it's a draft to refine. "
     "Creating a plan is a long-running task (100+ LLM calls). Main output: large HTML file (approx 700KB) and a zip of intermediary files (md, json, csv). "
-    "Call prompt_examples first, then task_create; poll task_status and use task_download when complete."
+    "Call prompt_examples first, then task_create; poll task_status and use task_download or task_file_info when complete."
 ),
     host=HTTP_HOST,
     port=HTTP_PORT,

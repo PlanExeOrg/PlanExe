@@ -270,11 +270,15 @@ ERROR_SCHEMA = {
 TASK_CREATE_INPUT_SCHEMA = {
     "type": "object",
     "properties": {
-        "idea": {"type": "string"},
+        "idea": {
+            "type": "string",
+            "description": "What the plan should cover. Good ideas are usually 300-800 words with clear context, constraints, and goals; short one-liners tend to produce poor output. For well-written examples, see the PlanExe prompt catalog.",
+        },
         "speed_vs_detail": {
             "type": "string",
             "enum": ["ping", "fast", "all"],
             "default": "ping",
+            "description": "How much work to run. 'ping': single LLM call to check the pipeline is reachable (check logs if it fails). 'fast': minimal run (approx 5-10 min) through all pipeline steps, skipping where possible—use to verify the pipeline works. 'all': full plan with full detail (approx 10-20 min).",
         },
     },
     "required": ["idea"],
@@ -282,21 +286,39 @@ TASK_CREATE_INPUT_SCHEMA = {
 
 TASK_STATUS_INPUT_SCHEMA = {
     "type": "object",
-    "properties": {"task_id": {"type": "string"}},
+    "properties": {
+        "task_id": {
+            "type": "string",
+            "description": "UUID of the task (returned by task_create).",
+        },
+    },
     "required": ["task_id"],
 }
 
 TASK_STOP_INPUT_SCHEMA = {
     "type": "object",
-    "properties": {"task_id": {"type": "string"}},
+    "properties": {
+        "task_id": {
+            "type": "string",
+            "description": "UUID of the task to stop (returned by task_create).",
+        },
+    },
     "required": ["task_id"],
 }
 
 TASK_DOWNLOAD_INPUT_SCHEMA = {
     "type": "object",
     "properties": {
-        "task_id": {"type": "string"},
-        "artifact": {"type": "string", "enum": ["report", "zip"], "default": "report"},
+        "task_id": {
+            "type": "string",
+            "description": "UUID of the task (returned by task_create).",
+        },
+        "artifact": {
+            "type": "string",
+            "enum": ["report", "zip"],
+            "default": "report",
+            "description": "What to download: 'report' = HTML report, 'zip' = full output bundle.",
+        },
     },
     "required": ["task_id"],
 }
@@ -344,27 +366,34 @@ TOOL_DEFINITIONS = [
     ToolDefinition(
         name="task_create",
         description=(
-            "Start creating a new plan. Plan creation is long-running and "
-            "typically takes 10-20 minutes to finish."
+            "Start creating a new plan. Runs in the background and usually "
+            "takes 10-20 minutes to complete."
         ),
         input_schema=TASK_CREATE_INPUT_SCHEMA,
         output_schema=TASK_CREATE_OUTPUT_SCHEMA,
     ),
     ToolDefinition(
         name="task_status",
-        description="Returns status and progress of the plan currently being created.",
+        description=(
+            "Get the current status and progress of a plan that is currently being created. "
+            "Poll about every 5 minutes at first; when progress is near 80%, "
+            "poll about every minute."
+        ),
         input_schema=TASK_STATUS_INPUT_SCHEMA,
         output_schema=TASK_STATUS_OUTPUT_SCHEMA,
     ),
     ToolDefinition(
         name="task_stop",
-        description="Stops the plan that is currently being created.",
+        description="Stop a plan that is currently being created.",
         input_schema=TASK_STOP_INPUT_SCHEMA,
         output_schema=TASK_STOP_OUTPUT_SCHEMA,
     ),
     ToolDefinition(
         name="task_download",
-        description="Download report or zip for a task and save it locally.",
+        description=(
+            "Download the plan output and save it locally. Choose the HTML "
+            "report (default) or a zip of all generated files."
+        ),
         input_schema=TASK_DOWNLOAD_INPUT_SCHEMA,
         output_schema=TASK_DOWNLOAD_OUTPUT_SCHEMA,
     ),

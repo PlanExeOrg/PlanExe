@@ -8,13 +8,13 @@ proxy forwards tool calls over HTTP and downloads artifacts from `/download/{tas
 
 ## Tools
 
-`prompt_catalog_samples` - Return curated example prompts from the catalog (entries with `mcp_example: true`). Use these to see the level of detail that produces good plans; you may iterate with your local LLM to refine your prompt before calling `task_create`. You can also call `task_create` with any prompt—short prompts produce less detailed plans.
+`prompt_examples` - Return example prompts. Use these as examples for task_create. You can also call `task_create` with any prompt—short prompts produce less detailed plans.
 `task_create` - Initiate creation of a plan.
 `task_status` - Get status and progress about the creation of a plan.
 `task_stop` - Abort creation of a plan.
 `task_download` - Download the plan, either html report or a zip with everything, and save it to disk.
 
-**Tip**: Call `prompt_catalog_samples` to see curated examples (300–800 words with context, constraints, and goals). The full catalog lives at `worker_plan/worker_plan_api/prompt/data/simple_plan_prompts.jsonl`.
+**Tip**: Call `prompt_examples` to get example prompts to use with task_create. The full catalog lives at `worker_plan/worker_plan_api/prompt/data/simple_plan_prompts.jsonl`.
 
 `task_download` is a synthetic tool provided by the local proxy. It calls the
 remote MCP tool `task_file_info` to obtain a download URL, then downloads the

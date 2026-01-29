@@ -321,8 +321,7 @@ TASK_CREATE_INPUT_SCHEMA = {
             "type": "string",
             "description": (
                 "What the plan should cover. Good prompts are often 300–800 words. "
-                "Call prompt_catalog_samples to see curated examples; you may need to iterate with your local LLM "
-                "to reach similar detail before calling task_create. You can also call task_create with a short prompt—plans will be less detailed."
+                "Use prompt_examples to get example prompts; use these as examples for task_create. Short prompts produce less detailed plans."
             ),
         },
         "speed_vs_detail": {
@@ -374,12 +373,12 @@ TASK_DOWNLOAD_INPUT_SCHEMA = {
     "required": ["task_id"],
 }
 
-PROMPT_CATALOG_SAMPLES_INPUT_SCHEMA = {
+PROMPT_EXAMPLES_INPUT_SCHEMA = {
     "type": "object",
     "properties": {},
     "required": [],
 }
-PROMPT_CATALOG_SAMPLES_OUTPUT_SCHEMA = {
+PROMPT_EXAMPLES_OUTPUT_SCHEMA = {
     "type": "object",
     "properties": {
         "samples": {
@@ -433,19 +432,19 @@ TASK_DOWNLOAD_OUTPUT_SCHEMA = {
 
 TOOL_DEFINITIONS = [
     ToolDefinition(
-        name="prompt_catalog_samples",
+        name="prompt_examples",
         description=(
             "Return curated example prompts from the PlanExe prompt catalog (entries marked mcp_example). "
             "Use these to see the level of detail that produces good plans; iterate with your local LLM "
-            "to refine your prompt before calling task_create, or call task_create with any prompt."
+            "Use these as examples for task_create."
         ),
-        input_schema=PROMPT_CATALOG_SAMPLES_INPUT_SCHEMA,
-        output_schema=PROMPT_CATALOG_SAMPLES_OUTPUT_SCHEMA,
+        input_schema=PROMPT_EXAMPLES_INPUT_SCHEMA,
+        output_schema=PROMPT_EXAMPLES_OUTPUT_SCHEMA,
     ),
     ToolDefinition(
         name="task_create",
         description=(
-            "Start creating a new plan. Call prompt_catalog_samples to see good prompt shape before task_create. "
+            "Start creating a new plan. Call prompt_examples for example prompts to use with task_create. "
             "Runs in the background and usually takes 10-20 minutes to complete."
         ),
         input_schema=TASK_CREATE_INPUT_SCHEMA,
@@ -543,9 +542,9 @@ async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
     return _wrap_response(payload)
 
 
-async def handle_prompt_catalog_samples(arguments: dict[str, Any]) -> CallToolResult:
+async def handle_prompt_examples(arguments: dict[str, Any]) -> CallToolResult:
     """Return curated prompts from mcp_cloud so LLMs can see example detail."""
-    payload, error = _call_remote_tool("prompt_catalog_samples", arguments or {})
+    payload, error = _call_remote_tool("prompt_examples", arguments or {})
     if error:
         return _wrap_response({"error": error}, is_error=True)
     return _wrap_response(payload)
@@ -664,7 +663,7 @@ TOOL_HANDLERS = {
     "task_status": handle_task_status,
     "task_stop": handle_task_stop,
     "task_download": handle_task_download,
-    "prompt_catalog_samples": handle_prompt_catalog_samples,
+    "prompt_examples": handle_prompt_examples,
 }
 
 

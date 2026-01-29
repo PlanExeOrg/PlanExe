@@ -124,7 +124,7 @@ mcp_cloud uses the same database configuration as other PlanExe services:
 
 See `extra/planexe_mcp_interface.md` for full specification. Available tools:
 
-- `prompt_catalog_samples` - Return curated example prompts from the catalog (entries with `mcp_example: true`). Use these to see the level of detail that produces good plans before calling `task_create`.
+- `prompt_examples` - Return example prompts. Use these as examples for task_create.
 - `task_create` - Create a new task
 - `task_status` - Get task status and progress
 - `task_stop` - Stop an active task
@@ -132,7 +132,7 @@ See `extra/planexe_mcp_interface.md` for full specification. Available tools:
 
 Note: `task_download` is a synthetic tool provided by `mcp_local`, not by this server.
 
-**Tip**: Call `prompt_catalog_samples` to see curated examples (300–800 words). The catalog is the same as in the frontends (`worker_plan.worker_plan_api.PromptCatalog`). When running with `PYTHONPATH` set to the repo root (e.g. stdio setup), the catalog is loaded automatically; otherwise built-in examples are returned.
+**Tip**: Call `prompt_examples` to get example prompts to use with task_create. The catalog is the same as in the frontends (`worker_plan.worker_plan_api.PromptCatalog`). When running with `PYTHONPATH` set to the repo root (e.g. stdio setup), the catalog is loaded automatically; otherwise built-in examples are returned.
 
 Download flow: call `task_file_info` to obtain the `download_url`, then fetch the
 report via `GET /download/{task_id}/030-report.html` (API key required if configured).

@@ -55,7 +55,7 @@ from mcp_cloud.app import (
     handle_task_status,
     handle_task_stop,
     handle_task_file_info,
-    handle_prompt_catalog_samples,
+    handle_prompt_examples,
     resolve_task_for_task_id,
 )
 
@@ -322,9 +322,9 @@ async def task_file_info(
     return await handle_task_file_info({"task_id": task_id, "artifact": artifact})
 
 
-async def prompt_catalog_samples() -> CallToolResult:
+async def prompt_examples() -> CallToolResult:
     """Return curated example prompts from the catalog (no arguments)."""
-    return await handle_prompt_catalog_samples({})
+    return await handle_prompt_examples({})
 
 
 def _register_tools(server: FastMCP) -> None:
@@ -333,7 +333,7 @@ def _register_tools(server: FastMCP) -> None:
         "task_status": task_status,
         "task_stop": task_stop,
         "task_file_info": task_file_info,
-        "prompt_catalog_samples": prompt_catalog_samples,
+        "prompt_examples": prompt_examples,
     }
     for tool in TOOL_DEFINITIONS:
         handler = handler_map.get(tool.name)

@@ -13,7 +13,7 @@ Establish a solar farm in Denmark.
 USAGE:
 python extract_simple_plan_prompts_as_raw_text.py > plan_prompts.txt
 or
-python extra/extract_simple_plan_prompts_as_raw_text.py > plan_prompts.txt
+python docs/extract_simple_plan_prompts_as_raw_text.py > plan_prompts.txt
 """
 
 import json

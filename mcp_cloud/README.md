@@ -1,6 +1,6 @@
 # PlanExe MCP Cloud - Experimental, likely to be changed a lot!
 
-Model Context Protocol (MCP) interface for PlanExe. Implements the MCP specification defined in `extra/planexe_mcp_interface.md`.
+Model Context Protocol (MCP) interface for PlanExe. Implements the MCP specification defined in `docs/planexe_mcp_interface.md`.
 
 ## Overview
 
@@ -14,7 +14,7 @@ mcp_cloud provides a standardized MCP interface for PlanExe's plan generation wo
 
 ## Run as task (MCP tasks protocol)
 
-MCP has two ways to run long-running work: **tools** (what we use) and the **tasks** protocol ("Run as task" in some UIs). PlanExe uses **tools only**: `task_create`, `task_status`, `task_stop`, `task_download`. The agent creates a task, polls status, then downloads; that is the intended flow per `extra/planexe_mcp_interface.md`. We do not advertise or implement the MCP tasks protocol (tasks/get, tasks/result, etc.). Clients like Cursor do not support it properly—use the tools directly.
+MCP has two ways to run long-running work: **tools** (what we use) and the **tasks** protocol ("Run as task" in some UIs). PlanExe uses **tools only**: `task_create`, `task_status`, `task_stop`, `task_download`. The agent creates a task, polls status, then downloads; that is the intended flow per `docs/planexe_mcp_interface.md`. We do not advertise or implement the MCP tasks protocol (tasks/get, tasks/result, etc.). Clients like Cursor do not support it properly—use the tools directly.
 
 ## Client Choice Guide
 
@@ -122,7 +122,7 @@ mcp_cloud uses the same database configuration as other PlanExe services:
 
 ## MCP Tools
 
-See `extra/planexe_mcp_interface.md` for full specification. Available tools:
+See `docs/planexe_mcp_interface.md` for full specification. Available tools:
 
 - `prompt_examples` - Return example prompts. Use these as examples for task_create.
 - `task_create` - Create a new task

@@ -1,7 +1,7 @@
 # PlanExe
 
 <p align="center">
-  <img src="extra/planexe-humanoid-factory.gif?raw=true" alt="PlanExe - Turn your idea into a comprehensive plan in minutes, not months." width="700">
+  <img src="docs/planexe-humanoid-factory.gif?raw=true" alt="PlanExe - Turn your idea into a comprehensive plan in minutes, not months." width="700">
 </p>
 
 <p align="center">
@@ -36,7 +36,7 @@ PlanExe removes 70–90 % of the labor for the planning scaffold on any topic, b
 
 ---
 
-New to PlanExe? Follow the [Getting Started](extra/getting_started.md) guide.
+New to PlanExe? Follow the [Getting Started](docs/getting_started.md) guide.
 
 <details>
 <summary><strong> Try it out now (Click to expand)</strong></summary>
@@ -90,13 +90,13 @@ docker compose logs -f worker_plan
 docker compose build --no-cache worker_plan frontend_single_user
 ```
 
-For compose tips, alternate ports, or troubleshooting, see `extra/docker.md` or `docker-compose.md`.
+For compose tips, alternate ports, or troubleshooting, see `docs/docker.md` or `docker-compose.md`.
 
 ### Configuration
 
-**Config A:** Run a model in the cloud using a paid provider. Follow the instructions in [OpenRouter](extra/openrouter.md).
+**Config A:** Run a model in the cloud using a paid provider. Follow the instructions in [OpenRouter](docs/openrouter.md).
 
-**Config B:** Run models locally on a high-end computer. Follow the instructions for either [Ollama](extra/ollama.md) or [LM Studio](extra/lm_studio.md). When using host-side tools with Docker, point the model URL at the host (for example `http://host.docker.internal:11434` for Ollama).
+**Config B:** Run models locally on a high-end computer. Follow the instructions for either [Ollama](docs/ollama.md) or [LM Studio](docs/lm_studio.md). When using host-side tools with Docker, point the model URL at the host (for example `http://host.docker.internal:11434` for Ollama).
 
 Recommendation: I recommend **Config A** as it offers the most straightforward path to getting PlanExe working reliably.
 
@@ -113,7 +113,7 @@ You input a vague description of what you want and PlanExe outputs a plan.
 
 [YouTube video: Using PlanExe to plan a lunar base](https://www.youtube.com/watch?v=7AM2F1C4CGI)
 
-![Screenshot of PlanExe](/extra/planexe-humanoid-factory.jpg?raw=true "Screenshot of PlanExe")
+![Screenshot of PlanExe](/docs/planexe-humanoid-factory.jpg?raw=true "Screenshot of PlanExe")
 
 </details>
 

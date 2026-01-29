@@ -48,17 +48,17 @@ Always check the package-level `AGENTS.md` for file-specific rules
 - `PLANEXE_POSTGRES_PORT` changes the host port mapping only; containers still
   connect to Postgres on 5432.
 - The `Open Output Dir` button requires the host `open_dir_server` and
-  `PLANEXE_OPEN_DIR_SERVER_URL` (OS-specific URLs live in `extra/docker.md`).
+  `PLANEXE_OPEN_DIR_SERVER_URL` (OS-specific URLs live in `docs/docker.md`).
 - Keep `PLANEXE_HOST_RUN_DIR` consistent with run dir mounts so outputs land in
   the expected host folder.
 
 ## Documentation sync
 - When changing Docker services, env defaults, or port mappings, update
-  `docker-compose.yml`, `docker-compose.md`, and `extra/docker.md` together.
+  `docker-compose.yml`, `docker-compose.md`, and `docs/docker.md` together.
 - When changing single-user quickstart or LLM env requirements (e.g.
-  `OPENROUTER_API_KEY`), update `extra/getting_started.md`.
+  `OPENROUTER_API_KEY`), update `docs/getting_started.md`.
 - When changing local dev startup steps or the test command, update
-  `extra/install_developer.md`.
+  `docs/install_developer.md`.
 
 ## Testing strategy
 - Prefer unit tests over manual curl/server checks.

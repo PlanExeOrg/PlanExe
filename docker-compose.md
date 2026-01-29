@@ -105,13 +105,13 @@ Service: `mcp_cloud` (MCP interface)
 - Volumes: `run/` (rw for artifact access).
 - Entrypoint: `python -m mcp_cloud.app` (runs the MCP server over stdio).
 - Communication: the server communicates over stdio (standard input/output) following the MCP protocol. Configure your MCP client to connect to this container. The container runs with `stdin_open: true` and `tty: true` to enable stdio communication.
-- MCP tools: implements the specification in `extra/planexe_mcp_interface.md` including session management, artifact operations, and event streaming.
+- MCP tools: implements the specification in `docs/planexe_mcp_interface.md` including session management, artifact operations, and event streaming.
 
 Usage notes
 -----------
 - Ports: host `8000->worker_plan`, `7860->frontend_single_user`, `${PLANEXE_FRONTEND_MULTIUSER_PORT:-5001}->frontend_multi_user`, `PLANEXE_POSTGRES_PORT (default 5432)->database_postgres`; change mappings in `docker-compose.yml` if needed.
 - `.env` must exist before `docker compose up`; it is both loaded and mounted read-only. Same for `llm_config.json`. If missing, start from `.env.docker-example`.
-- Host opener: set `PLANEXE_OPEN_DIR_SERVER_URL` so the frontend can reach your host opener service (see `extra/docker.md` for OS-specific URLs and optional `extra_hosts` on Linux).
+- Host opener: set `PLANEXE_OPEN_DIR_SERVER_URL` so the frontend can reach your host opener service (see `docs/docker.md` for OS-specific URLs and optional `extra_hosts` on Linux).
 - To relocate outputs, set `PLANEXE_HOST_RUN_DIR` (or edit the bind mount) to another host path.
 - Database: connect on `localhost:${PLANEXE_POSTGRES_PORT:-5432}` with `planexe/planexe` by default; data persists via the `database_postgres_data` volume.
 

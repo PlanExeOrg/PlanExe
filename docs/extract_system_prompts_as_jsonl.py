@@ -12,7 +12,7 @@ The file should be in the following format:
 USAGE:
 python extract_system_prompts_as_jsonl.py
 or
-python extra/extract_system_prompts_as_jsonl.py
+python docs/extract_system_prompts_as_jsonl.py
 """
 import os
 import re

@@ -14,4 +14,4 @@ See [example plans](https://planexe.org/examples/) (e.g. Minecraft escape room, 
 
 Install PlanExe, configure your AI provider, and generate your first plan. Browse the sections in the sidebar for setup guides, usage, and reference.
 
-TEST1
+TEST2

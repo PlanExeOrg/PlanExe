@@ -1,0 +1,31 @@
+# When docs/ changes on main, notify PlanExe-docs to pull content and redeploy to docs.planexe.org.
+# PlanExe-docs listens for repository_dispatch event_type: docs-updated (see its deploy.yml).
+#
+# Required: In PlanExe repo Settings → Secrets and variables → Actions, add:
+#   PLANEXE_DOCS_DISPATCH_TOKEN — a PAT with repo scope for PlanExeOrg/PlanExe-docs
+#   (or fine-grained PAT with "Actions: write" on PlanExe-docs).
+# If the secret is not set, this workflow will fail at the dispatch step; you can
+# instead manually run the "Deploy Documentation" workflow in PlanExe-docs after pushing.
+
+name: Notify docs deploy
+
+on:
+  push:
+    branches: [main]
+    paths: ['docs/**']
+
+jobs:
+  notify-planexe-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger PlanExe-docs deploy
+        run: |
+          curl -sS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.PLANEXE_DOCS_DISPATCH_TOKEN }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/PlanExeOrg/PlanExe-docs/dispatches \
+            -d '{"event_type":"docs-updated"}'
+        env:
+          # Fail clearly if secret is missing
+          PLANEXE_DOCS_DISPATCH_TOKEN: ${{ secrets.PLANEXE_DOCS_DISPATCH_TOKEN }}

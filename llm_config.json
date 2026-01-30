@@ -27,6 +27,20 @@
             "max_retries": 5
         }
     },
+    "openrouter-paid-openai-gpt-5-nano": {
+        "comment": "This is very fast. It's paid, so check the pricing before use. Created Aug 7, 2025. 400,000 context. $0.05/M input tokens. $0.40/M output tokens. Smallest and fastest GPT-5 variant; successor to GPT-4.1-nano.",
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "openai/gpt-5-nano",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 0.1,
+            "timeout": 60.0,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 8192,
+            "max_retries": 5
+        }
+    },
     "openrouter-paid-gemini-2.0-flash-001": {
         "comment": "This is very fast. It's paid, so check the pricing before use. Created Feb 25, 2025. 1,048,576 context. $0.075/M input tokens. $0.30/M output tokens.",
         "priority": 1,

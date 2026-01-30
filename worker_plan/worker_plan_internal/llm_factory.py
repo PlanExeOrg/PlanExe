@@ -20,6 +20,60 @@ from llama_index.llms.openrouter import OpenRouter
 from worker_plan_internal.llm_util.ollama_info import OllamaInfo
 from worker_plan_api.llm_info import LLMConfigItem, LLMInfo, OllamaStatus
 
+
+class _OpenRouterTextStructuredWrapper(LLM):
+    """
+    Wraps an OpenRouter LLM so structured_predict uses the text-based path
+    (JSON-in-prompt) instead of function calling. When is_function_calling_model
+    is True, LlamaIndex sends tool_choice='required' + tools, which OpenRouter
+    / OpenAI can reject. This wrapper reports is_function_calling_model=False
+    so LlamaIndex uses LLMTextCompletionProgram (no tool_choice/tools).
+    All other behavior (chat, complete, etc.) is delegated to the inner LLM.
+    """
+
+    _inner: LLM
+
+    def __init__(self, inner: LLM) -> None:
+        super().__init__()
+        object.__setattr__(self, "_inner", inner)
+        object.__setattr__(self, "is_function_calling_model", False)
+        if hasattr(inner, "_is_function_calling_model"):
+            object.__setattr__(self, "_is_function_calling_model", False)
+
+    @property
+    def metadata(self) -> Any:
+        return self._inner.metadata
+
+    def chat(self, *args: Any, **kwargs: Any) -> Any:
+        return self._inner.chat(*args, **kwargs)
+
+    def complete(self, *args: Any, **kwargs: Any) -> Any:
+        return self._inner.complete(*args, **kwargs)
+
+    def stream_chat(self, *args: Any, **kwargs: Any) -> Any:
+        return self._inner.stream_chat(*args, **kwargs)
+
+    def stream_complete(self, *args: Any, **kwargs: Any) -> Any:
+        return self._inner.stream_complete(*args, **kwargs)
+
+    async def achat(self, *args: Any, **kwargs: Any) -> Any:
+        return await self._inner.achat(*args, **kwargs)
+
+    async def acomplete(self, *args: Any, **kwargs: Any) -> Any:
+        return await self._inner.acomplete(*args, **kwargs)
+
+    async def astream_chat(self, *args: Any, **kwargs: Any) -> Any:
+        return await self._inner.astream_chat(*args, **kwargs)
+
+    async def astream_complete(self, *args: Any, **kwargs: Any) -> Any:
+        return await self._inner.astream_complete(*args, **kwargs)
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._inner, name)
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        object.__setattr__(self, name, value)
+
 # You can disable this if you don't want to send app info to OpenRouter.
 SEND_APP_INFO_TO_OPENROUTER = True
 
@@ -168,23 +222,33 @@ def get_llm(llm_name: Optional[str] = None, **kwargs: Any) -> LLM:
     # Override with any kwargs passed to get_llm()
     arguments.update(kwargs)
 
-    if class_name == "OpenRouter" and SEND_APP_INFO_TO_OPENROUTER:
-        # https://openrouter.ai/rankings
-        # https://openrouter.ai/docs/api-reference/overview#headers
-        arguments_extra = {
-            "additional_kwargs": {
-                "extra_headers": {
-                    "HTTP-Referer": "https://github.com/PlanExeOrg/PlanExe",
-                    "X-Title": "PlanExe"
-                }
-            }
-        }
-        arguments.update(arguments_extra)
+    if class_name == "OpenRouter":
+        # Merge OpenRouter-specific options (headers, provider routing) with any
+        # additional_kwargs already set in llm_config.json (e.g. provider.allow).
+        base = dict(arguments.get("additional_kwargs") or {})
+        if SEND_APP_INFO_TO_OPENROUTER:
+            # https://openrouter.ai/rankings
+            # https://openrouter.ai/docs/api-reference/overview#headers
+            base.setdefault("extra_headers", {})
+            base["extra_headers"].update({
+                "HTTP-Referer": "https://github.com/PlanExeOrg/PlanExe",
+                "X-Title": "PlanExe"
+            })
+        if base:
+            arguments["additional_kwargs"] = base
 
     # Dynamically instantiate the class
     try:
         llm_class = globals()[class_name]  # Get class from global scope
-        return llm_class(**arguments)
+        llm = llm_class(**arguments)
+        # When is_function_calling_model is True, LlamaIndex uses function calling
+        # for structured output (tool_choice="required" + tools). OpenRouter/OpenAI
+        # can reject that. Wrap OpenRouter in a proxy that reports
+        # is_function_calling_model=False so structured_predict uses the text path
+        # (JSON-in-prompt) and we never send tool_choice/tools.
+        if class_name == "OpenRouter":
+            llm = _OpenRouterTextStructuredWrapper(llm)
+        return llm
     except KeyError:
         raise ValueError(f"Invalid LLM class name in config.json: {class_name}")
     except TypeError as e:

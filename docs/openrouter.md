@@ -54,6 +54,20 @@ When running in Docker, also check the worker logs for 401/429 or connectivity e
 docker compose logs -f worker_plan
 ```
 
+### "Tool choice 'required' must be specified with 'tools' parameter" (Azure)
+
+PlanExe uses LlamaIndex structured output (Pydantic), which sends `tool_choice: "required"` to the API. When OpenRouter routes to **Azure**, Azure can reject this with:
+
+`Provider returned error ... "Tool choice 'required' must be specified with 'tools' parameter."`
+
+**Fix:** PlanExe forces OpenRouter LLMs to use the *text-based* structured-output path (no `tool_choice`/`tools`), so the provider never receives that request. This is done in `worker_plan_internal/llm_factory.py` by setting `is_function_calling_model = False` after creating the OpenRouter instance. Structured output then uses JSON-in-prompt instead of function calling.
+
+**Workaround:** If you still see the error, prefer the OpenAI provider and disable fallbacks (`"order": ["openai"]`, `"allow_fallbacks": false` in `llm_config.json`). As a last resort, use a different model (e.g. `openrouter-paid-gemini-2.0-flash-001`). The `openrouter-paid-openai-gpt-5-nano` entry in `llm_config.json` sets:
+
+- `"order": ["openai"]` and `"allow_fallbacks": false` (top-level keys inside `arguments`)
+
+so OpenRouter prefers the OpenAI provider and does not fall back to Azure. If you still get the Azure error, ensure your worker/frontend were restarted after editing `llm_config.json` so the config is reloaded. If you get a “no provider” or similar error, the model may only be available via Azure on OpenRouter; in that case switch to `openrouter-paid-gemini-2.0-flash-001` or `openrouter-paid-openai-gpt-4o-mini`, which work with structured output on their default providers.
+
 Report your issue on [Discord](https://planexe.org/discord). Please include info about your system, such as: "I'm on macOS with M1 Max with 64 GB.".
 
 ## How to add a new OpenRouter model to `llm_config.json`

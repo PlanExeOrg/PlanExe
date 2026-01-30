@@ -12,13 +12,13 @@ PlanExe turns a single plain-English goal into a ~40-page strategic plan in ~15 
 
 ## Start here (pick your path)
 
-### If you’re an AI agent (or building one)
-- Start with **MCP overview**: [MCP](mcp.md)
-- Then read **PlanExe MCP interface**: [PlanExe MCP interface](planexe_mcp_interface.md)
-
 ### If you’re a human project manager
 - Try PlanExe in your browser and skim a real report first: [sample report](https://planexe.org/20251016_minecraft_escape_report.html)
 - Then go local if you want control/customization: [Getting started](getting_started.md)
+
+### If you’re an AI agent (or building one)
+- Start with **MCP overview**: [MCP](mcp.md)
+- Then read **PlanExe MCP interface**: [PlanExe MCP interface](planexe_mcp_interface.md)
 
 ### If you’re a developer
 - Fastest local setup: [Getting started](getting_started.md)
@@ -27,15 +27,10 @@ PlanExe turns a single plain-English goal into a ~40-page strategic plan in ~15 
 
 ---
 
-## What you actually get
+## What you get
 
-A PlanExe run produces a **single HTML report** that’s designed to be skimmed and navigated quickly:
-
-- **Executive summary** + deep sections you can expand as needed
-- **Gantt overview** plus an **interactive Gantt** with zoom controls
-- **Export to CSV** for schedules (useful for downstream processing)
-
-When running locally, generated plans are written to `run/<timestamped-output-dir>`.
+PlanExe generates a **single HTML report** (a self-contained artifact you can open in a browser). See the sample report here:
+[Minecraft Escape sample report](https://planexe.org/20251016_minecraft_escape_report.html)
 
 ---
 
@@ -46,8 +41,6 @@ Open the sample report and do this:
 1. Read **Executive Summary** to see the top-level deliverables, budget, risks, and next steps.
 2. Jump to **Gantt Interactive** to see how the goal gets broken down into many concrete tasks.
 3. Open **Premortem** to see what could go wrong and what to do about it.
-
-Sample report: [Minecraft Escape sample report](https://planexe.org/20251016_minecraft_escape_report.html)
 
 ---
 
@@ -66,7 +59,7 @@ If you get stuck, ask in **Discord** and include what you tried, your setup, and
 
 ---
 
-## Quick links
+## Links
 
 - Website: [planexe.org](https://planexe.org/)
 - GitHub: [PlanExeOrg/PlanExe](https://github.com/PlanExeOrg/PlanExe)

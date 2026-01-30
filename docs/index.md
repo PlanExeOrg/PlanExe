@@ -1,15 +1,73 @@
 # Welcome to PlanExe Documentation
 
-**PlanExe** is an open-source tool that turns a single plain-English goal into a ~40-page strategic plan in about 15 minutes, using local or cloud LLMs. It’s an accelerator for first drafts—not a replacement for human refinement. Typical output includes an executive summary, Gantt chart, governance structure, stakeholder maps, risk registers, and SWOT analyses. PlanExe removes most of the labor for the planning scaffold; the final 10–30% that makes a plan credible and defensible remains human work.
+PlanExe turns a single plain-English goal into a ~40-page strategic plan in ~15 minutes using local or cloud LLMs. It’s an accelerator for first drafts — not a replacement for human refinement. PlanExe removes most of the labor for the planning scaffold; the final 10–30% that makes a plan credible and defensible remains human work.
 
-See [example plans](https://planexe.org/examples/) (e.g. Minecraft escape room, Faraday cage company, Human-as-a-Service pilot). Use the navigation on the left to explore setup, usage, and reference.
+**Try it first, then decide if you want to run it locally.**
+
+- **Try PlanExe in your browser (no installation)**: [planexe.org](https://planexe.org/)
+- **Open a full sample report (HTML)**: [Minecraft Escape sample report](https://planexe.org/20251016_minecraft_escape_report.html)
+- **See more examples**: [planexe.org/examples](https://planexe.org/examples/)
+
+---
+
+## Start here (pick your path)
+
+### If you’re an AI agent (or building one)
+- Start with **MCP overview**: [MCP](mcp.md)
+- Then read **PlanExe MCP interface**: [PlanExe MCP interface](planexe_mcp_interface.md)
+
+### If you’re a human project manager
+- Try PlanExe in your browser and skim a real report first: [sample report](https://planexe.org/20251016_minecraft_escape_report.html)
+- Then go local if you want control/customization: [Getting started](getting_started.md)
+
+### If you’re a developer
+- Fastest local setup: [Getting started](getting_started.md)
+- Dev setup: [Developer install](install_developer.md)
+- Docker details: [Docker](docker.md)
+
+---
+
+## What you actually get
+
+A PlanExe run produces a **single HTML report** that’s designed to be skimmed and navigated quickly:
+
+- **Executive summary** + deep sections you can expand as needed
+- **Gantt overview** plus an **interactive Gantt** with zoom controls
+- **Export to CSV** for schedules (useful for downstream processing)
+
+When running locally, generated plans are written to `run/<timestamped-output-dir>`.
+
+---
+
+## 2-minute tour
+
+Open the sample report and do this:
+
+1. Read **Executive Summary** to see the top-level deliverables, budget, risks, and next steps.
+2. Jump to **Gantt Interactive** to see how the goal gets broken down into many concrete tasks.
+3. Open **Premortem** to see what could go wrong and what to do about it.
+
+Sample report: [Minecraft Escape sample report](https://planexe.org/20251016_minecraft_escape_report.html)
+
+---
+
+## Getting started locally
+
+If you want to run PlanExe locally (recommended when you need control, privacy, or customization):
+
+- Follow: [Getting started](getting_started.md)
+- Choose an AI provider:
+  - [OpenRouter](openrouter.md)
+  - [Ollama](ollama.md)
+  - [LM Studio](lm_studio.md)
+  - [Mistral](mistral.md)
+
+If you get stuck, ask in **Discord** and include what you tried, your setup, and any error output: [planexe.org/discord](https://planexe.org/discord)
+
+---
 
 ## Quick links
 
-- [PlanExe website](https://planexe.org)
-- [GitHub repository](https://github.com/PlanExeOrg/PlanExe)
-- [Discord community](https://planexe.org/discord)
-
-## Getting started
-
-Install PlanExe, configure your AI provider, and generate your first plan. Browse the sections in the sidebar for setup guides, usage, and reference.
+- Website: [planexe.org](https://planexe.org/)
+- GitHub: [PlanExeOrg/PlanExe](https://github.com/PlanExeOrg/PlanExe)
+- Discord: [planexe.org/discord](https://planexe.org/discord)

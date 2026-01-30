@@ -42,6 +42,30 @@ This document describes how the [PlanExe-docs](https://github.com/PlanExeOrg/Pla
 | Build dependencies | PlanExe-docs `requirements.txt` |
 | Frontpage | `PlanExe/docs/index.md` (used as site index) |
 
+## Linking between documentation pages
+
+When adding or editing links from one doc file to another in `PlanExe/docs/`, use paths that MkDocs (used by PlanExe-docs `build.py`) can resolve. Otherwise the build will report "unrecognized relative link" and leave the URL as-is on the published site.
+
+**Do:**
+
+- Use the **`.md` extension** in relative links to other docs in this directory.
+  - Same directory: `[MCP](mcp.md)`, `[Getting started](getting_started.md)`.
+  - Subdirectory: `[Extra](guides/extra.md)` (if you have `docs/guides/extra.md`).
+
+**Do not:**
+
+- Use **trailing slashes** for doc-to-doc links: `[MCP](mcp/)` is not resolved by MkDocs and will trigger a build warning.
+
+**Examples (in any file under `PlanExe/docs/`):**
+
+```markdown
+[PlanExe MCP interface](planexe_mcp_interface.md)
+[Docker](docker.md)
+[OpenRouter](openrouter.md)
+```
+
+External links (e.g. `https://planexe.org/`) are unchanged; this applies only to links between documentation `.md` files in this repo.
+
 ## Local preview
 
 To build and preview the same site locally:

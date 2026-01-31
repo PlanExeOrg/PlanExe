@@ -2,7 +2,7 @@
 PlanExe MCP Cloud
 
 Implements the Model Context Protocol interface for PlanExe as specified in
- docs/planexe_mcp_interface.md. Communicates with worker_plan_database via the shared
+ docs/mcp/planexe_mcp_interface.md. Communicates with worker_plan_database via the shared
 database_api models.
 """
 import asyncio

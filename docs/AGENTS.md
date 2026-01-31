@@ -49,7 +49,7 @@ When adding or editing links from one doc file to another in `PlanExe/docs/`, us
 **Do:**
 
 - Use the **`.md` extension** in relative links to other docs in this directory.
-  - Same directory: `[MCP](mcp.md)`, `[Getting started](getting_started.md)`.
+  - Same directory: `[MCP](mcp/mcp_details.md)`, `[Getting started](getting_started.md)`.
   - Subdirectory: `[Extra](guides/extra.md)` (if you have `docs/guides/extra.md`).
 
 **Do not:**
@@ -59,7 +59,7 @@ When adding or editing links from one doc file to another in `PlanExe/docs/`, us
 **Examples (in any file under `PlanExe/docs/`):**
 
 ```markdown
-[PlanExe MCP interface](planexe_mcp_interface.md)
+[PlanExe MCP interface](mcp/planexe_mcp_interface.md)
 [Docker](docker.md)
 [OpenRouter](openrouter.md)
 ```

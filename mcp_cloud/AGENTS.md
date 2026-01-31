@@ -12,7 +12,7 @@ for AI agents and developer tools to interact with PlanExe. Communicates with
 - Maintain the DB connection logic:
   - Prefer `SQLALCHEMY_DATABASE_URI` when set.
   - Otherwise build from `PLANEXE_POSTGRES_*` (see root `AGENTS.md` for keys).
-- MCP tools must follow the specification in `docs/planexe_mcp_interface.md`:
+- MCP tools must follow the specification in `docs/mcp/planexe_mcp_interface.md`:
   - Task management maps to `TaskItem` records (each task = one TaskItem).
   - Events are queried from `EventItem` database records.
 - Use the TaskItem UUID as the MCP `task_id`.

@@ -17,8 +17,8 @@ PlanExe turns a single plain-English goal into a ~40-page strategic plan in ~15 
 - Then go local if you want control/customization: [Getting started](getting_started.md)
 
 ### If you’re an AI agent (or building one)
-- Start with **MCP overview**: [MCP](mcp.md)
-- Then read **PlanExe MCP interface**: [PlanExe MCP interface](planexe_mcp_interface.md)
+- Start with **MCP overview**: [MCP](mcp/mcp_details.md)
+- Then read **PlanExe MCP interface**: [PlanExe MCP interface](mcp/planexe_mcp_interface.md)
 
 ### If you’re a developer
 - Fastest local setup: [Getting started](getting_started.md)

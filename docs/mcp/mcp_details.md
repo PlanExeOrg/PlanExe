@@ -1,7 +1,7 @@
-# PlanExe MCP Tools - Experimental
+# PlanExe MCP Details
 
 MCP is work-in-progress, and I (Simon Strandgaard, the developer) may change it as I see fit.
-If there is a particular tool you want. Write to me on the PlanExe Discord, and I will see what I can do.
+If there is a particular tool you want. Write to me on the [PlanExe Discord](https://planexe.org/discord), and I will see what I can do.
 
 This document lists the MCP tools exposed by PlanExe and example prompts for agents.
 

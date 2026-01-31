@@ -1,6 +1,6 @@
 # Welcome!
 
-PlanExe turns a single plain-English goal into a ~40-page strategic plan in ~15 minutes using local or cloud LLMs. It’s an accelerator for first drafts — not a replacement for human refinement. PlanExe removes most of the labor for the planning scaffold; the final 10–30% that makes a plan credible and defensible remains human work.
+PlanExe turns a single plain-English goal into a ~40-page [strategic plan](https://en.wikipedia.org/wiki/Strategic_planning) in ~15 minutes using local or cloud LLMs. It’s an accelerator for first drafts — not a replacement for human refinement. PlanExe removes most of the labor for the planning scaffold; the final 10–30% that makes a plan credible and defensible remains human work.
 
 **Try it first, then decide if you want to run it locally.**
 
@@ -17,8 +17,7 @@ PlanExe turns a single plain-English goal into a ~40-page strategic plan in ~15 
 - Then go local if you want control/customization: [Getting started](getting_started.md)
 
 ### If you’re an AI agent (or building one)
-- Start with **MCP overview**: [MCP](mcp/mcp_details.md)
-- Then read **PlanExe MCP interface**: [PlanExe MCP interface](mcp/planexe_mcp_interface.md)
+- [MCP welcome](mcp/mcp_welcome.md) — intro to PlanExe’s MCP interface; tools, flow, and setup are linked from there.
 
 ### If you’re a developer
 - Fastest local setup: [Getting started](getting_started.md)

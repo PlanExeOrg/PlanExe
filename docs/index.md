@@ -1,4 +1,4 @@
-# Welcome to PlanExe Documentation
+# Welcome!
 
 PlanExe turns a single plain-English goal into a ~40-page strategic plan in ~15 minutes using local or cloud LLMs. It’s an accelerator for first drafts — not a replacement for human refinement. PlanExe removes most of the labor for the planning scaffold; the final 10–30% that makes a plan credible and defensible remains human work.
 
@@ -12,7 +12,7 @@ PlanExe turns a single plain-English goal into a ~40-page strategic plan in ~15 
 
 ## Start here (pick your path)
 
-### If you’re a human project manager
+### If you’re a human
 - Try PlanExe in your browser and skim a real report first: [sample report](https://planexe.org/20251016_minecraft_escape_report.html)
 - Then go local if you want control/customization: [Getting started](getting_started.md)
 
@@ -44,18 +44,11 @@ Open the sample report and do this:
 
 ---
 
-## Getting started locally
+## Get help
 
-If you want to run PlanExe locally (recommended when you need control, privacy, or customization):
+If you run into issues, **join the PlanExe Discord** — the community and maintainers are there to help. When you ask, include what you tried, your setup (OS, Docker vs local, model/LLM), and any error output so others can help you quickly.
 
-- Follow: [Getting started](getting_started.md)
-- Choose an AI provider:
-  - [OpenRouter](openrouter.md)
-  - [Ollama](ollama.md)
-  - [LM Studio](lm_studio.md)
-  - [Mistral](mistral.md)
-
-If you get stuck, ask in **Discord** and include what you tried, your setup, and any error output: [planexe.org/discord](https://planexe.org/discord)
+**[Join the PlanExe Discord →](https://planexe.org/discord)**
 
 ---
 

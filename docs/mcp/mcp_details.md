@@ -13,18 +13,32 @@ This document lists the MCP tools exposed by PlanExe and example prompts for age
 
 ## Tool Catalog, `mcp_cloud`
 
+### prompt_examples
+
+Returns around five example prompts that show what good prompts look like. Each sample is typically 300–800 words: detailed context, requirements, and success criteria. Usually the AI does the heavy lifting: the user has a vague idea, the agent calls `prompt_examples`, then expands that idea into a high-quality prompt (300–800 words). The prompt is shown to the user, who can ask for further changes or confirm it’s good to go. When the user confirms, the agent then calls `task_create`. Shorter or vaguer prompts produce lower-quality plans.
+
+Example prompt:
+```
+Get example prompts for creating a plan.
+```
+
+Example call:
+```json
+{}
+```
+
+Response includes `samples` (array of prompt strings, each 300–800 words) and `message`.
+
 ### task_create
 
 Create a new plan task.
 
 Example prompt:
-```
-Create a plan for: Weekly meetup for humans where participants are randomly paired every 5 minutes...
-```
+> Create a plan for: Weekly meetup for humans where participants are randomly paired every 5 minutes...
 
 Example call:
 ```json
-{"idea": "Weekly meetup for humans where participants are randomly paired every 5 minutes..."}
+{"prompt": "Weekly meetup for humans where participants are randomly paired every 5 minutes..."}
 ```
 
 Optional argument:
@@ -99,14 +113,30 @@ Example call:
 
 ## Typical Flow
 
-### 1) Create a plan
+### 1. Get example prompts
+
+The user often starts with a vague idea. The AI calls `prompt_examples` first to see what good prompts look like (around five samples, 300–800 words each), then expands the user’s idea into a high-quality prompt and shows it to the user.
 
 Prompt:
 ```
-Create a plan for this idea: Weekly meetup for humans where participants are randomly paired every 5 minutes...
+Get example prompts for creating a plan.
 ```
 
-### 2) Get status
+Tool call:
+```json
+{}
+```
+
+### 2. Create a plan
+
+The user reviews the prompt and either asks for further changes or confirms it’s good to go. When the user confirms, the agent calls `task_create` with that prompt.
+
+Tool call:
+```json
+{"prompt": "..."}
+```
+
+### 3. Get status
 
 Prompt:
 ```
@@ -118,7 +148,7 @@ Tool call:
 {"task_id": "<task_id_from_task_create>"}
 ```
 
-### 3) Download the report
+### 4. Download the report
 
 Prompt:
 ```

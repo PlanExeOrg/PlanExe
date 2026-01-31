@@ -1,10 +1,8 @@
 # Using PlanExe with Mistral
 
-This is for **advanced users** that already have PlanExe working.
+This is for **advanced users** that already have PlanExe working. If you're new to PlanExe, start with [OpenRouter](openrouter.md) instead.
 
-If you are getting started with PlanExe, I (the developer of PlanExe) recommend following the [openrouter.md](openrouter.md) instructions. Stick with the default settings. 
-
-If you want to use Mistral, then [OpenRouter has several mistral models](https://openrouter.ai/models?q=mistral). 
+If you want to use Mistral, [OpenRouter has several mistral models](https://openrouter.ai/models?q=mistral). 
 
 ## Docker setup for Mistral
 

@@ -1,5 +1,7 @@
 # Using PlanExe with LM Studio
 
+This is for **advanced users** that already have PlanExe working. If you're new to PlanExe, start with [OpenRouter](openrouter.md) instead.
+
 [LM Studio](https://lmstudio.ai/) is an open source app for macOS, Windows, and Linux for running LLMs on your own computer. It is useful for local troubleshooting.
 
 PlanExe processes more text than regular chat. You will need capable hardware to run an LLM at a reasonable speed.

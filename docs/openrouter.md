@@ -1,10 +1,12 @@
 # Using PlanExe with OpenRouter
 
+For new users, OpenRouter is the recommended starting point. When you have have generated a few plans via OpenRouter, then you can try switch to other AI providers.
+
 [OpenRouter](https://openrouter.ai/) provides access to a large number of LLM models, that runs in the cloud.
 
 Unfortunately there is no `free` model that works reliable with PlanExe.
 
-In my experience, the `paid` models are the most reliable. Models like [google/gemini-2.0-flash-001](https://openrouter.ai/google/gemini-2.0-flash-001. and [openai/gpt-4o-mini](https://openrouter.ai/openai/gpt-4o-mini) are cheap and faster than running models on my own computer and without risk of it overheating.
+In my experience, the `paid` models are the most reliable. Models like [google/gemini-2.0-flash-001](https://openrouter.ai/google/gemini-2.0-flash-001). and [openai/gpt-4o-mini](https://openrouter.ai/openai/gpt-4o-mini) are cheap and faster than running models on my own computer and without risk of it overheating.
 
 I haven't been able to find a `free` model on OpenRouter that works well with PlanExe.
 

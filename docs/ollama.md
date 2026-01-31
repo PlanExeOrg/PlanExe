@@ -1,5 +1,7 @@
 # Using PlanExe with Ollama
 
+This is for **advanced users** that already have PlanExe working. If you're new to PlanExe, start with [OpenRouter](openrouter.md) instead.
+
 [Ollama](https://ollama.com/) is an open source app for macOS/Windows/Linux for running LLMs on your own computer (or on a remote computer).
 
 PlanExe processes more text than regular chat. You will need expensive hardware to run a LLM at a reasonable speed.

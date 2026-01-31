@@ -64,6 +64,8 @@ a different set of levers, fixing typos.
 - User specifies a budget of 0..100 USD. Which is unrealistic, when the plan is to hire a team, and work on it for months.
 - User leaves out physical location(s). So PlanExe picks a random location in a different part of the world.
 
+**Dynamic plugins:** Have AI's rewrite PlanExe as they see fit, depending on what the user have prompted it with. So if it's a software project, it writes PlanExe plugins that are going to be needed. And then proceeds to creating the plan. In the middle of the plan creation, it may be necessary to create more PlanExe plugins as issues shows up.
+
 **Grid search:** Currently PlanExe only generates a plan for 1 permutation of levers.
 A plan may have 10 levers with 3-5 settings. Here it could be interesting to create 
 100 full plans, each with a different combination of levers. Compare the generated plans against each other 

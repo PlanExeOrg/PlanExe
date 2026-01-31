@@ -10,6 +10,8 @@ In my experience, the `paid` models are the most reliable. Models like [google/g
 
 I haven't been able to find a `free` model on OpenRouter that works well with PlanExe.
 
+Avoid pricey `paid` models. PlanExe does more than 100 LLM inference calls per plan, so each run uses many tokens. With a cheap model, creating a full plan costs less than 0.30 USD; with one of the newest models, the price can exceed 20 USD. To keep PlanExe affordable for as many users as possible, the defaults use older, cheaper models.
+
 ## Quickstart (Docker)
 
 1. Install Docker (with Docker Compose) — no local Python or pip is needed now.

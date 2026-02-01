@@ -66,6 +66,20 @@ When adding or editing links from one doc file to another in `PlanExe/docs/`, us
 
 External links (e.g. `https://planexe.org/`) are unchanged; this applies only to links between documentation `.md` files in this repo.
 
+## Documentation conventions
+
+- **Tone**: keep it factual and direct; avoid marketing terms like “quickstart,” “fastest,” or “seamless.”
+- **Style guide**: follow `docs_style_guide.md` for structure and terminology.
+- **Social cards**: if a page needs a specific social card title, add front matter:
+  ```
+  ---
+  title: Your page title
+  ---
+  ```
+- **Links**: prefer Markdown links for URLs in prose, not bare URLs.
+- **AI providers**: provider docs live under `ai_providers/` (e.g. `ai_providers/openrouter.md`).
+- **MCP setup**: the MCP setup guide is `mcp/mcp_setup.md` (avoid “quickstart”).
+
 ## Local preview
 
 To build and preview the same site locally:

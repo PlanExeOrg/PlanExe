@@ -59,6 +59,8 @@ Always check the package-level `AGENTS.md` for file-specific rules
   `OPENROUTER_API_KEY`), update `docs/getting_started.md`.
 - When changing local dev startup steps or the test command, update
   `docs/install_developer.md`.
+- For README links, prefer absolute `https://docs.planexe.org/...` URLs so GitHub
+  readers land on the published docs site.
 
 ## Testing strategy
 - Prefer unit tests over manual curl/server checks.

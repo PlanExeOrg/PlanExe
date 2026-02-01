@@ -10,6 +10,8 @@ Short, consistent rules for PlanExe docs.
 
 ## Tone and voice
 - Be direct and practical.
+- Be factual and specific.
+- Avoid marketing terms like: quickstart, fastest.
 - Avoid long personal stories in setup guides.
 - Prefer short sentences.
 

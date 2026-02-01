@@ -36,7 +36,7 @@ PlanExe removes 70–90 % of the labor for the planning scaffold on any topic, b
 
 ---
 
-New to PlanExe? Follow the [Getting Started](docs/getting_started.md) guide.
+New to PlanExe? Follow the [Getting Started](https://docs.planexe.org/getting_started/) guide.
 
 <details>
 <summary><strong> Try it out now (Click to expand)</strong></summary>
@@ -94,9 +94,9 @@ For compose tips, alternate ports, or troubleshooting, see `docs/docker.md` or `
 
 ### Configuration
 
-**Config A:** Run a model in the cloud using a paid provider. Follow the instructions in [OpenRouter](docs/openrouter.md).
+**Config A:** Run a model in the cloud using a paid provider. Follow the instructions in [OpenRouter](https://docs.planexe.org/ai_providers/openrouter/).
 
-**Config B:** Run models locally on a high-end computer. Follow the instructions for either [Ollama](docs/ollama.md) or [LM Studio](docs/lm_studio.md). When using host-side tools with Docker, point the model URL at the host (for example `http://host.docker.internal:11434` for Ollama).
+**Config B:** Run models locally on a high-end computer. Follow the instructions for either [Ollama](https://docs.planexe.org/ai_providers/ollama/) or [LM Studio](https://docs.planexe.org/ai_providers/lm_studio/). When using host-side tools with Docker, point the model URL at the host (for example `http://host.docker.internal:11434` for Ollama).
 
 Recommendation: I recommend **Config A** as it offers the most straightforward path to getting PlanExe working reliably.
 

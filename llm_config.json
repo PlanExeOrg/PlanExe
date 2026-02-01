@@ -1,4 +1,20 @@
 {
+    "openai-gpt-5-nano": {
+        "comment": "GPT-5 Nano - Fast reasoning model with 400K context window. Uses OpenAI class directly to avoid llama-index OpenRouter class overwriting context_window with incorrect API metadata. Reasoning models require temperature=1.0 per OpenAI specs.",
+        "priority": 1,
+        "class": "OpenAI",
+        "arguments": {
+            "model": "gpt-5-nano",
+            "api_key": "${OPENAI_API_KEY}",
+            "temperature": 1.0,
+            "timeout": 120.0,
+            "context_window": 400000,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 128000,
+            "max_retries": 5
+        }
+    },
     "openrouter-paid-openai-gpt-oss-20b": {
         "comment": "This is very fast. It's paid, so check the pricing before use. Created August 5, 2025. 131,072 context. $0.05/M input tokens. $0.20/M output tokens. This is a reasoning model, and uses more tokens than LLMs.",
         "class": "OpenRouter",

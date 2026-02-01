@@ -15,9 +15,8 @@ Previously I have been using PythonAnywhere, and I was stuck in a dependency hel
 Now with docker, I don't have these incompatibility issues.
 However docker have its own issues.
 
-The last version BEFORE the transition to docker is available here
-https://github.com/PlanExeOrg/PlanExe/releases/tag/2025-dec-31
+The last version BEFORE the transition to docker is available here:
+[PlanExe 2025-dec-31 release](https://github.com/PlanExeOrg/PlanExe/releases/tag/2025-dec-31)
 
-The main branch will be docker from now on.
-https://github.com/PlanExeOrg/PlanExe/tree/main
-
+The main branch will be docker from now on:
+[PlanExe main branch](https://github.com/PlanExeOrg/PlanExe/tree/main)

@@ -130,3 +130,10 @@ Then set `base_url` to `http://localhost:11434` while the tunnel is running.
     }
 }
 ```
+
+---
+
+## Next steps
+
+- Learn prompt quality: [Prompt writing guide](../prompt_writing_guide.md)
+- Understand output sections: [Plan output anatomy](../plan_output_anatomy.md)

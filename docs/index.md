@@ -8,25 +8,23 @@ PlanExe turns a single plain-English goal into a ~40-page [strategic plan](https
 
 **Try it first, then decide if you want to run it locally.**
 
-- **Try PlanExe in your browser (no installation)**: [planexe.org](https://planexe.org/)
 - **Open a full sample report (HTML)**: [Minecraft Escape sample report](https://planexe.org/20251016_minecraft_escape_report.html)
+- **Try PlanExe in your browser (no installation)**: [planexe.org](https://planexe.org/)
 - **See more examples**: [planexe.org/examples](https://planexe.org/examples/)
 
 ---
 
 ## Start here (pick your path)
 
-### If you’re a human
-- Try PlanExe in your browser and skim a real report first: [sample report](https://planexe.org/20251016_minecraft_escape_report.html)
-- Then go local if you want control/customization: [Getting started](getting_started.md)
+Use the short decision guide: [Start here](start_here.md)
 
-### If you’re an AI agent (or building one)
-- [MCP welcome](mcp/mcp_welcome.md) — intro to PlanExe’s MCP interface; tools, flow, and setup are linked from there.
+---
 
-### If you’re a developer
-- Fastest local setup: [Getting started](getting_started.md)
-- Dev setup: [Developer install](install_developer.md)
-- Docker details: [Docker](docker.md)
+## Core guides
+
+- [Prompt writing guide](prompt_writing_guide.md)
+- [Plan output anatomy](plan_output_anatomy.md)
+- [Costs and models](costs_and_models.md)
 
 ---
 

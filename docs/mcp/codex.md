@@ -6,6 +6,28 @@ title: Codex - MCP integration
 
 Guide for connecting [codex](https://openai.com/codex/) with PlanExe via MCP.
 
+## Prerequisites
+
+- Access to Codex.
+- PlanExe MCP server reachable by Codex.
+
+## Quick setup
+
+1. Start Codex.
+2. Ask for MCP tools.
+3. Call `prompt_examples` to get examples.
+4. Call `task_create` to start a plan.
+
+## Sample prompt
+
+> Get example prompts for creating a plan.
+
+## Success criteria
+
+- You can retrieve prompt examples.
+- You can create a plan task.
+- You can download the report.
+
 ## Interaction
 
 In a terminal, start codex like this:

@@ -142,7 +142,7 @@ The hard thing is getting the venv's working.
 
 Currently the generated report has expandable/collapsible sections. There is an overwhelming amount of content inside each sections.
 I'm considering having a table of content in the left sidebar, similar to this:
-https://docs.railway.com/guides/dockerfiles
+[Railway Dockerfiles guide](https://docs.railway.com/guides/dockerfiles)
 It uses Docusaurus which uses React. I'm no fan of React.
 I'm considering using mkdocs instead.
 

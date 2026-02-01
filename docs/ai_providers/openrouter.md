@@ -80,3 +80,10 @@ Steps to add a model:
 1. Copy the model id from the openrouter website.
 2. Paste the model id into the `llm_config.json`.
 3. Restart PlanExe to apply the changes.
+
+---
+
+## Next steps
+
+- Learn prompt quality: [Prompt writing guide](../prompt_writing_guide.md)
+- Understand output sections: [Plan output anatomy](../plan_output_anatomy.md)

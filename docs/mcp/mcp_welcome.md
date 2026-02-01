@@ -37,9 +37,14 @@ The MCP user chooses which artifact to download:
 
 ## Next steps
 
+- **Setup** — [MCP setup](mcp_setup.md): recommended path to a working integration.
 - **See the tools and a typical flow** — [MCP details](mcp_details.md): tool list, example prompts, and step-by-step flow without heavy protocol detail.
-- **Set up in Cursor** — [Cursor](cursor.md): video, prerequisites, and how to connect PlanExe to Cursor.
+ - **Set up in Cursor** — [Cursor](cursor.md): video, prerequisites, and how to connect PlanExe to Cursor.
+ - **Set up in LM Studio** — [LM Studio](lm_studio.md): setup steps and example interaction.
+ - **Set up in Codex** — [Codex](codex.md): setup steps and example interaction.
+ - **Set up in Antigravity** — [Antigravity](antigravity.md): setup steps and example interaction.
 - **Full technical specification** — [PlanExe MCP interface](planexe_mcp_interface.md): for implementors; request/response schemas, state machine, error codes, and compatibility rules.
+ - **Troubleshooting** — [MCP troubleshooting](mcp_troubleshooting.md): common integration issues and fixes.
 
 ---
 

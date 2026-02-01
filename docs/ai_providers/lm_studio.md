@@ -86,3 +86,10 @@ ssh -N -L 1234:localhost:1234 user@remote-host
 ```
 
 Then set `base_url` to `http://localhost:1234` while the tunnel is running.
+
+---
+
+## Next steps
+
+- Learn prompt quality: [Prompt writing guide](../prompt_writing_guide.md)
+- Understand output sections: [Plan output anatomy](../plan_output_anatomy.md)

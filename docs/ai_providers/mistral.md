@@ -85,3 +85,10 @@ The JSON should look something like this:
 1. Restart PlanExe
 2. Go to the `Settings` tab
 3. Select the `mistral-paid-large` model.
+
+---
+
+## Next steps
+
+- Learn prompt quality: [Prompt writing guide](../prompt_writing_guide.md)
+- Understand output sections: [Plan output anatomy](../plan_output_anatomy.md)

@@ -1,9 +1,7 @@
 # PlanExe uses Docker
 
-I'm no fan of Docker and I tried to avoid it.
-I first tried dependency hell, and it was fragile. Incompatible packages, preventing installing/upgrading things.
-I had to choose between dependency hell or docker hell.
-Now I'm going with Docker. Hopefully it turns out to be less fragile.
+Docker is the supported way to run PlanExe locally and in most deployments.
+This page covers common Docker workflows and troubleshooting.
 
 ## Basic lifecycle
 - Stop everything: `docker compose down`

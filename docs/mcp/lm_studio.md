@@ -8,6 +8,26 @@ title: LM Studio - MCP integration
 
 You need a hefty computer for running models locally.
 
+## Prerequisites
+
+- LM Studio installed.
+- PlanExe MCP server reachable by LM Studio.
+
+## Quick setup
+
+1. Configure MCP in LM Studio.
+2. Ask for prompt examples.
+3. Create a plan task and download the report.
+
+## Sample prompt
+
+> Get example prompts for creating a plan.
+
+## Success criteria
+
+- You can fetch prompt examples.
+- You can create a plan task.
+- You can download the report.
 
 ## Interaction
 

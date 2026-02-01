@@ -28,12 +28,12 @@ OPENROUTER_API_KEY='sk-or-v1-your-key'
 docker compose up worker_plan frontend_single_user
 ```
 
-Wait for http://localhost:7860 to become available.
+Wait for [http://localhost:7860](http://localhost:7860) to become available.
 
 Stop with `Ctrl+C`.
 
 ## 5. Use the UI
-Open http://localhost:7860 in your browser. 
+Open [http://localhost:7860](http://localhost:7860) in your browser. 
 
 You can now submit your prompt.
 
@@ -41,10 +41,16 @@ The generated plans are written to `run/<timestamped-output-dir>`.
 
 ![Screenshot of PlanExe](planexe-humanoid-factory.jpg?raw=true "Screenshot of PlanExe")
 
+## Verification
+
+- You can open the UI at [http://localhost:7860](http://localhost:7860).
+- A plan run creates a new folder in `run/`.
+
 ## Troubleshooting and next steps
 - For Docker tips, see [docker.md](docker.md).
 - For OpenRouter-specific notes, see [openrouter.md](ai_providers/openrouter.md).
 - If the UI fails to load or plans don’t start, check worker logs: `docker compose logs -f worker_plan`.
+ - Learn how to write better prompts: [Prompt writing guide](prompt_writing_guide.md)
 
 ## Community
 Need help? Join the [PlanExe Discord](https://planexe.org/discord).

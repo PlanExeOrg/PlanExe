@@ -12,17 +12,17 @@ codex
 
 Inside codex; these are my interactions:
 
-- tell me about the mcp tools you have access to
-- for planexe, get the prompt examples
-- I want you to formulate a prompt about constructing a new variant of english where the worst inconsistencies have been fixed such as 11th vs 1st, 21st, 31st,
+1. tell me about the mcp tools you have access to
+2. for planexe, get the prompt examples
+3. I want you to formulate a prompt about constructing a new variant of english where the worst inconsistencies have been fixed such as 11th vs 1st, 21st, 31st,
   potentially eliminated such suffixes. And the pronounciation inconsistencies have been cleaned up. I want you to adhere to the planexe example prompts.
-- it's not just the ordinals. try again
-- go ahead create this plan
-- status
-- status
-- status
-- download both
-- summarize the html file
+4. it's not just the ordinals. try again
+5. go ahead create this plan
+6. status
+7. status
+8. status
+9. download both
+10. summarize the html file
 
 The created plan is here: [Clean English](https://planexe.org/20260131_clear_english_report.html)
 

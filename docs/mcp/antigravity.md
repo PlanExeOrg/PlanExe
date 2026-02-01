@@ -30,6 +30,8 @@ My interaction history:
 
 I had to manually ask about `check status` to get details how the plan creation was going. It's not something that Antigravity can do.
 
+The created plan is here: [Yellowstone Evacuation](https://planexe.org/20260201_yellowstone_evacuation_report.html)
+
 
 ## Prerequisites
 

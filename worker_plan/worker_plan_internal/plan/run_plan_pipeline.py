@@ -25,6 +25,7 @@ from worker_plan_internal.lever.scenarios_markdown import ScenariosMarkdown
 from worker_plan_internal.lever.strategic_decisions_markdown import StrategicDecisionsMarkdown
 from worker_plan_api.filenames import FilenameEnum, ExtraFilenameEnum
 from worker_plan_api.speedvsdetail import SpeedVsDetailEnum
+from worker_plan_internal.utils.planexe_llmconfig import PlanExeLLMConfig
 from worker_plan_internal.assume.identify_purpose import IdentifyPurpose
 from worker_plan_internal.assume.identify_plan_type import IdentifyPlanType
 from worker_plan_internal.assume.physical_locations import PhysicalLocations
@@ -3859,6 +3860,36 @@ class ExecutePipeline:
         # Obtain a list of all the expected output files of the FullPlanPipeline task and all its dependencies
         obtain_output_files = ObtainOutputFiles.execute(full_plan_pipeline_task)
         self.all_expected_filenames = obtain_output_files.get_all_filenames()
+
+    def resolve_luigi_workers(self) -> int:
+        default_workers = 1
+        try:
+            llm_config = PlanExeLLMConfig.load()
+        except Exception as exc:
+            logger.warning(f"Could not load llm_config.json; defaulting Luigi workers to {default_workers}: {exc}")
+            return default_workers
+
+        workers_candidates: list[int] = []
+        for llm_name in self.llm_models:
+            config = llm_config.llm_config_dict.get(llm_name)
+            if not isinstance(config, dict):
+                continue
+            luigi_workers_value = config.get("luigi_workers")
+            if luigi_workers_value is None:
+                continue
+            try:
+                luigi_workers_int = int(luigi_workers_value)
+            except (TypeError, ValueError):
+                logger.warning(f"Invalid luigi_workers for {llm_name!r}: {luigi_workers_value!r}")
+                continue
+            if luigi_workers_int < 1:
+                logger.warning(f"Invalid luigi_workers for {llm_name!r}: {luigi_workers_int!r}")
+                continue
+            workers_candidates.append(luigi_workers_int)
+
+        if not workers_candidates:
+            return default_workers
+        return min(workers_candidates)
     
     @classmethod
     def resolve_llm_models(cls, specified_llm_model: Optional[str]) -> list[str]:
@@ -3974,7 +4005,13 @@ class ExecutePipeline:
             json.dump(self.all_expected_filenames, f, indent=2)
         logger.info(f"Saved {len(self.all_expected_filenames)} expected filenames to {expected_filenames_path}")
 
-        self.luigi_build_return_value = luigi.build([self.full_plan_pipeline_task], local_scheduler=True, workers=1)
+        luigi_workers = self.resolve_luigi_workers()
+        logger.info(f"Luigi workers: {luigi_workers}")
+        self.luigi_build_return_value = luigi.build(
+            [self.full_plan_pipeline_task],
+            local_scheduler=True,
+            workers=luigi_workers
+        )
 
         # After the pipeline finishes (or fails), check for the stop flag.
         if self.has_stop_flag_file:

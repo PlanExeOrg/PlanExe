@@ -87,7 +87,7 @@ A long-lived container for a PlanExe project run.
 
 **Key properties**
 
-- task_id: stable unique identifier (UUID, matches TaskItem.id)
+- task_id: UUID returned by task_create for that task. Each task_create returns a new UUID. Use that exact UUID for all MCP calls; do not substitute ids from other services.
 - output_dir: artifact root namespace for task
 - config: immutable run configuration (models, runtime limits, Luigi params)
 - created_at, updated_at
@@ -236,6 +236,10 @@ For the full catalog file:
 }
 ```
 
+**Important**
+
+- task_id is a UUID returned by task_create. Use this exact UUID for task_status/task_stop/task_download.
+
 **Behavior**
 
 - Must be idempotent only if client supplies an optional client_request_id (optional extension).
@@ -254,6 +258,10 @@ Returns run status and progress. Used for progress bars and UI states. **Polling
   "task_id": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1"
 }
 ```
+
+**Input**
+
+- task_id: UUID returned by task_create. Use it to reference the plan being created.
 
 **Response**
 
@@ -293,6 +301,10 @@ Stops the active run.
 }
 ```
 
+**Input**
+
+- task_id: UUID returned by task_create. Use it to stop the plan creation.
+
 **Response**
 
 ```json
@@ -313,6 +325,11 @@ Stops the active run.
 **If your client exposes task_download** (e.g. mcp_local): use it to save the report or zip locally; it calls task_file_info under the hood, then fetches and writes to the local save path (e.g. PLANEXE_PATH).
 
 **If you only have task_file_info** (e.g. direct connection to mcp_cloud): call it with task_id and artifact ("report" or "zip"); use the returned download_url to fetch the file (e.g. GET with API key if configured).
+
+**task_file_info input**
+
+- task_id: UUID returned by task_create. Use it to download the created plan.
+- artifact: "report" or "zip" (default "report").
 
 ---
 

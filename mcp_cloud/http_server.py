@@ -71,16 +71,6 @@ MAX_BODY_BYTES = int(os.environ.get("PLANEXE_MCP_MAX_BODY_BYTES", "1048576"))
 RATE_LIMIT_REQUESTS = int(os.environ.get("PLANEXE_MCP_RATE_LIMIT", "60"))
 RATE_LIMIT_WINDOW_SECONDS = float(os.environ.get("PLANEXE_MCP_RATE_WINDOW_SECONDS", "60"))
 
-SpeedVsDetailInput = Literal[
-    "ping",
-    "fast",
-    "all",
-]
-ResultArtifactInput = Literal[
-    "report",
-    "zip",
-]
-
 
 def _split_csv_env(value: Optional[str]) -> list[str]:
     if not value:
@@ -283,37 +273,39 @@ def _normalize_tool_result(result: Any) -> tuple[list[dict[str, Any]], Optional[
     return content, error
 
 
+SpeedVsDetailInput = Literal["ping", "fast", "all"]
+ResultArtifactInput = Literal["report", "zip"]
+
+
 async def task_create(
     prompt: str,
     speed_vs_detail: Annotated[
         SpeedVsDetailInput,
         Field(
-            description=(
-                "Defaults to ping (alias for ping_llm). Options: ping, fast, all."
-            ),
+            description="Defaults to ping (alias for ping_llm). Options: ping, fast, all.",
         ),
     ] = "ping",
 ) -> Annotated[CallToolResult, TaskCreateOutput]:
+    """Create a new PlanExe task. Use prompt_examples first for example prompts."""
     return await handle_task_create(
-        {
-            "prompt": prompt,
-            "speed_vs_detail": speed_vs_detail,
-        }
+        {"prompt": prompt, "speed_vs_detail": speed_vs_detail},
     )
 
 
-async def task_status(task_id: str) -> Annotated[CallToolResult, TaskStatusOutput]:
+async def task_status(
+    task_id: str = Field(..., description="Task UUID returned by task_create."),
+) -> Annotated[CallToolResult, TaskStatusOutput]:
     return await handle_task_status({"task_id": task_id})
 
 
 async def task_stop(
-    task_id: str,
+    task_id: str = Field(..., description="Task UUID returned by task_create. Use it to stop the plan creation."),
 ) -> Annotated[CallToolResult, TaskStopOutput]:
     return await handle_task_stop({"task_id": task_id})
 
 
 async def task_file_info(
-    task_id: str,
+    task_id: str = Field(..., description="Task UUID returned by task_create. Use it to download the created plan."),
     artifact: Annotated[
         ResultArtifactInput,
         Field(description="Download artifact type: report or zip."),

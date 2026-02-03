@@ -406,6 +406,23 @@ TASK_STATUS_OUTPUT_SCHEMA = {
         "task_id": {"type": ["string", "null"]},
         "state": {"type": ["string", "null"]},
         "progress_percentage": {"type": ["number", "null"]},
+        "timing": {
+            "type": ["object", "null"],
+            "properties": {
+                "started_at": {"type": ["string", "null"]},
+                "elapsed_sec": {"type": "number"},
+            },
+        },
+        "files": {
+            "type": ["array", "null"],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string"},
+                    "updated_at": {"type": "string"},
+                },
+            },
+        },
     },
 }
 

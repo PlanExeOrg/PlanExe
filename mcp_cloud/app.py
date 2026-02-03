@@ -47,11 +47,17 @@ from database_api.model_taskitem import TaskItem, TaskState
 from database_api.model_event import EventItem, EventType
 from flask import Flask, has_app_context
 from mcp_cloud.tool_models import (
-    ErrorDetail,
-    TaskFileInfoReadyOutput,
+    PromptExamplesInput,
+    PromptExamplesOutput,
+    TaskCreateInput,
     TaskCreateOutput,
-    TaskStatusSuccess,
     TaskStopOutput,
+    TaskStatusInput,
+    TaskStopInput,
+    TaskFileInfoInput,
+    TaskStatusSuccess,
+    TaskFileInfoReadyOutput,
+    ErrorDetail,
 )
 
 app = Flask(__name__)
@@ -608,14 +614,14 @@ def _builtin_mcp_example_prompts() -> list[str]:
     ]
 
 
-ERROR_SCHEMA = ErrorDetail.model_json_schema()
+TASK_CREATE_INPUT_SCHEMA = TaskCreateInput.model_json_schema()
 TASK_CREATE_OUTPUT_SCHEMA = TaskCreateOutput.model_json_schema()
 TASK_STATUS_SUCCESS_SCHEMA = TaskStatusSuccess.model_json_schema()
 TASK_STATUS_OUTPUT_SCHEMA = {
     "oneOf": [
         {
             "type": "object",
-            "properties": {"error": ERROR_SCHEMA},
+            "properties": {"error": ErrorDetail.model_json_schema()},
             "required": ["error"],
         },
         TASK_STATUS_SUCCESS_SCHEMA,
@@ -627,7 +633,7 @@ TASK_FILE_INFO_OUTPUT_SCHEMA = {
     "oneOf": [
         {
             "type": "object",
-            "properties": {"error": ERROR_SCHEMA},
+            "properties": {"error": ErrorDetail.model_json_schema()},
             "required": ["error"],
         },
         {
@@ -638,73 +644,12 @@ TASK_FILE_INFO_OUTPUT_SCHEMA = {
         TASK_FILE_INFO_READY_OUTPUT_SCHEMA,
     ]
 }
+TASK_STATUS_INPUT_SCHEMA = TaskStatusInput.model_json_schema()
+TASK_STOP_INPUT_SCHEMA = TaskStopInput.model_json_schema()
+TASK_FILE_INFO_INPUT_SCHEMA = TaskFileInfoInput.model_json_schema()
 
-TASK_CREATE_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "prompt": {
-            "type": "string",
-            "description": (
-                "What the plan should cover (goal, context, constraints). "
-                "Use prompt_examples to get example prompts; use these as examples for task_create. Short prompts produce less detailed plans."
-            ),
-        },
-        "speed_vs_detail": {
-            "type": "string",
-            "enum": list(SPEED_VS_DETAIL_INPUT_VALUES),
-            "default": SPEED_VS_DETAIL_DEFAULT_ALIAS,
-            "description": (
-                "Defaults to ping (alias for ping_llm). Options: ping, fast, all."
-            ),
-        },
-    },
-    "required": ["prompt"],
-}
-TASK_STATUS_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "task_id": {"type": "string"},
-    },
-    "required": ["task_id"],
-}
-TASK_STOP_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "task_id": {"type": "string"},
-    },
-    "required": ["task_id"],
-}
-TASK_FILE_INFO_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "task_id": {"type": "string"},
-        "artifact": {
-            "type": "string",
-            "enum": ["report", "zip"],
-            "default": "report",
-            "description": "Download artifact type: report or zip.",
-        },
-    },
-    "required": ["task_id"],
-}
-
-PROMPT_EXAMPLES_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {},
-    "required": [],
-}
-PROMPT_EXAMPLES_OUTPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "samples": {
-            "type": "array",
-            "items": {"type": "string"},
-            "description": "Example prompts to copy or adapt when calling task_create.",
-        },
-        "message": {"type": "string"},
-    },
-    "required": ["samples", "message"],
-}
+PROMPT_EXAMPLES_INPUT_SCHEMA = PromptExamplesInput.model_json_schema()
+PROMPT_EXAMPLES_OUTPUT_SCHEMA = PromptExamplesOutput.model_json_schema()
 
 @dataclass(frozen=True)
 class ToolDefinition:
@@ -729,6 +674,7 @@ TOOL_DEFINITIONS = [
         description=(
             "PlanExe turns a plain-English goal into a structured strategic-plan draft (executive summary, Gantt, risk register, governance, etc.) in ~15–20 min. "
             "Start creating a new plan. Call prompt_examples for example prompts first. "
+            "Returns task_id as a UUID; use that exact id for task_status/task_stop/task_download. "
             "speed_vs_detail modes: "
             "'all' runs the full pipeline with all details (slower, higher token usage/cost). "
             "'fast' runs the full pipeline with minimal work per step (faster, fewer details), "
@@ -806,7 +752,7 @@ async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
     """Create a new PlanExe task and enqueue it for processing.
 
     Examples:
-        - {"prompt": "Start a dental clinic in Copenhagen with 3 treatment rooms, targeting families and children. Budget 2.5M DKK. Open within 12 months."} → returns task_id + created_at
+        - {"prompt": "Start a dental clinic in Copenhagen with 3 treatment rooms, targeting families and children. Budget 2.5M DKK. Open within 12 months."} → returns task_id (UUID) + created_at
         - {"prompt": "Launch a bike repair shop in Amsterdam with retail sales, service bays, and mobile repair van. Budget 150k EUR. Profitability goal: month 18.", "speed_vs_detail": "fast"} → faster run
 
     Args:
@@ -815,7 +761,7 @@ async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
 
     Returns:
         - content: JSON string matching structuredContent.
-        - structuredContent: {"task_id": ..., "created_at": ...}
+        - structuredContent: {"task_id": "<uuid>", "created_at": ...}
         - isError: False on success.
     """
     req = TaskCreateRequest(**arguments)

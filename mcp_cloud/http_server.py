@@ -9,6 +9,7 @@ import json
 import logging
 import os
 import sys
+from urllib.parse import urlparse
 from collections import defaultdict, deque
 from contextlib import asynccontextmanager, suppress
 from time import monotonic
@@ -49,6 +50,7 @@ from mcp_cloud.app import (
     TOOL_DEFINITIONS,
     ZIP_CONTENT_TYPE,
     ZIP_FILENAME,
+    clear_download_base_url,
     fetch_artifact_from_worker_plan,
     fetch_zip_from_worker_plan,
     handle_task_create,
@@ -57,6 +59,7 @@ from mcp_cloud.app import (
     handle_task_file_info,
     handle_prompt_examples,
     resolve_task_for_task_id,
+    set_download_base_url,
 )
 
 REQUIRED_API_KEY = os.environ.get("PLANEXE_MCP_API_KEY")
@@ -398,6 +401,12 @@ app.add_middleware(
 )
 
 
+def _request_origin(request: Request) -> str:
+    """Return scheme + netloc for the request (e.g. http://192.168.1.40:8001)."""
+    parsed = urlparse(str(request.base_url))
+    return f"{parsed.scheme}://{parsed.netloc}"
+
+
 @app.middleware("http")
 async def enforce_api_key(
     request: Request,
@@ -416,7 +425,13 @@ async def enforce_api_key(
     if error_response:
         return error_response
 
-    response = await call_next(request)
+    if request.url.path.startswith("/mcp"):
+        set_download_base_url(_request_origin(request))
+    try:
+        response = await call_next(request)
+    finally:
+        if request.url.path.startswith("/mcp"):
+            clear_download_base_url()
     if request.url.path.startswith("/mcp"):
         content_type = response.headers.get("content-type", "")
         if content_type.startswith("application/json"):
@@ -470,6 +485,7 @@ async def call_tool(
     Call an MCP tool by name with arguments.
 
     This endpoint wraps the stdio-based MCP tool handlers for HTTP access.
+    Download URLs use the request host when PLANEXE_MCP_PUBLIC_BASE_URL is not set (set in middleware).
     """
     return await call_tool_via_registry(fastmcp_server, payload.tool, payload.arguments)
 

@@ -206,7 +206,8 @@ All tool names below are normative.
 ```json
 {
   "prompt": "string",
-  "speed_vs_detail": "ping"
+  "speed_vs_detail": "ping",
+  "user_api_key": "pex_..."
 }
 ```
 
@@ -220,6 +221,10 @@ The `prompt` parameter should be a detailed description of what the plan should 
 - Banned words or approaches (if any)
 
 Short one-liners (e.g., "Construct a bridge") tend to produce poor output because they lack context for the planning pipeline. Important details are location, budget, time frame.
+
+**Optional**
+
+- user_api_key: user API key for credits and attribution (if your deployment requires it).
 
 Clients can call the MCP tool **prompt_examples** to retrieve example prompts. Use these as examples for task_create; they can also call task_create with any prompt—short prompts produce less detailed plans.
 

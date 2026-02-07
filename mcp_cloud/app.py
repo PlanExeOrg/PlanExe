@@ -15,6 +15,7 @@ import os
 import tempfile
 import uuid
 import zipfile
+import hashlib
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -46,6 +47,9 @@ if not _dotenv_loaded:
 from database_api.planexe_db_singleton import db
 from database_api.model_taskitem import TaskItem, TaskState
 from database_api.model_event import EventItem, EventType
+from database_api.model_user_account import UserAccount
+from database_api.model_user_api_key import UserApiKey
+from database_api.model_credit_ledger import CreditLedger
 from flask import Flask, has_app_context
 from mcp_cloud.tool_models import (
     PromptExamplesInput,
@@ -150,6 +154,7 @@ SPEED_VS_DETAIL_ALIASES = {
 class TaskCreateRequest(BaseModel):
     prompt: str
     speed_vs_detail: Optional[SpeedVsDetailInput] = None
+    user_api_key: Optional[str] = None
 
 class TaskStatusRequest(BaseModel):
     task_id: str
@@ -208,6 +213,47 @@ def get_task_by_id(task_id: str) -> Optional[TaskItem]:
 def resolve_task_for_task_id(task_id: str) -> Optional[TaskItem]:
     """Resolve a TaskItem from a task_id (UUID), with legacy fallback."""
     return find_task_by_task_id(task_id)
+
+def _hash_user_api_key(raw_key: str) -> str:
+    secret = os.environ.get("PLANEXE_API_KEY_SECRET", "dev-api-key-secret")
+    if secret == "dev-api-key-secret":
+        logger.warning("PLANEXE_API_KEY_SECRET not set. Using dev secret for API key hashing.")
+    return hashlib.sha256(f"{secret}:{raw_key}".encode("utf-8")).hexdigest()
+
+def _resolve_user_from_api_key(raw_key: str) -> Optional[UserAccount]:
+    if not raw_key:
+        return None
+    key_hash = _hash_user_api_key(raw_key)
+    with app.app_context():
+        api_key = UserApiKey.query.filter_by(key_hash=key_hash, revoked_at=None).first()
+        if not api_key:
+            return None
+        user = db.session.get(UserAccount, api_key.user_id)
+        if user:
+            api_key.last_used_at = datetime.now(UTC)
+            db.session.commit()
+        return user
+
+def _charge_user_credit(user: UserAccount, amount: int, reason: str, source: str) -> bool:
+    if amount <= 0:
+        return True
+    with app.app_context():
+        user = db.session.get(UserAccount, user.id)
+        if not user:
+            return False
+        current_balance = user.credits_balance or 0
+        if current_balance < amount:
+            return False
+        user.credits_balance = current_balance - amount
+        ledger = CreditLedger(
+            user_id=user.id,
+            delta=-amount,
+            reason=reason,
+            source=source,
+        )
+        db.session.add(ledger)
+        db.session.commit()
+        return True
 
 def _create_task_sync(
     prompt: str,
@@ -718,6 +764,7 @@ TOOL_DEFINITIONS = [
             "Step 3 — Call only after prompt_examples (Step 1) and after you have formulated a good prompt and got user approval (Step 2). "
             "PlanExe turns the approved prompt into a structured strategic-plan draft (executive summary, Gantt, risk register, governance, etc.) in ~15–20 min. "
             "Returns task_id (UUID); use it for task_status, task_stop, and task_download. "
+            "If your deployment uses credits, include user_api_key to charge the correct account. "
             "speed_vs_detail modes: "
             "'all' runs the full pipeline with all details (slower, higher token usage/cost). "
             "'fast' runs the full pipeline with minimal work per step (faster, fewer details), "
@@ -813,11 +860,41 @@ async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
     req = TaskCreateRequest(**arguments)
 
     merged_config = _merge_task_create_config(None, req.speed_vs_detail)
+    require_user_key = os.environ.get("PLANEXE_MCP_REQUIRE_USER_KEY", "false").lower() in ("1", "true", "yes", "on")
+    credits_per_plan = int(os.environ.get("PLANEXE_CREDITS_PER_PLAN", "1"))
+
+    user = None
+    if req.user_api_key:
+        user = _resolve_user_from_api_key(req.user_api_key.strip())
+        if not user:
+            response = {"error": {"code": "INVALID_USER_API_KEY", "message": "Invalid user_api_key."}}
+            return CallToolResult(
+                content=[TextContent(type="text", text=json.dumps(response))],
+                structuredContent=response,
+                isError=True,
+            )
+    elif require_user_key:
+        response = {"error": {"code": "USER_API_KEY_REQUIRED", "message": "user_api_key is required for task_create."}}
+        return CallToolResult(
+            content=[TextContent(type="text", text=json.dumps(response))],
+            structuredContent=response,
+            isError=True,
+        )
+
+    if user:
+        if not _charge_user_credit(user, credits_per_plan, reason="plan_created", source="mcp"):
+            response = {"error": {"code": "INSUFFICIENT_CREDITS", "message": "Not enough credits."}}
+            return CallToolResult(
+                content=[TextContent(type="text", text=json.dumps(response))],
+                structuredContent=response,
+                isError=True,
+            )
+
     response = await asyncio.to_thread(
         _create_task_sync,
         req.prompt,
         merged_config,
-        None,
+        {"user_id": str(user.id)} if user else None,
     )
     return CallToolResult(
         content=[TextContent(type="text", text=json.dumps(response))],

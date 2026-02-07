@@ -55,6 +55,14 @@
             <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
         </form>
+        {% if oauth_providers %}
+        <div class="form-signin" style="margin-top: 10px;">
+            <h4>Or sign in with</h4>
+            {% for provider in oauth_providers %}
+                <a class="btn btn-default btn-block" href="/login/{{ provider }}">{{ provider|capitalize }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 </body>
-</html> 
+</html>

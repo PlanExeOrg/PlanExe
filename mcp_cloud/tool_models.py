@@ -123,3 +123,7 @@ class TaskCreateInput(BaseModel):
         default="ping",
         description="Defaults to ping (alias for ping_llm). Options: ping, fast, all.",
     )
+    user_api_key: str | None = Field(
+        default=None,
+        description="Optional user API key for credits and attribution.",
+    )

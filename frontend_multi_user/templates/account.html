@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Account - PlanExe</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 30px;
+            padding-bottom: 30px;
+            background-color: #f8f8f8;
+        }
+        .card {
+            background: #fff;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        code {
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Account</h2>
+    <div class="card">
+        <h4>Profile</h4>
+        <p><strong>Email:</strong> {{ user.email or "—" }}</p>
+        <p><strong>Name:</strong> {{ user.name or "—" }}</p>
+        <p><strong>Credits:</strong> {{ user.credits_balance }}</p>
+    </div>
+
+    <div class="card">
+        <h4>API key</h4>
+        {% if new_api_key %}
+            <p><strong>New key (shown once):</strong></p>
+            <code>{{ new_api_key }}</code>
+        {% elif active_key %}
+            <p><strong>Active key prefix:</strong> {{ active_key.key_prefix }}</p>
+            <p>Use the full key you saved when it was created.</p>
+        {% else %}
+            <p>No API key yet.</p>
+        {% endif %}
+
+        <form method="POST">
+            <input type="hidden" name="action" value="regenerate_api_key">
+            <button class="btn btn-default">Generate new API key</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h4>Buy credits</h4>
+        <form method="POST" action="/billing/stripe/checkout" style="margin-bottom: 10px;">
+            <div class="form-group">
+                <label for="credits">Credits</label>
+                <input type="number" class="form-control" name="credits" id="credits" value="1" min="1">
+            </div>
+            {% if stripe_enabled %}
+                <button class="btn btn-primary">Pay with Stripe</button>
+            {% else %}
+                <button class="btn btn-primary" disabled>Stripe not configured</button>
+            {% endif %}
+        </form>
+
+        <form method="POST" action="/billing/telegram/invoice">
+            <div class="form-group">
+                <label for="credits_telegram">Credits</label>
+                <input type="number" class="form-control" name="credits" id="credits_telegram" value="1" min="1">
+            </div>
+            {% if telegram_enabled %}
+                <button class="btn btn-info">Pay with Telegram Stars</button>
+            {% else %}
+                <button class="btn btn-info" disabled>Telegram not configured</button>
+            {% endif %}
+        </form>
+    </div>
+
+    <a href="/logout">Logout</a>
+</div>
+</body>
+</html>

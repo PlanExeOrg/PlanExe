@@ -54,7 +54,7 @@ Notes:
 
 ---
 
-## CreditLedger
+## CreditHistory
 
 Append‑only ledger of credit changes.
 
@@ -93,27 +93,27 @@ Fields:
 1. User opens **Account** and chooses credits.
 2. Stripe Checkout is created.
 3. Stripe sends `checkout.session.completed` webhook.
-4. App creates a `PaymentRecord` and a **CreditLedger** entry (+credits).
+4. App creates a `PaymentRecord` and a **CreditHistory** entry (+credits).
 
 ### Buy credits (Telegram Stars)
 1. User opens **Account** and chooses credits.
 2. App creates an invoice link via Telegram.
 3. Telegram sends `successful_payment` webhook.
-4. App creates a `PaymentRecord` and a **CreditLedger** entry (+credits).
+4. App creates a `PaymentRecord` and a **CreditHistory** entry (+credits).
 
 ### Spend credits (create a plan)
 1. User submits a plan.
 2. App deducts 1 credit.
-3. A **CreditLedger** entry is created (delta = -1, reason = plan_created).
+3. A **CreditHistory** entry is created (delta = -1, reason = plan_created).
 
 ### Close account (user wants money back)
 Typical approach:
 - If credits are unused, issue a refund in Stripe/Telegram.
-- Add a **CreditLedger** entry to remove credits (negative delta) or to zero the balance.
+- Add a **CreditHistory** entry to remove credits (negative delta) or to zero the balance.
 - Keep the ledger history intact (do not delete rows).
 
 ### Refund / correction
 If something went wrong:
 - Process the refund with the payment provider (Stripe/Telegram). **This is the only step that moves real money.**
-- Add a **CreditLedger** entry that reverses the original credit grant. **This only changes internal credits.**
+- Add a **CreditHistory** entry that reverses the original credit grant. **This only changes internal credits.**
 - Optionally update `PaymentRecord.status` (e.g., refunded).

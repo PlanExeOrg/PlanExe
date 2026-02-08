@@ -43,7 +43,7 @@ from database_api.model_nonce import NonceItem
 from database_api.model_user_account import UserAccount
 from database_api.model_user_provider import UserProvider
 from database_api.model_user_api_key import UserApiKey
-from database_api.model_credit_ledger import CreditLedger
+from database_api.model_credit_history import CreditHistory
 from database_api.model_payment_record import PaymentRecord
 from planexe_modelviews import WorkerItemView, TaskItemView, NonceItemView
 logger = logging.getLogger(__name__)
@@ -313,7 +313,7 @@ class MyFlaskApp:
         self.admin.add_view(ModelView(model=UserAccount, session=self.db.session, name="User"))
         self.admin.add_view(ModelView(model=UserProvider, session=self.db.session, name="User Provider"))
         self.admin.add_view(ModelView(model=UserApiKey, session=self.db.session, name="User API Key"))
-        self.admin.add_view(ModelView(model=CreditLedger, session=self.db.session, name="Credit Ledger"))
+        self.admin.add_view(ModelView(model=CreditHistory, session=self.db.session, name="Credit History"))
         self.admin.add_view(ModelView(model=PaymentRecord, session=self.db.session, name="Payments"))
 
         self._setup_routes()
@@ -526,7 +526,7 @@ class MyFlaskApp:
 
     def _apply_credit_delta(self, user: UserAccount, delta: int, reason: str, source: str, external_id: Optional[str] = None) -> None:
         user.credits_balance = max(0, (user.credits_balance or 0) + delta)
-        ledger = CreditLedger(
+        ledger = CreditHistory(
             user_id=user.id,
             delta=delta,
             reason=reason,

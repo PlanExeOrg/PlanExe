@@ -4,7 +4,7 @@ from database_api.planexe_db_singleton import db
 from sqlalchemy_utils import UUIDType
 
 
-class CreditLedger(db.Model):
+class CreditHistory(db.Model):
     """
     Append-only ledger of credit changes.
 
@@ -40,4 +40,4 @@ class CreditLedger(db.Model):
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(UTC))
 
     def __repr__(self) -> str:
-        return f"CreditLedger(user_id={self.user_id}, delta={self.delta}, source={self.source!r})"
+        return f"CreditHistory(user_id={self.user_id}, delta={self.delta}, source={self.source!r})"

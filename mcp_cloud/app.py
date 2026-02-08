@@ -49,7 +49,7 @@ from database_api.model_taskitem import TaskItem, TaskState
 from database_api.model_event import EventItem, EventType
 from database_api.model_user_account import UserAccount
 from database_api.model_user_api_key import UserApiKey
-from database_api.model_credit_ledger import CreditLedger
+from database_api.model_credit_history import CreditHistory
 from flask import Flask, has_app_context
 from mcp_cloud.tool_models import (
     PromptExamplesInput,
@@ -245,7 +245,7 @@ def _charge_user_credit(user: UserAccount, amount: int, reason: str, source: str
         if current_balance < amount:
             return False
         user.credits_balance = current_balance - amount
-        ledger = CreditLedger(
+        ledger = CreditHistory(
             user_id=user.id,
             delta=-amount,
             reason=reason,

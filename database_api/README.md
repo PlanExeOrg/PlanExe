@@ -10,7 +10,7 @@ Shared database models used by multiple PlanExe services (e.g., `frontend_multi_
 - `model_user_account.py`: `UserAccount` for OAuth users, credits, and profile data.
 - `model_user_provider.py`: `UserProvider` links OAuth providers to users.
 - `model_user_api_key.py`: `UserApiKey` for MCP credits and attribution.
-- `model_credit_ledger.py`: `CreditLedger` append-only credit ledger.
+- `model_credit_history.py`: `CreditHistory` append-only credit ledger.
 - `model_payment_record.py`: `PaymentRecord` for Stripe/Telegram payments.
 
 ## How to import
@@ -24,7 +24,7 @@ from database_api.model_nonce import NonceItem
 from database_api.model_user_account import UserAccount
 from database_api.model_user_provider import UserProvider
 from database_api.model_user_api_key import UserApiKey
-from database_api.model_credit_ledger import CreditLedger
+from database_api.model_credit_history import CreditHistory
 from database_api.model_payment_record import PaymentRecord
 ```
 

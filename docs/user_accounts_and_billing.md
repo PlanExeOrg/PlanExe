@@ -114,6 +114,6 @@ Typical approach:
 
 ### Refund / correction
 If something went wrong:
-- Process the refund with the payment provider (Stripe/Telegram).
-- Add a **CreditLedger** entry that reverses the original credit grant.
+- Process the refund with the payment provider (Stripe/Telegram). **This is the only step that moves real money.**
+- Add a **CreditLedger** entry that reverses the original credit grant. **This only changes internal credits.**
 - Optionally update `PaymentRecord.status` (e.g., refunded).

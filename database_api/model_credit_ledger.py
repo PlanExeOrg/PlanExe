@@ -21,6 +21,9 @@ class CreditLedger(db.Model):
     - Normal flow: create rows only via application logic (payment webhooks, plan creation, admin grant).
     - Manual edits should be rare and only for corrections (e.g., refund, mistaken charge).
     - Do not delete rows; add a compensating entry instead.
+    
+    Important:
+    - Ledger entries do NOT move money. Refunds must be issued through Stripe/Telegram.
     """
     # A unique identifier for the ledger entry.
     id = db.Column(UUIDType(binary=False), default=uuid.uuid4, primary_key=True)

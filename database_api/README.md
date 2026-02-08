@@ -7,6 +7,11 @@ Shared database models used by multiple PlanExe services (e.g., `frontend_multi_
 - `model_taskitem.py`: `TaskState` enum and `TaskItem` SQLAlchemy model.
 - `model_worker.py`: `WorkerItem` SQLAlchemy model for worker heartbeats.
 - `model_nonce.py`: `NonceItem` SQLAlchemy model for nonce tracking.
+- `model_user_account.py`: `UserAccount` for OAuth users, credits, and profile data.
+- `model_user_provider.py`: `UserProvider` links OAuth providers to users.
+- `model_user_api_key.py`: `UserApiKey` for MCP credits and attribution.
+- `model_credit_ledger.py`: `CreditLedger` append-only credit ledger.
+- `model_payment_record.py`: `PaymentRecord` for Stripe/Telegram payments.
 
 ## How to import
 Add the repo root (containing `database_api/`) to `PYTHONPATH`, then:
@@ -16,6 +21,11 @@ from database_api.model_event import EventType, EventItem
 from database_api.model_taskitem import TaskItem, TaskState
 from database_api.model_worker import WorkerItem
 from database_api.model_nonce import NonceItem
+from database_api.model_user_account import UserAccount
+from database_api.model_user_provider import UserProvider
+from database_api.model_user_api_key import UserApiKey
+from database_api.model_credit_ledger import CreditLedger
+from database_api.model_payment_record import PaymentRecord
 ```
 
 Each model expects a `db` instance to be available in the module namespace (e.g., via `from database_api.planexe_db_singleton import db` in your service). Keep the models as-is to avoid divergence across services.

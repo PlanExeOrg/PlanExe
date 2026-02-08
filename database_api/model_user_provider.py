@@ -6,14 +6,20 @@ from sqlalchemy import JSON
 
 
 class UserProvider(db.Model):
+    # A unique identifier for this provider link.
     id = db.Column(UUIDType(binary=False), default=uuid.uuid4, primary_key=True)
+    # Owning user account.
     user_id = db.Column(UUIDType(binary=False), nullable=False, index=True)
 
+    # Provider name and provider-specific user id.
     provider = db.Column(db.String(32), nullable=False, index=True)
     provider_user_id = db.Column(db.String(256), nullable=False, index=True)
+    # Email as reported by the provider (may be null).
     email = db.Column(db.String(256), nullable=True)
 
+    # Full provider profile payload for debugging and future fields.
     raw_profile = db.Column(JSON, nullable=True)
+    # When the link was created and last used.
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(UTC))
     last_login_at = db.Column(db.DateTime, nullable=True)
 

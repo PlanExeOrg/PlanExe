@@ -14,7 +14,7 @@ import uuid
 import io
 import secrets
 import hashlib
-from urllib.parse import quote_plus
+from urllib.parse import quote_plus, urlparse
 from typing import ClassVar, Dict, Optional, Tuple, Any
 from dataclasses import dataclass
 from pathlib import Path
@@ -197,7 +197,7 @@ class MyFlaskApp:
         # Validate SECRET_KEY - check for both default values
         secret_key = self.app.config.get("SECRET_KEY")
         is_default_key = secret_key in ("dev-secret-key", "your-secret-key", None)
-        is_production = os.environ.get("FLASK_ENV") == "production" or bool(self.public_base_url)
+        is_production = os.environ.get("FLASK_ENV") == "production" or self._looks_like_production_url(self.public_base_url)
 
         if is_default_key:
             if is_production:
@@ -425,6 +425,25 @@ class MyFlaskApp:
         except Exception as exc:
             return None, f"Error fetching worker_plan llm-info: {exc}"
 
+    @staticmethod
+    def _looks_like_production_url(url: str) -> bool:
+        """Return True when *url* looks like a real production deployment.
+
+        Plain ``http://localhost`` / ``http://127.0.0.1`` URLs are treated as
+        development so that local Docker users don't need to set a dedicated
+        SECRET_KEY or deal with ``SESSION_COOKIE_SECURE`` over plain HTTP.
+        """
+        if not url:
+            return False
+        parsed = urlparse(url.lower())
+        if parsed.scheme == "https":
+            return True
+        # http:// to localhost / loopback is clearly dev
+        if parsed.hostname in ("localhost", "127.0.0.1", "0.0.0.0", "::1"):
+            return False
+        # Any other host over http is still likely a real deployment
+        return True
+
     def _register_oauth_providers(self) -> None:
         providers = {
             "google": {
@@ -456,7 +475,10 @@ class MyFlaskApp:
             if not config["client_id"] or not config["client_secret"]:
                 continue
             reg_config = dict(config)
-            if name == "google":
+            # Only pre-set redirect_uri when we can build it without app context.
+            # When public_base_url is empty the URL is resolved at request time
+            # inside oauth_login() where url_for() has a proper request context.
+            if name == "google" and self.public_base_url:
                 reg_config["redirect_uri"] = self._oauth_redirect_url("google")
             self.oauth.register(name=name, **reg_config)
             self.oauth_providers.append(name)

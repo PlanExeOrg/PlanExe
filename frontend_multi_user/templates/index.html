@@ -1,7 +1,412 @@
 {% extends "base.html" %}
 {% block title %}Home - PlanExe{% endblock %}
+{% block head %}
+<style>
+    /* ── Landing page (signed out) ──────────────────── */
+    .hero {
+        text-align: center;
+        padding: 64px 0 48px;
+    }
+    .hero h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin: 0 0 16px;
+        color: var(--color-text);
+    }
+    .hero p {
+        font-size: 1.15rem;
+        color: var(--color-text-secondary);
+        margin: 0 0 32px;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .btn-hero {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 32px;
+        background: var(--color-primary);
+        color: #fff;
+        border-radius: var(--radius);
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background 0.15s, transform 0.1s;
+        border: none;
+    }
+    .btn-hero:hover {
+        background: var(--color-primary-hover);
+        color: #fff;
+        text-decoration: none;
+        transform: translateY(-1px);
+    }
+    .btn-hero-outline {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 32px;
+        background: transparent;
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius);
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: border-color 0.15s, transform 0.1s;
+        margin-left: 12px;
+    }
+    .btn-hero-outline:hover {
+        border-color: var(--color-text-secondary);
+        color: var(--color-text);
+        text-decoration: none;
+        transform: translateY(-1px);
+    }
+    .hero-actions {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    /* Features grid */
+    .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+        padding: 32px 0 48px;
+    }
+    .feature-card {
+        background: var(--color-bg-soft);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 28px 24px;
+        transition: border-color 0.15s;
+    }
+    .feature-card:hover {
+        border-color: var(--color-primary);
+    }
+    .feature-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--color-primary);
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+        color: #fff;
+    }
+    .feature-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+    .feature-card h3 {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin: 0 0 8px;
+    }
+    .feature-card p {
+        font-size: 0.9rem;
+        color: var(--color-text-secondary);
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    /* Info banner below features */
+    .info-banner {
+        text-align: center;
+        padding: 32px 0 16px;
+        color: var(--color-text-secondary);
+        font-size: 0.95rem;
+    }
+    .info-banner a {
+        color: var(--color-primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .info-banner a:hover {
+        text-decoration: underline;
+    }
+
+    /* ── Dashboard (signed in) ──────────────────────── */
+    .dashboard-welcome {
+        margin-bottom: 32px;
+    }
+    .dashboard-welcome h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin: 0 0 4px;
+    }
+    .dashboard-welcome p {
+        color: var(--color-text-secondary);
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+    .stat-card {
+        background: var(--color-bg-soft);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: 20px 24px;
+        text-align: center;
+    }
+    .stat-value {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--color-text);
+        line-height: 1.2;
+    }
+    .stat-value.credits {
+        color: #059669;
+    }
+    .stat-label {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+        margin-top: 4px;
+    }
+
+    .quick-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 32px;
+    }
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 24px;
+        border-radius: var(--radius);
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background 0.15s, transform 0.1s;
+        border: none;
+    }
+    .btn-action:hover {
+        text-decoration: none;
+        transform: translateY(-1px);
+    }
+    .btn-action-primary {
+        background: var(--color-primary);
+        color: #fff;
+    }
+    .btn-action-primary:hover {
+        background: var(--color-primary-hover);
+        color: #fff;
+    }
+    .btn-action-secondary {
+        background: var(--color-bg-soft);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+    }
+    .btn-action-secondary:hover {
+        border-color: var(--color-text-secondary);
+        color: var(--color-text);
+    }
+
+    /* Recent tasks table */
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin: 0 0 16px;
+    }
+    .tasks-list {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+    }
+    .task-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--color-border);
+        background: var(--color-bg);
+        transition: background 0.1s;
+    }
+    .task-row:last-child {
+        border-bottom: none;
+    }
+    .task-row:hover {
+        background: var(--color-bg-soft);
+    }
+    .task-status {
+        flex-shrink: 0;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+    .task-status.completed { background: #10b981; }
+    .task-status.processing { background: #f59e0b; }
+    .task-status.pending { background: #94a3b8; }
+    .task-status.failed { background: #ef4444; }
+    .task-prompt {
+        flex: 1;
+        font-size: 0.9rem;
+        color: var(--color-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+    }
+    .task-meta {
+        flex-shrink: 0;
+        font-size: 0.8rem;
+        color: var(--color-text-secondary);
+        white-space: nowrap;
+    }
+    .empty-state {
+        text-align: center;
+        padding: 48px 24px;
+        color: var(--color-text-secondary);
+    }
+    .empty-state p {
+        margin: 0 0 16px;
+        font-size: 0.95rem;
+    }
+
+    /* ── Admin view ─────────────────────────────────── */
+    .admin-notice {
+        text-align: center;
+        padding: 48px 0;
+    }
+    .admin-notice h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin: 0 0 8px;
+    }
+    .admin-notice p {
+        color: var(--color-text-secondary);
+        margin: 0 0 24px;
+    }
+
+    @media (max-width: 600px) {
+        .hero h1 { font-size: 1.75rem; }
+        .hero { padding: 40px 0 32px; }
+        .hero-actions { flex-direction: column; align-items: center; }
+        .btn-hero-outline { margin-left: 0; }
+        .stats-row { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
+{% if user %}
+{# ─── Dashboard for signed-in users ─────────────────────────── #}
+<div class="dashboard-welcome">
+    <h1>Welcome back, {{ user.name or user.given_name or "there" }}</h1>
+    <p>Your PlanExe dashboard &mdash; manage your plans and credits.</p>
+</div>
+
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="stat-value credits">{{ user.credits_balance }}</div>
+        <div class="stat-label">Credits</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ recent_tasks | length if recent_tasks else 0 }}</div>
+        <div class="stat-label">Recent Plans</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ "Used" if user.free_plan_used else "Available" }}</div>
+        <div class="stat-label">Free Plan</div>
+    </div>
+</div>
+
+<div class="quick-actions">
+    <a href="{{ url_for('demo_run') }}" class="btn-action btn-action-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Create a Plan
+    </a>
+    <a href="{{ url_for('account') }}" class="btn-action btn-action-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Account Settings
+    </a>
+</div>
+
+{% if recent_tasks %}
+<h2 class="section-title">Recent Plans</h2>
+<div class="tasks-list">
+    {% for task in recent_tasks %}
+    <div class="task-row">
+        <span class="task-status {{ task.state.name if task.state else 'pending' }}"></span>
+        <span class="task-prompt" title="{{ task.prompt }}">{{ task.prompt }}</span>
+        <span class="task-meta">
+            {% if task.state %}{{ task.state.name | capitalize }}{% else %}Pending{% endif %}
+        </span>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>You haven't created any plans yet. Get started by creating your first one.</p>
+    <a href="{{ url_for('demo_run') }}" class="btn-action btn-action-primary">Create Your First Plan</a>
+</div>
+{% endif %}
+
+{% elif is_admin %}
+{# ─── Admin shortcut ────────────────────────────────────────── #}
+<div class="admin-notice">
+    <h1>PlanExe Admin</h1>
+    <p>You are signed in as an administrator.</p>
+    <div class="quick-actions" style="justify-content: center;">
+        <a href="{{ url_for('admin.index') }}" class="btn-action btn-action-primary">Open Admin Panel</a>
+        <a href="{{ url_for('demo_run') }}" class="btn-action btn-action-secondary">Create a Plan</a>
+    </div>
+</div>
+
+{% else %}
+{# ─── Landing page for visitors ─────────────────────────────── #}
+<section class="hero">
     <h1>Welcome to PlanExe</h1>
-    <p>Create plans from your description.</p>
-    <a href="{{ url_for('demo_run') }}" class="btn btn-primary btn-lg" style="margin-top: 16px;">Create a Plan</a>
+    <p>Generate detailed project plans from a simple description. Save time, save money, avoid surprises.</p>
+    <div class="hero-actions">
+        <a href="{{ url_for('login') }}" class="btn-hero">Sign In to Get Started</a>
+        <a href="https://planexe.org/" target="_blank" class="btn-hero-outline">Learn More</a>
+    </div>
+</section>
+
+<section class="features">
+    <div class="feature-card">
+        <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3>Save Money</h3>
+        <p>Don't fund doomed projects. Get a reality check before committing resources to your next idea.</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>Save Time</h3>
+        <p>It's time consuming to manually create a plan. Let AI handle the heavy lifting while you focus on execution.</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <h3>Avoid Surprises</h3>
+        <p>Uncover pitfalls early. Identify risks, dependencies, and blockers before they become costly problems.</p>
+    </div>
+</section>
+
+<section class="info-banner">
+    <p>
+        PlanExe is open source &mdash; learn more at
+        <a href="https://planexe.org/" target="_blank">planexe.org</a>
+    </p>
+</section>
+{% endif %}
 {% endblock %}

@@ -706,7 +706,31 @@ class MyFlaskApp:
 
         @self.app.route('/')
         def index():
-            return render_template('index.html')
+            user = None
+            recent_tasks: list[TaskItem] = []
+            is_admin = False
+            if current_user.is_authenticated:
+                is_admin = current_user.is_admin
+                if not is_admin:
+                    try:
+                        user_uuid = uuid.UUID(str(current_user.id))
+                        user = self.db.session.get(UserAccount, user_uuid)
+                        if user:
+                            recent_tasks = (
+                                TaskItem.query
+                                .filter_by(user_id=str(user.id))
+                                .order_by(TaskItem.timestamp_created.desc())
+                                .limit(5)
+                                .all()
+                            )
+                    except Exception:
+                        logger.debug("Could not load dashboard data", exc_info=True)
+            return render_template(
+                'index.html',
+                user=user,
+                recent_tasks=recent_tasks,
+                is_admin=is_admin,
+            )
 
         @self.app.route('/healthcheck')
         def healthcheck():

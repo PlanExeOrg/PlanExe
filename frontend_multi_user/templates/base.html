@@ -7,86 +7,201 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <style>
         :root {
-            --planexe-header-bg: #fff;
-            --planexe-header-border: #e5e5e5;
-            --planexe-brand: #333;
-            --planexe-link: #1a73e8;
-            --planexe-body-bg: #f8f9fa;
+            --color-bg: #ffffff;
+            --color-bg-soft: #f8f9fa;
+            --color-bg-muted: #f1f3f5;
+            --color-text: #1a1a2e;
+            --color-text-secondary: #6c757d;
+            --color-primary: #2563eb;
+            --color-primary-hover: #1d4ed8;
+            --color-border: #e5e7eb;
+            --color-card-bg: #ffffff;
+            --color-card-shadow: rgba(0, 0, 0, 0.06);
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                         "Helvetica Neue", Arial, sans-serif;
+            --radius: 8px;
+            --radius-lg: 12px;
+            --max-width: 960px;
         }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
         body {
-            background-color: var(--planexe-body-bg);
-            padding-top: 0;
-            padding-bottom: 30px;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-sans);
+            color: var(--color-text);
+            background: var(--color-bg);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
-        .planexe-header {
-            background: var(--planexe-header-bg);
-            border-bottom: 1px solid var(--planexe-header-border);
-            padding: 12px 0;
-            margin-bottom: 24px;
+
+        /* ── Header ─────────────────────────────────────── */
+        .site-header {
+            background: var(--color-bg);
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .planexe-header .container {
+        .header-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 56px;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
         }
-        .planexe-brand {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--planexe-brand);
+        .site-brand {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--color-text);
             text-decoration: none;
-        }
-        .planexe-brand:hover {
-            color: var(--planexe-brand);
-            text-decoration: none;
-        }
-        .planexe-user-nav {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 8px;
         }
-        .planexe-user-nav a {
-            color: var(--planexe-link);
+        .site-brand:hover,
+        .site-brand:focus {
+            color: var(--color-text);
             text-decoration: none;
         }
-        .planexe-user-nav a:hover {
-            text-decoration: underline;
+        .site-brand img {
+            width: 24px;
+            height: 24px;
         }
-        .planexe-user-name {
-            color: var(--planexe-brand);
+        .site-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .site-nav a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
             font-weight: 500;
+            transition: color 0.15s;
         }
+        .site-nav a:hover {
+            color: var(--color-text);
+            text-decoration: none;
+        }
+        .nav-user {
+            color: var(--color-text) !important;
+            font-weight: 600 !important;
+        }
+        .btn-nav {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 16px;
+            background: var(--color-primary);
+            color: #fff !important;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none !important;
+            transition: background 0.15s;
+            border: none;
+        }
+        .btn-nav:hover {
+            background: var(--color-primary-hover);
+            color: #fff !important;
+        }
+
+        /* ── Main ───────────────────────────────────────── */
+        .site-main {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 32px 24px;
+            min-height: calc(100vh - 56px - 80px);
+        }
+
+        /* ── Footer ─────────────────────────────────────── */
+        .site-footer {
+            border-top: 1px solid var(--color-border);
+            padding: 24px;
+            text-align: center;
+            color: var(--color-text-secondary);
+            font-size: 0.85rem;
+        }
+        .footer-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        .footer-links {
+            margin-bottom: 8px;
+        }
+        .footer-links a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            margin: 0 12px;
+        }
+        .footer-links a:hover {
+            color: var(--color-text);
+        }
+        .footer-sep {
+            color: var(--color-border);
+            margin: 0 4px;
+        }
+
+        /* ── Shared components ──────────────────────────── */
         .card {
-            background: #fff;
-            border-radius: 6px;
-            padding: 20px;
+            background: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
             margin-bottom: 20px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px var(--color-card-shadow);
         }
         code {
             word-break: break-all;
+        }
+
+        /* keep Bootstrap .container constrained to our max-width */
+        .container {
+            max-width: var(--max-width);
         }
     </style>
     {% block head %}{% endblock %}
 </head>
 <body>
-    <header class="planexe-header">
-        <div class="container">
-            <a href="{{ url_for('index') }}" class="planexe-brand">PlanExe</a>
-            <nav class="planexe-user-nav">
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="{{ url_for('index') }}" class="site-brand">
+                <img src="https://planexe.org/planexe-icon.svg" alt="" width="24" height="24">
+                PlanExe
+            </a>
+            <nav class="site-nav">
                 {% if current_user_name %}
-                    <a href="{{ url_for('account') }}" class="planexe-user-name">{{ current_user_name }}</a>
+                    <a href="{{ url_for('account') }}" class="nav-user">{{ current_user_name }}</a>
                     <a href="{{ url_for('logout') }}">Logout</a>
                 {% else %}
-                    <a href="{{ url_for('account') }}">Account</a>
+                    <a href="https://planexe.org/" target="_blank">About</a>
+                    <a href="{{ url_for('login') }}" class="btn-nav">Sign In</a>
                 {% endif %}
             </nav>
         </div>
     </header>
-    <div class="container">
+
+    <main class="site-main">
         {% block content %}{% endblock %}
-    </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-links">
+                <a href="https://planexe.org/">PlanExe</a>
+                <span class="footer-sep">&middot;</span>
+                <a href="https://github.com/PlanExeOrg/PlanExe">GitHub</a>
+                <span class="footer-sep">&middot;</span>
+                <a href="https://planexe.org/discord/">Discord</a>
+            </div>
+            <div>Open source planning tool</div>
+        </div>
+    </footer>
 </body>
 </html>

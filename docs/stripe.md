@@ -116,7 +116,7 @@ When you run `stripe listen`, the signing secret it prints is for **test** event
 | `PLANEXE_STRIPE_WEBHOOK_SECRET` | Webhook signing secret (`whsec_...`). Required to verify that webhook requests come from Stripe. For local dev, use the secret from `stripe listen`. |
 | `PLANEXE_STRIPE_CURRENCY` | Currency for Checkout (default: `usd`). |
 | `PLANEXE_CREDIT_PRICE_CENTS` | Price per credit in cents (default: `100`). |
-| `PLANEXE_PUBLIC_BASE_URL` | Public base URL used for Stripe success/cancel redirects (e.g. `http://localhost:5001` or your production URL). |
+| `PLANEXE_FRONTEND_MULTIUSER_PUBLIC_URL` | Public base URL used for Stripe success/cancel redirects (e.g. `http://localhost:5001` or your production URL). |
 
 ---
 

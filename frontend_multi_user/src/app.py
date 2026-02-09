@@ -192,7 +192,11 @@ class MyFlaskApp:
         if env_secret:
             self.app.config["SECRET_KEY"] = env_secret
 
-        self.public_base_url = (os.environ.get("PLANEXE_PUBLIC_BASE_URL") or "").rstrip("/")
+        _public_url = os.environ.get("PLANEXE_FRONTEND_MULTIUSER_PUBLIC_URL", "").strip()
+        if not _public_url:
+            _public_url = "http://localhost:5001"
+            logger.info("PLANEXE_FRONTEND_MULTIUSER_PUBLIC_URL not set; defaulting to %s", _public_url)
+        self.public_base_url = _public_url.rstrip("/")
 
         # Validate SECRET_KEY - check for both default values
         secret_key = self.app.config.get("SECRET_KEY")
@@ -221,8 +225,6 @@ class MyFlaskApp:
         if self.public_base_url.lower().startswith("https://"):
             self.app.config["SESSION_COOKIE_SECURE"] = True
             self.app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
-        if not self.public_base_url:
-            logger.warning("PLANEXE_PUBLIC_BASE_URL not set; OAuth redirects will use request.host.")
 
         # Enable CSRF protection
         self.csrf = CSRFProtect(self.app)
@@ -475,10 +477,7 @@ class MyFlaskApp:
             if not config["client_id"] or not config["client_secret"]:
                 continue
             reg_config = dict(config)
-            # Only pre-set redirect_uri when we can build it without app context.
-            # When public_base_url is empty the URL is resolved at request time
-            # inside oauth_login() where url_for() has a proper request context.
-            if name == "google" and self.public_base_url:
+            if name == "google":
                 reg_config["redirect_uri"] = self._oauth_redirect_url("google")
             self.oauth.register(name=name, **reg_config)
             self.oauth_providers.append(name)
@@ -529,9 +528,7 @@ class MyFlaskApp:
         return False
 
     def _oauth_redirect_url(self, provider: str) -> str:
-        if self.public_base_url:
-            return f"{self.public_base_url}/auth/{provider}/callback"
-        return url_for("oauth_callback", provider=provider, _external=True)
+        return f"{self.public_base_url}/auth/{provider}/callback"
 
     def _get_user_from_provider(self, provider: str, token: dict[str, Any]) -> dict[str, Any]:
         if provider == "google":
@@ -789,7 +786,7 @@ class MyFlaskApp:
         def oauth_redirect_uri_debug():
             """Return the redirect URI the app sends to Google. Use this to verify Google Console has the exact same URI."""
             lines = [
-                f"PLANEXE_PUBLIC_BASE_URL={self.public_base_url or '(not set)'}",
+                f"PLANEXE_FRONTEND_MULTIUSER_PUBLIC_URL={self.public_base_url or '(not set)'}",
                 f"redirect_uri={self._oauth_redirect_url('google') if 'google' in self.oauth_providers else '(google not configured)'}",
             ]
             body = "\n".join(lines)

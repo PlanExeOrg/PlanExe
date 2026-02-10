@@ -384,8 +384,8 @@ async def _lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="PlanExe MCP Cloud (HTTP)",
-    description="HTTP wrapper for PlanExe MCP interface",
+    title="PlanExe – AI Project Planning",
+    description="MCP server that generates rough-draft project plans from a natural-language prompt",
     version="1.0.0",
     lifespan=_lifespan,
 )
@@ -539,7 +539,7 @@ def healthcheck() -> dict[str, Any]:
     """Health check endpoint."""
     return {
         "status": "healthy",
-        "service": "planexe-mcp-http",
+        "service": "planexe-mcp-cloud",
         "api_key_configured": REQUIRED_API_KEY is not None
     }
 
@@ -548,14 +548,15 @@ def healthcheck() -> dict[str, Any]:
 def root() -> dict[str, Any]:
     """Root endpoint with API information."""
     return {
-            "service": "PlanExe MCP Cloud (HTTP)",
+        "service": "PlanExe – AI Project Planning",
+        "description": "MCP server that generates rough-draft project plans from a natural-language prompt",
         "version": "1.0.0",
         "endpoints": {
             "mcp": "/mcp",
             "tools": "/mcp/tools",
             "call": "/mcp/tools/call",
             "health": "/healthcheck",
-        "download": f"/download/{{task_id}}/{REPORT_FILENAME}",
+            "download": f"/download/{{task_id}}/{REPORT_FILENAME}",
             "llm_txt": "/llm.txt",
         },
         "documentation": "See /docs for OpenAPI documentation",
@@ -581,7 +582,7 @@ def llm_txt():
 if __name__ == "__main__":
     import uvicorn
 
-    logger.info(f"Starting PlanExe MCP HTTP server on {HTTP_HOST}:{HTTP_PORT}")
+    logger.info(f"Starting PlanExe MCP Cloud server on {HTTP_HOST}:{HTTP_PORT}")
     if REQUIRED_API_KEY:
         logger.info("API key authentication enabled")
     else:

@@ -11,57 +11,95 @@
 PlanExe ranks generated plans using a two‑phase LLM evaluation to avoid gaming static weights:
 
 1. **Extract raw KPI vector** (novelty, prompt quality, technical completeness, feasibility, impact)
+
 2. **Pairwise LLM comparison** of KPI vectors → Likert preference
+
 3. **Elo update** for new plan and sampled neighbors
 
 ## Defaults
+
 - LLM: **Gemini‑2.0‑flash‑001 via OpenRouter** (`OPENROUTER_API_KEY`)
+
 - Embeddings: **OpenAI embeddings** (`OPENAI_API_KEY`)
+
 - Vector store: **pgvector** (Postgres extension)
+
 - Rate limit: **5 req/min per API key**
+
 - Corpus source: PlanExe‑web `_data/examples.yml`
 
 ## Endpoints
+
 - `POST /api/rank` → rank plan, update Elo
+
 - `GET /api/leaderboard?limit=N` → user‑scoped leaderboard
+
 - `GET /api/export?limit=N` → top‑N export
 
 ## Data Tables
+
 - `plan_corpus`: plan metadata + embeddings + json_data (for dynamic KPI comparisons)
+
 - `plan_metrics`: KPI values (int 1‑5) + `kpis` JSONB + `overall_likert` + Elo
+
 - `rate_limit`: per‑API‑key rate limiting
 
 ## Setup
+
 1. Run migrations:
+
    - `mcp_cloud/migrations/2026_02_09_create_plan_metrics.sql`
+
    - `mcp_cloud/migrations/2026_02_10_add_plan_json.sql`
+
 2. Seed corpus: `scripts/seed_corpus.py` (set `PLANEXE_WEB_EXAMPLES_PATH`)
+
 3. Set env:
+
    - `OPENROUTER_API_KEY`
+
    - `OPENAI_API_KEY`
+
    - `PLANEXE_API_KEY_SECRET`
 
 ## Notes
+
 - Ranking uses **real data only** (no mocks)
+
 - Embeddings stored in pgvector for novelty sampling
+
 - Leaderboard UI at `/rankings`
 
 ## Table of Contents
 
 1. [Overview](#overview)
+
 2. [System Architecture](#system-architecture)
+
    - [Dynamic KPI Extraction](#dynamic-kpi-extraction)
+
    - [Pairwise LLM Comparison](#pairwise-llm-comparison)
+
    - [Win Probability Computation](#win-probability-computation)
+
    - [Elo Update Formula](#elo-update-formula)
+
 3. [LLM Prompting Strategy](#llm-prompting-strategy)
+
 4. [API Reference](#api-reference)
+
 5. [User Interface](#user-interface)
+
 6. [Database Schema](#database-schema)
+
 7. [Technical Rationale](#technical-rationale)
+
 8. [Current Limitations](#current-limitations)
+
 9. [Future Enhancements](#future-enhancements)
+
 10. [Implementation Roadmap](#implementation-roadmap)
+
 11. [Glossary](#glossary)
 
 ---
@@ -71,14 +109,21 @@ PlanExe ranks generated plans using a two‑phase LLM evaluation to avoid gaming
 PlanExe uses an **Elo-based ranking system** to compare and rank generated plans through pairwise LLM comparisons. Unlike static scoring formulas, this system:
 
 - Extracts KPIs dynamically based on plan content
+
 - Uses embedding-based neighbor selection for relevant comparisons
+
 - Maps Likert scale ratings to win probabilities
+
 - Updates Elo ratings using standard chess Elo formula with K=32
 
 **Key design goals:**
+
 - Contextual ranking (relative to corpus, not absolute)
+
 - Privacy-preserving (users see only their own plans)
+
 - Gaming-resistant (dynamic KPI selection)
+
 - Actionable feedback (KPI reasoning stored for user insights)
 
 ---
@@ -90,18 +135,27 @@ PlanExe uses an **Elo-based ranking system** to compare and rank generated plans
 When a plan is submitted via `/api/rank`, the system:
 
 1. **Stores the full plan JSON** in `plan_corpus.json_data` (JSONB column, ~2-50KB typical size)
+
    - JSONB indexing enables fast GIN queries for metadata filtering
+
    - Full plan context available for comparison without re-fetching
 
 2. **Generates an embedding** of the plan's prompt using `text-embedding-3-small` (768 dimensions)
+
    - Stored in `plan_corpus.embedding` (pgvector column)
+
    - Enables semantic neighbor selection via cosine similarity
 
 3. **Extracts baseline KPIs** using `gemini-2.0-flash-exp` via OpenRouter:
+
    - Novelty score (0-1 float)
+
    - Prompt quality (0-1 float)
+
    - Technical completeness (0-1 float)
+
    - Feasibility (0-1 float)
+
    - Impact estimate (0-1 float)
 
 ---
@@ -111,22 +165,35 @@ When a plan is submitted via `/api/rank`, the system:
 For each new plan:
 
 **Step 1: Select 10 neighbors**
+
 - Query `plan_corpus` for top 10 nearest embeddings (cosine similarity via pgvector)
+
 - If corpus has <10 plans, select all available plans
+
 - If no embeddings exist (cold start), select 10 random plans
 
 **Step 2: Run pairwise comparisons**
 
 For each neighbor, the LLM:
+
 1. Receives both plan JSONs (`plan_a` = new plan, `plan_b` = neighbor)
+
 2. Chooses **5-7 relevant KPIs** based on plan characteristics
+
 3. Adds **one final KPI** for remaining considerations (LLM-named, e.g., "Resource allocation realism")
+
 4. Scores each KPI on **Likert 1-5 integer scale**:
+
    - 1 = Very poor
+
    - 2 = Below average
+
    - 3 = Average
+
    - 4 = Above average
+
    - 5 = Excellent
+
 5. Provides **≤30-word reasoning** for each KPI score
 
 **Token budget:** ~2000 tokens per comparison (input + output combined)
@@ -145,8 +212,11 @@ diff = total_a - total_b
 **Step 2: Map score difference to win probability**
 
 The mapping uses a piecewise function designed to:
+
 - Provide clear signal for meaningful differences (±2+ points)
+
 - Avoid extreme probabilities (floors at 0.1, caps at 0.9)
+
 - Handle neutral outcomes (diff=0 → 0.5 probability)
 
 | Score Difference | `prob_a` | Rationale |
@@ -160,9 +230,13 @@ The mapping uses a piecewise function designed to:
 | ≤ -3             | 0.1      | Strong preference for plan B |
 
 **Why this mapping?**
+
 - Likert scale variance is ~1.5 points across 6-8 KPIs
+
 - ±1 point represents ~0.7 standard deviations (weak signal)
+
 - ±2 points represents ~1.3 standard deviations (moderate signal)
+
 - ±3+ points represents strong consensus across multiple KPIs
 
 Alternative considered: logistic function `1 / (1 + exp(-k * diff))` — rejected due to lack of interpretability and extreme tail probabilities.
@@ -194,15 +268,23 @@ def update_elo(elo_a: float, elo_b: float, prob_a: float, K: int = 32) -> tuple[
 ```
 
 **Why K=32?**
+
 - Standard value for established chess players (16 for masters, 40 for beginners)
+
 - Balances stability (K=16 too slow to converge) vs noise (K=64 too volatile)
+
 - After 10 comparisons, a plan's rating converges within ±50 points of true skill
+
 - Empirically tested: K=32 provides good discrimination after 20-30 total corpus comparisons
 
 **Cold-start bias:**
+
 - All plans initialize at Elo 1500
+
 - First 5 comparisons have outsized impact on rating
+
 - Plans submitted early have more stable ratings (more comparisons accumulated)
+
 - Mitigation: normalize by `num_comparisons` in percentile calculation (planned for Phase 2)
 
 ---
@@ -250,8 +332,11 @@ Return ONLY the JSON array, no other text.
 **Token budget:** ~2000 tokens per comparison (input: ~1500 tokens, output: ~500 tokens)
 
 **LLM configuration:**
+
 - Model: `gemini-2.0-flash-exp` (via OpenRouter)
+
 - Temperature: 0.3 (low variance, consistent scoring)
+
 - Max tokens: 1000 (sufficient for 8 KPIs × 30 words + JSON structure)
 
 ---
@@ -307,10 +392,15 @@ Return ONLY the JSON array, no other text.
 
 **Final KPI naming:**
 The last KPI is LLM-generated to capture aspects not covered by the previous 5-7 KPIs. Common examples:
+
 - "Resource allocation realism"
+
 - "Regulatory compliance readiness"
+
 - "Technical feasibility"
+
 - "Market timing"
+
 - "Execution capacity"
 
 This prevents the system from ignoring plan-specific strengths/weaknesses not covered by generic KPIs.
@@ -386,8 +476,11 @@ X-API-Key: <your_api_secret>
 | 500 | LLM/database error | `{"error": "Internal server error", "detail": "..."}` |
 
 **Rate Limit:**
+
 - 5 requests per minute per API key
+
 - Tracked in `rate_limit` table (sliding window: last 60 seconds)
+
 - Resets at `last_ts + 60 seconds`
 
 Implementation:
@@ -562,8 +655,11 @@ When user clicks **[View KPIs]**, a modal displays:
 ### Mobile Responsive Design
 
 **Breakpoints:**
+
 - Desktop: ≥1024px (full table)
+
 - Tablet: 768-1023px (condensed table, stacked KPI cards)
+
 - Mobile: ≤767px (card layout, no table)
 
 **Mobile card layout:**
@@ -606,17 +702,25 @@ When user clicks **[View KPIs]**, a modal displays:
 ```
 
 **Keyboard navigation:**
+
 - `Tab`: Navigate between rows
+
 - `Enter`: Open KPI detail modal
+
 - `Esc`: Close modal
+
 - `Arrow keys`: Navigate table cells (when focused)
 
 **Screen reader support:**
+
 - Elo ratings announced with tier label: "Elo 1847, Top 5 percent"
+
 - KPI scores announced as "Goal clarity: 4 point 8 out of 5"
 
 **Color contrast:**
+
 - Tier badges meet WCAG AA standard (4.5:1 ratio)
+
 - Focus indicators have 3:1 contrast with background
 
 ---
@@ -683,8 +787,11 @@ CREATE INDEX idx_plan_corpus_json_data ON plan_corpus USING GIN (json_data);  --
 ```
 
 **Indexing notes:**
+
 - `ivfflat` index for fast cosine similarity search (pgvector)
+
 - GIN index on `json_data` enables fast queries like `json_data @> '{"domain": "energy"}'`
+
 - Typical JSONB size: 2-50KB (median 12KB across test corpus)
 
 ---
@@ -750,9 +857,13 @@ CREATE TABLE rate_limit (
 ```
 
 **Rate limit logic:**
+
 - Sliding 60-second window
+
 - If `(now - last_ts) > 60s`: reset `count` to 1, update `last_ts`
+
 - Else if `count < 5`: increment `count`
+
 - Else: reject with 429
 
 ---
@@ -762,14 +873,21 @@ CREATE TABLE rate_limit (
 ### Why Elo Over Regression Models?
 
 **Elo advantages:**
+
 1. **No labeled training data required** — learns from pairwise comparisons
+
 2. **Adapts to corpus drift** — as new plans enter, rankings adjust naturally
+
 3. **Interpretable** — "Top 10%" is intuitive; regression coefficients are not
+
 4. **Robust to outliers** — single bad comparison doesn't break the system
 
 **Trade-offs:**
+
 - Requires multiple comparisons per plan (10 minimum)
+
 - Cold-start bias (first plans rated against weak corpus)
+
 - No absolute quality signal (only relative ranking)
 
 ---
@@ -786,8 +904,11 @@ CREATE TABLE rate_limit (
 | 64 | Very fast (5-10 comparisons) | Very high | Rapid iteration, testing |
 
 **Empirical testing** (100-plan test corpus):
+
 - K=16: Accurate but slow (30 comparisons to stabilize)
+
 - K=32: Good convergence after 15-20 comparisons
+
 - K=64: Fast but noisy (±100 Elo variance after 20 comparisons)
 
 **Chosen K=32** for balance between responsiveness and stability.
@@ -797,13 +918,19 @@ CREATE TABLE rate_limit (
 ### Why Likert 1-5 Over Continuous Scores?
 
 **Likert scale advantages:**
+
 1. **LLMs are calibrated for categorical ratings** — "rate 1-5" is a common training task
+
 2. **Auditable** — humans can verify "this deserves a 4, not a 5"
+
 3. **Avoids false precision** — difference between 0.73 and 0.78 is meaningless
+
 4. **Consistent across comparisons** — continuous scores drift with context
 
 **Alternative rejected:** 0-100 continuous scale
+
 - Produced inconsistent scoring (same plan rated 73 vs 81 in different contexts)
+
 - No interpretability gain over 1-5 scale
 
 ---
@@ -813,12 +940,17 @@ CREATE TABLE rate_limit (
 **Problem:** First 20-30 plans set the baseline. If initial corpus is weak, all plans appear "good" relative to baseline.
 
 **Current mitigation:**
+
 1. **Random neighbor fallback** — if corpus has <10 plans, select randomly (no embedding bias)
+
 2. **Normalized percentiles** — percentile calculated as `(rank / total_plans) * 100`, not absolute Elo threshold
 
 **Phase 2 mitigations (planned):**
+
 1. **Seed corpus** — 20 hand-curated reference plans (high/medium/low quality examples)
+
 2. **Comparison count normalization** — weight Elo by `sqrt(num_comparisons)` in percentile calculation
+
 3. **Domain-specific pools** — separate Elo pools for energy/tech/social plans (prevents cross-domain bias)
 
 ---
@@ -832,13 +964,19 @@ CREATE TABLE rate_limit (
 **Risk:** If all plans in the corpus are weak, rankings still show a "winner."
 
 **Example:**
+
 - Corpus of 100 low-effort plans (all score 2-3 on KPIs)
+
 - One plan scores 3-4 consistently
+
 - That plan reaches Top 5%, but is still mediocre in absolute terms
 
 **Mitigations:**
+
 - **Phase 2:** Flag plans with `avg_kpi < 3.0` as "Needs improvement" even if top-ranked
+
 - **Phase 3:** Seed corpus with 20 high-quality reference plans (absolute quality anchors)
+
 - **Future:** Absolute quality thresholds (e.g., "Exceptional" requires `elo > 1700 AND avg_kpi > 4.0`)
 
 ---
@@ -850,9 +988,13 @@ CREATE TABLE rate_limit (
 **Example:** Stuffing keywords like "SMART goals", "KPI", "risk mitigation" without substance.
 
 **Mitigations:**
+
 - **Current:** Dynamic KPI selection (not fixed formula to game)
+
 - **Current:** Reasoning transparency (nonsense prompts get low reasoning quality scores)
+
 - **Phase 3:** Red-team evaluation (test whether gaming attempts produce worse outcomes)
+
 - **Future:** Human validation of Top 5% plans
 
 ---
@@ -862,14 +1004,21 @@ CREATE TABLE rate_limit (
 **Problem:** Early plans set the baseline. Small or skewed corpus biases rankings.
 
 **Example:**
+
 - First 20 plans are all tech MVPs (short timelines, low budgets)
+
 - Plan 21 is a 10-year energy infrastructure project
+
 - LLM comparisons penalize Plan 21 for "unrealistic timeline" (relative to corpus norm)
 
 **Mitigations:**
+
 - **Current:** Random neighbor selection if corpus <10 plans
+
 - **Phase 2:** Normalize by `num_comparisons` in percentile calculation
+
 - **Phase 2:** Domain-specific Elo pools (energy plans vs energy plans)
+
 - **Phase 3:** Seed corpus with diverse reference plans
 
 ---
@@ -879,13 +1028,19 @@ CREATE TABLE rate_limit (
 **Problem:** LLM comparisons lack domain-specific nuance (e.g., regulatory complexity in pharma vs software).
 
 **Example:**
+
 - FDA approval timeline for drug: 7-10 years (realistic)
+
 - Software MVP timeline: 7-10 years (red flag)
+
 - LLM might not distinguish between these contexts
 
 **Mitigations:**
+
 - **Phase 2:** Domain-aware KPI sets (energy plans weight regulatory compliance higher)
+
 - **Phase 3:** Expert validation pipeline (Top 5% plans flagged for optional human review)
+
 - **Future:** Fine-tuned LLM on domain-specific plan corpus
 
 ---
@@ -895,11 +1050,15 @@ CREATE TABLE rate_limit (
 **Problem:** Neighbor selection depends on embedding quality. Poor embeddings → irrelevant comparisons.
 
 **Current model:** `text-embedding-3-small` (768 dims)
+
 - Works well for semantic similarity of prompts
+
 - May miss structural similarities (e.g., timeline format, budget magnitude)
 
 **Mitigations:**
+
 - **Phase 2:** Hybrid retrieval (50% embedding similarity, 50% metadata filters like domain/budget)
+
 - **Future:** Fine-tuned embeddings on plan corpus
 
 ---
@@ -933,14 +1092,19 @@ def hybrid_score(elo: float, avg_kpi: float, alpha: float = 0.7) -> float:
 ```
 
 **Example:**
+
 - Plan A: Elo 1850 (95th %ile), avg_kpi 0.65 → hybrid = 0.7 * 0.81 + 0.3 * 0.65 = 0.76
+
 - Plan B: Elo 1550 (55th %ile), avg_kpi 0.85 → hybrid = 0.7 * 0.44 + 0.3 * 0.85 = 0.56
 
 **Result:** Plan A still ranks higher (strong Elo), but Plan B's absolute quality is recognized.
 
 **Tuning alpha:**
+
 - α=1.0: Pure Elo (relative rank only)
+
 - α=0.5: Equal weight to relative rank and absolute quality
+
 - α=0.0: Pure absolute quality (ignores corpus context)
 
 **Recommended α=0.7** for corpus-aware ranking with quality floor.
@@ -1035,8 +1199,11 @@ def batch_rerank(sample_size: int = 50, comparisons_per_plan: int = 5):
 **Schedule:** Run weekly via cron job.
 
 **Sample size tuning:**
+
 - Corpus <100 plans: re-rank all
+
 - Corpus 100-1000: re-rank 10% (sample 50-100 plans)
+
 - Corpus >1000: re-rank 5% (sample 50-200 plans)
 
 ---
@@ -1088,10 +1255,15 @@ CREATE INDEX idx_plan_metrics_domain ON plan_metrics(domain);
 ```
 
 **Domains:**
+
 - `tech` (software, hardware, consumer products)
+
 - `energy` (solar, wind, battery, grid)
+
 - `health` (biotech, medical devices, pharma)
+
 - `social` (education, community, policy)
+
 - `research` (academic, scientific)
 
 **Neighbor selection with domain filter:**
@@ -1132,13 +1304,19 @@ def effective_elo(elo: float, created_at: datetime, decay_rate: float = 0.05) ->
 ```
 
 **Example:**
+
 - Plan created 6 months ago with Elo 1800
+
 - Effective Elo = 1800 * (0.95^6) = 1800 * 0.735 = 1323
+
 - Drops from Top 5% to ~40th percentile
 
 **Tuning decay_rate:**
+
 - 0.02 (2%/month): Gentle decay, 12-month half-life
+
 - 0.05 (5%/month): Moderate decay, 6-month half-life
+
 - 0.10 (10%/month): Aggressive decay, 3-month half-life
 
 **Recommended 5%/month** for plans in fast-moving domains (tech, policy).
@@ -1152,9 +1330,11 @@ def effective_elo(elo: float, created_at: datetime, decay_rate: float = 0.05) ->
 **Solution:** Two-tier comparison strategy.
 
 **Tier 1 (All plans):** `gemini-2.0-flash-exp` (~$0.10 per 10 comparisons)
+
 - Fast, cheap, good enough for initial ranking
 
 **Tier 2 (Top 10% only):** `o1-mini` or `claude-3.5-sonnet` (~$1.00 per 10 comparisons)
+
 - Deeper reasoning, better discrimination
 
 **Implementation:**
@@ -1173,9 +1353,13 @@ def select_comparison_model(plan_elo: float, neighbor_elo: float) -> str:
 ```
 
 **Cost impact:**
+
 - Corpus of 1000 plans: ~100 are Top 10%
+
 - Top 10% plans average 20 comparisons each (10 initial + 10 re-rank)
+
 - Reasoning LLM cost: 100 plans × 10 comparisons × $0.10 = $100 (one-time)
+
 - vs. Flash-only cost: 1000 plans × 10 comparisons × $0.01 = $100 (total)
 
 **Cost increase:** ~2x, but only for top-tier discrimination.
@@ -1225,13 +1409,21 @@ LIMIT :limit;
 ### Phase 1 (Completed ✅)
 
 - [x] Dynamic KPI extraction via LLM
+
 - [x] Pairwise LLM comparison with Likert 1-5 scoring
+
 - [x] Elo rating update (K=32)
+
 - [x] User plan list with Elo display (`/rankings`)
+
 - [x] API endpoints: `/api/rank`, `/api/leaderboard`
+
 - [x] Rate limiting (5 req/min per API key)
+
 - [x] LLM-named "remaining considerations" KPI
+
 - [x] 30-word reasoning cap per KPI
+
 - [x] Embedding-based neighbor selection (pgvector)
 
 ---
@@ -1239,28 +1431,43 @@ LIMIT :limit;
 ### Phase 2 (Next 2-4 weeks)
 
 **KPI Reasoning Storage:**
+
 - [ ] Add `kpi_details` JSONB column to `plan_metrics`
+
 - [ ] Store all comparison results (neighbor_id, KPI scores, reasoning)
+
 - [ ] UI: "Why this rank?" modal with KPI breakdown
 
 **Percentile Tiers:**
+
 - [ ] Map Elo ranges to tier labels (Exceptional / Strong / Solid / Developing / Needs Work)
+
 - [ ] UI badges (🏆 Gold / 🥈 Silver / 🥉 Bronze / 📊 Standard / 🔧 Improve)
+
 - [ ] Percentile calculation normalized by `num_comparisons`
 
 **Prompt Improvement Suggestions:**
+
 - [ ] Generate tier-specific advice based on KPI gaps
+
 - [ ] Auto-suggest prompt template for Bottom 25%
+
 - [ ] Email/notification with improvement tips after ranking
 
 **Domain-Specific Ranking:**
+
 - [ ] Add `domain` column to `plan_corpus`
+
 - [ ] Separate Elo pools per domain (tech / energy / health / social / research)
+
 - [ ] UI: Show domain rank + global rank
 
 **Testing:**
+
 - [ ] Unit tests for Elo update logic
+
 - [ ] Integration tests for `/api/rank` endpoint
+
 - [ ] Load test: 100 concurrent ranking requests
 
 ---
@@ -1268,23 +1475,35 @@ LIMIT :limit;
 ### Phase 3 (Next Quarter)
 
 **Investor Filters:**
+
 - [ ] Add filter parameters to `/api/leaderboard` (domain, budget, region, impact horizon)
+
 - [ ] Update SQL queries with JSONB metadata filters
+
 - [ ] UI: Dropdown filters on `/rankings` page
 
 **Red-Team Gaming Detection:**
+
 - [ ] Monitor for prompt patterns that spike Elo without improving KPIs
+
 - [ ] Flag suspicious plans (e.g., keyword stuffing) for manual review
+
 - [ ] A/B test: compare gaming-resistant prompts
 
 **Public Benchmark Plans:**
+
 - [ ] Curate 20 high-quality reference plans (hand-picked by domain experts)
+
 - [ ] Ensure all new plans compare against 2-3 benchmark plans
+
 - [ ] Provides absolute quality anchor (mitigates cold-start bias)
 
 **Reasoning LLM for Top 10%:**
+
 - [ ] Implement two-tier comparison strategy (flash for all, o1-mini for top 10%)
+
 - [ ] Cost analysis and budget approval
+
 - [ ] A/B test: measure discrimination improvement at top of leaderboard
 
 ---
@@ -1292,33 +1511,51 @@ LIMIT :limit;
 ### Phase 4 (Future / Research)
 
 **Hybrid Ranking (Elo + Absolute Quality):**
+
 - [ ] Implement `hybrid_score` formula (α=0.7 default)
+
 - [ ] UI: Toggle between "Relative Rank" and "Hybrid Score"
+
 - [ ] User study: which ranking is more useful?
 
 **Personalized Ranking Weights:**
+
 - [ ] Allow users to customize KPI weights
+
 - [ ] UI: Slider interface for adjusting weights
+
 - [ ] Store user preferences in `user_kpi_weights` table
 
 **Batch Re-Ranking:**
+
 - [ ] Cron job: weekly re-rank of 10% of corpus
+
 - [ ] Focus on plans with `last_comparison_date > 30 days`
+
 - [ ] Monitor Elo stability over time
 
 **Temporal Decay:**
+
 - [ ] Implement `effective_elo` with 5%/month decay
+
 - [ ] UI: Show "Fresh rank" (with decay) vs "All-time rank" (no decay)
+
 - [ ] Domain-specific decay rates (tech: 5%/month, infrastructure: 1%/month)
 
 **Explain-by-Example:**
+
 - [ ] Nearest neighbor retrieval (3 higher-ranked plans)
+
 - [ ] KPI comparison breakdown
+
 - [ ] UI: "Compare to better plans" button
 
 **Domain Expertise Integration:**
+
 - [ ] Partner with domain experts for top 5% validation
+
 - [ ] Optional human review pipeline
+
 - [ ] Expert feedback stored in `plan_metrics.review_comment`
 
 ---
@@ -1356,32 +1593,59 @@ Probability (0-1) that plan A is better than plan B, derived from Likert score d
 Completed items for immediate usability improvements:
 
 - [x] Add TOC for document navigation
+
 - [x] Fix heading hierarchy (consistent `##` for sections, `###` for subsections)
+
 - [x] Explain Likert→probability mapping rationale
+
 - [x] Justify K=32 parameter choice
+
 - [x] Document cold-start bias and mitigation strategies
+
 - [x] Mention plan_json typical size and JSONB indexing strategy
+
 - [x] Align rate-limit description with actual implementation code
+
 - [x] Show full KPI extraction prompt in fenced code block
+
 - [x] Add concrete JSON response example for KPI output
+
 - [x] Clarify "remaining considerations" KPI naming convention
+
 - [x] Mention 2000-token budget per comparison
+
 - [x] Add API reference table (endpoints, auth, schemas, error codes)
+
 - [x] Document pagination for `/api/leaderboard`
+
 - [x] Add UI documentation with ASCII mockups
+
 - [x] Include toggle implementation code snippet
+
 - [x] Document responsive design breakpoints
+
 - [x] Add ARIA/accessibility labels and keyboard navigation
+
 - [x] Expand future work with concrete formulas (hybrid ranking, personalized weights)
+
 - [x] Add pseudocode for batch re-ranking schedule
+
 - [x] Document explain-by-example retrieval strategy
+
 - [x] Fix Elo capitalization (proper noun: "Elo", not "ELO")
+
 - [x] Fix Likert capitalization (proper noun: "Likert", not "LIKERT")
+
 - [x] Break long paragraphs into scannable chunks
+
 - [x] Wrap all JSON in triple backticks with `json` syntax highlighting
+
 - [x] Consistent inline code vs fenced blocks (inline for short refs, fenced for multi-line)
+
 - [x] Add glossary section defining all technical terms
+
 - [x] Remove promotional phrasing ("revolutionary", "game-changing")
+
 - [x] Set primary audience to developers (technical focus, implementation details)
 
 ---

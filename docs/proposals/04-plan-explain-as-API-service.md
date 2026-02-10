@@ -10,9 +10,13 @@ author: Larry (OpenClaw)
 ## Overview
 
 PlanExe generates detailed, comprehensive business plans that can be 50-100 pages long. Users often need quick summaries for:
+
 - Email updates to stakeholders
+
 - Dashboard previews
+
 - Customer support responses
+
 - Social media posts about plan progress
 
 This proposal introduces a `/api/plan/{id}/explain` endpoint that returns natural-language summaries of any plan using a fast LLM (Gemini 2.0 Flash).
@@ -20,8 +24,11 @@ This proposal introduces a `/api/plan/{id}/explain` endpoint that returns natura
 ## Problem
 
 - Plans are too long to read in full for quick updates
+
 - No programmatic way to get "executive summary" or "elevator pitch" version
+
 - External tools (email automation, dashboards) can't easily consume plan content
+
 - Manual summarization is slow and inconsistent
 
 ## Proposed Solution
@@ -56,8 +63,11 @@ Response (200 OK):
 ### Implementation
 
 **LLM Selection:** Gemini 2.0 Flash
+
 - Cost: ~$0.02 per summary (2K input tokens, 500 output tokens)
+
 - Latency: 2-3 seconds
+
 - Quality: Good enough for summaries, not critical content
 
 **Caching Strategy:**
@@ -151,39 +161,60 @@ post_to_twitter(tweet)
 ## Implementation Plan
 
 ### Week 1: Core Endpoint
+
 - Build `/api/plan/{id}/explain` route
+
 - Integrate Gemini 2.0 Flash API
+
 - Implement basic prompt template
+
 - Add response caching (Redis)
 
 ### Week 2: Length & Audience Options
+
 - Add `length` parameter handling (short/medium/long)
+
 - Add `audience` parameter (technical/business/general)
+
 - Tune prompts for each combination
+
 - A/B test summary quality
 
 ### Week 3: Advanced Features
+
 - Add `format` parameter (text/markdown/json)
+
 - Extract structured key points (bullets)
+
 - Add confidence score (how well summary captures plan)
+
 - Rate limiting (10 requests/minute per user)
 
 ### Week 4: Integration & Polish
+
 - Update API docs with examples
+
 - Build SDK helpers for common use cases
+
 - Add to PlanExe web UI (show summary before full plan)
+
 - Monitor cache hit rate and optimize TTL
 
 ## Cost Analysis
 
 **Per-request cost:** ~$0.02 (Gemini Flash input + output)
 **With caching (12h TTL):**
+
 - Cache hit rate: 70-80% (most users view same plan multiple times)
+
 - Effective cost per unique plan: $0.02 (first request) + $0.00 (cached hits)
 
 **Monthly estimate for 1,000 active plans:**
+
 - Unique summarizations: 1,000 × $0.02 = $20
+
 - Cached requests: ~7,000 × $0.00 = $0
+
 - **Total: ~$20/month**
 
 ## Risks & Mitigations
@@ -199,19 +230,27 @@ post_to_twitter(tweet)
 ## Success Metrics
 
 - 80%+ of users view summary before full plan
+
 - Cache hit rate > 70%
+
 - Average summary generation time < 3 seconds
+
 - User feedback: "summary accurately represents my plan" > 4/5 stars
 
 ## Future Enhancements
 
 - **Multi-language summaries** (translate to Spanish, French, etc.)
+
 - **Voice summaries** (TTS integration for audio version)
+
 - **Comparison summaries** ("How does this plan differ from my previous one?")
+
 - **Sentiment analysis** (is the plan optimistic, cautious, ambitious?)
 
 ## References
 
 - Gemini 2.0 Flash pricing: https://ai.google.dev/pricing
+
 - Prompt engineering best practices: Anthropic prompt guide
+
 - Caching strategies: Redis best practices

@@ -16,7 +16,9 @@ This proposal introduces a **meta-agent dispatcher** that routes each pipeline s
 ## Problem
 
 - Generic agents produce mediocre results across all domains
+
 - No way to leverage specialized models (reasoning models for analysis, fast models for formatting, etc.)
+
 - Pipeline stages have different cost/quality trade-offs that aren't exploited
 
 ## Proposed Solution
@@ -72,15 +74,21 @@ Store routing configuration in `llm_config.json`:
 ### Implementation
 
 1. Add `AgentRouter` class in `backend/mcp_cloud/src/routing/`
+
 2. Modify pipeline stages to call `router.get_agent(stage_type, domain)`
+
 3. Add telemetry to track agent selection and performance per stage
+
 4. Build admin UI to override routing rules per-customer
 
 ## Benefits
 
 - **15-30% cost reduction** by using fast models for simple stages
+
 - **Quality improvement** from specialized agents
+
 - **Flexibility** for customers to bring their own agent configs
+
 - **A/B testing** different agent combinations per stage
 
 ## Risks & Mitigations
@@ -94,12 +102,17 @@ Store routing configuration in `llm_config.json`:
 ## Next Steps
 
 1. Prototype with 3 agents (research, writing, format)
+
 2. Run side-by-side comparison on 20 existing plans
+
 3. Measure cost savings and quality delta
+
 4. Ship behind feature flag, enable for beta customers
 
 ## Success Metrics
 
 - Cost per plan decreases by 20%+
+
 - User satisfaction rating increases (via post-plan survey)
+
 - No increase in pipeline failure rate

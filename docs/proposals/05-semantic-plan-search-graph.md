@@ -10,8 +10,11 @@ author: Larry (OpenClaw)
 ## Overview
 
 PlanExe has generated thousands of business plans across diverse domains. This corpus is valuable for:
+
 - Finding similar plans ("show me plans like this one")
+
 - Few-shot learning (use similar plans as examples for new generation)
+
 - Discovery ("I want to open a coffee shop - what plans exist?")
 
 This proposal adds **semantic search** across the entire plan corpus using pgvector (PostgreSQL extension) and sentence embeddings.
@@ -19,8 +22,11 @@ This proposal adds **semantic search** across the entire plan corpus using pgvec
 ## Problem
 
 - No way to search plans by meaning/topic (only exact text match)
+
 - Can't find "plans similar to mine" for inspiration
+
 - Agents can't leverage existing plans as few-shot examples
+
 - Plan library feels like a black box instead of a knowledge graph
 
 ## Proposed Solution
@@ -84,9 +90,13 @@ CREATE INDEX ON plan_corpus USING ivfflat (embedding vector_cosine_ops)
 ### Embedding Generation
 
 **Model:** `sentence-transformers/all-mpnet-base-v2`
+
 - Dimension: 768
+
 - Speed: ~100 sentences/second on CPU
+
 - Quality: State-of-the-art for semantic search
+
 - Cost: Free (run locally or serverless)
 
 **Embed on Insert:**
@@ -221,34 +231,53 @@ def trending_domains(days=30):
 ## Implementation Plan
 
 ### Week 1: Core Infrastructure
+
 - Add pgvector extension to PostgreSQL
+
 - Create `plan_corpus` table with vector column
+
 - Set up sentence-transformers model (serverless or Railway service)
+
 - Build embedding generation pipeline
 
 ### Week 2: Indexing Existing Plans
+
 - Batch process existing plans (embed title + summary)
+
 - Insert into `plan_corpus` table
+
 - Create similarity search index (ivfflat)
+
 - Benchmark query performance
 
 ### Week 3: Search API
+
 - Build `/api/plans/search` endpoint
+
 - Add filtering (domain, min_similarity)
+
 - Implement pagination
+
 - Add response caching for common queries
 
 ### Week 4: UI Integration
+
 - Add search bar to plan library
+
 - Show "Plans like this" on plan detail page
+
 - Add domain filters to search UI
+
 - Display similarity scores visually
 
 ## Performance Optimization
 
 **Indexing Strategy:**
+
 - Use `ivfflat` index for sub-linear search time
+
 - Trade-off: ~95% recall at 10x speed improvement
+
 - Tune `lists` parameter based on corpus size (100 lists for 10K plans)
 
 **Batch Embedding:**
@@ -273,16 +302,23 @@ redis.setex(cache_key, 3600, json.dumps(results))  # 1h TTL
 ## Cost Analysis
 
 **Embedding Model:**
+
 - Hosting: $20/month (Railway CPU service, always-on)
+
 - Alternative: AWS Lambda (serverless, pay-per-request)
 
 **pgvector:**
+
 - Storage: ~1KB per plan (768-dim vector)
+
 - 10K plans = 10MB (negligible)
+
 - Index overhead: ~2x storage
 
 **Query Cost:**
+
 - Compute: Minimal (vector similarity is fast)
+
 - No external API calls (model runs locally)
 
 **Total:** ~$20-30/month for 10K-100K plans
@@ -299,19 +335,27 @@ redis.setex(cache_key, 3600, json.dumps(results))  # 1h TTL
 ## Success Metrics
 
 - Search returns relevant results 80%+ of the time (user feedback)
+
 - Average query time < 100ms (p95)
+
 - 30%+ of users use "find similar plans" feature
+
 - Few-shot plan generation quality improves (measured by ratings)
 
 ## Future Enhancements
 
 - **Multi-modal embeddings** (include plan images, charts)
+
 - **Temporal search** ("plans created in last 6 months")
+
 - **User preference learning** (personalize search based on history)
+
 - **Graph visualization** (show plan similarity network)
 
 ## References
 
 - pgvector documentation: https://github.com/pgvector/pgvector
+
 - sentence-transformers: https://www.sbert.net/
+
 - Semantic search best practices: https://www.pinecone.io/learn/semantic-search/

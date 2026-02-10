@@ -16,8 +16,11 @@ This proposal introduces a **distributed execution model** with worker pool para
 ## Problem
 
 - Single-threaded execution = slow generation for complex plans
+
 - Wasted compute: Outline stage could start while research continues
+
 - No horizontal scaling: Can't throw more workers at the problem
+
 - Railway infrastructure supports multi-worker deployments but pipeline doesn't use it
 
 ## Proposed Solution
@@ -121,41 +124,63 @@ def execute_outline_stage(plan_id, research_results):
 ## Implementation Plan
 
 ### Phase 1: DAG Scheduler (Week 1-2)
+
 - Define stage dependency graph schema (YAML config)
+
 - Build coordinator service that parses DAG and dispatches tasks
+
 - Add Redis for job state management
+
 - Single worker proof-of-concept
 
 ### Phase 2: Worker Pool (Week 3)
+
 - Deploy 3-5 workers on Railway
+
 - Implement task routing and load balancing
+
 - Add retry logic and failure handling
+
 - Monitor queue depth and worker utilization
 
 ### Phase 3: Parallel Stages (Week 4)
+
 - Enable parallel execution for research subtasks
+
 - Enable parallel execution for section expansion
+
 - Add progress reporting (% complete across all workers)
+
 - Optimize stage chunking for latency
 
 ### Phase 4: Auto-Scaling (Week 5+)
+
 - Dynamic worker scaling based on queue depth
+
 - Cost optimization (scale down during off-hours)
+
 - Priority queues (premium users get dedicated workers)
 
 ## Benefits
 
 - **3-5x faster plan generation** for complex plans
+
 - **Horizontal scaling** - add more workers as load increases
+
 - **Better resource utilization** - multiple stages run concurrently
+
 - **Resilience** - worker failure doesn't kill entire plan generation
+
 - **Cost efficiency** - pay for compute only when queue is deep
 
 ## Technical Stack
 
 - **Task Queue:** Celery + Redis (battle-tested, Python-native)
+
 - **DAG Engine:** Custom lightweight scheduler (simpler than Airflow for our use case)
+
 - **Worker Runtime:** Docker containers on Railway
+
 - **State Storage:** Redis (job metadata) + PostgreSQL (completed plans)
 
 ## Risks & Mitigations
@@ -171,18 +196,25 @@ def execute_outline_stage(plan_id, research_results):
 ## Success Metrics
 
 - Average plan generation time decreases by 50%+
+
 - Worker CPU utilization stays 60-80% (not idle, not maxed)
+
 - Task retry rate < 2% (most jobs succeed first try)
+
 - P95 latency under 10 minutes for standard business plan
 
 ## Future Enhancements
 
 - **GPU workers** for vision/multimodal stages
+
 - **Speculative execution** (start likely next stage before deps finish)
+
 - **Agent-specific worker pools** (specialized workers for finance plans vs. tech plans)
 
 ## References
 
 - Celery documentation: https://docs.celeryq.dev/
+
 - Railway multi-service deploys: https://docs.railway.app/
+
 - DAG scheduling patterns: Apache Airflow, Prefect, Temporal

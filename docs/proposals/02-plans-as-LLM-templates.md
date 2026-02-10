@@ -12,14 +12,19 @@ author: Larry (OpenClaw)
 PlanExe generates comprehensive business plans, but they're currently opaque artifacts. External agents and automation tools can't easily consume plan logic or adapt plans to new contexts.
 
 This proposal treats **completed plans as reusable LLM templates** with parameterized sections, enabling:
+
 - Export as Jinja2-style templates
+
 - API endpoint for template rendering with custom variables
+
 - Plan remixing and few-shot learning for downstream agents
 
 ## Problem
 
 - Plans are one-shot artifacts with no reuse mechanism
+
 - Agents can't easily say "give me a plan like X but for industry Y"
+
 - No structured way to extract the prompt logic that created a good plan
 
 ## Proposed Solution
@@ -104,37 +109,55 @@ CREATE TABLE plan_templates (
 ## Use Cases
 
 1. **Agent Few-Shot Learning**: "Generate a plan like template X but for domain Y"
+
 2. **Customer Self-Service**: Browse template library, fill in variables, instant draft
+
 3. **Plan Remixing**: Combine sections from multiple templates
+
 4. **API Integration**: External tools can request plans programmatically
 
 ## Benefits
 
 - **Plan reuse** - Good plans become templates for future work
+
 - **Faster generation** - Template rendering is instant (no LLM call for structure)
+
 - **Consistency** - Templates enforce proven structures
+
 - **Monetization** - Premium template library for subscribers
 
 ## Implementation Plan
 
 ### Phase 1: Template Export (Week 1-2)
+
 - Add "Export as Template" button in plan UI
+
 - Generate Jinja2 from plan HTML/markdown
+
 - Store in `plan_templates` table
 
 ### Phase 2: Rendering Engine (Week 3)
+
 - Build Jinja2 renderer with variable validation
+
 - Add `/api/plan/template/render` endpoint
+
 - Rate limit: 10 renders/hour for free tier
 
 ### Phase 3: Template Library (Week 4-5)
+
 - Public template browse UI
+
 - Search and filter by industry/domain
+
 - User ratings and favorites
 
 ### Phase 4: Advanced Features (Future)
+
 - Template versioning (v1, v2, etc.)
+
 - Diff view between template versions
+
 - Collaborative template editing
 
 ## Risks & Mitigations
@@ -149,11 +172,15 @@ CREATE TABLE plan_templates (
 ## Success Metrics
 
 - 50+ templates published in first month
+
 - 20% of new plans start from a template
+
 - Template renders account for 15%+ of API usage
+
 - User feedback: "faster than starting from scratch"
 
 ## References
 
 - Jinja2 documentation: https://jinja.palletsprojects.com/
+
 - Similar pattern: Terraform modules, Helm charts, AWS CloudFormation templates

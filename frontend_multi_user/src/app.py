@@ -45,6 +45,7 @@ from database_api.model_user_provider import UserProvider
 from database_api.model_user_api_key import UserApiKey
 from database_api.model_credit_history import CreditHistory
 from database_api.model_payment_record import PaymentRecord
+from database_api.model_token_metrics import TokenMetrics, TokenMetricsSummary
 from planexe_modelviews import WorkerItemView, TaskItemView, NonceItemView, AdminOnlyModelView
 logger = logging.getLogger(__name__)
 

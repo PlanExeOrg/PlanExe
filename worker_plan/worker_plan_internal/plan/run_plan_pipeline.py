@@ -4068,6 +4068,7 @@ def configure_logging(run_id_dir: Path) -> int:
 if __name__ == '__main__':
     from llama_index.core.instrumentation import get_dispatcher
     from worker_plan_internal.llm_util.track_activity import TrackActivity
+    from worker_plan_internal.llm_util.token_instrumentation import set_current_run_id
 
     pipeline_environment = PipelineEnvironment.from_env()
     try:
@@ -4077,6 +4078,11 @@ if __name__ == '__main__':
         logger.error(msg)
         print(f"Exiting... {msg}")
         sys.exit(1)
+    
+    # Initialize token tracking with the run ID
+    run_id = run_id_dir.name  # Extract run_id from the directory path
+    set_current_run_id(run_id)
+    logger.info(f"Initialized token tracking for run_id: {run_id}")
 
     console_level = configure_logging(run_id_dir)
     logger.info(

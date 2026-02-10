@@ -476,6 +476,50 @@ def purge_runs(request: PurgeRunsRequest) -> PurgeRunsResponse:
     )
 
 
+@app.get("/runs/{run_id}/token-metrics")
+def get_token_metrics(run_id: str) -> dict:
+    """
+    Get token metrics for a specific plan execution run.
+    
+    Returns aggregated token usage statistics including input tokens,
+    output tokens, thinking tokens, and performance metrics.
+    """
+    try:
+        from worker_plan_internal.llm_util.token_metrics_store import get_token_metrics_store
+        store = get_token_metrics_store()
+        summary = store.get_summary_for_run(run_id)
+        if summary is None:
+            raise HTTPException(status_code=500, detail="Unable to retrieve token metrics")
+        return summary
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.warning("Error retrieving token metrics for run %s: %s", run_id, exc)
+        raise HTTPException(status_code=500, detail=f"Unable to retrieve token metrics: {exc}") from exc
+
+
+@app.get("/runs/{run_id}/token-metrics/detailed")
+def get_token_metrics_detailed(run_id: str) -> dict:
+    """
+    Get detailed token metrics for each LLM call in a plan execution.
+    
+    Returns a list of metrics for each individual LLM invocation,
+    useful for understanding token usage patterns across the plan.
+    """
+    try:
+        from worker_plan_internal.llm_util.token_metrics_store import get_token_metrics_store
+        store = get_token_metrics_store()
+        metrics = store.get_metrics_for_run(run_id)
+        return {
+            "run_id": run_id,
+            "metrics": [m.to_dict() for m in metrics],
+            "count": len(metrics),
+        }
+    except Exception as exc:
+        logger.warning("Error retrieving detailed token metrics for run %s: %s", run_id, exc)
+        raise HTTPException(status_code=500, detail=f"Unable to retrieve token metrics: {exc}") from exc
+
+
 @app.get("/healthcheck")
 def healthcheck() -> dict:
     return {"status": "ok", "run_base_path": str(RUN_BASE_PATH)}

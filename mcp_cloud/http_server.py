@@ -83,7 +83,10 @@ def _split_csv_env(value: Optional[str]) -> list[str]:
 
 CORS_ORIGINS = _split_csv_env(os.environ.get("PLANEXE_MCP_CORS_ORIGINS"))
 if not CORS_ORIGINS:
-    CORS_ORIGINS = ["http://localhost", "http://127.0.0.1"]
+    # Use wildcard so that browser-based tools (e.g. MCP Inspector at
+    # localhost:6274) can connect directly.  API-key auth is the primary
+    # access control; CORS is defence-in-depth only.
+    CORS_ORIGINS = ["*"]
 
 _rate_lock = asyncio.Lock()
 _rate_buckets: dict[str, deque[float]] = defaultdict(deque)
@@ -390,8 +393,6 @@ app = FastAPI(
     lifespan=_lifespan,
 )
 
-app.mount("/mcp", fastmcp_http_app)
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
@@ -511,6 +512,12 @@ async def list_tools(fastmcp_server: FastMCP = Depends(_get_fastmcp)) -> dict[st
             tool_entry["icons"] = tool.icons
         sanitized.append(tool_entry)
     return {"tools": sanitized}
+
+# Mount the Streamable HTTP MCP endpoint AFTER the explicit /mcp/tools and
+# /mcp/tools/call routes so that those routes take priority.  Starlette checks
+# routes in registration order; if the mount were first it would shadow the
+# REST endpoints with a 404 from the sub-app.
+app.mount("/mcp", fastmcp_http_app)
 
 @app.get("/download/{task_id}/{filename}")
 async def download_report(task_id: str, filename: str) -> Response:

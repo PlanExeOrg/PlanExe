@@ -1,3 +1,10 @@
+---
+title: Near-Match Plugin Adaptation Lifecycle
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Near-Match Plugin Adaptation Lifecycle
 
 ## Pitch

@@ -2,7 +2,7 @@
 title: Semantic Plan Search Graph - pgvector Similarity
 date: 2026-02-09
 status: proposal
-author: Larry (OpenClaw)
+author: Larry the Laptop Lobster
 ---
 
 # Semantic Plan Search Graph - pgvector Similarity

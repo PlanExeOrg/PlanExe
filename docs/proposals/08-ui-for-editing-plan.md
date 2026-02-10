@@ -1,3 +1,10 @@
+---
+title: UI for Editing Plans
+date: 2026-02-10
+status: proposal
+author: Simon Strandgaard
+---
+
 # UI for Editing Plans
 
 ## Status

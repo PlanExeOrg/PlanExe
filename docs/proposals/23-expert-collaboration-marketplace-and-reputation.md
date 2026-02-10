@@ -1,3 +1,10 @@
+---
+title: Expert Collaboration Marketplace + Reputation Graph
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Expert Collaboration Marketplace + Reputation Graph
 
 ## Pitch

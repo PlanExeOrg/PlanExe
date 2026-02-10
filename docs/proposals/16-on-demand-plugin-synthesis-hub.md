@@ -1,3 +1,10 @@
+---
+title: On-Demand Plugin Synthesis + Plugin Hub for `run_plan_pipeline.py`
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # On-Demand Plugin Synthesis + Plugin Hub for `run_plan_pipeline.py`
 
 ## Pitch

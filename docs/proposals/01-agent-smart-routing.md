@@ -2,7 +2,7 @@
 title: Agent Smart Routing - Meta-Agent Dispatcher
 date: 2026-02-09
 status: proposal
-author: Larry (OpenClaw)
+author: Larry the Laptop Lobster
 ---
 
 # Agent Smart Routing - Meta-Agent Dispatcher

@@ -1,3 +1,10 @@
+---
+title: Governance, Risk, and Ethics for Autonomous Bidding Organizations
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Governance, Risk, and Ethics for Autonomous Bidding Organizations
 
 ## Pitch

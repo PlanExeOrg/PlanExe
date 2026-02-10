@@ -1,3 +1,10 @@
+---
+title: Portfolio-Aware Capital Allocation for Investor Matching
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Portfolio-Aware Capital Allocation for Investor Matching
 
 **Author:** PlanExe Team  

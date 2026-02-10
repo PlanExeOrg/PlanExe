@@ -2,7 +2,7 @@
 title: Plan Explain API - Natural Language Summaries
 date: 2026-02-09
 status: proposal
-author: Larry (OpenClaw)
+author: Larry the Laptop Lobster
 ---
 
 # Plan Explain API - Natural Language Summaries

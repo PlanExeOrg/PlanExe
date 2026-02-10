@@ -1,3 +1,10 @@
+---
+title: Plugin Hub Discovery, Ranking, and Reuse Economy
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Plugin Hub Discovery, Ranking, and Reuse Economy
 
 ## Pitch

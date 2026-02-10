@@ -1,3 +1,10 @@
+---
+title: Safety + Governance for Runtime Plugin Loading
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Safety + Governance for Runtime Plugin Loading
 
 ## Pitch

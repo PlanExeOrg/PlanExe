@@ -1,3 +1,10 @@
+---
+title: Autonomous Bid Factory Orchestration (1000 Plans/Day)
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Autonomous Bid Factory Orchestration (1000 Plans/Day)
 
 ## Pitch

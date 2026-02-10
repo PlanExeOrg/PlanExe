@@ -2,7 +2,7 @@
 title: Plans as LLM Templates - Parameterized Prompt Export
 date: 2026-02-09
 status: proposal
-author: Larry (OpenClaw)
+author: Larry the Laptop Lobster
 ---
 
 # Plans as LLM Templates - Parameterized Prompt Export

@@ -1,3 +1,10 @@
+---
+title: Investor Thesis Matching Engine
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Investor Thesis Matching Engine
 
 **Author:** PlanExe Team  

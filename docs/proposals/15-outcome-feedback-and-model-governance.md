@@ -1,3 +1,10 @@
+---
+title: Outcome Feedback Loop and Model Governance for Investor Matching
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Outcome Feedback Loop and Model Governance for Investor Matching
 
 **Author:** PlanExe Team  

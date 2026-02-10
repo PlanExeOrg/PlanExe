@@ -1,3 +1,10 @@
+---
+title: Confidence-Weighted Funding Auctions
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Confidence-Weighted Funding Auctions
 
 **Author:** PlanExe Team  

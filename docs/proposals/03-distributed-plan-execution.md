@@ -2,7 +2,7 @@
 title: Distributed Plan Execution - Worker Pool Parallelism
 date: 2026-02-09
 status: proposal
-author: Larry (OpenClaw)
+author: Larry the Laptop Lobster
 ---
 
 # Distributed Plan Execution - Worker Pool Parallelism

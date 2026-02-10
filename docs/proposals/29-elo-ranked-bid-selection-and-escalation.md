@@ -1,3 +1,10 @@
+---
+title: ELO-Ranked Bid Selection + Escalation Pipeline
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # ELO-Ranked Bid Selection + Escalation Pipeline
 
 ## Pitch

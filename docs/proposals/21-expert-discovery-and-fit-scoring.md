@@ -1,3 +1,10 @@
+---
+title: Expert Discovery + Fit Scoring for Plan Verification
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Expert Discovery + Fit Scoring for Plan Verification
 
 ## Pitch

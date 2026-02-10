@@ -1,3 +1,10 @@
+---
+title: Cross-Border Project Verification Framework (Bridge Example)
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Cross-Border Project Verification Framework (Bridge Example)
 
 ## Pitch

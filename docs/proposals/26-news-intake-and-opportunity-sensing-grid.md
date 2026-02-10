@@ -1,3 +1,10 @@
+---
+title: News Intake + Opportunity Sensing Grid for Autonomous Bidding
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # News Intake + Opportunity Sensing Grid for Autonomous Bidding
 
 ## Pitch

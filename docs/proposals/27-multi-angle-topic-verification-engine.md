@@ -1,3 +1,10 @@
+---
+title: Multi-Angle Topic Verification Engine Before Bidding
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Multi-Angle Topic Verification Engine Before Bidding
 
 ## Pitch

@@ -1,3 +1,10 @@
+---
+title: Evidence-Based Founder Execution Index
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Evidence-Based Founder Execution Index
 
 **Author:** PlanExe Team  

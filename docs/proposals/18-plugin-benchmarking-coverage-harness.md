@@ -1,3 +1,10 @@
+---
+title: Plugin Benchmarking Harness Across Diverse Plan Types
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Plugin Benchmarking Harness Across Diverse Plan Types
 
 ## Pitch

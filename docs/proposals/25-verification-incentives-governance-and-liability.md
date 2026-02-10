@@ -1,3 +1,10 @@
+---
+title: Verification Incentives, Governance, and Liability Model
+date: 2026-02-10
+status: proposal
+author: Larry the Laptop Lobster
+---
+
 # Verification Incentives, Governance, and Liability Model
 
 ## Pitch

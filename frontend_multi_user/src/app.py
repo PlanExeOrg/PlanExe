@@ -862,7 +862,9 @@ class MyFlaskApp:
                     for key in existing_keys:
                         key.revoked_at = now
                     self.db.session.commit()
-                    new_api_key = self._get_or_create_api_key(user)
+                    raw_key = self._get_or_create_api_key(user)
+                    if raw_key:
+                        session["new_api_key"] = raw_key
                 return redirect(url_for('account'))
 
             active_key = UserApiKey.query.filter_by(user_id=user.id, revoked_at=None).first()

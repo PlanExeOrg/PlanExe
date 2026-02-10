@@ -151,14 +151,18 @@ Note: `task_download` is a synthetic tool provided by `mcp_local`, not by this s
 Download flow: call `task_file_info` to obtain the `download_url`, then fetch the
 report via `GET /download/{task_id}/030-report.html` (API key required if configured).
 
-## Debugging tools
+## Debugging with the MCP Inspector
 
-Use the MCP Inspector to verify tool registration and output schemas.
+Use the [MCP Inspector](https://github.com/modelcontextprotocol/inspector) to verify tool registration, authentication, and output schemas.
 
-Everything reference (stdio):
+> **Trailing slash required.** The server mounts at `/mcp` which redirects to `/mcp/`.
+> Always use `/mcp/` (with trailing slash) in the inspector URL to avoid a 307 redirect
+> that crashes `node-fetch` in older inspector versions.
+
+### Local (no authentication)
 
 ```bash
-npx @modelcontextprotocol/inspector --transport stdio npx -y @modelcontextprotocol/server-everything
+npx @modelcontextprotocol/inspector --transport http --server-url http://localhost:8001/mcp/
 ```
 
 Steps:
@@ -166,10 +170,44 @@ Steps:
 - Click "Tools"
 - Click "List Tools"
 
-PlanExe MCP (HTTP):
+### Production (with API key authentication)
+
+When `PLANEXE_MCP_API_KEY` is set on the server, the inspector must send the key
+with every request. The inspector proxy forwards the `Authorization` header to
+the remote server.
 
 ```bash
-npx @modelcontextprotocol/inspector --transport http --server-url http://localhost:8001/mcp
+npx @modelcontextprotocol/inspector --transport http --server-url https://mcp.planexe.org/mcp/
+```
+
+Steps:
+1. In the inspector UI, expand **"Authentication"** in the left sidebar
+2. Select **Bearer Token**
+3. Paste your API key (e.g. `pex_...`)
+4. Click **"Connect"**
+5. Click **"Tools"** then **"List Tools"** to verify
+
+The inspector sends `Authorization: Bearer <your-key>` which the server accepts
+via `_extract_api_key()` (same as `X-API-Key` or `API_KEY` headers).
+
+### Skipping proxy authentication (development only)
+
+The inspector proxy itself also requires a session token. To disable that during
+local development:
+
+```bash
+DANGEROUSLY_OMIT_AUTH=true npx @modelcontextprotocol/inspector --transport http --server-url https://mcp.planexe.org/mcp/
+```
+
+This only disables the local inspector-proxy token check. The remote server still
+enforces `PLANEXE_MCP_API_KEY` if configured.
+
+### Everything reference (stdio)
+
+Sanity-check the inspector itself against the reference server:
+
+```bash
+npx @modelcontextprotocol/inspector --transport stdio npx -y @modelcontextprotocol/server-everything
 ```
 
 Steps:

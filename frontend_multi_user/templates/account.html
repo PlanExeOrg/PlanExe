@@ -22,6 +22,7 @@
         {% endif %}
 
         <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <input type="hidden" name="action" value="regenerate_api_key">
             <button class="btn btn-default">Generate new API key</button>
         </form>
@@ -30,6 +31,7 @@
     <div class="card">
         <h4>Buy credits</h4>
         <form method="POST" action="/billing/stripe/checkout" style="margin-bottom: 10px;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="form-group">
                 <label for="credits">Credits</label>
                 <input type="number" class="form-control" name="credits" id="credits" value="1" min="1">
@@ -42,6 +44,7 @@
         </form>
 
         <form method="POST" action="/billing/telegram/invoice">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="form-group">
                 <label for="credits_telegram">Credits</label>
                 <input type="number" class="form-control" name="credits" id="credits_telegram" value="1" min="1">

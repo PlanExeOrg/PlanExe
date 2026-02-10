@@ -20,7 +20,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from flask import Flask, render_template, Response, request, jsonify, send_file, redirect, url_for, session, abort
 from flask_admin import Admin, AdminIndexView, expose
-from flask_admin.contrib.sqla import ModelView
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from authlib.integrations.flask_client import OAuth
 from flask_wtf.csrf import CSRFProtect
@@ -46,7 +45,7 @@ from database_api.model_user_provider import UserProvider
 from database_api.model_user_api_key import UserApiKey
 from database_api.model_credit_history import CreditHistory
 from database_api.model_payment_record import PaymentRecord
-from planexe_modelviews import WorkerItemView, TaskItemView, NonceItemView
+from planexe_modelviews import WorkerItemView, TaskItemView, NonceItemView, AdminOnlyModelView
 logger = logging.getLogger(__name__)
 
 from worker_plan_api.planexe_dotenv import DotEnvKeyEnum, PlanExeDotEnv
@@ -91,7 +90,17 @@ class MyAdminIndexView(AdminIndexView):
     def index(self):
         if not current_user.is_authenticated:
             return redirect(url_for('login'))
+        if not current_user.is_admin:
+            abort(403)
         return super(MyAdminIndexView, self).index()
+
+    def is_accessible(self):
+        return current_user.is_authenticated and getattr(current_user, "is_admin", False)
+
+    def inaccessible_callback(self, name, **kwargs):
+        if not current_user.is_authenticated:
+            return redirect(url_for("login"))
+        abort(403)
 
 def nocache(view):
     """Decorator to add 'no-cache' headers to a response."""
@@ -105,6 +114,16 @@ def nocache(view):
         response.headers['Expires'] = '-1' # Or any date in the past, or 0
         return response
     return no_cache_view
+
+def admin_required(view):
+    """Decorator that requires an authenticated admin user."""
+    @wraps(view)
+    @login_required
+    def wrapper(*args, **kwargs):
+        if not current_user.is_admin:
+            abort(403)
+        return view(*args, **kwargs)
+    return wrapper
 
 class MyFlaskApp:
     def __init__(self):
@@ -350,14 +369,14 @@ class MyFlaskApp:
         
         # Add database tables to admin panel
         self.admin.add_view(TaskItemView(model=TaskItem, session=self.db.session, name="Task"))
-        self.admin.add_view(ModelView(model=EventItem, session=self.db.session, name="Event"))
+        self.admin.add_view(AdminOnlyModelView(model=EventItem, session=self.db.session, name="Event"))
         self.admin.add_view(WorkerItemView(model=WorkerItem, session=self.db.session, name="Worker"))
         self.admin.add_view(NonceItemView(model=NonceItem, session=self.db.session, name="Nonce"))
-        self.admin.add_view(ModelView(model=UserAccount, session=self.db.session, name="User"))
-        self.admin.add_view(ModelView(model=UserProvider, session=self.db.session, name="User Provider"))
-        self.admin.add_view(ModelView(model=UserApiKey, session=self.db.session, name="User API Key"))
-        self.admin.add_view(ModelView(model=CreditHistory, session=self.db.session, name="Credit History"))
-        self.admin.add_view(ModelView(model=PaymentRecord, session=self.db.session, name="Payments"))
+        self.admin.add_view(AdminOnlyModelView(model=UserAccount, session=self.db.session, name="User"))
+        self.admin.add_view(AdminOnlyModelView(model=UserProvider, session=self.db.session, name="User Provider"))
+        self.admin.add_view(AdminOnlyModelView(model=UserApiKey, session=self.db.session, name="User API Key"))
+        self.admin.add_view(AdminOnlyModelView(model=CreditHistory, session=self.db.session, name="Credit History"))
+        self.admin.add_view(AdminOnlyModelView(model=PaymentRecord, session=self.db.session, name="Payments"))
 
         self._setup_routes()
 
@@ -1216,7 +1235,7 @@ class MyFlaskApp:
             return response
 
         @self.app.route('/admin/task/<uuid:task_id>/report')
-        @login_required
+        @admin_required
         def download_task_report(task_id):
             task = self.db.session.get(TaskItem, task_id)
             if task is None or not task.generated_report_html:
@@ -1226,7 +1245,7 @@ class MyFlaskApp:
             return send_file(buffer, mimetype='text/html', as_attachment=True, download_name='report.html')
 
         @self.app.route('/admin/task/<uuid:task_id>/run_zip')
-        @login_required
+        @admin_required
         def download_task_run_zip(task_id):
             task = self.db.session.get(TaskItem, task_id)
             if task is None or not task.run_zip_snapshot:
@@ -1237,7 +1256,7 @@ class MyFlaskApp:
             return send_file(buffer, mimetype='application/zip', as_attachment=True, download_name=download_name)
 
         @self.app.route('/demo_run')
-        @login_required
+        @admin_required
         def demo_run():
             user_id = str(current_user.id)
             nonce = 'DEMO_' + str(uuid.uuid4())

@@ -326,10 +326,6 @@
 </div>
 
 <div class="quick-actions">
-    <a href="{{ url_for('demo_run') }}" class="btn-action btn-action-primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Create a Plan
-    </a>
     <a href="{{ url_for('account') }}" class="btn-action btn-action-secondary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Account Settings
@@ -352,7 +348,6 @@
 {% else %}
 <div class="empty-state">
     <p>You haven't created any plans yet. Get started by creating your first one.</p>
-    <a href="{{ url_for('demo_run') }}" class="btn-action btn-action-primary">Create Your First Plan</a>
 </div>
 {% endif %}
 
@@ -363,7 +358,6 @@
     <p>You are signed in as an administrator.</p>
     <div class="quick-actions" style="justify-content: center;">
         <a href="{{ url_for('admin.index') }}" class="btn-action btn-action-primary">Open Admin Panel</a>
-        <a href="{{ url_for('demo_run') }}" class="btn-action btn-action-secondary">Create a Plan</a>
     </div>
 </div>
 

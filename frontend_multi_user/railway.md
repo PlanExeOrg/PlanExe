@@ -1,6 +1,7 @@
 # Railway Configuration for `frontend_multi_user`
 
 ```
+PLANEXE_FRONTEND_MULTIUSER_PUBLIC_URL="https://home.planexe.org"
 PLANEXE_FRONTEND_MULTIUSER_ADMIN_PASSWORD="insert-your-password"
 PLANEXE_FRONTEND_MULTIUSER_ADMIN_USERNAME="insert-your-username"
 PLANEXE_FRONTEND_MULTIUSER_PORT="5000"
@@ -9,7 +10,6 @@ PLANEXE_POSTGRES_PASSWORD="${{shared.PLANEXE_POSTGRES_PASSWORD}}"
 PLANEXE_AUTH_REQUIRED='true'
 PLANEXE_OAUTH_GOOGLE_CLIENT_ID='insert-your-clientid'
 PLANEXE_OAUTH_GOOGLE_CLIENT_SECRET='insert-your-secret'
-PLANEXE_FRONTEND_MULTIUSER_PUBLIC_URL='https://home.planexe.org'
 PLANEXE_FRONTEND_MULTIUSER_SECRET_KEY='insert-a-long-random-secret-for-sessions'
 PLANEXE_STRIPE_SECRET_KEY='insert-your-secret'
 ```

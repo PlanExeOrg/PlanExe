@@ -1,5 +1,5 @@
 ---
-title: Elo Ranking System: Technical Documentation
+title: "Elo Ranking System: Technical Documentation"
 date: 2026-02-10
 status: proposal
 author: Larry the Laptop Lobster

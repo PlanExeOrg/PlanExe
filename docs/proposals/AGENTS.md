@@ -37,6 +37,7 @@ Notes:
 All proposals must include YAML front matter (`---` blocks with `title`, `date`, `status`, `author`). Keep it consistent:
 - The front matter `title` must match the H1 (no numeric prefix).
 - Don’t rely on the filename for display titles.
+- Quote `title` values that contain `:` to keep YAML valid.
 
 ## Required Sections
 Every proposal should include at least:

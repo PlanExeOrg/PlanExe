@@ -19,7 +19,7 @@ Below is the distilled guidance based on the current proposals in this folder.
   - Good: `# Multi-Angle Topic Verification Engine Before Bidding`
   - Avoid: `# 27) Multi-Angle Topic Verification Engine Before Bidding`
 
-## Metadata Block (Recommended)
+## Metadata Block (Required)
 Place directly under the H1. Example:
 
 ```
@@ -32,6 +32,11 @@ Place directly under the H1. Example:
 Notes:
 - Use backticks for each tag so MkDocs renders them cleanly.
 - Keep tags short and searchable.
+
+## Front Matter (Required)
+All proposals must include YAML front matter (`---` blocks with `title`, `date`, `status`, `author`). Keep it consistent:
+- The front matter `title` must match the H1 (no numeric prefix).
+- Don’t rely on the filename for display titles.
 
 ## Required Sections
 Every proposal should include at least:

@@ -8,29 +8,56 @@ This proposal describes how a PlanExe‑generated strategic plan can be executed
 - **Agent Types** – specialized micro‑services (e.g., data‑gathering, analysis, reporting) each exposing a standard RPC/REST interface.
 - **Human‑in‑the‑Loop** – tasks marked `human_required` are routed to a task‑queue watched by human workers via the existing PlanExe UI.
 
-## 2. Task Delegation Logic
-- **Capability Registry** – each agent publishes a schema of actions it can perform (`schema.json`). The orchestrator matches plan steps to agents based on these schemas.
-- **Fallback Path** – if no agent matches a step, the orchestrator creates a “human ticket” in the PlanExe UI, notifying the responsible stakeholder.
-- **Dynamic Re‑routing** – agents can reject a task (e.g., due to missing data). The orchestrator then escalates to a human or retries with an alternative agent.
+## 2. High‑level Architecture
+```
++----------------+      +----------------+      +----------------+
+|   Planner      | ---> | Orchestrator   | ---> |   Agents       |
++----------------+      +----------------+      +----------------+
+        |                         |                     |
+        v                         v                     v
+   Plan JSON                Task Graph          Execution Results
+```
+- The **Planner** (PlanExe) produces a JSON plan.
+- The **Orchestrator** parses the plan, constructs a DAG of tasks, and assigns each task to an appropriate agent.
+- **Agents** are independent services (LLM‑driven, data‑fetching, computation) that expose a uniform `run(task)` API.
+- Human‑only tasks are sent to a **Human Queue** visible in the UI.
 
-## 3. Monitoring & Feedback
+## 3. Delegation Flow
+1. **Capability Matching** – each agent registers a schema of actions it can perform. The orchestrator matches plan steps to agents based on these schemas.
+2. **Task Assignment** – the orchestrator sends the task payload to the chosen agent via RPC.
+3. **Result Collection** – agents return JSON results plus a confidence score.
+4. **Fallback** – if no agent matches, a human ticket is created; if an agent rejects, the orchestrator retries with an alternative or escalates.
+5. **Human Review** – low‑confidence or high‑impact results trigger a human approval step before continuation.
+
+## 4. Required Extensions
+- **Capability Registry Service** – a tiny HTTP service where agents POST their `schema.json` and the orchestrator queries it.
+- **Human Ticket Queue** – extend the existing PlanExe UI with a task list (`/tasks`) that shows pending human‑required steps.
+- **Result Validator** – a shared library that checks confidence thresholds and flags anomalies for review.
+- **Audit Logger** – immutable log (e.g., append‑only file or simple DB) recording every task dispatch, result, and reviewer decision.
+
+## 5. Reporting – What the Pipeline Will Emit
 - **Progress Dashboard** – real‑time status (queued, running, completed, failed) displayed in the PlanExe front‑end.
-- **Result Validation** – each agent returns a JSON result plus a confidence score. Low‑confidence results trigger a human review step.
-- **Continuous Learning** – successful executions are logged and fed back into the LLM prompts to improve future plan generation.
+- **Intermediate Reports** – after each major milestone the orchestrator invokes `run_plan_pipeline.py` to generate updated Gantt charts, risk registers, and executive summaries.
+- **Final Execution Report** – a consolidated PDF/HTML document containing:
+  - Execution timeline
+  - Deviations from the original plan
+  - Human decisions and rationale
+  - Confidence metrics per task
+  - Audit log reference
 
-## 4. Safety & Risk Management
+## 6. Safety & Risk Mitigation
 - **Explicit Risk Gates** – before any high‑impact step (budget allocation, regulatory filing) the orchestrator requires explicit human approval.
 - **Audit Trail** – every action is signed with the agent’s identity and timestamped, enabling full traceability.
 - **Existential‑Risk Checks** – a dedicated “risk‑assessment” agent runs scenario analysis on critical milestones and flags any existential‑risk concerns for senior review.
+- **Rollback Capability** – because each milestone produces a snapshot, the plan can be rolled back to a safe state if a downstream failure is detected.
 
-## 5. Integration with PlanExe
-- **Report Generation** – after each major milestone the orchestrator calls the existing `run_plan_pipeline.py` to produce updated Gantt charts, risk registers, and executive summaries.
-- **Versioned Plans** – the orchestrator stores each execution snapshot under `run/<timestamp>/` so the plan can be rolled back or audited later.
-
-## 6. Benefits
-- **Speed** – most routine steps (data collection, metric calculation) are fully automated, reducing plan execution time from weeks to days.
-- **Reliability** – human bottlenecks are limited to only those steps that truly require domain expertise or judgment.
-- **Scalability** – the micro‑service architecture lets new agent capabilities be added without changing the core orchestrator.
+## 7. Roadmap
+1. **Prototype Orchestrator** – FastAPI service with a simple DAG scheduler (MVP in 2 weeks).
+2. **Define Agent Schema** – publish a JSON‑Schema for task capabilities; implement two example agents (data fetcher, LLM summarizer).
+3. **Integrate Human Queue** – UI extension to show pending human tasks and allow approval/rejection.
+4. **Implement Reporting Hooks** – call `run_plan_pipeline.py` after each milestone.
+5. **Safety Review Layer** – add risk‑gate middleware and audit logger.
+6. **Beta Test** – run on a real PlanExe generated plan, collect feedback, iterate.
 
 ---
-*Next steps*: prototype the orchestrator as a FastAPI service, define the capability schema for existing agents, and integrate the human‑ticket queue into the current PlanExe UI.
+*This document merges the earlier high‑level sections (Architecture, Delegation Flow, Extensions, Reporting, Safety, Roadmap) with the concrete execution details described previously.*

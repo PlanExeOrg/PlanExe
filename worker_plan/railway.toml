@@ -1,6 +1,7 @@
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "/worker_plan/Dockerfile"
+watchPatterns = ["/worker_plan/**", "/llm_config.json"]
 context = "."
 
 [deploy]

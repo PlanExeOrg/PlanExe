@@ -84,3 +84,22 @@ Always check the package-level `AGENTS.md` for file-specific rules
 - `frontend_single_user` and `worker_plan_database`: add deps in `requirements.txt`.
 - Do not `pip install` ad-hoc without recording the dependency in the
   package manifest.
+
+## Strategic Alignment (The PlanExe Mindset)
+We are evolving from a "Plan Generator" (rough drafts) to a "Plan Execution Engine" (enterprise-grade).
+New features and proposals should align with this shift:
+
+1.  **Trust & Rigor:** AI output is untrusted by default.
+    *   Favor features that verify, cite, and stress-test claims (e.g., Evidence Ledgers, Monte Carlo sims).
+    *   Avoid features that just "generate more text" without validation.
+2.  **Execution Focus:** A plan is a living tool, not a static PDF.
+    *   Favor features that monitor reality vs. plan (e.g., drift monitors, readiness gates).
+    *   Ensure data structures support dynamic updates (databases over documents).
+3.  **Scale:** We are building for users who manage 100+ plans.
+    *   Favor features that automate sorting, ranking, and routing (e.g., Elo ranking, automated dispatch).
+
+## Ecosystem & OpenClaw
+PlanExe is designed to be used by **both humans and autonomous agents**.
+*   **OpenClaw** (an open-source agent framework) is a first-class citizen.
+*   We support MCP (Model Context Protocol) to allow bots to natively call PlanExe tools.
+*   When designing APIs, assume the caller might be a Raspberry Pi running OpenClaw, not just a human with a browser.

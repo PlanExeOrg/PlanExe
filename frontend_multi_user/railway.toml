@@ -1,6 +1,7 @@
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "/frontend_multi_user/Dockerfile"
+watchPatterns = ["/frontend_multi_user/**", "/worker_plan/worker_plan_api/**", "/database_api/**"]
 context = "."
 
 [deploy]

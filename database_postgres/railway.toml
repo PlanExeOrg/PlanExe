@@ -1,6 +1,7 @@
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "/database_postgres/Dockerfile"
+watchPatterns = ["/database_postgres/**"]
 context = "."
 
 [deploy]

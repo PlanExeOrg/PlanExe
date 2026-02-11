@@ -6,6 +6,7 @@ Implements the Model Context Protocol interface for PlanExe as specified in
 database_api models.
 """
 import asyncio
+import contextvars
 import hashlib
 import io
 import json
@@ -14,6 +15,7 @@ import os
 import tempfile
 import uuid
 import zipfile
+import hashlib
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -45,13 +47,22 @@ if not _dotenv_loaded:
 from database_api.planexe_db_singleton import db
 from database_api.model_taskitem import TaskItem, TaskState
 from database_api.model_event import EventItem, EventType
+from database_api.model_user_account import UserAccount
+from database_api.model_user_api_key import UserApiKey
+from database_api.model_credit_history import CreditHistory
 from flask import Flask, has_app_context
 from mcp_cloud.tool_models import (
-    ErrorDetail,
-    TaskFileInfoReadyOutput,
+    PromptExamplesInput,
+    PromptExamplesOutput,
+    TaskCreateInput,
     TaskCreateOutput,
-    TaskStatusSuccess,
     TaskStopOutput,
+    TaskStatusInput,
+    TaskStopInput,
+    TaskFileInfoInput,
+    TaskStatusSuccess,
+    TaskFileInfoReadyOutput,
+    ErrorDetail,
 )
 
 app = Flask(__name__)
@@ -97,10 +108,11 @@ with app.app_context():
 # Shown in MCP initialize (e.g. Inspector) so clients know what PlanExe does.
 PLANEXE_SERVER_INSTRUCTIONS = (
     "PlanExe generates rough-draft project plans from a natural-language prompt. "
-    "You describe a large goal (e.g. open a clinic, launch a product, build a moon base)—the kind of project that takes months or years. "
-    "PlanExe produces a structured draft with steps and deliverables (Gantt chart, risk analysis, etc.); the plan is not executable yet, it's a draft to refine. "
-    "Creating a plan is a long-running task (100+ LLM calls). Main output: large HTML file (approx 700KB) and a zip of intermediary files (md, json, csv). "
-    "Call prompt_examples first, then task_create; poll task_status and use task_download or task_file_info when complete."
+    "Required interaction order: Step 1 — Call prompt_examples to fetch example prompts. "
+    "Step 2 — Formulate a good prompt (use the examples as a baseline; draft a prompt with similar structure; get user approval). "
+    "Step 3 — Only then call task_create with the approved prompt. "
+    "Then poll task_status; use task_download or task_file_info when complete. To stop, call task_stop with the task_id from task_create. "
+    "Main output: large HTML report (~700KB) and zip of intermediary files (md, json, csv)."
 )
 
 mcp_cloud = Server("planexe-mcp-cloud", instructions=PLANEXE_SERVER_INSTRUCTIONS)
@@ -142,6 +154,7 @@ SPEED_VS_DETAIL_ALIASES = {
 class TaskCreateRequest(BaseModel):
     prompt: str
     speed_vs_detail: Optional[SpeedVsDetailInput] = None
+    user_api_key: Optional[str] = None
 
 class TaskStatusRequest(BaseModel):
     task_id: str
@@ -200,6 +213,47 @@ def get_task_by_id(task_id: str) -> Optional[TaskItem]:
 def resolve_task_for_task_id(task_id: str) -> Optional[TaskItem]:
     """Resolve a TaskItem from a task_id (UUID), with legacy fallback."""
     return find_task_by_task_id(task_id)
+
+def _hash_user_api_key(raw_key: str) -> str:
+    secret = os.environ.get("PLANEXE_API_KEY_SECRET", "dev-api-key-secret")
+    if secret == "dev-api-key-secret":
+        logger.warning("PLANEXE_API_KEY_SECRET not set. Using dev secret for API key hashing.")
+    return hashlib.sha256(f"{secret}:{raw_key}".encode("utf-8")).hexdigest()
+
+def _resolve_user_from_api_key(raw_key: str) -> Optional[UserAccount]:
+    if not raw_key:
+        return None
+    key_hash = _hash_user_api_key(raw_key)
+    with app.app_context():
+        api_key = UserApiKey.query.filter_by(key_hash=key_hash, revoked_at=None).first()
+        if not api_key:
+            return None
+        user = db.session.get(UserAccount, api_key.user_id)
+        if user:
+            api_key.last_used_at = datetime.now(UTC)
+            db.session.commit()
+        return user
+
+def _charge_user_credit(user: UserAccount, amount: int, reason: str, source: str) -> bool:
+    if amount <= 0:
+        return True
+    with app.app_context():
+        user = db.session.get(UserAccount, user.id)
+        if not user:
+            return False
+        current_balance = user.credits_balance or 0
+        if current_balance < amount:
+            return False
+        user.credits_balance = current_balance - amount
+        ledger = CreditHistory(
+            user_id=user.id,
+            delta=-amount,
+            reason=reason,
+            source=source,
+        )
+        db.session.add(ledger)
+        db.session.commit()
+        return True
 
 def _create_task_sync(
     prompt: str,
@@ -525,23 +579,65 @@ def _merge_task_create_config(
             merged["speed_vs_detail"] = candidate
     return merged or None
 
+# Context var set by HTTP server so download URLs use the request's host when
+# PLANEXE_MCP_PUBLIC_BASE_URL is not set (avoids localhost for remote clients).
+_download_base_url_ctx: contextvars.ContextVar[Optional[str]] = contextvars.ContextVar(
+    "download_base_url", default=None
+)
+
+
+def set_download_base_url(base_url: Optional[str]) -> None:
+    """Set the base URL used for download links for this request (e.g. from HTTP Request).
+    Cleared automatically when the request ends. Used when PLANEXE_MCP_PUBLIC_BASE_URL is unset."""
+    if base_url is not None:
+        _download_base_url_ctx.set(base_url.rstrip("/"))
+    else:
+        try:
+            _download_base_url_ctx.set("")
+        except LookupError:
+            pass
+
+
+def clear_download_base_url() -> None:
+    """Clear the request-scoped base URL (call when request ends)."""
+    try:
+        _download_base_url_ctx.set("")
+    except LookupError:
+        pass
+
+
+def _get_download_base_url() -> Optional[str]:
+    """Return base URL for download links: env var, then request context, then None."""
+    base_url = os.environ.get("PLANEXE_MCP_PUBLIC_BASE_URL")
+    if base_url:
+        return base_url.rstrip("/")
+    try:
+        ctx_url = _download_base_url_ctx.get()
+        return ctx_url if ctx_url else None
+    except LookupError:
+        return None
+
+
 def build_report_download_path(task_id: str) -> str:
     return f"/download/{task_id}/{REPORT_FILENAME}"
 
+
 def build_report_download_url(task_id: str) -> Optional[str]:
-    base_url = os.environ.get("PLANEXE_MCP_PUBLIC_BASE_URL")
+    base_url = _get_download_base_url()
     if not base_url:
         return None
-    return f"{base_url.rstrip('/')}{build_report_download_path(task_id)}"
+    return f"{base_url}{build_report_download_path(task_id)}"
+
 
 def build_zip_download_path(task_id: str) -> str:
     return f"/download/{task_id}/{ZIP_FILENAME}"
 
+
 def build_zip_download_url(task_id: str) -> Optional[str]:
-    base_url = os.environ.get("PLANEXE_MCP_PUBLIC_BASE_URL")
+    base_url = _get_download_base_url()
     if not base_url:
         return None
-    return f"{base_url.rstrip('/')}{build_zip_download_path(task_id)}"
+    return f"{base_url}{build_zip_download_path(task_id)}"
 
 
 def _load_mcp_example_prompts() -> list[str]:
@@ -608,14 +704,14 @@ def _builtin_mcp_example_prompts() -> list[str]:
     ]
 
 
-ERROR_SCHEMA = ErrorDetail.model_json_schema()
+TASK_CREATE_INPUT_SCHEMA = TaskCreateInput.model_json_schema()
 TASK_CREATE_OUTPUT_SCHEMA = TaskCreateOutput.model_json_schema()
 TASK_STATUS_SUCCESS_SCHEMA = TaskStatusSuccess.model_json_schema()
 TASK_STATUS_OUTPUT_SCHEMA = {
     "oneOf": [
         {
             "type": "object",
-            "properties": {"error": ERROR_SCHEMA},
+            "properties": {"error": ErrorDetail.model_json_schema()},
             "required": ["error"],
         },
         TASK_STATUS_SUCCESS_SCHEMA,
@@ -627,7 +723,7 @@ TASK_FILE_INFO_OUTPUT_SCHEMA = {
     "oneOf": [
         {
             "type": "object",
-            "properties": {"error": ERROR_SCHEMA},
+            "properties": {"error": ErrorDetail.model_json_schema()},
             "required": ["error"],
         },
         {
@@ -638,73 +734,12 @@ TASK_FILE_INFO_OUTPUT_SCHEMA = {
         TASK_FILE_INFO_READY_OUTPUT_SCHEMA,
     ]
 }
+TASK_STATUS_INPUT_SCHEMA = TaskStatusInput.model_json_schema()
+TASK_STOP_INPUT_SCHEMA = TaskStopInput.model_json_schema()
+TASK_FILE_INFO_INPUT_SCHEMA = TaskFileInfoInput.model_json_schema()
 
-TASK_CREATE_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "prompt": {
-            "type": "string",
-            "description": (
-                "What the plan should cover (goal, context, constraints). "
-                "Use prompt_examples to get example prompts; use these as examples for task_create. Short prompts produce less detailed plans."
-            ),
-        },
-        "speed_vs_detail": {
-            "type": "string",
-            "enum": list(SPEED_VS_DETAIL_INPUT_VALUES),
-            "default": SPEED_VS_DETAIL_DEFAULT_ALIAS,
-            "description": (
-                "Defaults to ping (alias for ping_llm). Options: ping, fast, all."
-            ),
-        },
-    },
-    "required": ["prompt"],
-}
-TASK_STATUS_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "task_id": {"type": "string"},
-    },
-    "required": ["task_id"],
-}
-TASK_STOP_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "task_id": {"type": "string"},
-    },
-    "required": ["task_id"],
-}
-TASK_FILE_INFO_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "task_id": {"type": "string"},
-        "artifact": {
-            "type": "string",
-            "enum": ["report", "zip"],
-            "default": "report",
-            "description": "Download artifact type: report or zip.",
-        },
-    },
-    "required": ["task_id"],
-}
-
-PROMPT_EXAMPLES_INPUT_SCHEMA = {
-    "type": "object",
-    "properties": {},
-    "required": [],
-}
-PROMPT_EXAMPLES_OUTPUT_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "samples": {
-            "type": "array",
-            "items": {"type": "string"},
-            "description": "Example prompts to copy or adapt when calling task_create.",
-        },
-        "message": {"type": "string"},
-    },
-    "required": ["samples", "message"],
-}
+PROMPT_EXAMPLES_INPUT_SCHEMA = PromptExamplesInput.model_json_schema()
+PROMPT_EXAMPLES_OUTPUT_SCHEMA = PromptExamplesOutput.model_json_schema()
 
 @dataclass(frozen=True)
 class ToolDefinition:
@@ -717,9 +752,8 @@ TOOL_DEFINITIONS = [
     ToolDefinition(
         name="prompt_examples",
         description=(
-            "Call this first to see what a good prompt looks like. "
-            "Returns curated example prompts from the PlanExe catalog (entries marked mcp_example). "
-            "Use them as the level of detail for task_create; short prompts produce less detailed plans."
+            "Step 1 — Call this first. Returns example prompts that define what a good prompt looks like. "
+            "Do NOT call task_create yet. Next: formulate a prompt (use examples as a baseline, similar structure), get user approval, then call task_create (Step 3)."
         ),
         input_schema=PROMPT_EXAMPLES_INPUT_SCHEMA,
         output_schema=PROMPT_EXAMPLES_OUTPUT_SCHEMA,
@@ -727,8 +761,10 @@ TOOL_DEFINITIONS = [
     ToolDefinition(
         name="task_create",
         description=(
-            "PlanExe turns a plain-English goal into a structured strategic-plan draft (executive summary, Gantt, risk register, governance, etc.) in ~15–20 min. "
-            "Start creating a new plan. Call prompt_examples for example prompts first. "
+            "Step 3 — Call only after prompt_examples (Step 1) and after you have formulated a good prompt and got user approval (Step 2). "
+            "PlanExe turns the approved prompt into a structured strategic-plan draft (executive summary, Gantt, risk register, governance, etc.) in ~15–20 min. "
+            "Returns task_id (UUID); use it for task_status, task_stop, and task_download. "
+            "If your deployment uses credits, include user_api_key to charge the correct account. "
             "speed_vs_detail modes: "
             "'all' runs the full pipeline with all details (slower, higher token usage/cost). "
             "'fast' runs the full pipeline with minimal work per step (faster, fewer details), "
@@ -751,7 +787,10 @@ TOOL_DEFINITIONS = [
     ),
     ToolDefinition(
         name="task_stop",
-        description="Stops the plan that is currently being created.",
+        description=(
+            "Request the plan generation to stop. Pass the task_id (the UUID returned by task_create). "
+            "This is a normal MCP tool call: call task_stop with that task_id."
+        ),
         input_schema=TASK_STOP_INPUT_SCHEMA,
         output_schema=TASK_STOP_OUTPUT_SCHEMA,
     ),
@@ -806,7 +845,7 @@ async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
     """Create a new PlanExe task and enqueue it for processing.
 
     Examples:
-        - {"prompt": "Start a dental clinic in Copenhagen with 3 treatment rooms, targeting families and children. Budget 2.5M DKK. Open within 12 months."} → returns task_id + created_at
+        - {"prompt": "Start a dental clinic in Copenhagen with 3 treatment rooms, targeting families and children. Budget 2.5M DKK. Open within 12 months."} → returns task_id (UUID) + created_at
         - {"prompt": "Launch a bike repair shop in Amsterdam with retail sales, service bays, and mobile repair van. Budget 150k EUR. Profitability goal: month 18.", "speed_vs_detail": "fast"} → faster run
 
     Args:
@@ -815,17 +854,47 @@ async def handle_task_create(arguments: dict[str, Any]) -> CallToolResult:
 
     Returns:
         - content: JSON string matching structuredContent.
-        - structuredContent: {"task_id": ..., "created_at": ...}
+        - structuredContent: {"task_id": "<uuid>", "created_at": ...}
         - isError: False on success.
     """
     req = TaskCreateRequest(**arguments)
 
     merged_config = _merge_task_create_config(None, req.speed_vs_detail)
+    require_user_key = os.environ.get("PLANEXE_MCP_REQUIRE_USER_KEY", "false").lower() in ("1", "true", "yes", "on")
+    credits_per_plan = int(os.environ.get("PLANEXE_CREDITS_PER_PLAN", "1"))
+
+    user = None
+    if req.user_api_key:
+        user = _resolve_user_from_api_key(req.user_api_key.strip())
+        if not user:
+            response = {"error": {"code": "INVALID_USER_API_KEY", "message": "Invalid user_api_key."}}
+            return CallToolResult(
+                content=[TextContent(type="text", text=json.dumps(response))],
+                structuredContent=response,
+                isError=True,
+            )
+    elif require_user_key:
+        response = {"error": {"code": "USER_API_KEY_REQUIRED", "message": "user_api_key is required for task_create."}}
+        return CallToolResult(
+            content=[TextContent(type="text", text=json.dumps(response))],
+            structuredContent=response,
+            isError=True,
+        )
+
+    if user:
+        if not _charge_user_credit(user, credits_per_plan, reason="plan_created", source="mcp"):
+            response = {"error": {"code": "INSUFFICIENT_CREDITS", "message": "Not enough credits."}}
+            return CallToolResult(
+                content=[TextContent(type="text", text=json.dumps(response))],
+                structuredContent=response,
+                isError=True,
+            )
+
     response = await asyncio.to_thread(
         _create_task_sync,
         req.prompt,
         merged_config,
-        None,
+        {"user_id": str(user.id)} if user else None,
     )
     return CallToolResult(
         content=[TextContent(type="text", text=json.dumps(response))],
@@ -839,7 +908,10 @@ async def handle_prompt_examples(arguments: dict[str, Any]) -> CallToolResult:
     samples = _load_mcp_example_prompts()
     payload = {
         "samples": samples,
-        "message": "Use these as examples for task_create.",
+        "message": (
+            "Step 1 done. Next: Step 2 — Formulate a good prompt using these as a baseline (similar structure). Get user approval. "
+            "Step 3 — Only then call task_create with the approved prompt. Do not call task_create yet."
+        ),
     }
     return CallToolResult(
         content=[TextContent(type="text", text=json.dumps(payload))],

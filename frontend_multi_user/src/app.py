@@ -12,19 +12,23 @@ import time
 import json
 import uuid
 import io
-from urllib.parse import quote_plus
+import secrets
+import hashlib
+from urllib.parse import quote_plus, urlparse
 from typing import ClassVar, Dict, Optional, Tuple, Any
 from dataclasses import dataclass
 from pathlib import Path
-from flask import Flask, render_template, Response, request, jsonify, send_file, redirect, url_for
+from flask import Flask, render_template, Response, request, jsonify, send_file, redirect, url_for, session, abort
 from flask_admin import Admin, AdminIndexView, expose
-from flask_admin.contrib.sqla import ModelView
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from authlib.integrations.flask_client import OAuth
+from flask_wtf.csrf import CSRFProtect
 from functools import wraps
 import urllib.request
 from urllib.error import URLError
 from flask import make_response
 import requests
+import stripe
 from worker_plan_api.generate_run_id import generate_run_id
 from worker_plan_api.start_time import StartTime
 from worker_plan_api.plan_file import PlanFile
@@ -36,7 +40,13 @@ from database_api.model_taskitem import TaskItem, TaskState
 from database_api.model_event import EventType, EventItem
 from database_api.model_worker import WorkerItem
 from database_api.model_nonce import NonceItem
-from planexe_modelviews import WorkerItemView, TaskItemView, NonceItemView
+from database_api.model_user_account import UserAccount
+from database_api.model_user_provider import UserProvider
+from database_api.model_user_api_key import UserApiKey
+from database_api.model_credit_history import CreditHistory
+from database_api.model_payment_record import PaymentRecord
+from database_api.model_token_metrics import TokenMetrics, TokenMetricsSummary
+from planexe_modelviews import WorkerItemView, TaskItemView, NonceItemView, AdminOnlyModelView
 logger = logging.getLogger(__name__)
 
 from worker_plan_api.planexe_dotenv import DotEnvKeyEnum, PlanExeDotEnv
@@ -72,15 +82,26 @@ CONFIG = Config(
 )
 
 class User(UserMixin):
-    def __init__(self, user_id):
-        self.id = user_id
+    def __init__(self, user_id: str, is_admin: bool = False):
+        self.id = str(user_id)
+        self.is_admin = is_admin
 
 class MyAdminIndexView(AdminIndexView):
     @expose('/')
     def index(self):
         if not current_user.is_authenticated:
             return redirect(url_for('login'))
+        if not current_user.is_admin:
+            abort(403)
         return super(MyAdminIndexView, self).index()
+
+    def is_accessible(self):
+        return current_user.is_authenticated and getattr(current_user, "is_admin", False)
+
+    def inaccessible_callback(self, name, **kwargs):
+        if not current_user.is_authenticated:
+            return redirect(url_for("login"))
+        abort(403)
 
 def nocache(view):
     """Decorator to add 'no-cache' headers to a response."""
@@ -94,6 +115,16 @@ def nocache(view):
         response.headers['Expires'] = '-1' # Or any date in the past, or 0
         return response
     return no_cache_view
+
+def admin_required(view):
+    """Decorator that requires an authenticated admin user."""
+    @wraps(view)
+    @login_required
+    def wrapper(*args, **kwargs):
+        if not current_user.is_admin:
+            abort(403)
+        return view(*args, **kwargs)
+    return wrapper
 
 class MyFlaskApp:
     def __init__(self):
@@ -172,9 +203,61 @@ class MyFlaskApp:
         else:
             logger.warning("Config file not found at %s; using fallback settings.", config_path)
             self.app.config.from_mapping(
-                SECRET_KEY=os.environ.get("SECRET_KEY", "dev-secret-key"),
+                SECRET_KEY=os.environ.get("PLANEXE_FRONTEND_MULTIUSER_SECRET_KEY", "dev-secret-key"),
                 SQLALCHEMY_TRACK_MODIFICATIONS=False,
             )
+
+        # Env overrides: production sets PLANEXE_FRONTEND_MULTIUSER_SECRET_KEY; honor it over config.py
+        env_secret = os.environ.get("PLANEXE_FRONTEND_MULTIUSER_SECRET_KEY")
+        if env_secret:
+            self.app.config["SECRET_KEY"] = env_secret
+
+        _public_url = os.environ.get("PLANEXE_FRONTEND_MULTIUSER_PUBLIC_URL", "").strip()
+        if not _public_url:
+            _public_url = "http://localhost:5001"
+            logger.info("PLANEXE_FRONTEND_MULTIUSER_PUBLIC_URL not set; defaulting to %s", _public_url)
+        self.public_base_url = _public_url.rstrip("/")
+
+        # Validate SECRET_KEY - check for both default values
+        secret_key = self.app.config.get("SECRET_KEY")
+        is_default_key = secret_key in ("dev-secret-key", "your-secret-key", None)
+        is_production = os.environ.get("FLASK_ENV") == "production" or self._looks_like_production_url(self.public_base_url)
+
+        if is_default_key:
+            if is_production:
+                raise ValueError(
+                    "Cannot use default SECRET_KEY in production. "
+                    "Set PLANEXE_FRONTEND_MULTIUSER_SECRET_KEY environment variable. "
+                    "Generate with: python -c 'import secrets; print(secrets.token_hex(32))'"
+                )
+            logger.warning(
+                "Using default Flask SECRET_KEY (%s). "
+                "Set PLANEXE_FRONTEND_MULTIUSER_SECRET_KEY for production.",
+                secret_key
+            )
+
+        # Session cookie security settings
+        self.app.config.setdefault('SESSION_COOKIE_SECURE', is_production)
+        self.app.config.setdefault('SESSION_COOKIE_HTTPONLY', True)
+        self.app.config.setdefault('SESSION_COOKIE_SAMESITE', 'Lax')
+        logger.info(f"Session cookie security: secure={is_production}, httponly=True, samesite=Lax")
+
+        if self.public_base_url.lower().startswith("https://"):
+            self.app.config["SESSION_COOKIE_SECURE"] = True
+            self.app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+
+        # Enable CSRF protection
+        self.csrf = CSRFProtect(self.app)
+        logger.info("CSRF protection enabled")
+
+        self.oauth = OAuth(self.app)
+        self._register_oauth_providers()
+
+        # Determine open access mode (no login required).
+        # When no OAuth providers are configured and PLANEXE_AUTH_REQUIRED is not
+        # explicitly true, the app auto-logins every request as admin so Docker
+        # localhost users can create plans without setting up Google Console, etc.
+        self.open_access = self._determine_open_access()
 
         db_settings: Dict[str, str] = {}
         sqlalchemy_database_uri = self.planexe_dotenv.get("SQLALCHEMY_DATABASE_URI")
@@ -271,8 +354,15 @@ class MyFlaskApp:
         @self.login_manager.user_loader
         def load_user(user_id):
             if user_id == self.admin_username:
-                return User(user_id)
-            return None
+                return User(user_id, is_admin=True)
+            try:
+                user_uuid = uuid.UUID(str(user_id))
+            except ValueError:
+                return None
+            user = self.db.session.get(UserAccount, user_uuid)
+            if not user:
+                return None
+            return User(user.id, is_admin=user.is_admin)
         
         # Setup Flask-Admin
         # Flask-Admin versions bundled in the image don't accept template_mode; stick with defaults.
@@ -280,9 +370,14 @@ class MyFlaskApp:
         
         # Add database tables to admin panel
         self.admin.add_view(TaskItemView(model=TaskItem, session=self.db.session, name="Task"))
-        self.admin.add_view(ModelView(model=EventItem, session=self.db.session, name="Event"))
+        self.admin.add_view(AdminOnlyModelView(model=EventItem, session=self.db.session, name="Event"))
         self.admin.add_view(WorkerItemView(model=WorkerItem, session=self.db.session, name="Worker"))
         self.admin.add_view(NonceItemView(model=NonceItem, session=self.db.session, name="Nonce"))
+        self.admin.add_view(AdminOnlyModelView(model=UserAccount, session=self.db.session, name="User"))
+        self.admin.add_view(AdminOnlyModelView(model=UserProvider, session=self.db.session, name="User Provider"))
+        self.admin.add_view(AdminOnlyModelView(model=UserApiKey, session=self.db.session, name="User API Key"))
+        self.admin.add_view(AdminOnlyModelView(model=CreditHistory, session=self.db.session, name="Credit History"))
+        self.admin.add_view(AdminOnlyModelView(model=PaymentRecord, session=self.db.session, name="Payments"))
 
         self._setup_routes()
 
@@ -352,10 +447,329 @@ class MyFlaskApp:
         except Exception as exc:
             return None, f"Error fetching worker_plan llm-info: {exc}"
 
+    @staticmethod
+    def _looks_like_production_url(url: str) -> bool:
+        """Return True when *url* looks like a real production deployment.
+
+        Plain ``http://localhost`` / ``http://127.0.0.1`` URLs are treated as
+        development so that local Docker users don't need to set a dedicated
+        SECRET_KEY or deal with ``SESSION_COOKIE_SECURE`` over plain HTTP.
+        """
+        if not url:
+            return False
+        parsed = urlparse(url.lower())
+        if parsed.scheme == "https":
+            return True
+        # http:// to localhost / loopback is clearly dev
+        if parsed.hostname in ("localhost", "127.0.0.1", "0.0.0.0", "::1"):
+            return False
+        # Any other host over http is still likely a real deployment
+        return True
+
+    def _register_oauth_providers(self) -> None:
+        providers = {
+            "google": {
+                "client_id": os.environ.get("PLANEXE_OAUTH_GOOGLE_CLIENT_ID"),
+                "client_secret": os.environ.get("PLANEXE_OAUTH_GOOGLE_CLIENT_SECRET"),
+                "server_metadata_url": "https://accounts.google.com/.well-known/openid-configuration",
+                "client_kwargs": {"scope": "openid email profile"},
+            },
+            "github": {
+                "client_id": os.environ.get("PLANEXE_OAUTH_GITHUB_CLIENT_ID"),
+                "client_secret": os.environ.get("PLANEXE_OAUTH_GITHUB_CLIENT_SECRET"),
+                "authorize_url": "https://github.com/login/oauth/authorize",
+                "access_token_url": "https://github.com/login/oauth/access_token",
+                "api_base_url": "https://api.github.com/",
+                "client_kwargs": {"scope": "read:user user:email"},
+            },
+            "discord": {
+                "client_id": os.environ.get("PLANEXE_OAUTH_DISCORD_CLIENT_ID"),
+                "client_secret": os.environ.get("PLANEXE_OAUTH_DISCORD_CLIENT_SECRET"),
+                "authorize_url": "https://discord.com/oauth2/authorize",
+                "access_token_url": "https://discord.com/api/oauth2/token",
+                "api_base_url": "https://discord.com/api/",
+                "client_kwargs": {"scope": "identify email"},
+            },
+        }
+
+        self.oauth_providers: list[str] = []
+        for name, config in providers.items():
+            if not config["client_id"] or not config["client_secret"]:
+                continue
+            reg_config = dict(config)
+            if name == "google":
+                reg_config["redirect_uri"] = self._oauth_redirect_url("google")
+            self.oauth.register(name=name, **reg_config)
+            self.oauth_providers.append(name)
+
+        if not self.oauth_providers:
+            logger.warning("No OAuth providers configured. Set PLANEXE_OAUTH_* env vars to enable OAuth login.")
+
+    def _determine_open_access(self) -> bool:
+        """Check if the app should run in open access mode (no login required).
+
+        Open access is enabled when no OAuth providers are configured and
+        ``PLANEXE_AUTH_REQUIRED`` is not explicitly set to ``true``.
+        This lets Docker-on-localhost users create plans immediately after
+        ``docker compose up`` without setting up Google Console or any other
+        OAuth provider.
+
+        To force login even without OAuth (e.g. admin-only access via
+        username/password), set ``PLANEXE_AUTH_REQUIRED=true``.
+        """
+        env_val = os.environ.get("PLANEXE_AUTH_REQUIRED", "").strip().lower()
+        if env_val in ("1", "true", "yes"):
+            if not self.oauth_providers:
+                raise ValueError(
+                    "PLANEXE_AUTH_REQUIRED=true but no OAuth providers are configured. "
+                    "Either set PLANEXE_OAUTH_* env vars (Google / GitHub / Discord) "
+                    "or remove PLANEXE_AUTH_REQUIRED to use open access mode."
+                )
+            logger.info(
+                "Authentication required (PLANEXE_AUTH_REQUIRED=true). "
+                "%d OAuth provider(s) configured.",
+                len(self.oauth_providers),
+            )
+            return False
+        if env_val in ("0", "false", "no"):
+            logger.info("Open access mode forced via PLANEXE_AUTH_REQUIRED=false.")
+            return True
+        # Auto-detect: open access when no OAuth providers are configured.
+        if not self.oauth_providers:
+            logger.info(
+                "Open access mode: no OAuth providers configured, login not required. "
+                "Set PLANEXE_AUTH_REQUIRED=true to enforce login."
+            )
+            return True
+        logger.info(
+            "Authentication required. %d OAuth provider(s) configured.",
+            len(self.oauth_providers),
+        )
+        return False
+
+    def _oauth_redirect_url(self, provider: str) -> str:
+        return f"{self.public_base_url}/auth/{provider}/callback"
+
+    def _get_user_from_provider(self, provider: str, token: dict[str, Any]) -> dict[str, Any]:
+        if provider == "google":
+            client = self.oauth.create_client(provider)
+            userinfo = client.parse_id_token(token)
+            if userinfo:
+                return userinfo
+            return client.get("userinfo").json()
+        if provider == "github":
+            client = self.oauth.create_client(provider)
+            profile = client.get("user").json()
+            emails = client.get("user/emails").json()
+            primary_email = None
+            for item in emails:
+                if item.get("primary"):
+                    primary_email = item.get("email")
+                    break
+            if primary_email and not profile.get("email"):
+                profile["email"] = primary_email
+            return profile
+        if provider == "discord":
+            client = self.oauth.create_client(provider)
+            return client.get("users/@me").json()
+        raise ValueError(f"Unsupported OAuth provider: {provider}")
+
+    def _upsert_user_from_oauth(self, provider: str, profile: dict[str, Any]) -> UserAccount:
+        # Validate required fields
+        provider_user_id = str(profile.get("sub") or profile.get("id") or "")
+        if not provider_user_id:
+            raise ValueError(f"OAuth profile from {provider} missing user identifier (sub/id).")
+
+        # Email is optional for some providers - log warning if missing
+        email = profile.get("email")
+        if not email:
+            logger.warning(f"OAuth profile from {provider} missing email for user {provider_user_id}")
+
+        existing_provider = UserProvider.query.filter_by(
+            provider=provider,
+            provider_user_id=provider_user_id,
+        ).first()
+        now = datetime.now(UTC)
+
+        if existing_provider:
+            user = self.db.session.get(UserAccount, existing_provider.user_id)
+            existing_provider.raw_profile = profile
+            existing_provider.email = profile.get("email")
+            existing_provider.last_login_at = now
+            if user:
+                user.last_login_at = now
+                self._update_user_from_profile(user, profile)
+                self.db.session.commit()
+                return user
+
+        user = UserAccount(
+            email=profile.get("email"),
+            name=profile.get("name") or profile.get("username") or profile.get("login"),
+            given_name=profile.get("given_name"),
+            family_name=profile.get("family_name"),
+            locale=profile.get("locale"),
+            avatar_url=profile.get("picture") or profile.get("avatar_url") or profile.get("avatar"),
+            last_login_at=now,
+        )
+        self.db.session.add(user)
+        self.db.session.commit()
+
+        provider_row = UserProvider(
+            user_id=user.id,
+            provider=provider,
+            provider_user_id=provider_user_id,
+            email=profile.get("email"),
+            raw_profile=profile,
+            last_login_at=now,
+        )
+        self.db.session.add(provider_row)
+        self.db.session.commit()
+        return user
+
+    def _update_user_from_profile(self, user: UserAccount, profile: dict[str, Any]) -> None:
+        user.email = profile.get("email") or user.email
+        user.name = profile.get("name") or profile.get("username") or profile.get("login") or user.name
+        user.given_name = profile.get("given_name") or user.given_name
+        user.family_name = profile.get("family_name") or user.family_name
+        user.locale = profile.get("locale") or user.locale
+        user.avatar_url = profile.get("picture") or profile.get("avatar_url") or profile.get("avatar") or user.avatar_url
+
+    def _get_or_create_api_key(self, user: UserAccount) -> str:
+        api_key_secret = os.environ.get("PLANEXE_API_KEY_SECRET", "dev-api-key-secret")
+        if api_key_secret == "dev-api-key-secret":
+            logger.warning("PLANEXE_API_KEY_SECRET not set. Using dev secret for API key hashing.")
+
+        existing_key = UserApiKey.query.filter_by(user_id=user.id, revoked_at=None).first()
+        if existing_key:
+            return ""
+
+        raw_key = f"pex_{secrets.token_urlsafe(24)}"
+        key_hash = hashlib.sha256(f"{api_key_secret}:{raw_key}".encode("utf-8")).hexdigest()
+        key_prefix = raw_key[:10]
+        api_key = UserApiKey(
+            user_id=user.id,
+            key_hash=key_hash,
+            key_prefix=key_prefix,
+        )
+        self.db.session.add(api_key)
+        self.db.session.commit()
+        return raw_key
+
+    def _apply_credit_delta(self, user: UserAccount, delta: int, reason: str, source: str, external_id: Optional[str] = None) -> None:
+        user.credits_balance = max(0, (user.credits_balance or 0) + delta)
+        ledger = CreditHistory(
+            user_id=user.id,
+            delta=delta,
+            reason=reason,
+            source=source,
+            external_id=external_id,
+        )
+        self.db.session.add(ledger)
+        self.db.session.commit()
+
+    def _apply_payment_credits(
+        self,
+        user_id: str,
+        provider: str,
+        provider_payment_id: str,
+        credits: int,
+        amount: int,
+        currency: str,
+        raw_payload: dict[str, Any],
+    ) -> None:
+        try:
+            user_uuid = uuid.UUID(str(user_id))
+        except ValueError:
+            logger.error("Invalid user_id in payment payload: %s", user_id)
+            return
+        with self.app.app_context():
+            user = self.db.session.get(UserAccount, user_uuid)
+            if not user:
+                logger.error("Payment user not found: %s", user_id)
+                return
+            existing = PaymentRecord.query.filter_by(
+                provider=provider,
+                provider_payment_id=provider_payment_id,
+            ).first()
+            if existing:
+                return
+            payment = PaymentRecord(
+                user_id=user.id,
+                provider=provider,
+                provider_payment_id=provider_payment_id,
+                credits=credits,
+                amount=amount,
+                currency=currency,
+                status="completed",
+                raw_payload=raw_payload,
+            )
+            self.db.session.add(payment)
+            self.db.session.commit()
+            self._apply_credit_delta(
+                user,
+                delta=credits,
+                reason="credits_purchased",
+                source=provider,
+                external_id=provider_payment_id,
+            )
+
     def _setup_routes(self):
+        @self.app.before_request
+        def _auto_login_open_access():
+            """In open access mode, auto-login as admin so @login_required routes work."""
+            if self.open_access and not current_user.is_authenticated:
+                login_user(User(self.admin_username, is_admin=True))
+
+        @self.app.context_processor
+        def inject_current_user_name():
+            """Inject current_user_name for header display (full name or None)."""
+            extra: dict[str, Any] = {"open_access": self.open_access}
+            if not current_user.is_authenticated:
+                extra["current_user_name"] = None
+                return extra
+            if current_user.is_admin:
+                extra["current_user_name"] = "Admin"
+                return extra
+            try:
+                user_uuid = uuid.UUID(str(current_user.id))
+            except ValueError:
+                extra["current_user_name"] = None
+                return extra
+            user = self.db.session.get(UserAccount, user_uuid)
+            if not user:
+                extra["current_user_name"] = None
+                return extra
+            name = (user.name or user.given_name or user.email or "Account").strip() or "Account"
+            extra["current_user_name"] = name
+            return extra
+
         @self.app.route('/')
         def index():
-            return render_template('index.html')
+            user = None
+            recent_tasks: list[TaskItem] = []
+            is_admin = False
+            if current_user.is_authenticated:
+                is_admin = current_user.is_admin
+                if not is_admin:
+                    try:
+                        user_uuid = uuid.UUID(str(current_user.id))
+                        user = self.db.session.get(UserAccount, user_uuid)
+                        if user:
+                            recent_tasks = (
+                                TaskItem.query
+                                .filter_by(user_id=str(user.id))
+                                .order_by(TaskItem.timestamp_created.desc())
+                                .limit(5)
+                                .all()
+                            )
+                    except Exception:
+                        logger.debug("Could not load dashboard data", exc_info=True)
+            return render_template(
+                'index.html',
+                user=user,
+                recent_tasks=recent_tasks,
+                is_admin=is_admin,
+            )
 
         @self.app.route('/healthcheck')
         def healthcheck():
@@ -377,17 +791,249 @@ class MyFlaskApp:
                 username = request.form.get('username')
                 password = request.form.get('password')
                 if username == self.admin_username and password == self.admin_password:
-                    user = User(self.admin_username)
+                    user = User(self.admin_username, is_admin=True)
                     login_user(user)
                     return redirect(url_for('admin.index'))
                 return 'Invalid credentials', 401
-            return render_template('login.html')
+            return render_template(
+                'login.html',
+                oauth_providers=self.oauth_providers,
+                telegram_enabled=bool(os.environ.get("PLANEXE_TELEGRAM_BOT_TOKEN")),
+                telegram_login_url=os.environ.get("PLANEXE_TELEGRAM_LOGIN_URL") or None,
+            )
+
+        @self.app.route('/api/oauth-redirect-uri')
+        def oauth_redirect_uri_debug():
+            """Return the redirect URI the app sends to Google. Use this to verify Google Console has the exact same URI."""
+            lines = [
+                f"PLANEXE_FRONTEND_MULTIUSER_PUBLIC_URL={self.public_base_url or '(not set)'}",
+                f"redirect_uri={self._oauth_redirect_url('google') if 'google' in self.oauth_providers else '(google not configured)'}",
+            ]
+            body = "\n".join(lines)
+            return body, 200, {"Content-Type": "text/plain; charset=utf-8"}
+
+        @self.app.route('/login/<provider>')
+        def oauth_login(provider: str):
+            if provider not in self.oauth_providers:
+                abort(404)
+            client = self.oauth.create_client(provider)
+            redirect_uri = self._oauth_redirect_url(provider)
+            if provider == "google":
+                nonce = secrets.token_urlsafe(16)
+                session["oauth_google_nonce"] = nonce
+                return client.authorize_redirect(redirect_uri, nonce=nonce)
+            return client.authorize_redirect(redirect_uri)
+
+        @self.app.route('/auth/<provider>/callback')
+        def oauth_callback(provider: str):
+            if provider not in self.oauth_providers:
+                abort(404)
+
+            try:
+                client = self.oauth.create_client(provider)
+                token = client.authorize_access_token()
+
+                if provider == "google":
+                    nonce = session.pop("oauth_google_nonce", None)
+                    profile = client.parse_id_token(token, nonce=nonce)
+                    if not profile:
+                        profile = client.get("userinfo").json()
+                else:
+                    profile = self._get_user_from_provider(provider, token)
+
+                user = self._upsert_user_from_oauth(provider, profile)
+                login_user(User(user.id, is_admin=user.is_admin))
+                new_api_key = self._get_or_create_api_key(user)
+                if new_api_key:
+                    session["new_api_key"] = new_api_key
+                return redirect(url_for('account'))
+
+            except Exception as e:
+                logger.error(f"OAuth callback error for {provider}: {e}", exc_info=True)
+                return render_template('login.html',
+                    error=f"Authentication failed. Please try again or contact support.",
+                    oauth_providers=self.oauth_providers,
+                    telegram_enabled=bool(os.environ.get("PLANEXE_TELEGRAM_BOT_TOKEN")),
+                    telegram_login_url=os.environ.get("PLANEXE_TELEGRAM_LOGIN_URL") or None,
+                ), 401
 
         @self.app.route('/logout')
         @login_required
         def logout():
             logout_user()
             return redirect(url_for('index'))
+
+        @self.app.route('/account', methods=['GET', 'POST'])
+        @login_required
+        def account():
+            if current_user.is_admin:
+                return redirect(url_for('admin.index'))
+            user_uuid = uuid.UUID(str(current_user.id))
+            user = self.db.session.get(UserAccount, user_uuid)
+            if not user:
+                return redirect(url_for('logout'))
+
+            new_api_key = session.pop("new_api_key", None)
+            if request.method == 'POST':
+                action = request.form.get('action')
+                if action == "regenerate_api_key":
+                    existing_keys = UserApiKey.query.filter_by(user_id=user.id, revoked_at=None).all()
+                    now = datetime.now(UTC)
+                    for key in existing_keys:
+                        key.revoked_at = now
+                    self.db.session.commit()
+                    raw_key = self._get_or_create_api_key(user)
+                    if raw_key:
+                        session["new_api_key"] = raw_key
+                return redirect(url_for('account'))
+
+            active_key = UserApiKey.query.filter_by(user_id=user.id, revoked_at=None).first()
+            return render_template(
+                'account.html',
+                user=user,
+                active_key=active_key,
+                new_api_key=new_api_key,
+                stripe_enabled=bool(os.environ.get("PLANEXE_STRIPE_SECRET_KEY")),
+                telegram_enabled=bool(os.environ.get("PLANEXE_TELEGRAM_BOT_TOKEN")),
+            )
+
+        @self.app.route('/billing/stripe/checkout', methods=['POST'])
+        @login_required
+        def stripe_checkout():
+            if current_user.is_admin:
+                abort(403)
+            stripe_secret = os.environ.get("PLANEXE_STRIPE_SECRET_KEY")
+            if not stripe_secret:
+                return jsonify({"error": "Stripe not configured"}), 400
+            stripe.api_key = stripe_secret
+            credits = int(request.form.get("credits", "1"))
+            if credits < 1:
+                return jsonify({"error": "credits must be >= 1"}), 400
+            price_per_credit = int(os.environ.get("PLANEXE_CREDIT_PRICE_CENTS", "100"))
+            amount = credits * price_per_credit
+            success_url = f"{self.public_base_url}/account?stripe=success" if self.public_base_url else url_for("account", _external=True)
+            cancel_url = f"{self.public_base_url}/account?stripe=cancel" if self.public_base_url else url_for("account", _external=True)
+            session_obj = stripe.checkout.Session.create(
+                mode="payment",
+                success_url=success_url,
+                cancel_url=cancel_url,
+                line_items=[{
+                    "price_data": {
+                        "currency": os.environ.get("PLANEXE_STRIPE_CURRENCY", "usd"),
+                        "product_data": {"name": "PlanExe credits"},
+                        "unit_amount": amount,
+                    },
+                    "quantity": 1,
+                }],
+                metadata={
+                    "user_id": str(current_user.id),
+                    "credits": str(credits),
+                },
+            )
+            return redirect(session_obj.url)
+
+        @self.app.route('/billing/stripe/webhook', methods=['POST'])
+        def stripe_webhook():
+            stripe_secret = os.environ.get("PLANEXE_STRIPE_SECRET_KEY")
+            webhook_secret = os.environ.get("PLANEXE_STRIPE_WEBHOOK_SECRET")
+            if not stripe_secret:
+                return jsonify({"error": "Stripe not configured"}), 400
+            stripe.api_key = stripe_secret
+            payload = request.get_data()
+            sig_header = request.headers.get("Stripe-Signature")
+            try:
+                if webhook_secret:
+                    event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
+                else:
+                    event = json.loads(payload)
+            except Exception as exc:
+                logger.error("Stripe webhook error: %s", exc)
+                return jsonify({"error": "invalid payload"}), 400
+
+            if event.get("type") == "checkout.session.completed":
+                session_obj = event["data"]["object"]
+                metadata = session_obj.get("metadata") or {}
+                user_id = metadata.get("user_id")
+                credits = int(metadata.get("credits", "0") or 0)
+                if user_id and credits > 0:
+                    self._apply_payment_credits(
+                        user_id=user_id,
+                        provider="stripe",
+                        provider_payment_id=session_obj.get("id", ""),
+                        credits=credits,
+                        amount=session_obj.get("amount_total") or 0,
+                        currency=session_obj.get("currency") or "usd",
+                        raw_payload=session_obj,
+                    )
+            return jsonify({"status": "ok"})
+
+        @self.app.route('/billing/telegram/invoice', methods=['POST'])
+        @login_required
+        def telegram_invoice():
+            if current_user.is_admin:
+                abort(403)
+            bot_token = os.environ.get("PLANEXE_TELEGRAM_BOT_TOKEN")
+            if not bot_token:
+                return jsonify({"error": "Telegram not configured"}), 400
+            credits = int(request.form.get("credits", "1"))
+            if credits < 1:
+                return jsonify({"error": "credits must be >= 1"}), 400
+            price_per_credit = int(os.environ.get("PLANEXE_TELEGRAM_STARS_PER_CREDIT", "100"))
+            payload = f"planexe:{current_user.id}:{credits}:{uuid.uuid4()}"
+            url = f"https://api.telegram.org/bot{bot_token}/createInvoiceLink"
+            response = requests.post(url, json={
+                "title": "PlanExe credits",
+                "description": f"{credits} credit(s) for PlanExe",
+                "payload": payload,
+                "currency": "XTR",
+                "prices": [{"label": "PlanExe credits", "amount": credits * price_per_credit}],
+            }, timeout=10)
+            if response.status_code != 200:
+                return jsonify({"error": "telegram error", "details": response.text}), 400
+            data = response.json()
+            if not data.get("ok"):
+                return jsonify({"error": "telegram error", "details": data}), 400
+            return redirect(data["result"])
+
+        @self.app.route('/billing/telegram/webhook', methods=['POST'])
+        def telegram_webhook():
+            bot_token = os.environ.get("PLANEXE_TELEGRAM_BOT_TOKEN")
+            if not bot_token:
+                return jsonify({"error": "Telegram not configured"}), 400
+            update = request.get_json(silent=True) or {}
+            if "pre_checkout_query" in update:
+                query_id = update["pre_checkout_query"]["id"]
+                requests.post(
+                    f"https://api.telegram.org/bot{bot_token}/answerPreCheckoutQuery",
+                    json={"pre_checkout_query_id": query_id, "ok": True},
+                    timeout=5,
+                )
+                return jsonify({"status": "ok"})
+            message = update.get("message") or {}
+            payment = message.get("successful_payment")
+            if payment:
+                payload = payment.get("invoice_payload", "")
+                try:
+                    _, user_id, credits, _nonce = payload.split(":", 3)
+                    credits_int = int(credits)
+                except Exception:
+                    return jsonify({"status": "ignored"})
+                self._apply_payment_credits(
+                    user_id=user_id,
+                    provider="telegram",
+                    provider_payment_id=payment.get("telegram_payment_charge_id", ""),
+                    credits=credits_int,
+                    amount=payment.get("total_amount") or 0,
+                    currency=payment.get("currency") or "XTR",
+                    raw_payload=payment,
+                )
+            return jsonify({"status": "ok"})
+
+        # Exempt external webhook endpoints from CSRF protection.
+        # These receive POST requests from third-party services (Stripe, Telegram)
+        # that cannot provide a CSRF token.
+        self.csrf.exempt(stripe_webhook)
+        self.csrf.exempt(telegram_webhook)
 
         @self.app.route('/ping')
         @login_required
@@ -429,6 +1075,7 @@ class MyFlaskApp:
             return response
 
         @self.app.route('/run', methods=['GET', 'POST'])
+        @login_required
         @nocache
         def run():
             # When request.method is POST, and urlencoded parameters are detected, then return an error, so the developer can detect that something is wrong, the parameters in the url are supposed to be part for the form.
@@ -464,6 +1111,11 @@ class MyFlaskApp:
                 log_prompt_info += "... (truncated)"
             logger.info(f"endpoint /run ({request.method}). Size of request: {request_size_bytes} bytes. Starting run with parameters: prompt={log_prompt_info!r}, user_id={user_id_param!r}, nonce={nonce_param!r}, parameters={parameters!r}, prompt_param_bytes={prompt_param_bytes}, prompt_param_characters={prompt_param_characters}")
 
+            if current_user.is_admin:
+                user_id_param = self.admin_username
+            else:
+                user_id_param = str(current_user.id)
+
             if not nonce_param:
                 logger.error(f"endpoint /run. No nonce provided")
                 return jsonify({"error": "A unique request identifier (nonce) is required."}), 400
@@ -484,11 +1136,19 @@ class MyFlaskApp:
                 logger.error(f"endpoint /run. No prompt provided")
                 return jsonify({"error": "No prompt provided"}), 400
             
-            if not user_id_param:
-                logger.error(f"endpoint /run. No user_id provided")
-                return jsonify({"error": "No user_id provided"}), 400
-
             with self.app.app_context():
+                if not current_user.is_admin:
+                    user = self.db.session.get(UserAccount, uuid.UUID(str(current_user.id)))
+                    if not user:
+                        return jsonify({"error": "User not found"}), 400
+                    if not user.free_plan_used:
+                        user.free_plan_used = True
+                        self.db.session.commit()
+                    else:
+                        if (user.credits_balance or 0) <= 0:
+                            return jsonify({"error": "No credits available"}), 402
+                        self._apply_credit_delta(user, -1, reason="plan_created", source="web")
+
                 task = TaskItem(
                     state=TaskState.pending,
                     prompt=prompt_param,
@@ -576,7 +1236,7 @@ class MyFlaskApp:
             return response
 
         @self.app.route('/admin/task/<uuid:task_id>/report')
-        @login_required
+        @admin_required
         def download_task_report(task_id):
             task = self.db.session.get(TaskItem, task_id)
             if task is None or not task.generated_report_html:
@@ -586,7 +1246,7 @@ class MyFlaskApp:
             return send_file(buffer, mimetype='text/html', as_attachment=True, download_name='report.html')
 
         @self.app.route('/admin/task/<uuid:task_id>/run_zip')
-        @login_required
+        @admin_required
         def download_task_run_zip(task_id):
             task = self.db.session.get(TaskItem, task_id)
             if task is None or not task.run_zip_snapshot:
@@ -597,9 +1257,9 @@ class MyFlaskApp:
             return send_file(buffer, mimetype='application/zip', as_attachment=True, download_name=download_name)
 
         @self.app.route('/demo_run')
-        @login_required
+        @admin_required
         def demo_run():
-            user_id = 'USERIDPLACEHOLDER'
+            user_id = str(current_user.id)
             nonce = 'DEMO_' + str(uuid.uuid4())
 
             # The prompts to be shown on the page.
@@ -628,5 +1288,11 @@ if __name__ == '__main__':
         level=logging.DEBUG, 
         format='%(asctime)s - %(name)s - %(levelname)s - %(threadName)s - %(message)s'
     )
-    flask_app_instance = MyFlaskApp()
+    try:
+        flask_app_instance = MyFlaskApp()
+    except ValueError as exc:
+        # Configuration errors (e.g. PLANEXE_AUTH_REQUIRED=true without OAuth).
+        # Exit with code 0 so Docker "on-failure" restart policy does NOT restart.
+        logger.critical("Configuration error – service will not start: %s", exc)
+        sys.exit(0)
     flask_app_instance.run_server()

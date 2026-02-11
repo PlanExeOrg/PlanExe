@@ -202,7 +202,9 @@ services:
       timeout: 5s
       retries: 5
       start_period: 5s
-    restart: unless-stopped
+    # Use on-failure so config errors (exit 0) stop the container immediately
+    # instead of restart-looping. Runtime crashes (exit != 0) still restart.
+    restart: on-failure
 
   mcp_cloud:
     build:

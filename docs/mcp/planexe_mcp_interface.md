@@ -15,7 +15,7 @@ The plan is a **project plan**: a DAG of steps (Luigi tasks) that produce artifa
 Implementors should expose the following to agents so they understand what PlanExe does:
 
 - **What:** PlanExe turns a plain-English goal into a structured strategic-plan draft (executive summary, Gantt, risk register, governance, etc.) in ~15–20 min. The plan is a draft to refine, not an executable or final document.
-- **Flow:** Call prompt_examples first, then task_create; poll task_status at reasonable intervals (e.g. every 5 min); use task_download or task_file_info when complete.
+- **Required interaction order:** Step 1 — Call prompt_examples to fetch example prompts. Step 2 — Formulate a good prompt (use examples as a baseline; similar structure; get user approval). Step 3 — Only then call task_create with the approved prompt. Then poll task_status; use task_download or task_file_info when complete. To stop, call task_stop with the task_id from task_create.
 - **Output:** Large HTML report (~700KB) and optional zip of intermediate files (md, json, csv).
 
 ### 1.3 Scope of this document
@@ -73,7 +73,7 @@ The MCP specification defines two different mechanisms:
 - **MCP tools** (e.g. task_create, task_status, task_stop): the server exposes named tools; the client calls them and receives a response. PlanExe's interface is **tool-based**: the agent calls task_create → receives task_id → polls task_status → uses task_download. This document specifies those tools.
 - **MCP tasks protocol** ("Run as task" in some UIs): a separate mechanism where the client can run a tool "as a task" using RPC methods such as tasks/run, tasks/get, tasks/result, tasks/cancel, tasks/list, so the tool runs in the background and the client polls for results.
 
-PlanExe **does not** use or advertise the MCP tasks protocol. Implementors and clients should use the **tools only**. Do not enable "Run as task" for PlanExe; many clients (e.g. Cursor) and the Python MCP SDK do not support the tasks protocol properly. The intended flow is: call task_create, poll task_status, then call task_download when complete.
+PlanExe **does not** use or advertise the MCP tasks protocol. Implementors and clients should use the **tools only**. Do not enable "Run as task" for PlanExe; many clients (e.g. Cursor) and the Python MCP SDK do not support the tasks protocol properly. The intended flow is: Step 1 — call prompt_examples; Step 2 — formulate a good prompt (user approval); Step 3 — call task_create; then poll task_status and call task_download when complete.
 
 ---
 
@@ -87,7 +87,7 @@ A long-lived container for a PlanExe project run.
 
 **Key properties**
 
-- task_id: stable unique identifier (UUID, matches TaskItem.id)
+- task_id: UUID returned by task_create for that task. Each task_create returns a new UUID. Use that exact UUID for all MCP calls; do not substitute ids from other services.
 - output_dir: artifact root namespace for task
 - config: immutable run configuration (models, runtime limits, Luigi params)
 - created_at, updated_at
@@ -163,7 +163,7 @@ All tool names below are normative.
 
 ### 6.1 prompt_examples
 
-Returns example prompts that define the baseline for a good prompt. Call this tool before task_create and refine your prompt until it matches that quality. If you create a task with a weaker prompt, the resulting plan will be lower quality than it could be.
+**Step 1 — Call this first.** Returns example prompts that define the baseline for what a good prompt looks like. Do not call task_create yet. Correct flow: Step 1 — call this tool to fetch examples. Step 2 — Formulate a good prompt (use examples as a baseline; similar structure; get user approval). Step 3 — Only then call task_create with the approved prompt. If you call task_create before formulating and approving a prompt, the resulting plan will be lower quality than it could be.
 
 **Request:** no parameters (empty object).
 
@@ -180,7 +180,7 @@ Returns example prompts that define the baseline for a good prompt. Call this to
 
 ### 6.2 task_create
 
-Start creating a new plan. speed_vs_detail modes: 'all' runs the full pipeline with all details (slower, higher token usage/cost). 'fast' runs the full pipeline with minimal work per step (faster, fewer details), useful to verify the pipeline is working. 'ping' runs the pipeline entrypoint and makes a single LLM call to verify the worker_plan_database is processing tasks and can reach the LLM.
+**Step 3 — Call only after prompt_examples (Step 1) and after you have formulated a good prompt and got user approval (Step 2).** Start creating a new plan with the approved prompt. speed_vs_detail modes: 'all' runs the full pipeline with all details (slower, higher token usage/cost). 'fast' runs the full pipeline with minimal work per step (faster, fewer details), useful to verify the pipeline is working. 'ping' runs the pipeline entrypoint and makes a single LLM call to verify the worker_plan_database is processing tasks and can reach the LLM.
 
 **Request**
 
@@ -206,7 +206,8 @@ Start creating a new plan. speed_vs_detail modes: 'all' runs the full pipeline w
 ```json
 {
   "prompt": "string",
-  "speed_vs_detail": "ping"
+  "speed_vs_detail": "ping",
+  "user_api_key": "pex_..."
 }
 ```
 
@@ -220,6 +221,10 @@ The `prompt` parameter should be a detailed description of what the plan should 
 - Banned words or approaches (if any)
 
 Short one-liners (e.g., "Construct a bridge") tend to produce poor output because they lack context for the planning pipeline. Important details are location, budget, time frame.
+
+**Optional**
+
+- user_api_key: user API key for credits and attribution (if your deployment requires it).
 
 Clients can call the MCP tool **prompt_examples** to retrieve example prompts. Use these as examples for task_create; they can also call task_create with any prompt—short prompts produce less detailed plans.
 
@@ -235,6 +240,10 @@ For the full catalog file:
   "created_at": "2026-01-14T12:34:56Z"
 }
 ```
+
+**Important**
+
+- task_id is a UUID returned by task_create. Use this exact UUID for task_status/task_stop/task_download.
 
 **Behavior**
 
@@ -254,6 +263,10 @@ Returns run status and progress. Used for progress bars and UI states. **Polling
   "task_id": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1"
 }
 ```
+
+**Input**
+
+- task_id: UUID returned by task_create. Use it to reference the plan being created.
 
 **Response**
 
@@ -283,7 +296,7 @@ Returns run status and progress. Used for progress bars and UI states. **Polling
 
 ### 6.4 task_stop
 
-Stops the active run.
+Requests the plan generation to stop. Pass the **task_id** (the UUID returned by task_create). This is a normal MCP tool call: call task_stop with that task_id.
 
 **Request**
 
@@ -292,6 +305,10 @@ Stops the active run.
   "task_id": "5e2b2a7c-8b49-4d2f-9b8f-6a3c1f05b9a1"
 }
 ```
+
+**Input**
+
+- task_id: UUID returned by task_create. Use this same UUID when calling task_stop to request the run to stop.
 
 **Response**
 
@@ -313,6 +330,11 @@ Stops the active run.
 **If your client exposes task_download** (e.g. mcp_local): use it to save the report or zip locally; it calls task_file_info under the hood, then fetches and writes to the local save path (e.g. PLANEXE_PATH).
 
 **If you only have task_file_info** (e.g. direct connection to mcp_cloud): call it with task_id and artifact ("report" or "zip"); use the returned download_url to fetch the file (e.g. GET with API key if configured).
+
+**task_file_info input**
+
+- task_id: UUID returned by task_create. Use it to download the created plan.
+- artifact: "report" or "zip" (default "report").
 
 ---
 

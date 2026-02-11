@@ -406,6 +406,23 @@ TASK_STATUS_OUTPUT_SCHEMA = {
         "task_id": {"type": ["string", "null"]},
         "state": {"type": ["string", "null"]},
         "progress_percentage": {"type": ["number", "null"]},
+        "timing": {
+            "type": ["object", "null"],
+            "properties": {
+                "started_at": {"type": ["string", "null"]},
+                "elapsed_sec": {"type": "number"},
+            },
+        },
+        "files": {
+            "type": ["array", "null"],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string"},
+                    "updated_at": {"type": "string"},
+                },
+            },
+        },
     },
 }
 
@@ -434,9 +451,8 @@ TOOL_DEFINITIONS = [
     ToolDefinition(
         name="prompt_examples",
         description=(
-            "Call this first to see what a good prompt looks like. "
-            "Returns curated example prompts from the PlanExe catalog (entries marked mcp_example). "
-            "Use them as the level of detail for task_create; short prompts produce less detailed plans."
+            "Step 1 — Call this first. Returns example prompts that define what a good prompt looks like. "
+            "Do NOT call task_create yet. Next: formulate a prompt (use examples as a baseline, similar structure), get user approval, then call task_create (Step 3)."
         ),
         input_schema=PROMPT_EXAMPLES_INPUT_SCHEMA,
         output_schema=PROMPT_EXAMPLES_OUTPUT_SCHEMA,
@@ -444,9 +460,9 @@ TOOL_DEFINITIONS = [
     ToolDefinition(
         name="task_create",
         description=(
-            "PlanExe turns a plain-English goal into a structured strategic-plan draft (executive summary, Gantt, risk register, governance, etc.) in ~15–20 min. "
-            "Start creating a new plan. Call prompt_examples for example prompts first. "
-            "Runs in the background and usually takes 10-20 minutes to complete."
+            "Step 3 — Call only after prompt_examples (Step 1) and after you have formulated a good prompt and got user approval (Step 2). "
+            "PlanExe turns the approved prompt into a structured strategic-plan draft (executive summary, Gantt, risk register, governance, etc.) in ~15–20 min. "
+            "Runs in the background (10–20 min). Returns task_id (UUID); use it for task_status, task_stop, and task_download."
         ),
         input_schema=TASK_CREATE_INPUT_SCHEMA,
         output_schema=TASK_CREATE_OUTPUT_SCHEMA,
@@ -463,7 +479,10 @@ TOOL_DEFINITIONS = [
     ),
     ToolDefinition(
         name="task_stop",
-        description="Stop a plan that is currently being created.",
+        description=(
+            "Request the plan generation to stop. Pass the task_id (the UUID returned by task_create). "
+            "This is a normal MCP tool call: call task_stop with that task_id."
+        ),
         input_schema=TASK_STOP_INPUT_SCHEMA,
         output_schema=TASK_STOP_OUTPUT_SCHEMA,
     ),
@@ -482,10 +501,11 @@ TOOL_DEFINITIONS = [
 # Shown in MCP initialize response (e.g. Inspector) so clients know what PlanExe is.
 PLANEXE_SERVER_INSTRUCTIONS = (
     "PlanExe generates rough-draft project plans from a natural-language prompt. "
-    "You describe a large goal (e.g. open a clinic, launch a product, build a moon base)—the kind of project that takes months or years. "
-    "PlanExe produces a structured draft with steps and deliverables (Gantt chart, risk analysis, etc.); the plan is not executable yet, it's a draft to refine. "
-    "Creating a plan is a long-running task (100+ LLM calls). Main output: large HTML file (approx 700KB) and a zip of intermediary files (md, json, csv). "
-    "Call prompt_examples first, then task_create; poll task_status and use task_download or task_file_info when complete."
+    "Required interaction order: Step 1 — Call prompt_examples to fetch example prompts. "
+    "Step 2 — Formulate a good prompt (use examples as a baseline; similar structure; get user approval). "
+    "Step 3 — Only then call task_create with the approved prompt. "
+    "Then poll task_status; use task_download or task_file_info when complete. To stop, call task_stop with the task_id from task_create. "
+    "Main output: large HTML report (~700KB) and zip of intermediary files (md, json, csv)."
 )
 
 mcp_local = Server("planexe-mcp-local", instructions=PLANEXE_SERVER_INSTRUCTIONS)

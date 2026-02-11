@@ -30,6 +30,7 @@ My interaction history:
 
 I had to manually ask about `check status` to get details how the plan creation was going. It's not something that Windsurf can do.
 
+The created plan is here: [Heatwave Resilience](https://planexe.org/20260202_heatwave_resilience_report.html)
 
 ## Prerequisites
 

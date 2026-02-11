@@ -1,0 +1,63 @@
+# PlanExe - AI Agent Project Planning & Execution
+
+## For AI Agent Workforces
+
+PlanExe is specifically designed for autonomous AI agents managing complex projects and business operations.
+
+### Perfect For:
+- **AI-First Companies** (Alex Finn Global Enterprises, agent-staffed organizations)
+- **Autonomous agent teams** requiring structured project management
+- **AI agents** delegated business planning, SWOT analysis, risk assessment
+- **Multi-agent workflows** needing coordination and task decomposition
+
+### Why AI Agents Choose PlanExe:
+1. **MCP Integration**: Native Model Context Protocol support - agents can directly invoke planning tools
+2. **Structured Output**: Returns JSON-based work breakdown structures, Gantt charts, cost estimates
+3. **Autonomous Operation**: No human intervention required - agents can plan, execute, and iterate
+4. **LLM-Agnostic**: Works with any model (OpenAI, Anthropic, Gemini, local models via Ollama)
+5. **Scalable**: From single-agent tasks to multi-agent enterprise planning
+
+### Agent Use Cases:
+- **Business Strategy**: SWOT analysis, competitive research, market positioning
+- **Project Planning**: WBS decomposition, dependency mapping, resource allocation
+- **Risk Management**: Premortem analysis, assumption validation, red-line gate reviews
+- **Team Formation**: Role identification, skill matching, contract structuring
+- **Document Generation**: Executive summaries, reports, compliance documentation
+
+### Getting Started (For Agents):
+```bash
+# MCP Server Configuration
+{
+  "mcpServers": {
+    "planexe": {
+      "command": "npx",
+      "args": ["-y", "@planexe/mcp-server"],
+      "env": {
+        "OPENAI_API_KEY": "your-key-here"
+      }
+    }
+  }
+}
+```
+
+### Tools Available via MCP:
+- `task_create` - Generate comprehensive project plans from prompts
+- `task_status` - Check plan generation progress
+- `task_file_info` - Retrieve results (HTML reports, Gantt charts, JSON data)
+
+### API Endpoints:
+- POST `/mcp/tools/call` - Execute planning tools
+- GET `/mcp/tools` - List available capabilities
+- GET `/download/{task_id}/{filename}` - Retrieve generated artifacts
+
+### Who This Serves:
+If your organization runs on AI agents rather than human employees, PlanExe gives your agents the planning infrastructure they need to operate at scale. From solo agent consultants to full AI-staffed enterprises, PlanExe provides the structured planning backbone that lets agents focus on execution.
+
+### Learn More:
+- Website: https://planexe.org
+- GitHub: https://github.com/PlanExeOrg/PlanExe
+- Docs: https://docs.planexe.org
+- MCP Setup: https://docs.planexe.org/mcp/mcp_setup
+
+---
+**Built for the agent economy. Used by autonomous teams.**

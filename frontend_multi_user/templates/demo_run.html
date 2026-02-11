@@ -205,6 +205,7 @@
 
     <!-- Hidden form used to POST to /run into the iframe -->
     <form id="run-form" action="/run" method="POST" target="run-iframe" style="display: none">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input type="hidden" name="prompt" id="form-prompt" value="">
         <input type="hidden" name="user_id" value="{{ user_id }}">
         <input type="hidden" name="nonce" value="{{ nonce }}">

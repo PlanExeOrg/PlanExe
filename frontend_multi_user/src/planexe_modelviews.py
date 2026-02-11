@@ -3,16 +3,27 @@ Custom ModelViews for the PlanExe-server tables.
 """
 from flask_admin.contrib.sqla import ModelView
 from markupsafe import Markup
-from flask import url_for
+from flask import url_for, abort, redirect
+from flask_login import current_user
 
-class WorkerItemView(ModelView):
+class AdminOnlyModelView(ModelView):
+    """Restrict admin views to authenticated admin users only."""
+    def is_accessible(self):
+        return current_user.is_authenticated and getattr(current_user, "is_admin", False)
+
+    def inaccessible_callback(self, name, **kwargs):
+        if not current_user.is_authenticated:
+            return redirect(url_for("login"))
+        abort(403)
+
+class WorkerItemView(AdminOnlyModelView):
     """Custom ModelView for WorkerItem"""
     column_list = ['id', 'started_at', 'last_heartbeat_at', 'current_task_id']
     column_default_sort = ('id', False)
     column_searchable_list = ['id', 'current_task_id']
     column_filters = ['started_at', 'last_heartbeat_at']
 
-class TaskItemView(ModelView):
+class TaskItemView(AdminOnlyModelView):
     """Custom ModelView for TaskItem"""
     column_list = [
         'id',
@@ -51,7 +62,7 @@ class TaskItemView(ModelView):
         ) if m.run_zip_snapshot else '—',
     }
 
-class NonceItemView(ModelView):
+class NonceItemView(AdminOnlyModelView):
     """Custom ModelView for NonceItem"""
     def __init__(self, model, *args, **kwargs):
         self.column_list = [c.key for c in model.__table__.columns]

@@ -88,11 +88,25 @@ Set `PLANEXE_MCP_API_KEY` to the same value you use in `Authorization: Bearer <k
 
 ### Available HTTP Endpoints
 
-- `POST /mcp` - Main MCP JSON-RPC endpoint (recommended)
-- `POST /mcp/tools/call` - Alternative HTTP wrapper for tool calls
-- `GET /mcp/tools` - List available tools
+- `POST /mcp` - Main MCP JSON-RPC endpoint (Streamable HTTP; may use SSE for streaming)
+- `GET /mcp/tools` - **List tools (JSON). No SSE required.** Use this if your client reports "SSE error" when connecting to `/mcp`.
+- `POST /mcp/tools/call` - **Call a tool (JSON). No SSE required.**
 - `GET /healthcheck` - Health check endpoint
 - `GET /docs` - OpenAPI documentation (Swagger UI)
+
+### "SSE error" or "no Server-SSE stream" from the client
+
+Some MCP clients (e.g. OpenClaw/mcporter) connect by doing a **GET** to the server URL and expect a **Server-Sent Events (SSE)** stream (`Content-Type: text/event-stream`). That is the **Streamable HTTP** transport. This server mounts FastMCP at `/mcp`; **GET /mcp** returns a **307 redirect** to `/mcp/`, and the Streamable HTTP handshake may not match what the client expects, so the client reports "SSE error" or "could not fetch … no SSE stream".
+
+**You do not need SSE for tools.** MCP over HTTP can use plain JSON:
+
+- **List tools:** `GET http://<host>:8001/mcp/tools` → returns `{"tools": [...]}` (JSON).
+- **Call a tool:** `POST http://<host>:8001/mcp/tools/call` with body `{"tool": "task_create", "arguments": {"prompt": "…", "speed_vs_detail": "ping"}}` → returns JSON.
+
+If your client only supports Streamable HTTP and fails on `/mcp`, you have two options:
+
+1. **Point the client at the JSON API** if it allows a separate "tools list" URL: use `GET /mcp/tools` for listing and `POST /mcp/tools/call` for calls (no SSE).
+2. **Use baseUrl with trailing slash** (e.g. `http://192.168.1.10:8001/mcp/`) so the client does not follow a redirect; whether that fixes SSE depends on how the client and FastMCP do the Streamable HTTP handshake.
 
 ## Environment Variables
 
@@ -101,7 +115,7 @@ Set `PLANEXE_MCP_API_KEY` to the same value you use in `Authorization: Bearer <k
 - `PLANEXE_MCP_API_KEY`: **Required for production**. API key for authentication. Clients can provide `Authorization: Bearer <key>` or `X-API-Key`.
 - `PLANEXE_MCP_HTTP_HOST`: HTTP server host (default: `127.0.0.1`). Use `0.0.0.0` to bind all interfaces (containers/cloud).
 - `PLANEXE_MCP_HTTP_PORT`: HTTP server port (default: `8001`). Railway will override with `PORT` env var.
-- `PLANEXE_MCP_PUBLIC_BASE_URL`: Public base URL for report download links (default unset; clients can use the connected base URL).
+- `PLANEXE_MCP_PUBLIC_BASE_URL`: Public base URL for report/zip download links in `task_file_info` (e.g. `http://192.168.1.40:8001`). When unset, the HTTP server uses the request’s host (scheme + authority), so clients connecting at `http://192.168.1.40:8001/mcp/` get download URLs like `http://192.168.1.40:8001/download/...` instead of localhost. If clients still see localhost in download URLs (e.g. behind a proxy), uncomment and set this in the repo’s `.env.docker-example` or `.env.developer-example` (copy to `.env` and fill in your public URL).
 - `PORT`: Railway-provided port (takes precedence over `PLANEXE_MCP_HTTP_PORT`)
 - `PLANEXE_MCP_CORS_ORIGINS`: Comma-separated list of allowed origins (default: `http://localhost,http://127.0.0.1`).
 - `PLANEXE_MCP_MAX_BODY_BYTES`: Max request size for `POST /mcp/tools/call` (default: `1048576`).
@@ -125,7 +139,7 @@ mcp_cloud uses the same database configuration as other PlanExe services:
 See `docs/mcp/planexe_mcp_interface.md` for full specification. Available tools:
 
 - `prompt_examples` - Return example prompts. Use these as examples for task_create.
-- `task_create` - Create a new task
+- `task_create` - Create a new task (returns task_id as UUID; may require user_api_key for credits)
 - `task_status` - Get task status and progress
 - `task_stop` - Stop an active task
 - `task_file_info` - Get file metadata for report or zip
@@ -137,14 +151,18 @@ Note: `task_download` is a synthetic tool provided by `mcp_local`, not by this s
 Download flow: call `task_file_info` to obtain the `download_url`, then fetch the
 report via `GET /download/{task_id}/030-report.html` (API key required if configured).
 
-## Debugging tools
+## Debugging with the MCP Inspector
 
-Use the MCP Inspector to verify tool registration and output schemas.
+Use the [MCP Inspector](https://github.com/modelcontextprotocol/inspector) to verify tool registration, authentication, and output schemas.
 
-Everything reference (stdio):
+> **Trailing slash required.** The server mounts at `/mcp` which redirects to `/mcp/`.
+> Always use `/mcp/` (with trailing slash) in the inspector URL to avoid a 307 redirect
+> that crashes `node-fetch` in older inspector versions.
+
+### Local (no authentication)
 
 ```bash
-npx @modelcontextprotocol/inspector --transport stdio npx -y @modelcontextprotocol/server-everything
+npx @modelcontextprotocol/inspector --transport http --server-url http://localhost:8001/mcp/
 ```
 
 Steps:
@@ -152,10 +170,44 @@ Steps:
 - Click "Tools"
 - Click "List Tools"
 
-PlanExe MCP (HTTP):
+### Production (with API key authentication)
+
+When `PLANEXE_MCP_API_KEY` is set on the server, the inspector must send the key
+with every request. The inspector proxy forwards the `Authorization` header to
+the remote server.
 
 ```bash
-npx @modelcontextprotocol/inspector --transport http --server-url http://localhost:8001/mcp
+npx @modelcontextprotocol/inspector --transport http --server-url https://mcp.planexe.org/mcp/
+```
+
+Steps:
+1. In the inspector UI, expand **"Authentication"** in the left sidebar
+2. Select **Bearer Token**
+3. Paste your API key (e.g. `pex_...`)
+4. Click **"Connect"**
+5. Click **"Tools"** then **"List Tools"** to verify
+
+The inspector sends `Authorization: Bearer <your-key>` which the server accepts
+via `_extract_api_key()` (same as `X-API-Key` or `API_KEY` headers).
+
+### Skipping proxy authentication (development only)
+
+The inspector proxy itself also requires a session token. To disable that during
+local development:
+
+```bash
+DANGEROUSLY_OMIT_AUTH=true npx @modelcontextprotocol/inspector --transport http --server-url https://mcp.planexe.org/mcp/
+```
+
+This only disables the local inspector-proxy token check. The remote server still
+enforces `PLANEXE_MCP_API_KEY` if configured.
+
+### Everything reference (stdio)
+
+Sanity-check the inspector itself against the reference server:
+
+```bash
+npx @modelcontextprotocol/inspector --transport stdio npx -y @modelcontextprotocol/server-everything
 ```
 
 Steps:

@@ -1,5 +1,8 @@
 [build]
-builder = "NIXPACKS"
+builder = "DOCKERFILE"
+dockerfilePath = "/mcp_cloud/Dockerfile"
+watchPatterns = ["/mcp_cloud/**", "/database_api/**", "/worker_plan/worker_plan_api/**"]
+context = "."
 
 [deploy]
 startCommand = "python -m mcp_cloud.http_server"

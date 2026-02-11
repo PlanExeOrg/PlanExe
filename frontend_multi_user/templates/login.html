@@ -1,60 +1,76 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login - PlanExe</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <style>
-        body {
-            padding-top: 40px;
-            padding-bottom: 40px;
-            background-color: #eee;
-        }
-        .form-signin {
-            max-width: 330px;
-            padding: 15px;
-            margin: 0 auto;
-        }
-        .form-signin .form-signin-heading,
-        .form-signin .checkbox {
-            margin-bottom: 10px;
-        }
-        .form-signin .checkbox {
-            font-weight: normal;
-        }
-        .form-signin .form-control {
-            position: relative;
-            height: auto;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-            padding: 10px;
-            font-size: 16px;
-        }
-        .form-signin .form-control:focus {
-            z-index: 2;
-        }
-        .form-signin input[type="text"] {
-            margin-bottom: -1px;
-            border-bottom-right-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-        .form-signin input[type="password"] {
-            margin-bottom: 10px;
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <form class="form-signin" method="POST">
-            <h2 class="form-signin-heading">Please sign in</h2>
+{% extends "base.html" %}
+{% block title %}Login - PlanExe{% endblock %}
+{% block head %}
+<style>
+    .form-signin {
+        max-width: 330px;
+        padding: 15px;
+        margin: 0 auto;
+    }
+    .form-signin .form-signin-heading,
+    .form-signin .checkbox {
+        margin-bottom: 10px;
+    }
+    .form-signin .checkbox {
+        font-weight: normal;
+    }
+    .form-signin .form-control {
+        position: relative;
+        height: auto;
+        box-sizing: border-box;
+        padding: 10px;
+        font-size: 16px;
+    }
+    .form-signin .form-control:focus {
+        z-index: 2;
+    }
+    .form-signin input[type="text"] {
+        margin-bottom: -1px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    .form-signin input[type="password"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+</style>
+{% endblock %}
+{% block content %}
+    <h2 class="form-signin-heading" style="text-align: center; margin-bottom: 20px;">Sign in</h2>
+
+    {% if error %}
+    <div class="alert alert-danger" role="alert" style="max-width: 500px; margin: 0 auto 20px auto;">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    {% if oauth_providers %}
+    <div class="form-signin">
+        <h4>Sign in with</h4>
+        {% for provider in oauth_providers %}
+            <a class="btn btn-primary btn-block" href="/login/{{ provider }}" style="margin-bottom: 8px;">{{ provider|capitalize }}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if telegram_enabled %}
+    <div class="form-signin" style="margin-top: 16px;">
+        <h4>Or sign in with Telegram</h4>
+        <p class="text-muted small">Open our bot in Telegram to sign in.</p>
+        <a class="btn btn-info btn-block" href="{{ telegram_login_url or '#' }}">Telegram</a>
+    </div>
+    {% endif %}
+
+    <div class="form-signin" style="margin-top: 16px;">
+        <h4>Or sign in with username and password</h4>
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <label for="username" class="sr-only">Username</label>
             <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
             <label for="password" class="sr-only">Password</label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Password" required style="margin-top: 8px;">
+            <button class="btn btn-default btn-block" type="submit" style="margin-top: 10px;">Sign in</button>
         </form>
     </div>
-</body>
-</html> 
+{% endblock %}

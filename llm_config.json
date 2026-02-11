@@ -1,6 +1,7 @@
 {
     "openai-paid-gpt-5-nano": {
         "comment": "This is slow. It's paid, and requires that you have a OPENAI_API_KEY in the .env file. This is a reasoning model, so it takes MUCH longer to create a plan.",
+        "luigi_workers": 4,
         "class": "OpenAI",
         "arguments": {
             "model": "gpt-5-nano",
@@ -16,6 +17,7 @@
     },
     "openrouter-paid-openai-gpt-oss-20b": {
         "comment": "This is very fast. It's paid, so check the pricing before use. Created August 5, 2025. 131,072 context. $0.05/M input tokens. $0.20/M output tokens. This is a reasoning model, and uses more tokens than LLMs.",
+        "luigi_workers": 4,
         "class": "OpenRouter",
         "arguments": {
             "model": "openai/gpt-oss-20b",
@@ -30,6 +32,7 @@
     },
     "openrouter-paid-nvidia-nemotron-3-nano-30b-a3b": {
         "comment": "This is very fast. It's paid, so check the pricing before use. Created Dec 14, 2025. 262,144 context. $0.06/M input tokens. $0.24/M output tokens. This is a reasoning model, and uses more tokens than LLMs.",
+        "luigi_workers": 4,
         "class": "OpenRouter",
         "arguments": {
             "model": "nvidia/nemotron-3-nano-30b-a3b",
@@ -45,6 +48,7 @@
     "openrouter-paid-gemini-2.0-flash-001": {
         "comment": "This is very fast. It's paid, so check the pricing before use. Created Feb 25, 2025. 1,048,576 context. $0.075/M input tokens. $0.30/M output tokens.",
         "priority": 1,
+        "luigi_workers": 4,
         "class": "OpenRouter",
         "arguments": {
             "model": "google/gemini-2.0-flash-001",
@@ -60,6 +64,7 @@
     "openrouter-paid-openai-gpt-4o-mini": {
         "comment": "This is medium fast. It's paid, so check the pricing before use. Created Jul 18, 2024. 128,000 context. Starting at $0.15/M input tokens. Starting at $0.60/M output tokens.",
         "priority": 2,
+        "luigi_workers": 4,
         "class": "OpenRouter",
         "arguments": {
             "model": "openai/gpt-4o-mini",
@@ -75,6 +80,7 @@
     "openrouter-paid-qwen3-30b-a3b": {
         "comment": "This is slow. It's paid, so check the pricing before use. Created Apr 28, 2025. 40,960 context. $0.08/M input tokens. $0.29/M output tokens.",
         "priority": 3,
+        "luigi_workers": 4,
         "class": "OpenRouter",
         "arguments": {
             "model": "qwen/qwen3-30b-a3b",
@@ -89,6 +95,7 @@
     },
     "ollama-llama3.1": {
         "comment": "This runs on your own computer. It's free. Requires Ollama to be installed. PlanExe runs in .venv on the host computer. No use of docker.",
+        "luigi_workers": 1,
         "class": "Ollama",
         "arguments": {
             "model": "llama3.1:latest",
@@ -99,6 +106,7 @@
     },
     "docker-ollama-llama3.1": {
         "comment": "This runs on your own computer. It's free. Requires Ollama to be installed. PlanExe runs in a Docker container, and ollama is installed on the host the computer.",
+        "luigi_workers": 1,
         "class": "Ollama",
         "arguments": {
             "model": "llama3.1:latest",
@@ -110,6 +118,7 @@
     },
     "ollama-qwen2.5-coder": {
         "comment": "This runs on your own computer. It's free. Requires Ollama to be installed. PlanExe runs in .venv on the host computer. No use of docker.",
+        "luigi_workers": 1,
         "class": "Ollama",
         "arguments": {
             "model": "qwen2.5-coder:latest",
@@ -120,6 +129,7 @@
     },
     "lmstudio-qwen2.5-7b-instruct-1m": {
         "comment": "This runs on your own computer. It's free. Requires LM Studio to be installed. Great for inspecting the request/response. PlanExe runs in .venv on the host computer. No use of docker.",
+        "luigi_workers": 1,
         "class": "LMStudio",
         "arguments": {
             "model_name": "qwen2.5-7b-instruct-1m",
@@ -131,6 +141,7 @@
     },
     "docker-lmstudio-qwen2.5-7b-instruct-1m": {
         "comment": "This runs on your own computer. It's free. Requires LM Studio to be installed. Great for inspecting the request/response. PlanExe runs in a Docker container, and ollama is installed on the host the computer.",
+        "luigi_workers": 1,
         "class": "LMStudio",
         "arguments": {
             "model_name": "qwen2.5-7b-instruct-1m",

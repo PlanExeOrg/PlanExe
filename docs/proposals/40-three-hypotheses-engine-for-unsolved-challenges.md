@@ -1,4 +1,16 @@
-# 40) Three-Hypotheses Engine for Unsolved Challenges
+---
+title: "Three-Hypotheses Engine for Unsolved Challenges"
+date: 2026-02-10
+status: Proposal
+author: PlanExe Team
+---
+
+# Three-Hypotheses Engine for Unsolved Challenges
+
+**Author:** PlanExe Team  
+**Date:** 2026-02-10  
+**Status:** Proposal  
+**Tags:** `hypotheses`, `r-and-d`, `uncertainty`, `experimentation`, `planning`
 
 ## Pitch
 When the system finds an unsolved challenge, require generation of exactly three plausible hypotheses to approach a solution, then rank them by evidence and risk.

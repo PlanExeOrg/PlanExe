@@ -1,4 +1,16 @@
-# 37) Cashflow + Funding Stress Monte Carlo (How Money Moves)
+---
+title: "Cashflow + Funding Stress Monte Carlo (How Money Moves)"
+date: 2026-02-10
+status: Proposal
+author: PlanExe Team
+---
+
+# Cashflow + Funding Stress Monte Carlo (How Money Moves)
+
+**Author:** PlanExe Team  
+**Date:** 2026-02-10  
+**Status:** Proposal  
+**Tags:** `cashflow`, `finance`, `simulation`, `liquidity`, `risk`
 
 ## Pitch
 Simulate monthly/weekly cash movement under uncertainty to identify liquidity cliffs, funding gaps, and insolvency windows before execution starts.

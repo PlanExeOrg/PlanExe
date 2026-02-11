@@ -1,4 +1,16 @@
-# 36) Monte Carlo Plan Success Probability Engine (10,000 Runs)
+---
+title: "Monte Carlo Plan Success Probability Engine (10,000 Runs)"
+date: 2026-02-10
+status: Proposal
+author: PlanExe Team
+---
+
+# Monte Carlo Plan Success Probability Engine (10,000 Runs)
+
+**Author:** PlanExe Team  
+**Date:** 2026-02-10  
+**Status:** Proposal  
+**Tags:** `monte-carlo`, `risk`, `forecasting`, `planning`, `simulation`
 
 ## Pitch
 Add a Monte Carlo simulation layer that runs 10,000 stochastic scenarios per plan to estimate probability of success/failure, budget overrun risk, and schedule slippage.

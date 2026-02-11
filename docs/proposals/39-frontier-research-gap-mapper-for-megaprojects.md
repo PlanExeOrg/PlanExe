@@ -1,4 +1,16 @@
-# 39) Frontier Research Gap Mapper for Mega-Projects
+---
+title: "Frontier Research Gap Mapper for Mega-Projects"
+date: 2026-02-10
+status: Proposal
+author: PlanExe Team
+---
+
+# Frontier Research Gap Mapper for Mega-Projects
+
+**Author:** PlanExe Team  
+**Date:** 2026-02-10  
+**Status:** Proposal  
+**Tags:** `research`, `frontier`, `megaprojects`, `feasibility`, `innovation`
 
 ## Pitch
 Add a module that detects where a plan depends on unresolved science/engineering and explicitly maps those dependencies before bid commitments.

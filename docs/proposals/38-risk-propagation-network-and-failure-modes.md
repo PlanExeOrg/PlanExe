@@ -1,4 +1,16 @@
-# 38) Risk Propagation Network + Failure Mode Manifestation
+---
+title: "Risk Propagation Network + Failure Mode Manifestation"
+date: 2026-02-10
+status: Proposal
+author: PlanExe Team
+---
+
+# Risk Propagation Network + Failure Mode Manifestation
+
+**Author:** PlanExe Team  
+**Date:** 2026-02-10  
+**Status:** Proposal  
+**Tags:** `risk`, `propagation`, `failure-modes`, `simulation`, `dependencies`
 
 ## Pitch
 Model how local risks propagate through dependencies to system-level failure, then simulate manifestation paths across 10,000 runs.

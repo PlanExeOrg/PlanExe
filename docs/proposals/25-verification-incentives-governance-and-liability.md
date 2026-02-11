@@ -8,52 +8,99 @@ author: Larry the Laptop Lobster
 # Verification Incentives, Governance, and Liability Model
 
 ## Pitch
-Expert verification only scales if incentives and liability are clear. Add governance, compensation, and legal responsibility templates for trusted collaboration.
+Establish a governance framework that aligns incentives for truthful verification, assigns liability for errors, and defines transparent accountability across experts, platforms, and plan owners.
+
+## Why
+Verification only works if experts are motivated to be accurate, conflicts of interest are managed, and accountability is clear. Without governance, verification risks becoming performative, biased, or legally fragile.
 
 ## Problem
-Experts may avoid participation without clear compensation, scope boundaries, and liability protections.
 
-## Proposal
-Define a governance model with:
+- Experts lack standardized incentives for accuracy.
+- Liability for incorrect verification is undefined.
+- Conflicts of interest and bias are not systematically managed.
 
-- Verification scopes (advisory vs certifying opinions)
+## Proposed Solution
+Create a governance and incentive framework that includes:
 
-- Compensation models (flat fee, milestone, retainer)
+1. Incentive structures tied to long-term accuracy.
+2. Liability rules for negligent or fraudulent verification.
+3. Transparent audit trails for verification decisions.
+4. A dispute resolution and appeals process.
 
-- Liability boundaries and insurance expectations
+## Incentive Model
 
-- Conflict-of-interest disclosures and recusal policy
+Align incentives with truthfulness:
 
-## Verification contract templates
+- **Base fee:** paid for verification work regardless of outcome.
+- **Accuracy bonus:** paid when verified claims are later confirmed.
+- **Penalty:** applied for negligent or consistently inaccurate verification.
 
-1. Expert engagement agreement
+**Example incentive split:**
 
-2. Review scope and deliverable definition
+- 60% base fee
+- 30% accuracy bonus
+- 10% at risk (released after outcome validation)
 
-3. Evidence standard and acceptance criteria
+## Governance Structure
 
-4. Escalation + dispute resolution process
+- **Verification Policy Board:** defines standards and acceptable evidence.
+- **Audit Committee:** samples verification decisions for consistency.
+- **Dispute Panel:** handles disagreements and appeals.
 
-## Risk controls
+## Liability Rules
 
-- Mandatory disclosures for financial/political conflicts
+Define responsibility tiers:
 
-- Multi-expert quorum for critical safety decisions
+- **Expert liability:** negligence, conflicts not disclosed, fabricated evidence.
+- **Platform liability:** failure to enforce standards or audit processes.
+- **Plan owner liability:** false inputs or withheld data.
 
-- Immutable audit trail of comments and signed decisions
+Liability should be proportional and documented in terms of service.
 
-## Product integration
+## Evidence Standards and Audits
 
-- "Verified by" badges with confidence and scope labels
+- Require evidence-level tagging for each claim.
+- Publish audit trails and verification notes.
+- Randomly audit high-impact plans.
 
-- Verification status visible to investors/stakeholders
+## Dispute Resolution Process
 
-- Exportable compliance bundle for due diligence
+1. Triggered by contradictions or stakeholder complaints.
+2. Independent review by separate experts.
+3. Resolution outcomes: uphold, revise, or revoke verification.
 
-## Success metrics
+## Output Schema
 
-- Expert participation and retention
+```json
+{
+  "verification_id": "ver_981",
+  "expert_id": "exp_123",
+  "evidence_level": "Level 3",
+  "audit_status": "pass",
+  "liability_notes": ["No conflicts disclosed"]
+}
+```
 
-- Legal disputes per 100 verified plans
+## Integration Points
 
-- Investor trust uplift for verified plans
+- Tied to expert marketplace reputation scoring.
+- Used by verification workflow stages to enforce gating.
+- Informs legal and compliance policies.
+
+## Success Metrics
+
+- Reduced rate of verified-claim reversals.
+- Increased investor confidence in verification outputs.
+- Faster resolution of disputes.
+
+## Risks
+
+- Legal complexity across jurisdictions.
+- Overly harsh penalties discourage participation.
+- Governance overhead slows verification cycles.
+
+## Future Enhancements
+
+- Insurance-backed verification guarantees.
+- Automated conflict-of-interest detection.
+- Cross-platform verification standards consortium.

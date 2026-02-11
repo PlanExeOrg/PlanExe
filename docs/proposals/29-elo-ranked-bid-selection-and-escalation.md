@@ -8,50 +8,78 @@ author: Larry the Laptop Lobster
 # ELO-Ranked Bid Selection + Escalation Pipeline
 
 ## Pitch
-Use `07-elo-ranking.md` as the core selection engine: rank thousands of generated plans, shortlist the strongest, and escalate only top candidates into expensive expert-grade refinement.
+Rank generated bids with an Elo-style system and route the highest-value opportunities to escalation queues, ensuring human attention is focused on the most promising bids.
 
 ## Why
-If 1000 plans are generated daily, selection quality is the economic center. ELO ranking provides a robust comparative filter before deeper spend.
+When the system produces hundreds of bids per day, manual review cannot keep up. Ranking and escalation allow high-value bids to surface, while low-value bids are deprioritized or discarded.
 
-## Proposal
-Implement a 3-tier funnel:
+## Problem
 
-1. **Tier 1**: bulk generation + lightweight scoring
+- Excess bids overwhelm decision makers.
+- Good bids are lost in noise without ranking.
+- Escalation is currently ad hoc and inconsistent.
 
-2. **Tier 2**: ELO pairwise ranking and percentile assignment
+## Proposed Solution
+Implement a pipeline that:
 
-3. **Tier 3**: top percentile receives expert verification + final bid packaging
+1. Scores bids using an Elo-style ranking based on bid quality metrics.
+2. Compares new bids against a rolling set of prior bids.
+3. Escalates top-ranked bids to human review.
+4. Auto-rejects bids that fail minimum thresholds.
 
-## Suggested cutoffs
+## Ranking Model
 
-- Keep top 20% after first pass
+### Input Metrics
 
-- Keep top 5% after ELO cross-domain ranking
+- Bid completeness
+- Evidence strength
+- Risk-adjusted ROI estimate
+- Feasibility score
+- Strategic fit
 
-- Send top 1% to full bid escalation
+### Elo Update Logic
 
-## Selection features
+- Each bid is compared to a peer set.
+- Winners gain Elo points, losers lose points.
+- Rankings update continuously as new bids arrive.
 
-- ELO score + confidence band
+## Escalation Rules
 
-- Domain fitness to opportunity
+- Top 5% of bids auto-escalated.
+- Bids above a fixed Elo threshold are escalated.
+- High-risk bids require mandatory review.
 
-- Verification status from Proposal 27
+## Output Schema
 
-- Resource feasibility for timely delivery
+```json
+{
+  "bid_id": "bid_902",
+  "elo_score": 1580,
+  "status": "escalated",
+  "reason": "Top 5% and high ROI"
+}
+```
 
-## Feedback loop
+## Integration Points
 
-- Track actual outcomes (win/loss, shortlist/not shortlisted)
+- Connected to bid factory orchestration.
+- Feeds into governance and risk checks.
+- Links to investor matching and dispatch.
 
-- Feed outcomes back into ranking calibration
+## Success Metrics
 
-- Penalize plans that score high but underperform in real bids
+- % of escalated bids that convert to funded projects.
+- Reduction in time spent reviewing low-quality bids.
+- Stability of rankings over time.
 
-## Success metrics
+## Risks
 
-- Precision of top-ranked plans
+- Elo scores could be gamed by noisy inputs.
+- Over-reliance on ranking may miss niche opportunities.
+- Escalation thresholds may be miscalibrated.
 
-- Win-rate lift from ELO-based shortlisting
+## Future Enhancements
 
-- Cost savings from reduced deep-review volume
+- Dynamic K-factor based on bid confidence.
+- Hybrid ranking with rule-based overrides.
+- Domain-specific Elo pools.

@@ -8,50 +8,128 @@ author: Larry the Laptop Lobster
 # Cost Breakdown Structure (CBS) Generation
 
 ## Pitch
-Generate a **Cost Breakdown Structure** alongside the WBS so users can see where money goes (labor, materials, vendors, permits, contingency) and tie costs back to tasks.
+Automatically generate a Cost Breakdown Structure (CBS) from a plan, mapping scope to cost categories, subcategories, and line items with assumptions and confidence levels.
 
 ## Why
-A plan without a CBS is hard to fund, bid, or govern. CBS improves transparency and enables tracking actuals vs plan.
+Most plans mention costs but do not structure them. A CBS enables:
 
-## Proposal
-### 1) CBS tree aligned to WBS
+- Comparable cost estimates across plans.
+- Immediate visibility into cost drivers.
+- Faster budgeting, funding, and procurement decisions.
 
-- Map each WBS node to cost categories:
+## Problem
+Without a CBS:
 
-  - labor (role-based)
+- Cost claims are vague or non-auditable.
+- Missing categories create hidden risk.
+- Downstream financial models are inconsistent.
 
-  - materials
+## Proposed Solution
+Implement a CBS generator that:
 
-  - software/services
+1. Parses plan scope and milestones.
+2. Maps scope elements to standard cost categories.
+3. Produces a multi-level CBS with assumptions and ranges.
+4. Assigns confidence and missing-info flags.
 
-  - subcontractors
+## CBS Taxonomy (Default)
 
-  - travel
+Level 1 categories:
 
-  - legal/compliance
+- Labor
+- Materials
+- Equipment
+- Software and Licenses
+- Facilities
+- Professional Services
+- Compliance and Legal
+- Operations and Maintenance
+- Contingency
 
-  - contingency
+Level 2 examples:
 
-### 2) Cost assumptions registry
+- Labor: engineering, project management, field staff
+- Materials: raw materials, components, consumables
+- Facilities: rent, utilities, site prep
+- Compliance: permits, audits, regulatory fees
 
-- Every cost line references assumptions (rates, quantities, quotes, inflation)
+## Generation Process
 
-### 3) Outputs
+### 1) Scope Extraction
+Identify:
 
-- CBS table (hierarchical)
+- Deliverables (what will be built or delivered)
+- Work packages (tasks and milestones)
+- Dependencies and external services
 
-- CBS ↔ WBS mapping table
+### 2) Mapping Rules
+Apply mapping from scope to cost categories:
 
-- “Top cost drivers” section
+- Physical deliverables -> materials + equipment + labor
+- Software deliverables -> labor + cloud + licenses
+- Regulated projects -> compliance + legal
 
-## Data model additions
+### 3) Cost Estimation
+Use a combination of:
 
-- `cost_items` (wbs_id, cbs_path, amount_cents, currency, assumption_id)
+- Benchmark ratios (per unit, per employee, per square meter)
+- Historical PlanExe costs
+- User-provided or inferred quantities
 
-- `cost_assumptions` (id, description, source, confidence)
+### 4) Confidence Assignment
 
-## Success metrics
+- High: explicit quantities and pricing provided.
+- Medium: benchmark-based estimates.
+- Low: inferred or missing data.
 
-- % WBS nodes mapped to CBS categories
+## Output Schema
 
-- User ability to export CBS to spreadsheet/accounting tools
+```json
+{
+  "cbs": [
+    {
+      "category": "Labor",
+      "subcategories": [
+        {"name": "Engineering", "estimate": 420000, "confidence": "medium"},
+        {"name": "Project Management", "estimate": 120000, "confidence": "medium"}
+      ]
+    },
+    {
+      "category": "Compliance and Legal",
+      "subcategories": [
+        {"name": "Permits", "estimate": 30000, "confidence": "low"}
+      ]
+    }
+  ],
+  "total_estimate": 570000,
+  "contingency": 0.12,
+  "assumptions": [
+    "Engineering team of 5 for 12 months",
+    "Permit costs based on regional averages"
+  ]
+}
+```
+
+## Integration Points
+
+- Feed into top-down and bottom-up finance modules.
+- Use as a checklist for missing cost categories.
+- Provide input to bid pricing and risk analysis.
+
+## Success Metrics
+
+- % plans with a generated CBS.
+- Reduction in unaccounted cost categories during review.
+- Alignment between CBS totals and final budget.
+
+## Risks
+
+- Over-simplified categories: mitigate with domain-specific mappings.
+- False precision: provide ranges and confidence labels.
+- Missing quantities: require user clarification prompts.
+
+## Future Enhancements
+
+- Domain-specific CBS templates.
+- Automated cost library updates.
+- Integration with procurement and supplier pricing feeds.

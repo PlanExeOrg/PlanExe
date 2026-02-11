@@ -8,52 +8,114 @@ author: Larry the Laptop Lobster
 # Expert Collaboration Marketplace + Reputation Graph
 
 ## Pitch
-Create a trusted expert collaboration layer where plans can be reviewed by verified specialists, with transparent reputation and outcome tracking.
+Create a marketplace where verified experts collaborate on plan validation and delivery, with a reputation graph that tracks expertise, performance, and reliability across domains.
+
+## Why
+Plan verification and execution quality depend on the right experts. Today, discovery is manual, trust is opaque, and accountability is weak. A structured marketplace improves match quality, lowers verification time, and raises investor confidence.
 
 ## Problem
-Finding experts is not enough; users need confidence in reviewer quality, reliability, and relevance.
 
-## Proposal
-Add a marketplace-like module with:
+- Experts are discovered ad hoc via personal networks.
+- Credentials are often unclear or unverifiable.
+- There is no consistent feedback loop or performance history.
+- Collaboration across experts is hard to coordinate and measure.
 
-- Verified expert profiles (credentials + domain tags)
+## Proposed Solution
+Implement a marketplace with:
 
-- Reputation graph (quality of past reviews, response time, conflicts)
+1. Expert profiles with verified credentials and domain tags.
+2. A reputation graph based on outcomes, not self-claims.
+3. A collaboration workflow that matches experts to plans and claims.
+4. Payments and incentives tied to quality and timeliness.
 
-- Matching requests with SLA options
+## Core Components
 
-- Structured collaboration threads tied to plan sections
+### Expert Profiles
 
-## Reputation dimensions
+Each expert profile should include:
 
-1. Technical accuracy of reviews
+- Domain and subdomain expertise
+- Verified credentials and affiliations
+- Historical verification outcomes
+- Availability and pricing model
+- Geographic and regulatory coverage
 
-2. Resolution quality (did recommendations help?)
+### Reputation Graph
 
-3. Timeliness and reliability
+A graph linking experts, plans, and outcomes:
 
-4. Conflict-of-interest transparency
+- Nodes: experts, plans, claims, organizations
+- Edges: verified, disputed, confirmed, collaborated
+- Weights: accuracy, timeliness, consensus alignment
 
-## Anti-gaming controls
+### Collaboration Workflow
 
-- Blind secondary reviews for high-stakes plans
+- Expert assignment to claims or plan sections
+- Shared evidence workspace and versioned notes
+- Disagreement resolution workflow
+- Final synthesis to a single verified output
 
-- Anomaly detection for reciprocal rating abuse
+## Reputation Scoring Model
 
-- Weighted trust from verified outcomes (not just stars)
+Compute a composite reputation score:
 
-## User-facing value
+- **Accuracy:** verified correctness of past assessments
+- **Timeliness:** responsiveness and on-time delivery
+- **Consensus Quality:** alignment with other high-reputation experts
+- **Outcome Impact:** correlation with post-investment results
 
-- Better expert selection confidence
+**Example formula:**
 
-- Faster collaboration starts
+```
+ReputationScore =
+  0.40*Accuracy +
+  0.20*Timeliness +
+  0.20*ConsensusQuality +
+  0.20*OutcomeImpact
+```
 
-- Persistent expert network for future plans
+## Marketplace Mechanics
 
-## Success metrics
+- Experts can opt into categories and claim types.
+- Plans can request single-expert review or multi-expert panels.
+- Pricing can be fixed, hourly, or outcome-based.
+- Incentives favor verified outcomes rather than volume.
 
-- Median time-to-match expert
+## Output Schema
 
-- Review completion rate
+```json
+{
+  "expert_id": "exp_123",
+  "domains": ["energy", "regulatory"],
+  "reputation_score": 0.82,
+  "verification_history": [
+    {"plan_id": "plan_001", "accuracy": 0.9, "timeliness_days": 2}
+  ],
+  "pricing": {"type": "hourly", "rate": 180}
+}
+```
 
-- User satisfaction with verification outcomes
+## Integration Points
+
+- Feeds into expert discovery and fit scoring.
+- Used by multi-stage verification workflow.
+- Reputation score impacts assignment priority and pricing.
+
+## Success Metrics
+
+- Reduced time to find qualified experts.
+- Increased verification completion rate.
+- Higher investor trust in expert-validated plans.
+- Expert retention and repeat engagements.
+
+## Risks
+
+- Reputation gaming: mitigate with audit and cross-validation.
+- Cold-start experts: bootstrap with credential scoring and probation periods.
+- Bias against minority experts: normalize by domain and experience level.
+
+## Future Enhancements
+
+- Cross-platform credential verification.
+- Expert cohort benchmarking.
+- Automated conflict-of-interest detection.

@@ -8,58 +8,110 @@ author: Larry the Laptop Lobster
 # Autonomous Bid Factory Orchestration (1000 Plans/Day)
 
 ## Pitch
-Create a queue-based orchestration system that can generate, refine, and package up to 1000 plans/day while enforcing budget, quality, and domain-priority constraints.
+Design an orchestration layer that can generate, verify, and route up to 1000 bid-ready plans per day, while maintaining quality gates, auditability, and human oversight.
 
 ## Why
-At this throughput, naive generation creates noise. The system needs disciplined orchestration, quotas, and escalation paths.
+Generating plans at scale is only valuable if they are:
 
-## Proposal
-Build a 4-stage bid factory:
+- high-quality and defensible
+- properly verified
+- routed to the right decision-makers
+- consistent with governance and risk constraints
 
-1. **Intake**: validated opportunities from news pipeline
+Without orchestration, a high-throughput system becomes noisy and untrustworthy.
 
-2. **Generation**: multi-domain plan drafting
+## Problem
 
-3. **Selection**: quality ranking + risk filtering
+- Large volumes of opportunities require automated prioritization.
+- Quality gates and verification can bottleneck throughput.
+- Without routing logic, valuable bids get lost in a flood of noise.
 
-4. **Packaging**: bid artifacts and submission-ready bundles
+## Proposed Solution
+Build a bid factory orchestrator that:
 
-## Throughput controls
+1. Prioritizes incoming opportunities.
+2. Dispatches plan creation jobs to a worker pool.
+3. Applies staged verification and scoring.
+4. Routes plans to investors or bid channels based on fit.
+5. Logs all actions for audit and governance.
 
-- Domain quotas (avoid one domain monopolizing capacity)
+## Orchestration Architecture
 
-- Region quotas
+```text
+Opportunity Intake
+  -> Prioritization Queue
+  -> Plan Generation Workers
+  -> Verification Pipeline
+  -> Ranking and Escalation
+  -> Routing and Dispatch
+```
 
-- Risk-adjusted compute budgets
+## Core Components
 
-- SLA tiers (urgent tenders vs long-lead projects)
+### 1) Prioritization Queue
 
-## Required outputs per candidate
+- Assign priority based on urgency, bidability, and strategic fit.
+- Enforce rate limits per domain to avoid overload.
+- Allow human override for strategic opportunities.
 
-- Executive summary
+### 2) Plan Generation Workers
 
-- Technical approach
+- Run in parallel with concurrency limits.
+- Use standardized prompt templates to reduce variance.
+- Capture metadata and evidence used in plan generation.
 
-- Cost/schedule assumptions
+### 3) Verification Pipeline
 
-- Risk register
+- Apply automated claim checks and evidence scoring.
+- Route high-risk plans to expert verification.
+- Produce confidence scores and missing-info lists.
 
-- Compliance checklist
+### 4) Ranking and Escalation
 
-- Bid/no-bid recommendation
+- Rank plans by expected ROI and risk-adjusted confidence.
+- Escalate top plans to human review.
+- Auto-discard low-quality or non-viable plans.
 
-## Operational safeguards
+### 5) Routing and Dispatch
 
-- Backpressure when queue exceeds threshold
+- Route to relevant investor groups or bid channels.
+- Trigger outreach or RFP response workflows.
+- Track outcomes for feedback and learning.
 
-- Automatic downgrade to sketch-level plans under load
+## Output Schema
 
-- Escalation to deep reasoning only for shortlisted opportunities
+```json
+{
+  "plan_id": "plan_123",
+  "opportunity_id": "opp_987",
+  "priority": "high",
+  "verification_score": 0.78,
+  "status": "escalated",
+  "routing_target": "infrastructure_investors"
+}
+```
 
-## Success metrics
+## Governance and Auditability
 
-- Plans/day at target quality threshold
+- Every plan has an audit log of inputs, prompts, and decision steps.
+- Human review points are logged with rationale.
+- Override decisions require justification.
 
-- Cost per usable bid package
+## Success Metrics
 
-- Bid conversion readiness rate
+- Plans/day throughput with quality acceptance rate.
+- Percentage of plans passing verification.
+- Time-to-dispatch from opportunity detection.
+- Conversion rate to funded or awarded bids.
+
+## Risks
+
+- Throughput pressure lowering quality: mitigate with strict gates.
+- Hallucinated data: mitigate with evidence checks.
+- Routing errors: mitigate with feedback loops.
+
+## Future Enhancements
+
+- Adaptive prioritization based on historical win rates.
+- Dynamic scaling of worker pools.
+- Real-time dashboard of throughput, quality, and outcomes.

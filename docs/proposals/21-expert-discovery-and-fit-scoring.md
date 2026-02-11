@@ -8,47 +8,91 @@ author: Larry the Laptop Lobster
 # Expert Discovery + Fit Scoring for Plan Verification
 
 ## Pitch
-Add an Expert Discovery layer that finds and ranks domain experts for a given plan (e.g., cross-border bridge projects), so users can move from draft plans to verified, execution-ready plans.
+Automatically identify and rank qualified experts for plan verification using a structured fit scoring model that balances domain expertise, availability, cost, and reputation.
+
+## Why
+Verification requires the right experts, but manual discovery is slow and unreliable. Fit scoring streamlines selection while maintaining quality and accountability.
 
 ## Problem
-Users can generate high-quality plans, but often cannot identify the right experts to validate assumptions, engineering safety, legal constraints, and execution feasibility.
 
-## Proposal
-Build a pipeline that:
+- Expert discovery is ad hoc and time-consuming.
+- Expertise is not normalized across domains.
+- Cost and availability trade-offs are poorly quantified.
 
-1. Extracts verification domains from plan artifacts.
+## Proposed Solution
+Build a system that:
 
-2. Searches expert sources (licenses, publications, associations, project portfolios).
+1. Extracts verification requirements from a plan.
+2. Queries an expert registry and external sources.
+3. Scores experts by fit and ranks the best matches.
+4. Produces an explainable recommendation list.
 
-3. Computes a fit score per expert.
+## Fit Scoring Model
 
-4. Produces a shortlist with reasoning and risk flags.
+### Inputs
 
-## Core fit model
-`fit_score = 0.35*domain_match + 0.20*project_similarity + 0.15*regional_relevance + 0.15*credential_strength + 0.15*availability_signal`
+- Domain match (primary and secondary expertise)
+- Verification experience and prior outcomes
+- Availability and turnaround time
+- Cost relative to budget constraints
+- Reputation score from marketplace
 
-## Data sources (initial)
+### Example Formula
 
-- Professional associations and certification registries
+```
+FitScore =
+  0.35*DomainMatch +
+  0.25*Reputation +
+  0.20*Availability +
+  0.10*CostFit +
+  0.10*OutcomeHistory
+```
 
-- Public procurement/project databases
+## Expert Registry Schema
 
-- Publications/patents and conference profiles
+```json
+{
+  "expert_id": "exp_441",
+  "domains": ["energy", "regulation"],
+  "credentials": ["PE", "PhD"],
+  "availability_days": 7,
+  "hourly_rate": 180,
+  "reputation_score": 0.86
+}
+```
 
-- Verified platform profiles (LinkedIn-like signals as optional)
+## Output Schema
 
-## Output for user
+```json
+{
+  "plan_id": "plan_007",
+  "ranked_experts": [
+    {"expert_id": "exp_441", "fit_score": 0.89, "reason": "Strong domain match"},
+    {"expert_id": "exp_208", "fit_score": 0.81, "reason": "Fast turnaround"}
+  ]
+}
+```
 
-- Top 5–20 experts by category (engineering, legal, environmental, finance)
+## Integration Points
 
-- Why each expert is relevant
+- Feeds into multi-stage verification workflow.
+- Uses reputation scores from expert marketplace.
+- Supports governance and conflict-of-interest checks.
 
-- Gaps in verification coverage
+## Success Metrics
 
-## Success metrics
+- Reduced time to match experts.
+- Higher verification completion rates.
+- Improved investor confidence in verification process.
 
-- Time from plan creation to first expert outreach
+## Risks
 
-- Expert acceptance rate
+- Incomplete expert data: mitigate with periodic profile verification.
+- Cost bias against high-quality experts: allow weighted trade-offs.
+- Bias in reputation scoring: normalize by domain and sample size.
 
-- % plans with complete verification coverage
+## Future Enhancements
+
+- External credential validation integration.
+- Automated discovery from publications and patents.
+- Adaptive scoring by project complexity.

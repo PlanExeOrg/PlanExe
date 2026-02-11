@@ -8,44 +8,114 @@ author: Larry the Laptop Lobster
 # Multi-Stage Expert Verification Workflow
 
 ## Pitch
-Introduce a structured verification workflow that separates quick plausibility checks from deep technical/legal reviews, making expert collaboration predictable and scalable.
+Create a structured, multi-stage verification workflow that validates plan claims using domain experts and evidence gates, producing a verified, investor-grade plan with explicit confidence ratings.
+
+## Why
+Investors and decision-makers need more than persuasive narratives. They need verified claims, clear evidence coverage, and risk transparency. A staged workflow allows fast rejection of weak plans and deep validation of strong candidates without wasting expert time.
 
 ## Problem
-Verification is currently ad hoc. Users need a clear path from "draft plan" to "verified plan" with stage gates.
+Today, verification is ad hoc:
 
-## Proposal
-Define verification stages:
+- Some plans are reviewed deeply, others barely.
+- Evidence quality is not standardized.
+- Experts are not sequenced efficiently, wasting time on poor candidates.
 
-1. **Stage A: Triage Review (fast)** — identify critical flaws and missing evidence.
+## Proposed Solution
+Implement a pipeline with escalating verification depth:
 
-2. **Stage B: Domain Review (deep)** — engineering/legal/environmental/financial domain checks.
+1. Automated evidence extraction and claim scoring.
+2. Lightweight expert screening on critical claims.
+3. Deep domain verification for shortlisted plans.
+4. Final synthesis into a verified plan report.
 
-3. **Stage C: Integration Review** — reconcile cross-domain conflicts.
+## Workflow Stages
 
-4. **Stage D: Final Verification Report** — signed conclusions + conditions.
+### Stage 0: Intake and Claim Extraction
 
-## Workflow artifacts
+- Parse plan text into discrete claims (market size, unit economics, regulatory feasibility, technical feasibility).
+- Tag claims by domain and risk class.
+- Produce a claim map and evidence requirements.
 
-- Verification checklist per domain
+### Stage 1: Automated Evidence Check
 
-- Issue register with severity and owners
+- Validate claims against known databases and public sources.
+- Flag contradictions or unsupported assumptions.
+- Assign initial confidence scores.
 
-- Evidence pack (documents, assumptions, calculations)
+**Output:** Evidence coverage report and critical risk flags.
 
-- Final signed verification summary
+### Stage 2: Expert Screening
 
-## `run_plan_pipeline.py` integration
+- Route high-risk claims to appropriate experts.
+- Experts validate plausibility and point out weak assumptions.
+- Filter out non-viable plans early.
 
-- Add optional `verification_mode=true`
+**Output:** Screened plan with go/no-go recommendation.
 
-- Pipeline emits domain-specific review packets
+### Stage 3: Deep Verification
 
-- Plan status transitions: `draft -> in_review -> conditionally_verified -> verified`
+- Full verification of remaining claims.
+- Require primary evidence: signed LOIs, audits, regulatory approvals.
+- Validate technical feasibility with domain-specific expertise.
 
-## Success metrics
+**Output:** Verified plan with confidence scores by claim category.
 
-- Verification cycle time
+### Stage 4: Final Synthesis
 
-- Critical issue catch rate before implementation
+- Produce an investor-ready verification summary.
+- Provide recommendations and required fixes.
+- Generate a final verification grade.
 
-- Rework reduction after verification
+## Evidence Standards
+
+Evidence should be graded by strength:
+
+- **Level 1:** Anecdotal or unverified claims.
+- **Level 2:** Third-party reports or benchmarks.
+- **Level 3:** Audited financials, signed contracts, regulatory approvals.
+
+Each claim in the plan should reference an evidence level.
+
+## Output Schema
+
+```json
+{
+  "verification_grade": "B+",
+  "critical_flags": ["Regulatory approval uncertain"],
+  "evidence_coverage": 0.72,
+  "claim_confidence": {
+    "market_size": "medium",
+    "unit_economics": "low",
+    "technical_feasibility": "high"
+  },
+  "required_fixes": [
+    "Provide updated unit economics from pilot",
+    "Secure preliminary regulatory consultation"
+  ]
+}
+```
+
+## Integration Points
+
+- Links directly to FEI scoring (execution credibility).
+- Feeds into investor matching (confidence-weighted ranking).
+- Provides gating before plan promotion to marketplace.
+
+## Success Metrics
+
+- % plans passing Stage 2 and Stage 3.
+- Reduction in false-positive investor matches.
+- Time saved per expert review cycle.
+- Investor satisfaction with verification reports.
+
+## Risks
+
+- Expert availability bottlenecks: mitigate with staged filtering.
+- Over-reliance on automation: keep human override.
+- Inconsistent evidence quality across sectors: normalize by domain.
+
+## Future Enhancements
+
+- Reputation scoring for experts.
+- Automated dispute resolution for conflicting expert opinions.
+- Continuous verification updates as plans evolve.

@@ -16,6 +16,7 @@ from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.instrumentation import get_dispatcher
 from llama_index.core.instrumentation.event_handlers.base import BaseEventHandler
 from llama_index.core.instrumentation.events.llm import LLMChatStartEvent, LLMChatEndEvent, LLMCompletionStartEvent, LLMCompletionEndEvent, LLMStructuredPredictStartEvent, LLMStructuredPredictEndEvent
+from worker_plan_api.filenames import ExtraFilenameEnum
 
 logger = logging.getLogger(__name__)
 
@@ -73,6 +74,26 @@ class TrackActivity(BaseEventHandler):
 
     def _extract_token_usage(self, event_data: dict) -> Optional[dict]:
         """Extract token usage data from event payloads, if present."""
+        usage = self._find_usage_dict(event_data)
+        if isinstance(usage, dict):
+            input_tokens = usage.get("prompt_tokens") or usage.get("input_tokens")
+            output_tokens = usage.get("completion_tokens") or usage.get("output_tokens")
+            thinking_tokens = (
+                usage.get("reasoning_tokens")
+                or usage.get("thinking_tokens")
+                or usage.get("cache_creation_input_tokens")
+            )
+            total_tokens = usage.get("total_tokens")
+            return {
+                "input_tokens": input_tokens,
+                "output_tokens": output_tokens,
+                "thinking_tokens": thinking_tokens,
+                "total_tokens": total_tokens
+                if total_tokens is not None
+                else (input_tokens or 0) + (output_tokens or 0) + (thinking_tokens or 0),
+                "raw_usage_data": usage,
+            }
+
         try:
             from worker_plan_internal.llm_util.token_counter import extract_token_count
         except Exception as exc:
@@ -103,6 +124,132 @@ class TrackActivity(BaseEventHandler):
 
         return None
 
+    def _extract_model_name(self, event_data: dict) -> str:
+        """Extract model/provider name from event payloads."""
+        if not isinstance(event_data, dict):
+            return "unknown"
+
+        model = event_data.get("model") or event_data.get("model_name") or event_data.get("llm_model")
+        if not model:
+            tags = event_data.get("tags")
+            if isinstance(tags, dict):
+                model = tags.get("llm_model") or tags.get("model") or tags.get("model_name")
+
+        response = event_data.get("response")
+        if not model and isinstance(response, dict):
+            model = response.get("model") or response.get("model_name") or response.get("model_id") or response.get("llm_model")
+            raw = response.get("raw")
+            if not model and isinstance(raw, dict):
+                model = raw.get("model") or raw.get("model_name") or raw.get("model_id") or raw.get("llm_model")
+
+        provider = event_data.get("provider")
+        if not provider and isinstance(response, dict):
+            provider = response.get("provider")
+            raw = response.get("raw")
+            if not provider and isinstance(raw, dict):
+                provider = raw.get("provider")
+
+        if model and provider and str(provider) not in str(model):
+            return f"{provider}:{model}"
+        if model:
+            return str(model)
+        if provider:
+            return str(provider)
+        return "unknown"
+
+    def _extract_cost(self, event_data: dict) -> float:
+        """Extract cost from usage data if available."""
+        usage = self._find_usage_dict(event_data)
+        if not isinstance(usage, dict):
+            return 0.0
+
+        cost = usage.get("cost")
+        if cost is None:
+            cost_details = usage.get("cost_details")
+            if isinstance(cost_details, dict):
+                cost = cost_details.get("upstream_inference_cost") or cost_details.get("total_cost")
+
+        try:
+            return float(cost) if cost is not None else 0.0
+        except (TypeError, ValueError):
+            return 0.0
+
+    def _load_activity_overview(self, path: Path) -> dict:
+        if not path.exists():
+            return {
+                "last_updated": None,
+                "total_cost": 0.0,
+                "total_input_tokens": 0,
+                "total_output_tokens": 0,
+                "total_thinking_tokens": 0,
+                "total_tokens": 0,
+                "models": {},
+            }
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            if isinstance(data, dict):
+                data.setdefault("models", {})
+                return data
+        except Exception:
+            logger.debug("Failed to read activity overview file: %s", path, exc_info=True)
+        return {
+            "last_updated": None,
+            "total_cost": 0.0,
+            "total_input_tokens": 0,
+            "total_output_tokens": 0,
+            "total_thinking_tokens": 0,
+            "total_tokens": 0,
+            "models": {},
+        }
+
+    def _update_activity_overview(self, event_data: dict) -> None:
+        token_usage = self._extract_token_usage(event_data) or {}
+        cost = self._extract_cost(event_data)
+        if not token_usage and cost == 0.0:
+            return
+
+        overview_path = self.jsonl_file_path.parent / ExtraFilenameEnum.ACTIVITY_OVERVIEW_JSON.value
+        overview = self._load_activity_overview(overview_path)
+        model_name = self._extract_model_name(event_data)
+
+        model_stats = overview["models"].setdefault(
+            model_name,
+            {
+                "total_cost": 0.0,
+                "input_tokens": 0,
+                "output_tokens": 0,
+                "thinking_tokens": 0,
+                "total_tokens": 0,
+                "calls": 0,
+            },
+        )
+
+        input_tokens = int(token_usage.get("input_tokens") or 0)
+        output_tokens = int(token_usage.get("output_tokens") or 0)
+        thinking_tokens = int(token_usage.get("thinking_tokens") or 0)
+        total_tokens = int(token_usage.get("total_tokens") or input_tokens + output_tokens + thinking_tokens)
+
+        model_stats["total_cost"] = float(model_stats.get("total_cost", 0.0)) + cost
+        model_stats["input_tokens"] = int(model_stats.get("input_tokens", 0)) + input_tokens
+        model_stats["output_tokens"] = int(model_stats.get("output_tokens", 0)) + output_tokens
+        model_stats["thinking_tokens"] = int(model_stats.get("thinking_tokens", 0)) + thinking_tokens
+        model_stats["total_tokens"] = int(model_stats.get("total_tokens", 0)) + total_tokens
+        model_stats["calls"] = int(model_stats.get("calls", 0)) + 1
+
+        overview["total_cost"] = float(overview.get("total_cost", 0.0)) + cost
+        overview["total_input_tokens"] = int(overview.get("total_input_tokens", 0)) + input_tokens
+        overview["total_output_tokens"] = int(overview.get("total_output_tokens", 0)) + output_tokens
+        overview["total_thinking_tokens"] = int(overview.get("total_thinking_tokens", 0)) + thinking_tokens
+        overview["total_tokens"] = int(overview.get("total_tokens", 0)) + total_tokens
+        overview["last_updated"] = datetime.now().isoformat()
+
+        try:
+            with open(overview_path, "w", encoding="utf-8") as f:
+                json.dump(overview, f, indent=2, sort_keys=True)
+        except Exception:
+            logger.debug("Failed to write activity overview file: %s", overview_path, exc_info=True)
+
     def handle(self, event: Any) -> None:
         if isinstance(event, (LLMChatStartEvent, LLMChatEndEvent, LLMCompletionStartEvent, LLMCompletionEndEvent, LLMStructuredPredictStartEvent, LLMStructuredPredictEndEvent)):
             # Create event record with timestamp and backtrace
@@ -120,6 +267,7 @@ class TrackActivity(BaseEventHandler):
                 token_usage = self._extract_token_usage(filtered_event_data)
                 if token_usage is not None:
                     event_record["token_usage"] = token_usage
+                self._update_activity_overview(filtered_event_data)
             
             # Append to JSONL file
             with open(self.jsonl_file_path, 'a', encoding='utf-8') as f:

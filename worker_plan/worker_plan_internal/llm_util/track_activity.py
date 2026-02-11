@@ -11,6 +11,7 @@ import traceback
 import logging
 from datetime import datetime
 from pathlib import Path
+from typing import Any, Optional
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.instrumentation import get_dispatcher
 from llama_index.core.instrumentation.event_handlers.base import BaseEventHandler
@@ -29,7 +30,7 @@ class TrackActivity(BaseEventHandler):
     """
     model_config = {'extra': 'allow'}
     
-    def __init__(self, jsonl_file_path: Path, write_to_logger: bool = False):
+    def __init__(self, jsonl_file_path: Path, write_to_logger: bool = False) -> None:
         super().__init__()
         if not isinstance(jsonl_file_path, Path):
             raise ValueError(f"jsonl_file_path must be a Path, got: {jsonl_file_path!r}")
@@ -38,7 +39,7 @@ class TrackActivity(BaseEventHandler):
         self.jsonl_file_path = jsonl_file_path
         self.write_to_logger = write_to_logger
     
-    def _filter_sensitive_data(self, data):
+    def _filter_sensitive_data(self, data: Any) -> Any:
         """Recursively filter out sensitive fields from event data."""
         if isinstance(data, dict):
             filtered = {}
@@ -53,7 +54,56 @@ class TrackActivity(BaseEventHandler):
         else:
             return data
 
-    def handle(self, event):
+    def _find_usage_dict(self, data: Any) -> Optional[dict]:
+        """Search nested structures for a usage dict."""
+        if isinstance(data, dict):
+            usage = data.get("usage")
+            if isinstance(usage, dict):
+                return usage
+            for value in data.values():
+                found = self._find_usage_dict(value)
+                if found is not None:
+                    return found
+        elif isinstance(data, list):
+            for item in data:
+                found = self._find_usage_dict(item)
+                if found is not None:
+                    return found
+        return None
+
+    def _extract_token_usage(self, event_data: dict) -> Optional[dict]:
+        """Extract token usage data from event payloads, if present."""
+        try:
+            from worker_plan_internal.llm_util.token_counter import extract_token_count
+        except Exception as exc:
+            logger.debug("Token counter unavailable: %s", exc)
+            return None
+
+        candidates = []
+        if isinstance(event_data, dict):
+            candidates.append(event_data.get("response"))
+            candidates.append(event_data.get("output"))
+            candidates.append(event_data.get("outputs"))
+            response = event_data.get("response") if isinstance(event_data.get("response"), dict) else None
+            if response:
+                candidates.append(response.get("raw"))
+                candidates.append(response.get("usage"))
+                raw = response.get("raw")
+                if isinstance(raw, dict):
+                    candidates.append(raw.get("usage"))
+            candidates.append(event_data.get("usage"))
+            candidates.append(self._find_usage_dict(event_data))
+
+        for candidate in candidates:
+            if candidate is None:
+                continue
+            token_count = extract_token_count(candidate)
+            if any(value is not None for value in [token_count.input_tokens, token_count.output_tokens, token_count.thinking_tokens]):
+                return token_count.to_dict()
+
+        return None
+
+    def handle(self, event: Any) -> None:
         if isinstance(event, (LLMChatStartEvent, LLMChatEndEvent, LLMCompletionStartEvent, LLMCompletionEndEvent, LLMStructuredPredictStartEvent, LLMStructuredPredictEndEvent)):
             # Create event record with timestamp and backtrace
             event_data = json.loads(event.model_dump_json())
@@ -65,6 +115,11 @@ class TrackActivity(BaseEventHandler):
                 "event_data": filtered_event_data,
                 "backtrace": traceback.format_stack()
             }
+
+            if isinstance(event, (LLMChatEndEvent, LLMCompletionEndEvent, LLMStructuredPredictEndEvent)):
+                token_usage = self._extract_token_usage(filtered_event_data)
+                if token_usage is not None:
+                    event_record["token_usage"] = token_usage
             
             # Append to JSONL file
             with open(self.jsonl_file_path, 'a', encoding='utf-8') as f:

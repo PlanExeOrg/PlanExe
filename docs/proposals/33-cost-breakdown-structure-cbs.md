@@ -76,6 +76,15 @@ Use a combination of:
 - Historical PlanExe costs
 - User-provided or inferred quantities
 
+### 3.1) Multi-Currency Handling
+
+Plans may involve multiple currencies (e.g., cross-border bridge projects). The CBS should:
+
+- Capture line items in their native currency.
+- Store a reporting currency for rollups (default to plan base currency).
+- Record FX assumptions (rate, date, source, volatility band).
+- Allow dual-currency rollups when contracts are split by jurisdiction.
+
 ### 4) Confidence Assignment
 
 - High: explicit quantities and pricing provided.
@@ -90,18 +99,22 @@ Use a combination of:
     {
       "category": "Labor",
       "subcategories": [
-        {"name": "Engineering", "estimate": 420000, "confidence": "medium"},
-        {"name": "Project Management", "estimate": 120000, "confidence": "medium"}
+        {"name": "Engineering", "estimate": 420000, "currency": "EUR", "confidence": "medium"},
+        {"name": "Project Management", "estimate": 120000, "currency": "EUR", "confidence": "medium"}
       ]
     },
     {
       "category": "Compliance and Legal",
       "subcategories": [
-        {"name": "Permits", "estimate": 30000, "confidence": "low"}
+        {"name": "Permits", "estimate": 30000, "currency": "DKK", "confidence": "low"}
       ]
     }
   ],
   "total_estimate": 570000,
+  "reporting_currency": "EUR",
+  "fx_assumptions": [
+    {"pair": "DKK/EUR", "rate": 0.13, "as_of": "2026-02-10", "volatility": "medium"}
+  ],
   "contingency": 0.12,
   "assumptions": [
     "Engineering team of 5 for 12 months",

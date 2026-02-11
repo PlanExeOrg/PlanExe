@@ -8,56 +8,91 @@ author: Larry the Laptop Lobster
 # Token Counting + Cost Transparency (Raw Provider Tokens)
 
 ## Pitch
-Instrument the LLM layer so every plan run reports **exact token usage and cost**: input/output tokens, and for reasoning models, **thinking tokens vs final output tokens**. This should be measured from **raw provider responses**, not from structured-parsed output.
+Expose per-plan token usage and cost breakdowns, using raw provider token counts to enable transparent budgeting, optimization, and governance.
 
 ## Why
-Users want to know: “How much did this plan cost?” and “Why did it cost that much?” This is critical for budgeting, trust, and optimization.
+Token costs are opaque and often underestimated. Transparent cost accounting is essential for budgeting, pricing, and scaling decisions.
 
-## Requirements
+## Problem
 
-- Count tokens for **all model calls** in a plan run.
+- Users cannot see cost drivers across steps.
+- Internal teams cannot optimize prompt and model usage.
+- Investors and operators lack visibility into plan-generation cost structure.
 
-- Separate: `input_tokens`, `output_tokens`.
+## Proposed Solution
+Implement a token accounting layer that:
 
-- For reasoning models: `reasoning_tokens` / `thinking_tokens` (provider-specific) separate from final answer tokens.
+1. Captures raw provider token counts for every model call.
+2. Maps tokens to cost using provider pricing tables.
+3. Aggregates cost by plan stage, plugin, and model.
+4. Surfaces a user-facing cost report.
 
-- **Do not** count tokens after we parse structured output; count from the provider’s raw response/metadata.
+## Data Model
 
-## Proposed design
-### 1) Add accounting hooks in `llm.py`
+### Token Event Schema
 
-- Wrap the provider call and capture:
+```json
+{
+  "plan_id": "plan_123",
+  "stage": "assume",
+  "model": "gpt-4o-mini",
+  "input_tokens": 4200,
+  "output_tokens": 900,
+  "provider_cost_usd": 0.034
+}
+```
 
-  - provider usage fields (preferred)
+### Aggregation Schema
 
-  - or fallback to local tokenizer if provider doesn’t return usage
+```json
+{
+  "plan_id": "plan_123",
+  "total_cost_usd": 1.42,
+  "by_stage": {
+    "assume": 0.35,
+    "risk": 0.22,
+    "finance": 0.47
+  },
+  "by_model": {
+    "gpt-4o-mini": 0.78,
+    "gemini-2.0-flash": 0.64
+  }
+}
+```
 
-### 2) Store per-call usage + aggregate per-run
+## Reporting Views
 
-- Per-call record: model, stage, latency, usage, cost
+- **Plan Cost Summary:** total tokens, total cost, top cost drivers.
+- **Stage Breakdown:** cost per pipeline stage.
+- **Model Breakdown:** cost per model/provider.
+- **Optimization Insights:** suggestions to reduce high-cost stages.
 
-- Per-run rollup: totals + breakdown by stage
+## Governance Features
 
-### 3) Surface results
+- Cost caps per plan or per day.
+- Alerts when costs exceed thresholds.
+- Audit logs for cost anomalies.
 
-- In report: “Cost & Token Usage” section
+## Integration Points
 
-- In API: `task_status` includes `usage_summary`
+- Works with all pipeline stages and plugins.
+- Feeds budgeting dashboards.
+- Used in governance and allocation decisions.
 
-## Data model
+## Success Metrics
 
-- `llm_call_usage` (run_id, stage, model, input_tokens, output_tokens, reasoning_tokens, cost_cents, latency_ms)
+- Cost visibility for 100% of plans.
+- Reduction in cost per plan after optimization.
+- Fewer cost overruns and unexpected bills.
 
-- `llm_run_usage_summary` (run_id, totals..., created_at)
+## Risks
 
-## Provider notes
+- Provider token counts may change or be inconsistent.
+- Cost reporting overhead adds latency.
+- Misinterpretation of cost data by users.
 
-- Prefer provider-provided `usage` block.
+## Future Enhancements
 
-- For OpenAI/Anthropic/Gemini/OpenRouter: normalize to a common schema.
-
-## Success metrics
-
-- 100% of calls have usage captured (or explicit “unknown”)
-
-- Cost estimate within ±2% of provider billing
+- Per-user or per-team cost budgeting.
+- Predictive cost estimation before plan generation.
+- Multi-currency cost reporting.

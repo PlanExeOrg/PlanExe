@@ -8,67 +8,91 @@ author: Larry the Laptop Lobster
 # Near-Match Plugin Adaptation Lifecycle
 
 ## Pitch
-When an existing plugin is close but not exact, PlanExe should branch, adapt, validate, and optionally merge the improvement—treating plugins like living assets with versioned lifecycle.
+Enable safe, low-friction adaptation of existing plugins when they almost fit a new task, reducing duplication and increasing reuse while maintaining quality controls.
+
+## Why
+Most new plugin requests are variants of existing capabilities. Without a formal adaptation lifecycle, teams either fork plugins ad hoc or rebuild from scratch, creating fragmentation and quality drift.
 
 ## Problem
-A strict exact-match lookup causes unnecessary regeneration. Most missing capabilities are near neighbors of existing plugins.
 
-## Proposal
-Implement a lifecycle for **adapt instead of rebuild**:
+- Duplicate plugins proliferate without a clear adaptation path.
+- Unreviewed modifications introduce bugs and regressions.
+- No consistent record of what changed, why, and with what impact.
 
-1. Retrieve top-N similar plugins by capability embedding.
+## Proposed Solution
+Create a formal adaptation lifecycle with stages:
 
-2. Compute fit score against requested contract.
+1. Detection of near-match plugins.
+2. Structured gap analysis.
+3. Controlled modification and testing.
+4. Validation and promotion to production.
 
-3. If fit >= threshold, create adaptation branch (`plugin@vX-adapt-runY`).
+## Lifecycle Stages
 
-4. Apply targeted code edits.
+### Stage 1: Near-Match Detection
 
-5. Validate against old + new test suites.
+- Use semantic similarity on plugin metadata and required outputs.
+- Identify the closest plugin candidates.
+- Produce a ranked short list with compatibility scores.
 
-6. Promote to new semantic version if quality holds.
+### Stage 2: Gap Analysis
 
-## Lifecycle states
-`candidate -> adapted -> validated -> canary -> stable -> deprecated`
+- Compare expected inputs/outputs with target requirements.
+- Identify missing capabilities and output mismatches.
+- Classify gaps as minor (parameter changes) or major (logic change).
 
-## Versioning rules
+### Stage 3: Adaptation
 
-- Patch: non-breaking bug/compat fix
+- Apply targeted modifications:
+  - Input schema extensions
+  - Output formatting changes
+  - Parameter tuning
+  - New edge-case handling
 
-- Minor: backward-compatible capability expansion
+### Stage 4: Testing
 
-- Major: contract-breaking changes
+- Run benchmark tests against known scenarios.
+- Compare performance with original plugin.
+- Validate output schema compatibility.
 
-## Review policy
+### Stage 5: Promotion
 
-- Auto-promote only for patch/minor with full test pass and no security regressions.
+- Approve adapted plugin into registry.
+- Assign new semantic version.
+- Attach adaptation notes and rationale.
 
-- Require human review for major upgrades or trust-tier elevation.
+## Output Schema
 
-## `run_plan_pipeline.py` integration
+```json
+{
+  "plugin_id": "plug_301",
+  "adapted_from": "plug_212",
+  "gap_summary": ["Add JSON schema X", "Handle multi-currency"],
+  "test_status": "pass",
+  "version": "2.1.0"
+}
+```
 
-- Add `PluginAdaptationPlanner` before synthesis path.
+## Integration Points
 
-- Preference order: exact match -> near-match adapt -> on-demand synthesis.
+- Linked to plugin hub discovery and benchmarking harness.
+- Uses safety governance for runtime loading.
+- Feeds change logs into audit trails.
 
-## Data model additions
+## Success Metrics
 
-- `plugin_lineage` (parent_plugin_id, child_plugin_id, reason)
+- Reduction in duplicate plugins.
+- Faster delivery of adapted plugins.
+- Lower regression rates after adaptation.
 
-- `plugin_versions` (plugin_id, semver, state, changelog)
+## Risks
 
-- `plugin_canary_stats` (version_id, success_rate, rollback_count)
+- Over-reliance on near-match detection can hide better designs.
+- Incomplete testing leads to silent failures.
+- Version sprawl without governance.
 
-## Rollback strategy
+## Future Enhancements
 
-- Canary cohort first (e.g., 5% runs)
-
-- Auto-rollback if failure rate delta exceeds threshold
-
-## Success metrics
-
-- % missing capabilities solved via adaptation vs full synthesis
-
-- Adaptation lead time
-
-- Regression rate after adaptation
+- Automated adaptation suggestions.
+- Cross-plugin dependency mapping.
+- Adaptation impact scoring.

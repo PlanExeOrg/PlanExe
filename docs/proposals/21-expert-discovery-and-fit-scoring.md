@@ -73,6 +73,29 @@ FitScore =
 }
 ```
 
+## Matching Workflow
+
+### 1) Requirement Extraction
+
+- Identify required domains, claim types, and regulatory context.
+- Tag the plan with complexity and risk tiers.
+
+### 2) Candidate Retrieval
+
+- Query registry by domain and geography.
+- Filter by minimum credentials and availability.
+- Exclude conflicts of interest.
+
+### 3) Fit Scoring
+
+- Compute fit score and provide reason codes.
+- Allow human override when the plan is high-stakes.
+
+### 4) Assignment
+
+- Auto-assign top experts or present ranked list to reviewer.
+- Track acceptance and response latency.
+
 ## Integration Points
 
 - Feeds into multi-stage verification workflow.

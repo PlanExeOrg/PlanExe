@@ -8,63 +8,93 @@ author: Larry the Laptop Lobster
 # Safety + Governance for Runtime Plugin Loading
 
 ## Pitch
-If PlanExe can code and load plugins dynamically, governance must be first-class: trust tiers, policy gates, signed artifacts, and audit trails before execution in `run_plan_pipeline.py`.
+Enable runtime plugin loading while enforcing strict safety, permissioning, and auditability, so new capabilities can be introduced without destabilizing the system or violating trust boundaries.
+
+## Why
+PlanExe benefits from extensible plugins, but runtime loading introduces risks:
+
+- untrusted code execution
+- data leakage or misuse
+- inconsistent behavior across environments
+
+A formal governance layer is required before runtime plugin activation can be safe.
 
 ## Problem
-Dynamic plugin ecosystems introduce security, compliance, and reliability risks unless runtime loading is policy-controlled.
 
-## Proposal
-Introduce **policy-governed runtime loading**:
+- No standardized trust model for plugins.
+- No consistent permissioning or sandbox enforcement.
+- Limited audit trails for plugin behavior and impact.
 
-- Every plugin has trust tier (`experimental`, `verified`, `trusted`)
+## Proposed Solution
+Implement a runtime plugin governance system that:
 
-- Stage-level policy defines allowed tiers
+1. Defines plugin trust tiers and permissions.
+2. Enforces sandboxing and execution constraints.
+3. Logs plugin activity for audit and rollback.
+4. Provides kill-switches and quarantine for unsafe plugins.
 
-- Load only signed plugins with valid checksum and provenance
+## Trust Tiers
 
-- Log full execution trace for every plugin invocation
+- **Tier 0:** Core built-in plugins (fully trusted).
+- **Tier 1:** Signed and vetted plugins (trusted but sandboxed).
+- **Tier 2:** Unverified plugins (restricted capabilities, limited data access).
 
-## Runtime checks in `run_plan_pipeline.py`
-Before plugin execution:
+## Permission Model
 
-1. Verify signature + checksum
+Each plugin declares required permissions:
 
-2. Validate declared capabilities vs requested stage contract
+- File system access
+- Network access
+- External API calls
+- Sensitive data access
 
-3. Enforce policy (tier + owner + allowlist)
+Permissions must be approved before runtime activation.
 
-4. Enforce resource limits (CPU/memory/timeouts)
+## Runtime Safeguards
 
-## Governance controls
+- Execution time limits
+- Memory and resource quotas
+- Output validation and schema checks
+- Continuous monitoring for anomalies
 
-- Quarantine mode for new plugins
+## Audit and Governance
 
-- Kill switch per plugin/version
+- Every plugin execution logged with inputs and outputs.
+- Versioned plugin registry with history of approvals.
+- Quarantine workflow for suspicious behavior.
 
-- Mandatory re-validation on dependency updates
+## Output Schema
 
-- Security scan (SAST + dependency CVE check)
+```json
+{
+  "plugin_id": "plug_771",
+  "tier": "Tier 1",
+  "permissions": ["network", "file_read"],
+  "execution_limit_ms": 5000,
+  "audit_log": "log_4001"
+}
+```
 
-## Data model additions
+## Integration Points
 
-- `plugin_policy` (stage_name, allowed_tiers, owners, max_runtime_ms)
+- Linked to plugin discovery and ranking hub.
+- Works with plugin benchmarking harness for safety testing.
+- Required for any runtime plugin activation.
 
-- `plugin_audit_log` (run_id, plugin_id, version, decision, reason)
+## Success Metrics
 
-- `plugin_security_reports` (plugin_id, scan_result, vuln_count)
+- Zero critical incidents from runtime plugins.
+- % plugins passing safety certification.
+- Mean time to quarantine unsafe plugin behavior.
 
-## Incident response
+## Risks
 
-- One-click disable plugin/version
+- Overly strict controls slow innovation.
+- False positives in anomaly detection.
+- Trust tier inflation without proper review.
 
-- Backfill affected runs via audit lookup
+## Future Enhancements
 
-- Auto-notify maintainers on abnormal failure spikes
-
-## Success metrics
-
-- Blocked unsafe plugin load attempts
-
-- Mean time to contain plugin incident
-
-- % plugin executions with complete provenance
+- Automated static and dynamic code analysis.
+- Third-party certification authority.
+- Differential permissioning by plan sensitivity.

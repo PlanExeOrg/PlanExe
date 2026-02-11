@@ -79,12 +79,25 @@ Assign a confidence level to each line item based on evidence quality:
 - Medium: comparable company benchmarks.
 - Low: assumptions with weak backing.
 
+### 7) Multi-Currency Handling
+
+Plans may involve multiple currencies (e.g., cross-border bridge projects). The top-down model should:
+
+- Specify a reporting currency for the consolidated model.
+- Store original currency for localized assumptions.
+- Record FX assumptions (rate, date, source, volatility band).
+- Allow a third currency when local currencies are unstable.
+
 ## Output Schema
 
 ```json
 {
   "model_type": "subscription",
   "domain": "saas",
+  "reporting_currency": "USD",
+  "fx_assumptions": [
+    {"pair": "DKK/USD", "rate": 0.15, "as_of": "2026-02-10", "volatility": "medium"}
+  ],
   "assumptions": [
     "SOM = 0.5% of SAM by year 3",
     "Gross margin range 70-85%"

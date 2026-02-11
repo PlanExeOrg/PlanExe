@@ -11,13 +11,14 @@ author: Larry the Laptop Lobster
 Establish a verification framework for cross-border projects that accounts for multi-jurisdiction regulation, political risk, and bilateral coordination, using a bridge project as the reference case.
 
 ## Why
-Cross-border projects are high-cost, high-risk, and politically sensitive. Verification must go beyond technical feasibility to include regulatory alignment, treaty compliance, and funding coordination.
+Cross-border projects are high-cost, high-risk, and politically sensitive. Verification must go beyond technical feasibility to include regulatory alignment, treaty compliance, funding coordination, and currency exposure.
 
 ## Problem
 
 - Standards differ across jurisdictions.
 - Approvals require alignment between multiple authorities.
 - Funding and liability structures are complex and often opaque.
+- Currency risk can undermine financial viability.
 
 ## Proposed Solution
 Create a verification framework that:
@@ -26,6 +27,7 @@ Create a verification framework that:
 2. Validates governance and treaty frameworks.
 3. Verifies financing structure and risk allocation.
 4. Confirms technical feasibility with cross-border standards.
+5. Assesses FX and macroeconomic exposure.
 
 ## Verification Dimensions
 
@@ -53,6 +55,12 @@ Create a verification framework that:
 - Construction codes
 - Maintenance obligations
 
+### 5) Currency and FX Exposure
+
+- Identify contract currencies and reporting currency.
+- Stress-test revenue and cost under FX scenarios.
+- Define hedging or indexation strategy.
+
 ## Output Schema
 
 ```json
@@ -62,10 +70,12 @@ Create a verification framework that:
   "regulatory_alignment": "medium",
   "treaty_status": "draft",
   "financing_risk": "high",
+  "fx_exposure": "medium",
   "technical_feasibility": "medium",
   "required_actions": [
     "Confirm environmental approvals in Country B",
-    "Finalize revenue-sharing agreement"
+    "Finalize revenue-sharing agreement",
+    "Define FX hedging policy"
   ]
 }
 ```

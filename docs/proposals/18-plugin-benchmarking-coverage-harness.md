@@ -8,63 +8,102 @@ author: Larry the Laptop Lobster
 # Plugin Benchmarking Harness Across Diverse Plan Types
 
 ## Pitch
-Create a benchmark harness that continuously measures plugin quality across a broad matrix of plan domains, complexity levels, and risk profiles—so plugin quality is evidence-based, not anecdotal.
+Create a benchmark harness that continuously measures plugin quality across a broad matrix of plan domains, complexity levels, and risk profiles so plugin performance is evidence-based, not anecdotal.
+
+## Why
+Plugins affect plan quality, but without benchmarking the system cannot identify which plugins are safe, accurate, or robust across contexts.
 
 ## Problem
-Without systematic benchmarking, Plugin Hub quality will drift and overfit to popular plan categories.
 
-## Proposal
-Build a benchmark framework with:
+- No consistent evaluation of plugin performance.
+- Failures surface late in production plans.
+- Plugin quality varies widely across domains.
 
-- **Dataset matrix**: business, software, nonprofit, policy, industrial, scientific
+## Proposed Solution
+Implement a benchmarking harness that:
 
-- **Scenario tiers**: simple, medium, complex, adversarial
+1. Defines standardized test sets of plans by domain and complexity.
+2. Runs plugins against these sets under controlled conditions.
+3. Scores outputs with objective quality metrics.
+4. Publishes coverage and reliability dashboards.
 
-- **Golden outputs** and contract checks per scenario
+## Benchmark Matrix
 
-- **Regression suite** run on each plugin publish
+Dimensions to cover:
 
-## Core scoring dimensions
+- Domain: infrastructure, software, healthcare, energy, finance
+- Complexity: simple, moderate, complex
+- Risk: low, medium, high
+- Data completeness: sparse, average, rich
 
-1. Contract adherence (schema + invariants)
+## Test Set Design
 
-2. Correctness against golden cases
+- Use historical plans plus synthetic edge cases.
+- Define “golden outputs” for deterministic tasks.
+- Include adversarial inputs for robustness testing.
 
-3. Robustness under noisy inputs
+## Evaluation Metrics
 
-4. Latency and cost
+- Accuracy vs known ground truth
+- Completeness of outputs
+- Consistency across runs
+- Failure rate and error types
+- Cost and latency impact
 
-5. Generalization across domains
+## Benchmark Workflow
 
-## Execution design
+1. Select plan samples from each matrix cell.
+2. Run plugin in isolation with fixed inputs.
+3. Compare outputs to baseline and expected structure.
+4. Aggregate results into a coverage score.
 
-- `benchmark_runner.py` executes plugin against scenario bundle
+## Coverage Scoring
 
-- Stores metrics in `plugin_benchmarks`
+Compute a coverage score that rewards breadth and depth:
 
-- Produces leaderboard and confidence bands
+```
+CoverageScore =
+  0.40*DomainCoverage +
+  0.25*ComplexityCoverage +
+  0.20*RiskCoverage +
+  0.15*DataCompletenessCoverage
+```
 
-## Suggested score formula
-`overall = 0.35*correctness + 0.20*robustness + 0.20*contract + 0.15*generalization + 0.10*latency_cost`
+## Output Schema
 
-## `run_plan_pipeline.py` policy hook
+```json
+{
+  "plugin_id": "plug_551",
+  "coverage_score": 0.78,
+  "accuracy": 0.84,
+  "failure_rate": 0.05,
+  "domain_breakdown": {
+    "infrastructure": 0.9,
+    "healthcare": 0.65
+  }
+}
+```
 
-- Production selection should prefer plugins above minimum benchmark grade (e.g., B+)
+## Integration Points
 
-- If all candidates fail threshold, fall back to synthesis + quarantine mode
+- Feeds into plugin hub ranking and discovery.
+- Required for runtime plugin safety governance.
+- Supports plugin adaptation lifecycle improvements.
 
-## Data model additions
+## Success Metrics
 
-- `plugin_benchmark_runs` (plugin_id, suite_id, score_json, created_at)
+- Increased plugin reliability across domains.
+- Reduced incidence of untested plugin failures.
+- Improved user trust in plugin outputs.
 
-- `benchmark_scenarios` (suite_id, domain, difficulty, expected_contract)
+## Risks
 
-- `plugin_quality_grade` (plugin_id, grade, confidence, last_eval_at)
+- High cost to maintain benchmark sets.
+- Overfitting plugins to benchmarks.
+- Gaps in coverage for emerging domains.
 
-## Success metrics
+## Future Enhancements
 
-- Benchmark coverage % across supported plan categories
-
-- Failed-in-prod rate vs benchmark grade
-
-- Time to detect regressions after plugin updates
+- Continual learning from live production feedback.
+- Automated benchmark generation from new plans.
+- Plugin performance regression alerts.

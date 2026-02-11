@@ -8,81 +8,95 @@ author: Larry the Laptop Lobster
 # On-Demand Plugin Synthesis + Plugin Hub for `run_plan_pipeline.py`
 
 ## Pitch
-When the pipeline lacks a capability, PlanExe should auto-generate a focused plugin, validate it, and publish it to a shared Plugin Hub so future plans reuse it instead of re-solving the same gap.
+Automatically synthesize new plugins when a plan needs a capability that does not exist, and publish them into a shared plugin hub with testing and governance.
+
+## Why
+PlanExe encounters novel plan types where existing plugins do not apply. Manual plugin development slows throughput. On-demand synthesis enables rapid capability expansion while maintaining quality controls.
 
 ## Problem
-Today, `run_plan_pipeline.py` can only execute built-in stages. For novel domains, the plan quality drops if a required transformation or validator does not exist.
 
-## Proposal
-Add a **missing-capability loop**:
+- Missing plugins block automation.
+- Plugin creation is slow and inconsistent.
+- No repeatable pathway from “missing capability” to reusable plugin.
 
-1. Detect unresolved task capability in pipeline stage execution.
+## Proposed Solution
+Create a synthesis hub that:
 
-2. Generate plugin spec (inputs/outputs/contracts).
+1. Detects missing capabilities from plan requirements.
+2. Generates a plugin scaffold and implementation.
+3. Tests the plugin against benchmark tasks.
+4. Publishes approved plugins into the hub.
 
-3. Code plugin on demand in a sandbox.
+## Synthesis Workflow
 
-4. Run tests + security checks.
+### 1) Capability Gap Detection
 
-5. If passed, register plugin in Plugin Hub.
+- Identify missing task coverage from plan parsing.
+- Use plugin registry to find near matches.
+- Trigger synthesis only when no adequate plugin exists.
 
-6. Retry pipeline stage with new plugin.
+### 2) Plugin Synthesis
 
-## Where it plugs in
+- Generate a specification: inputs, outputs, constraints.
+- Produce code and test cases.
+- Add documentation and metadata.
 
-- Add `PluginResolver` before stage execution in `run_plan_pipeline.py`.
+### 3) Validation
 
-- Add `CapabilityNotFoundError` handling path that calls `PluginSynthesizer`.
+- Run benchmark harness for quality and safety.
+- Validate schema compatibility.
+- Assign trust tier based on results.
 
-- Add `PluginHubClient` for publish/fetch.
+### 4) Publication
 
-## Minimal interfaces
-```python
-class PluginSpec(BaseModel):
-    capability: str
-    stage_name: str
-    input_schema: dict
-    output_schema: dict
-    constraints: list[str]
+- Versioned release to plugin hub.
+- Attach synthesis provenance and evaluation results.
+- Enable future adaptations via lifecycle workflows.
 
-class PluginRecord(BaseModel):
-    plugin_id: str
-    capability: str
-    version: str
-    checksum: str
-    trust_tier: str
+## Plugin Spec Template
+
+```json
+{
+  "name": "cost_estimation",
+  "inputs": ["plan_json"],
+  "outputs": ["cost_breakdown"],
+  "constraints": ["deterministic", "schema_validated"],
+  "tests": ["golden_case_1", "edge_case_2"]
+}
 ```
 
-## Data model additions
+## Output Schema
 
-- `plugin_hub_plugins` (id, capability, version, checksum, owner, trust_tier, created_at)
+```json
+{
+  "plugin_id": "plug_900",
+  "origin": "synthesized",
+  "capability": "cost_estimation",
+  "status": "approved",
+  "trust_tier": "Tier 1"
+}
+```
 
-- `plugin_hub_usage` (plugin_id, run_id, success, latency_ms, error_type)
+## Integration Points
 
-- `plugin_hub_test_reports` (plugin_id, report_json, pass_rate)
+- Feeds into plugin hub discovery and ranking.
+- Uses benchmarking harness for validation.
+- Enforces safety governance for runtime loading.
 
-## Rollout
+## Success Metrics
 
-- **Phase 1:** detect + suggest plugin (no auto-code)
+- Reduced time to add new capabilities.
+- % synthesized plugins accepted after testing.
+- Increase in task coverage across domains.
 
-- **Phase 2:** auto-code in dry-run mode (no publish)
+## Risks
 
-- **Phase 3:** auto-code + gated publish + reuse
+- Synthesized plugins may be brittle or unsafe.
+- Over-generation of low-value plugins.
+- Increased governance burden.
 
-## Risks & controls
+## Future Enhancements
 
-- Risk: low-quality generated plugins
-
-  - Control: required contract tests + static analysis + sandbox execution
-
-- Risk: supply-chain poisoning
-
-  - Control: signed plugins + checksums + trust tiers + allowlist policy
-
-## Success metrics
-
-- % of failed stages recovered via plugin synthesis
-
-- Plugin reuse rate across runs
-
-- Median time-to-capability (first missing capability to successful rerun)
+- Human review gates for sensitive plugins.
+- Continual learning from production failures.
+- Automatic deprecation of low-usage plugins.

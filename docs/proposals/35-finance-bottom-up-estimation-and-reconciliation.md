@@ -61,6 +61,14 @@ Produce:
 - Break-even timing
 - Profit and loss summary
 
+### 5) Multi-Currency Handling
+
+Plans may involve multiple currencies (e.g., cross-border projects). The bottom-up model should:
+
+- Track line items in native currency at the work-package level.
+- Roll up to a reporting currency with explicit FX assumptions.
+- Support a third currency when local currencies are unstable.
+
 ## Reconciliation Layer
 
 Compare bottom-up vs top-down outputs:
@@ -83,7 +91,11 @@ Compare bottom-up vs top-down outputs:
   "bottom_up": {
     "total_cost": 2200000,
     "total_revenue": 4800000,
-    "burn_rate_monthly": 180000
+    "burn_rate_monthly": 180000,
+    "reporting_currency": "USD",
+    "fx_assumptions": [
+      {"pair": "BRL/USD", "rate": 0.19, "as_of": "2026-02-10", "volatility": "high"}
+    ]
   },
   "top_down": {
     "total_cost": 1500000,

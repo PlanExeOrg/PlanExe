@@ -8,55 +8,102 @@ author: Larry the Laptop Lobster
 # Plugin Hub Discovery, Ranking, and Reuse Economy
 
 ## Pitch
-A plugin hub only creates compounding value if the best plugin is discoverable quickly. Add semantic search, performance ranking, and reuse incentives so future plan creations get stronger over time.
+Create a plugin hub where users and agents can discover, rank, and reuse plugins, enabling a growing ecosystem of verified capabilities with economic incentives for contributors.
+
+## Why
+A vibrant plugin ecosystem accelerates PlanExe adoption and quality. Without discovery and ranking, useful plugins remain hidden and the system becomes fragmented.
 
 ## Problem
-As plugin count grows, retrieval quality becomes the bottleneck. Poor discovery leads to duplicate plugins and lower plan quality.
 
-## Proposal
-Build a hub retrieval layer with:
+- No standardized marketplace for plugins.
+- Quality and safety are inconsistent.
+- Contributors lack incentives to improve or maintain plugins.
 
-- Semantic capability search (embedding-based)
+## Proposed Solution
+Build a plugin hub that:
 
-- Multi-factor ranking (fit, benchmark grade, reliability, recency)
+1. Hosts plugins with metadata, versioning, and usage stats.
+2. Ranks plugins by quality, safety, and outcome performance.
+3. Enables reuse and composability across plans.
+4. Supports economic incentives for contributors.
 
-- Reuse feedback loop (successful reuse boosts rank)
+## Core Components
 
-- Duplicate detection + merge suggestions
+### Plugin Registry
 
-## Retrieval ranking formula (example)
-`rank = 0.40*capability_fit + 0.25*benchmark_grade + 0.20*reliability + 0.10*recency + 0.05*reuse_trust`
+- Unique plugin IDs and semantic versioning.
+- Metadata: domains, tasks supported, inputs/outputs.
+- Security tier and safety certifications.
 
-## `run_plan_pipeline.py` integration
+### Ranking and Discovery
 
-- Replace first-hit plugin selection with top-k ranked retrieval
+- Ranking based on reliability, performance, and adoption.
+- Search by task, domain, or required outputs.
+- Personalized recommendations by usage patterns.
 
-- Execute top candidate; fallback to runner-up on hard failure
+### Reuse Economy
 
-- Emit post-run feedback to hub ranking system
+- Credit system for plugin authors.
+- Usage-based compensation or reputation gains.
+- Maintenance incentives for high-usage plugins.
 
-## Data model additions
+## Ranking Model
 
-- `plugin_embeddings` (plugin_id, capability_vector)
+Rank plugins using a weighted score:
 
-- `plugin_rank_features` (plugin_id, fit_score, reliability, recency, reuse_count)
+- Reliability score (crash rate, schema conformance)
+- Quality score (benchmark outcomes)
+- Adoption score (active usage, retention)
+- Safety tier (penalty for lower tiers)
 
-- `plugin_feedback` (plugin_id, run_id, outcome, quality_label)
+**Example formula:**
 
-## Reuse incentives
+```
+RankScore =
+  0.35*Reliability +
+  0.30*Quality +
+  0.20*Adoption +
+  0.15*SafetyTier
+```
 
-- Reward high-performing plugins with higher trust and visibility
+## Output Schema
 
-- Penalize frequent regressions via automatic rank decay
+```json
+{
+  "plugin_id": "plug_210",
+  "version": "1.3.0",
+  "ranking_score": 0.91,
+  "downloads": 2480,
+  "safety_tier": "Tier 1"
+}
+```
 
-- Flag stale plugins for retraining or deprecation
+## Governance and Moderation
 
-## Success metrics
+- Require safety certification for Tier 1 listing.
+- Provide a takedown path for malicious or broken plugins.
+- Enforce semantic versioning and compatibility checks.
 
-- Plugin reuse rate over time
+## Integration Points
 
-- Duplicate plugin creation rate
+- Tied to runtime plugin safety governance.
+- Uses benchmarking harness for quality scoring.
+- Interfaces with plugin adaptation lifecycle.
 
-- Median retrieval-to-success latency
+## Success Metrics
 
-- Top-1 retrieval success rate
+- Growth in active plugins.
+- Increase in reused plugins per plan.
+- Contributor retention and maintenance rates.
+
+## Risks
+
+- Ranking manipulation or gaming.
+- Low-quality plugin proliferation.
+- Misaligned incentives for short-term usage over long-term quality.
+
+## Future Enhancements
+
+- Revenue sharing models.
+- Federated plugin registries.
+- Automated dependency compatibility checks.

@@ -58,6 +58,3 @@ This proposal describes how a PlanExe‑generated strategic plan can be executed
 4. **Implement Reporting Hooks** – call `run_plan_pipeline.py` after each milestone.
 5. **Safety Review Layer** – add risk‑gate middleware and audit logger.
 6. **Beta Test** – run on a real PlanExe generated plan, collect feedback, iterate.
-
----
-*This document merges the earlier high‑level sections (Architecture, Delegation Flow, Extensions, Reporting, Safety, Roadmap) with the concrete execution details described previously.*

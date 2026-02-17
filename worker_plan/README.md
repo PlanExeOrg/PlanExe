@@ -43,7 +43,7 @@ If you must stay on Python 3.14, expect source builds and potential failures; ex
 | `PLANEXE_PURGE_ENABLED` | `false` | Enable the background scheduler that purges old run directories. |
 | `PLANEXE_PURGE_MAX_AGE_HOURS` | `1` | Maximum age (hours) of runs to delete when purging (scheduler and manual default). |
 | `PLANEXE_PURGE_INTERVAL_SECONDS` | `3600` | How often the purge scheduler runs when enabled. |
-| `PLANEXE_PURGE_RUN_PREFIX` | `PlanExe_` | Only purge runs whose IDs start with this prefix. |
+| `PLANEXE_PURGE_RUN_PREFIX` | *(empty)* | Optional compatibility filter. UUID-named runs are always considered; when set, legacy prefixed non-UUID run directories that match this prefix are also considered. |
 | `PLANEXE_LOG_LEVEL` | `INFO` | Sets the console log level for the worker API and the pipeline process. Accepted values are the standard logging levels (e.g., `DEBUG`, `INFO`, `WARNING`, `ERROR`). |
 
 `PLANEXE_LOG_LEVEL` affects both the FastAPI worker and the spawned pipeline logs written to stdout. File logs in `run/<id>/log.txt` always include DEBUG and above.

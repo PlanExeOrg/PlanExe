@@ -7,6 +7,7 @@ import os
 import subprocess
 import sys
 import re
+import uuid
 from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -59,12 +60,29 @@ def _command_for_platform(target: Path) -> list[str]:
     raise ValueError(f"Unsupported platform: {sys.platform}")
 
 
+def _is_uuid_name(name: str) -> bool:
+    try:
+        parsed = uuid.UUID(name)
+    except ValueError:
+        return False
+    return str(parsed) == name
+
+
+def _is_legacy_planexe_run_name(name: str) -> bool:
+    # Compatibility shim: legacy single-user runs used PlanExe_YYYYMMDD_HHMMSS.
+    return bool(re.fullmatch(r"^PlanExe_\d{8}_\d{6}$", name))
+
+
+def _is_allowed_run_name(name: str) -> bool:
+    return _is_uuid_name(name) or _is_legacy_planexe_run_name(name)
+
+
 @app.post("/open", response_model=OpenPathResponse)
 def open_path(request: OpenPathRequest):
     raw_path = request.path
-    # Only allow PlanExe-style run directory names to avoid arbitrary path access.
-    if not re.fullmatch(r"^PlanExe_\d+_\d+$", Path(raw_path).name):
-        raise HTTPException(status_code=400, detail="Invalid path format.")
+    # UUID-first, while retaining legacy support for existing timestamp-prefixed run dirs.
+    if not _is_allowed_run_name(Path(raw_path).name):
+        raise HTTPException(status_code=400, detail="Invalid path format. Expected UUID task id or legacy PlanExe_YYYYMMDD_HHMMSS name.")
     target = Path(raw_path).expanduser().resolve()
 
     if not _is_allowed(target):

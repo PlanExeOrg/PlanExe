@@ -8,7 +8,7 @@ consumers.
 - Preserve the public API contract in `worker_plan/app.py`:
   - Keep request/response shapes and endpoint paths backward compatible.
   - Avoid renaming response fields like `run_id`, `run_dir`, `display_run_dir`.
-- Maintain the run directory conventions (`PlanExe_...`) and environment-driven
+- Maintain UUID run directory conventions (with legacy compatibility where explicitly required) and environment-driven
   paths (`PLANEXE_RUN_DIR`, `PLANEXE_HOST_RUN_DIR`, `PLANEXE_CONFIG_PATH`).
 - When changing pipeline behavior, keep the subprocess invocation in
   `start_pipeline_subprocess` consistent with `worker_plan_internal`.

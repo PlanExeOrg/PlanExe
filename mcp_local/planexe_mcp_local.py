@@ -11,6 +11,7 @@ import json
 import logging
 import os
 import time
+import uuid
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Literal, Optional
@@ -21,7 +22,7 @@ from urllib.request import Request, urlopen
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import CallToolResult, TextContent, Tool
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -41,17 +42,45 @@ class TaskCreateRequest(BaseModel):
     speed_vs_detail: Optional[SpeedVsDetailInput] = None
 
 
+def normalize_task_id_input(task_id: str) -> tuple[str, bool]:
+    """Normalize task_id input and classify whether it's a canonical UUID.
+
+    Returns (normalized_value, is_uuid). UUIDs are canonicalized to lowercase.
+    Non-UUID values are preserved as compatibility identifiers for legacy MCP rows.
+    """
+    if not isinstance(task_id, str):
+        raise ValueError("task_id must be a string")
+    value = task_id.strip()
+    if not value:
+        raise ValueError("task_id is required")
+    try:
+        return str(uuid.UUID(value)), True
+    except ValueError:
+        return value, False
+
+
+def _normalize_task_id_field(task_id: str) -> str:
+    normalized, _ = normalize_task_id_input(task_id)
+    return normalized
+
+
 class TaskStatusRequest(BaseModel):
     task_id: str
+
+    _normalize_task_id = field_validator("task_id")(_normalize_task_id_field)
 
 
 class TaskStopRequest(BaseModel):
     task_id: str
 
+    _normalize_task_id = field_validator("task_id")(_normalize_task_id_field)
+
 
 class TaskDownloadRequest(BaseModel):
     task_id: str
     artifact: str = "report"
+
+    _normalize_task_id = field_validator("task_id")(_normalize_task_id_field)
 
 
 def _get_env(name: str, default: Optional[str] = None) -> Optional[str]:

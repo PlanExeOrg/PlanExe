@@ -28,7 +28,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import CallToolResult, Tool, TextContent
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 from mcp_cloud.dotenv_utils import load_planexe_dotenv
 _dotenv_loaded, _dotenv_paths = load_planexe_dotenv(Path(__file__).parent)
@@ -155,20 +155,56 @@ class TaskCreateRequest(BaseModel):
     speed_vs_detail: Optional[SpeedVsDetailInput] = None
     user_api_key: Optional[str] = None
 
+
+def normalize_task_id_input(task_id: str) -> tuple[str, bool]:
+    """Normalize task_id input and classify whether it's a canonical UUID.
+
+    Returns (normalized_value, is_uuid). UUIDs are canonicalized to lowercase.
+    Non-UUID values are preserved as compatibility identifiers for legacy MCP rows.
+    """
+    if not isinstance(task_id, str):
+        raise ValueError("task_id must be a string")
+    value = task_id.strip()
+    if not value:
+        raise ValueError("task_id is required")
+    try:
+        return str(uuid.UUID(value)), True
+    except ValueError:
+        return value, False
+
+
+def _normalize_task_id_field(task_id: str) -> str:
+    normalized, _ = normalize_task_id_input(task_id)
+    return normalized
+
+
 class TaskStatusRequest(BaseModel):
     task_id: str
 
+    _normalize_task_id = field_validator("task_id")(_normalize_task_id_field)
+
+
 class TaskStopRequest(BaseModel):
     task_id: str
+
+    _normalize_task_id = field_validator("task_id")(_normalize_task_id_field)
+
 
 class TaskFileInfoRequest(BaseModel):
     task_id: str
     artifact: Optional[str] = None
 
+    _normalize_task_id = field_validator("task_id")(_normalize_task_id_field)
+
 # Helper functions
 def find_task_by_task_id(task_id: str) -> Optional[TaskItem]:
-    """Find TaskItem by MCP task_id (UUID), with legacy fallback."""
-    task = get_task_by_id(task_id)
+    """Find TaskItem by MCP task_id with UUID-first lookup and legacy fallback."""
+    try:
+        normalized_task_id, is_uuid = normalize_task_id_input(task_id)
+    except ValueError:
+        return None
+
+    task = get_task_by_id(normalized_task_id) if is_uuid else None
     if task is not None:
         return task
 
@@ -176,11 +212,11 @@ def find_task_by_task_id(task_id: str) -> Optional[TaskItem]:
         query = db.session.query(TaskItem)
         if db.engine.dialect.name == "postgresql":
             tasks = query.filter(
-                cast(TaskItem.parameters, JSONB).contains({"_mcp_task_id": task_id})
+                cast(TaskItem.parameters, JSONB).contains({"_mcp_task_id": normalized_task_id})
             ).all()
         else:
             tasks = query.filter(
-                TaskItem.parameters.contains({"_mcp_task_id": task_id})
+                TaskItem.parameters.contains({"_mcp_task_id": normalized_task_id})
             ).all()
         if tasks:
             return tasks[0]
@@ -192,16 +228,19 @@ def find_task_by_task_id(task_id: str) -> Optional[TaskItem]:
         with app.app_context():
             legacy_task = _query_legacy()
     if legacy_task is not None:
-        logger.debug("Resolved legacy MCP task id %s to task %s", task_id, legacy_task.id)
+        logger.debug("Resolved legacy MCP task id %s to task %s", normalized_task_id, legacy_task.id)
     return legacy_task
 
 def get_task_by_id(task_id: str) -> Optional[TaskItem]:
     """Fetch a TaskItem by its UUID string."""
     def _query() -> Optional[TaskItem]:
         try:
-            task_uuid = uuid.UUID(task_id)
+            normalized_task_id, is_uuid = normalize_task_id_input(task_id)
         except ValueError:
             return None
+        if not is_uuid:
+            return None
+        task_uuid = uuid.UUID(normalized_task_id)
         return db.session.get(TaskItem, task_uuid)
 
     if has_app_context():

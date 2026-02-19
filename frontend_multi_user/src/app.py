@@ -69,6 +69,7 @@ DEMO_FORM_RUN_PROMPT_UUIDS = [
 AUTH_PROVIDER_LABELS = {
     "google": "Google",
     "github": "GitHub",
+    "microsoft": "Microsoft",
     "discord": "Discord",
     "password": "Password",
     "telegram": "Telegram",
@@ -572,6 +573,12 @@ class MyFlaskApp:
                 "api_base_url": "https://api.github.com/",
                 "client_kwargs": {"scope": "read:user user:email"},
             },
+            "microsoft": {
+                "client_id": os.environ.get("PLANEXE_OAUTH_MICROSOFT_CLIENT_ID"),
+                "client_secret": os.environ.get("PLANEXE_OAUTH_MICROSOFT_CLIENT_SECRET"),
+                "server_metadata_url": "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration",
+                "client_kwargs": {"scope": "openid email profile User.Read"},
+            },
             "discord": {
                 "client_id": os.environ.get("PLANEXE_OAUTH_DISCORD_CLIENT_ID"),
                 "client_secret": os.environ.get("PLANEXE_OAUTH_DISCORD_CLIENT_SECRET"),
@@ -612,7 +619,7 @@ class MyFlaskApp:
             if not self.oauth_providers:
                 raise ValueError(
                     "PLANEXE_AUTH_REQUIRED=true but no OAuth providers are configured. "
-                    "Either set PLANEXE_OAUTH_* env vars (Google / GitHub / Discord) "
+                    "Either set PLANEXE_OAUTH_* env vars (Google / GitHub / Microsoft / Discord) "
                     "or remove PLANEXE_AUTH_REQUIRED to use open access mode."
                 )
             logger.info(
@@ -670,6 +677,15 @@ class MyFlaskApp:
         if provider == "discord":
             client = self.oauth.create_client(provider)
             return client.get("users/@me").json()
+        if provider == "microsoft":
+            client = self.oauth.create_client(provider)
+            profile = client.get("https://graph.microsoft.com/v1.0/me").json()
+            email = profile.get("mail") or profile.get("userPrincipalName")
+            if email and not profile.get("email"):
+                profile["email"] = email
+            if not profile.get("name"):
+                profile["name"] = profile.get("displayName")
+            return profile
         raise ValueError(f"Unsupported OAuth provider: {provider}")
 
     def _avatar_url_from_profile(self, provider: str, profile: dict[str, Any]) -> Optional[str]:

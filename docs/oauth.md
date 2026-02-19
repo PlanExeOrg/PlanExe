@@ -8,6 +8,7 @@ This guide covers OAuth login for `frontend_multi_user` with:
 
 - Google
 - GitHub
+- Microsoft
 - Discord
 
 It includes both production and localhost setups.
@@ -22,9 +23,11 @@ Examples:
 
 - `https://home.planexe.org/auth/google/callback`
 - `https://home.planexe.org/auth/github/callback`
+- `https://home.planexe.org/auth/microsoft/callback`
 - `https://home.planexe.org/auth/discord/callback`
 - `http://localhost:5001/auth/google/callback`
 - `http://localhost:5001/auth/github/callback`
+- `http://localhost:5001/auth/microsoft/callback`
 - `http://localhost:5001/auth/discord/callback`
 
 Important:
@@ -46,6 +49,9 @@ PLANEXE_OAUTH_GOOGLE_CLIENT_SECRET="insert-your-secret"
 
 PLANEXE_OAUTH_GITHUB_CLIENT_ID="insert-your-clientid"
 PLANEXE_OAUTH_GITHUB_CLIENT_SECRET="insert-your-secret"
+
+PLANEXE_OAUTH_MICROSOFT_CLIENT_ID="insert-your-clientid"
+PLANEXE_OAUTH_MICROSOFT_CLIENT_SECRET="insert-your-secret"
 
 PLANEXE_OAUTH_DISCORD_CLIENT_ID="insert-your-clientid"
 PLANEXE_OAUTH_DISCORD_CLIENT_SECRET="insert-your-secret"
@@ -69,6 +75,7 @@ Provider naming is mostly the same:
 
 - GitHub: `Client ID` and `Client Secret`
 - Google: `Client ID` and `Client Secret` (OAuth 2.0 Client)
+- Microsoft: `Application (client) ID` and `Client secret`
 - Discord: `Client ID` and `Client Secret` (OAuth2 section)
 
 ## Production setup
@@ -129,6 +136,33 @@ Set credentials in:
 
 - `PLANEXE_OAUTH_GITHUB_CLIENT_ID`
 - `PLANEXE_OAUTH_GITHUB_CLIENT_SECRET`
+
+### Microsoft - production
+
+In Azure Portal, create an app registration for PlanExe:
+[portal.azure.com](https://portal.azure.com/)
+
+Under **Authentication**, add redirect URI (Web):
+
+- `https://home.planexe.org/auth/microsoft/callback`
+
+Under **Certificates & secrets**, create a client secret.
+
+Set credentials in:
+
+- `PLANEXE_OAUTH_MICROSOFT_CLIENT_ID`
+- `PLANEXE_OAUTH_MICROSOFT_CLIENT_SECRET`
+
+### Microsoft - localhost
+
+In the same Azure app registration, add redirect URI (Web):
+
+- `http://localhost:5001/auth/microsoft/callback`
+
+Set credentials in:
+
+- `PLANEXE_OAUTH_MICROSOFT_CLIENT_ID`
+- `PLANEXE_OAUTH_MICROSOFT_CLIENT_SECRET`
 
 ### Discord - production
 
@@ -191,7 +225,7 @@ Use `http://localhost:5001` as public URL.
 ## Troubleshooting
 
 - `404` on `/login/<provider>`: provider env vars are missing.
-  Required pairs: `PLANEXE_OAUTH_GOOGLE_CLIENT_ID`/`PLANEXE_OAUTH_GOOGLE_CLIENT_SECRET`, `PLANEXE_OAUTH_GITHUB_CLIENT_ID`/`PLANEXE_OAUTH_GITHUB_CLIENT_SECRET`, `PLANEXE_OAUTH_DISCORD_CLIENT_ID`/`PLANEXE_OAUTH_DISCORD_CLIENT_SECRET`.
+  Required pairs: `PLANEXE_OAUTH_GOOGLE_CLIENT_ID`/`PLANEXE_OAUTH_GOOGLE_CLIENT_SECRET`, `PLANEXE_OAUTH_GITHUB_CLIENT_ID`/`PLANEXE_OAUTH_GITHUB_CLIENT_SECRET`, `PLANEXE_OAUTH_MICROSOFT_CLIENT_ID`/`PLANEXE_OAUTH_MICROSOFT_CLIENT_SECRET`, `PLANEXE_OAUTH_DISCORD_CLIENT_ID`/`PLANEXE_OAUTH_DISCORD_CLIENT_SECRET`.
 - Redirect mismatch errors: callback URI in provider console does not exactly match PlanExe callback.
 - Login does not persist after redirect: `PLANEXE_FRONTEND_MULTIUSER_SECRET_KEY` is missing or changed.
 - Browser says insecure cookie on localhost over HTTP: expected in local dev; production should use HTTPS.

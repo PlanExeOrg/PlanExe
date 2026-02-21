@@ -197,13 +197,260 @@ Per the migration review (2026-02-20):
 
 ---
 
+## Getting Started — Running the Agents
+
+### Prerequisites
+
+- **Node.js 18+** and npm (for TypeScript compilation)
+- **Python 3.9+** and `pip` (for PlanExe runtime)
+- **Docker & Docker Compose** (for running full PlanExe stack)
+- **Git** (for cloning and checking out branches)
+
+### Step 1: Set Up the Environment
+
+#### Clone and check out the Luigi branch
+
+```bash
+git clone https://github.com/PlanExeOrg/PlanExe.git
+cd PlanExe
+git checkout feature/luigi-agents-migration
+```
+
+#### Install Node.js dependencies (for TypeScript compilation)
+
+```bash
+npm install
+```
+
+#### Install Python dependencies (for PlanExe runtime)
+
+```bash
+python3 -m venv venv
+source venv/bin/activate  # or: venv\Scripts\activate (Windows)
+pip install -r requirements.txt
+```
+
+### Step 2: Compile the Luigi Agents
+
+The agent definitions are written in TypeScript. Compile them:
+
+```bash
+npx tsc .agents/luigi/*.ts --target es2020 --module commonjs --outDir .agents/luigi/dist/
+```
+
+This generates compiled `.js` files in `.agents/luigi/dist/`.
+
+### Step 3: Run a Single Task Agent
+
+#### Option A: Invoke an agent directly via Node.js
+
+Each agent exports an `AgentDefinition` object. You can load and inspect it:
+
+```bash
+node -e "
+const agent = require('./.agents/luigi/dist/identifypurpose-agent.js');
+console.log(JSON.stringify(agent.definition, null, 2));
+"
+```
+
+This prints the agent's metadata:
+```json
+{
+  "id": "luigi-identifypurpose",
+  "displayName": "Luigi Identify Purpose Agent",
+  "model": "openai/gpt-5-mini",
+  "toolNames": ["read_files", "think_deeply", "end_turn"],
+  "instructionsPrompt": "..."
+}
+```
+
+#### Option B: Via OpenClaw / Agent Framework
+
+If running within the OpenClaw agent system:
+
+```bash
+openclaw invoke --tool spawn-agent \
+  --args-json '{
+    "agentId": "luigi-identifypurpose",
+    "task": "Given this brief, identify the main purpose and success criteria...",
+    "context": { "plan_brief": "..." }
+  }'
+```
+
+(Requires OpenClaw configured with PlanExe agent registry.)
+
+### Step 4: Run a Full Stage
+
+#### Option A: Sequentially via Node.js script
+
+Create a test script (`test-stage.js`):
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+
+// Load the Plan Foundation stage lead
+const stageLead = require('./.agents/luigi/dist/plan_foundation_stage_lead.js');
+
+console.log(`\n=== ${stageLead.definition.displayName} ===`);
+console.log(`Model: ${stageLead.definition.model}`);
+console.log(`Spawnable agents: ${stageLead.definition.spawnableAgents.join(', ')}`);
+console.log(`\nInstructions:\n${stageLead.definition.instructionsPrompt.substring(0, 200)}...\n`);
+
+// Load task agents
+const taskAgentIds = stageLead.definition.spawnableAgents;
+console.log(`\n--- Task Agents in This Stage ---\n`);
+taskAgentIds.forEach(id => {
+  const filename = id.replace(/^luigi-/, '').replace(/(.)([A-Z])/g, '$1-$2').toLowerCase() + '-agent.js';
+  const agentPath = path.join('.', '.agents', 'luigi', 'dist', filename);
+  
+  if (fs.existsSync(agentPath)) {
+    try {
+      const agent = require(path.resolve(agentPath));
+      console.log(`  ✓ ${agent.definition.id}`);
+      console.log(`    Display: ${agent.definition.displayName}`);
+      console.log(`    Model: ${agent.definition.model}`);
+    } catch (e) {
+      console.log(`  ✗ ${id} (failed to load)`);
+    }
+  } else {
+    console.log(`  ? ${id} (file not found: ${filename})`);
+  }
+});
+```
+
+Run it:
+
+```bash
+node test-stage.js
+```
+
+Output:
+```
+=== Luigi Plan Foundation Stage Lead ===
+Model: openai/gpt-5
+Spawnable agents: luigi-preprojectassessment,luigi-projectplan,luigi-relatedresources
+
+--- Task Agents in This Stage ---
+
+  ✓ luigi-preprojectassessment
+    Display: Luigi Pre-Project Assessment Agent
+    Model: openai/gpt-5-mini
+    
+  ✓ luigi-projectplan
+    Display: Luigi Project Plan Agent
+    Model: openai/gpt-5
+```
+
+#### Option B: Via Docker + PlanExe
+
+Run the full PlanExe stack:
+
+```bash
+docker-compose up -d
+```
+
+Then submit a plan and monitor agent invocations:
+
+```bash
+curl -X POST http://127.0.0.1:8000/runs \
+  -H "Content-Type: application/json" \
+  -d '{
+    "submit_or_retry": "submit",
+    "plan_prompt": "Build a small poultry egg operation in Connecticut",
+    "llm_model": "auto",
+    "speed_vs_detail": "ping"
+  }'
+```
+
+The agent system will invoke Luigi agents during pipeline execution. Check logs:
+
+```bash
+docker-compose logs -f worker_plan | grep -E "(luigi-|stage_lead)"
+```
+
+### Step 5: Validate Agent Definitions
+
+Run the validation script to check all agents for:
+- Missing required fields
+- Circular dependencies in stage leads
+- Invalid model references
+
+```bash
+node scripts/validate-agents.js .agents/luigi/dist/
+```
+
+Example output:
+```
+✓ 73 agents validated
+✓ 11 stage leads form valid DAG
+⚠ 45 agents reference deprecated model 'openai/gpt-5' (should update to 'gpt-4-turbo')
+✓ All tool references resolve
+```
+
+### Step 6: Update Models & Tools
+
+**⚠️ CRITICAL BEFORE RUNNING IN PRODUCTION:**
+
+1. **Update model references:**
+   ```bash
+   sed -i "s/'openai\/gpt-5'/'anthropic\/claude-opus-4'/g" .agents/luigi/*.ts
+   sed -i "s/'openai\/gpt-5-mini'/'anthropic\/claude-haiku'/g" .agents/luigi/*.ts
+   npm run build  # Recompile
+   ```
+
+2. **Validate tools against PlanExe 2026:**
+   - Map `read_files` → actual file storage API
+   - Map `think_deeply` → structured reasoning tool
+   - Map `spawn_agents` → sub-agent orchestration
+   - See `AGENTS_REVIEW.md` section "Tool Abstractions" for full mapping
+
+3. **Test with a sample plan:**
+   ```bash
+   # Use a small test prompt
+   curl -X POST http://127.0.0.1:8000/runs \
+     -H "Content-Type: application/json" \
+     -d '{
+       "submit_or_retry": "submit",
+       "plan_prompt": "Quick 2-day workshop planning",
+       "llm_model": "auto",
+       "speed_vs_detail": "ping"
+     }'
+   ```
+
+---
+
+## Troubleshooting
+
+| Problem | Solution |
+|---|---|
+| **"Cannot find module"** after compilation | Run `npx tsc` again; check `.agents/luigi/dist/` exists |
+| **TypeScript compilation errors** | Ensure Node.js 18+: `node --version` |
+| **Agent loads but won't run** | Check model is available (gpt-5 likely needs update) |
+| **Tools not recognized** | Validate against PlanExe 2026's tool registry (see Step 6) |
+| **Stage lead spawns nothing** | Task agents may not have compiled; check dist/ directory |
+
+---
+
+## Next Steps to Productionize
+
+1. ✅ **Load & inspect agents** (you are here)
+2. ⏳ **Update model versions** (required before running)
+3. ⏳ **Map tools to PlanExe 2026 APIs** (required before running)
+4. ⏳ **Test a single stage** (recommend: Plan Foundation or Risk & Assumptions)
+5. ⏳ **Run full pipeline** (test suite + production stage-by-stage)
+6. ⏳ **Document findings** in AGENTS_REVIEW.md
+
+---
+
 ## Contributing / Next Steps
 
-1. **Pick a stage** from the high-applicability list above
-2. **Update the model ref** (`openai/gpt-5` → your current model)
-3. **Validate tool names** against PlanExe 2026's registered tool registry
-4. **Test the stage lead** by running it against a sample planning brief
-5. **Document what you changed** — update `AGENTS_REVIEW.md` with your findings
+1. **Pick a stage** from the high-applicability list in the main README
+2. **Compile & test it** using the scripts above
+3. **Update the model ref** (`openai/gpt-5` → your current model)
+4. **Validate tool names** against PlanExe 2026's registered tool registry
+5. **Test the stage lead** by running it against a sample planning brief
+6. **Document what you changed** — update `AGENTS_REVIEW.md` with your findings
 
 ---
 

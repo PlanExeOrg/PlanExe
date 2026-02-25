@@ -34,6 +34,8 @@ from worker_plan_internal.assume.identify_risks import IdentifyRisks
 from worker_plan_internal.assume.make_assumptions import MakeAssumptions
 from worker_plan_internal.assume.distill_assumptions import DistillAssumptions
 from worker_plan_internal.assume.review_assumptions import ReviewAssumptions
+from worker_plan_internal.assume.quantified_assumptions import QuantifiedAssumptionExtractor
+from worker_plan_internal.assume.fermi_sanity_check import render_validation_summary, validate_quantified_assumptions
 from worker_plan_internal.assume.shorten_markdown import ShortenMarkdown
 from worker_plan_internal.expert.pre_project_assessment import PreProjectAssessment
 from worker_plan_internal.plan.project_plan import ProjectPlan
@@ -906,6 +908,48 @@ class MakeAssumptionsTask(PlanTask):
         make_assumptions.save_markdown(str(output_markdown_path))
 
 
+
+class FermiSanityCheckTask(PlanTask):
+    """Validate numeric assumptions before distillation."""
+
+    def requires(self):
+        return {
+            'make_assumptions': self.clone(MakeAssumptionsTask),
+            'fermi_sanity_check': self.clone(FermiSanityCheckTask)
+        }
+
+    def output(self):
+        return {
+            'report': self.local_target(FilenameEnum.FERMI_SANITY_CHECK_REPORT),
+            'summary': self.local_target(FilenameEnum.FERMI_SANITY_CHECK_SUMMARY)
+        }
+
+    def run_inner(self):
+        assumptions_target = self.input()['make_assumptions']['clean']
+        with assumptions_target.open('r', encoding='utf-8') as f:
+            assumptions_data = json.load(f)
+
+        extractor = QuantifiedAssumptionExtractor()
+        quantified = extractor.extract(assumptions_data)
+        report = validate_quantified_assumptions(quantified)
+
+        report_path = self.output()['report']
+        with report_path.open('w', encoding='utf-8') as f:
+            json.dump(report.dict(), f, indent=2)
+
+        summary_text = render_validation_summary(report)
+        summary_path = self.output()['summary']
+        with summary_path.open('w', encoding='utf-8') as f:
+            f.write(summary_text)
+
+        logger.info(
+            "Fermi sanity check completed: pass_rate=%.2f%% (%s/%s)",
+            report.pass_rate_pct,
+            report.passed,
+            report.total_assumptions
+        )
+
+
 class DistillAssumptionsTask(PlanTask):
     """
     Distill raw assumption data.
@@ -970,6 +1014,7 @@ class ReviewAssumptionsTask(PlanTask):
             'currency_strategy': self.clone(CurrencyStrategyTask),
             'identify_risks': self.clone(IdentifyRisksTask),
             'make_assumptions': self.clone(MakeAssumptionsTask),
+            'fermi_sanity_check': self.clone(FermiSanityCheckTask),
             'distill_assumptions': self.clone(DistillAssumptionsTask)
         }
 
@@ -990,7 +1035,8 @@ class ReviewAssumptionsTask(PlanTask):
             ('Currency Strategy', self.input()['currency_strategy']['markdown'].path),
             ('Identify Risks', self.input()['identify_risks']['markdown'].path),
             ('Make Assumptions', self.input()['make_assumptions']['markdown'].path),
-            ('Distill Assumptions', self.input()['distill_assumptions']['markdown'].path)
+            ('Distill Assumptions', self.input()['distill_assumptions']['markdown'].path),
+            ('Fermi Sanity Checks', self.input()['fermi_sanity_check']['summary'].path)
         ]
 
         # Read the files and handle exceptions
@@ -1031,6 +1077,7 @@ class ConsolidateAssumptionsMarkdownTask(PlanTask):
             'currency_strategy': self.clone(CurrencyStrategyTask),
             'identify_risks': self.clone(IdentifyRisksTask),
             'make_assumptions': self.clone(MakeAssumptionsTask),
+            'fermi_sanity_check': self.clone(FermiSanityCheckTask),
             'distill_assumptions': self.clone(DistillAssumptionsTask),
             'review_assumptions': self.clone(ReviewAssumptionsTask)
         }
@@ -1053,6 +1100,7 @@ class ConsolidateAssumptionsMarkdownTask(PlanTask):
             ('Identify Risks', self.input()['identify_risks']['markdown'].path),
             ('Make Assumptions', self.input()['make_assumptions']['markdown'].path),
             ('Distill Assumptions', self.input()['distill_assumptions']['markdown'].path),
+            ('Fermi Sanity Checks', self.input()['fermi_sanity_check']['summary'].path),
             ('Review Assumptions', self.input()['review_assumptions']['markdown'].path)
         ]
 

@@ -37,8 +37,8 @@ class EnrichedLever(BaseModel):
     options: List[str]
     review: str
     description: str
-    synergy_text: str
-    conflict_text: str
+    synergy_text: str | None = None
+    conflict_text: str | None = None
 
 class LeverAssessment(BaseModel):
     """An assessment of a single strategic lever's importance."""
@@ -117,39 +117,70 @@ class FocusOnVitalFewLevers:
 
         logger.info(f"Assessing {len(enriched_levers)} characterized levers to find the vital few.")
 
-        # Convert Pydantic models to dictionaries for JSON serialization
-        levers_dict = [lever.model_dump() for lever in enriched_levers]
-        levers_json = json.dumps(levers_dict, indent=2)        
-        focus_prompt = (
-            f"**Project Context:**\n{project_context}\n\n"
-            f"**Candidate Levers List:**\n"
-            f"Please assess the strategic importance of the following {len(enriched_levers)} levers based on the project plan and their detailed characterizations:\n\n"
-            f"{levers_json}"
-        )
-
-        system_prompt = FOCUS_LEVERS_SYSTEM_PROMPT.strip()
-        chat_message_list = [
-            ChatMessage(role=MessageRole.SYSTEM, content=system_prompt),
-            ChatMessage(role=MessageRole.USER, content=focus_prompt)
-        ]
-
-        # Step 2: Run the LLM to get the assessment
-        def execute_function(llm: LLM) -> dict:
-            sllm = llm.as_structured_llm(VitalLeversAssessmentResult)
-            chat_response = sllm.chat(chat_message_list)
-            metadata = dict(llm.metadata)
-            metadata["llm_classname"] = llm.class_name()
-            return { "chat_response": chat_response, "metadata": metadata }
+        # Compress enriched levers to only the 5 fields consumed by the task
+        def compress_lever(lever: EnrichedLever) -> dict:
+            return {
+                "lever_id": lever.lever_id,
+                "name": lever.name,
+                "description": lever.description,
+                "synergy_text": lever.synergy_text,
+                "conflict_text": lever.conflict_text
+            }
         
-        try:
-            result = llm_executor.run(execute_function)
-            response = result["chat_response"].raw
-            metadata = result["metadata"]
-        except PipelineStopRequested:
-            raise
-        except Exception as e:
-            logger.error("LLM chat interaction for focusing levers failed.", exc_info=True)
-            raise ValueError("LLM chat interaction failed.") from e
+        compressed_levers = [compress_lever(lever) for lever in enriched_levers]
+        
+        # Process levers in batches of 4 with retry logic
+        batch_size = 4
+        response = None
+        metadata = None
+        
+        for batch_start in range(0, len(compressed_levers), batch_size):
+            batch_end = min(batch_start + batch_size, len(compressed_levers))
+            batch_levers = compressed_levers[batch_start:batch_end]
+            batch_num = (batch_start // batch_size) + 1
+            total_batches = (len(compressed_levers) + batch_size - 1) // batch_size
+            
+            logger.info(f"Processing batch {batch_num}/{total_batches} with {len(batch_levers)} levers...")
+            
+            levers_json = json.dumps(batch_levers, indent=2)
+            focus_prompt = (
+                f"**Project Context:**\n{project_context}\n\n"
+                f"**Candidate Levers List:**\n"
+                f"Please assess the strategic importance of the following {len(batch_levers)} levers based on the project plan and their detailed characterizations:\n\n"
+                f"{levers_json}"
+            )
+
+            system_prompt = FOCUS_LEVERS_SYSTEM_PROMPT.strip()
+            chat_message_list = [
+                ChatMessage(role=MessageRole.SYSTEM, content=system_prompt),
+                ChatMessage(role=MessageRole.USER, content=focus_prompt)
+            ]
+
+            # Step 2: Run the LLM to get the assessment with retry
+            def execute_function(llm: LLM) -> dict:
+                sllm = llm.as_structured_llm(VitalLeversAssessmentResult)
+                chat_response = sllm.chat(chat_message_list)
+                metadata = dict(llm.metadata)
+                metadata["llm_classname"] = llm.class_name()
+                return { "chat_response": chat_response, "metadata": metadata }
+            
+            try:
+                result = llm_executor.run(execute_function)
+                response = result["chat_response"].raw
+                metadata = result["metadata"]
+                logger.info(f"Batch {batch_num}/{total_batches} processed successfully.")
+            except PipelineStopRequested:
+                raise
+            except Exception as e:
+                logger.warning(f"Batch {batch_num} failed with error: {e}. Retrying...")
+                try:
+                    result = llm_executor.run(execute_function)
+                    response = result["chat_response"].raw
+                    metadata = result["metadata"]
+                    logger.info(f"Batch {batch_num} succeeded on retry.")
+                except Exception as retry_error:
+                    logger.error(f"Batch {batch_num} failed on retry.", exc_info=True)
+                    raise ValueError(f"LLM chat interaction failed for batch {batch_num}.") from retry_error
             
         # Step 3: Select the "vital few" levers based on the assessment
         vital_levers = cls.select_top_levers(

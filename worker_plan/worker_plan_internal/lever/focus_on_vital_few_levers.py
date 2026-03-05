@@ -133,6 +133,7 @@ class FocusOnVitalFewLevers:
         batch_size = 4
         response = None
         metadata = None
+        all_assessments = []  # Accumulator for all batch assessments
         
         for batch_start in range(0, len(compressed_levers), batch_size):
             batch_end = min(batch_start + batch_size, len(compressed_levers))
@@ -166,8 +167,16 @@ class FocusOnVitalFewLevers:
             
             try:
                 result = llm_executor.run(execute_function)
-                response = result["chat_response"].raw
+                batch_response = result["chat_response"].raw
                 metadata = result["metadata"]
+                
+                # Accumulate assessments from all batches
+                if response is None:
+                    response = batch_response
+                    all_assessments = batch_response.lever_assessments.copy()
+                else:
+                    all_assessments.extend(batch_response.lever_assessments)
+                
                 logger.info(f"Batch {batch_num}/{total_batches} processed successfully.")
             except PipelineStopRequested:
                 raise
@@ -175,12 +184,24 @@ class FocusOnVitalFewLevers:
                 logger.warning(f"Batch {batch_num} failed with error: {e}. Retrying...")
                 try:
                     result = llm_executor.run(execute_function)
-                    response = result["chat_response"].raw
+                    batch_response = result["chat_response"].raw
                     metadata = result["metadata"]
+                    
+                    # Accumulate assessments from all batches
+                    if response is None:
+                        response = batch_response
+                        all_assessments = batch_response.lever_assessments.copy()
+                    else:
+                        all_assessments.extend(batch_response.lever_assessments)
+                    
                     logger.info(f"Batch {batch_num} succeeded on retry.")
                 except Exception as retry_error:
                     logger.error(f"Batch {batch_num} failed on retry.", exc_info=True)
                     raise ValueError(f"LLM chat interaction failed for batch {batch_num}.") from retry_error
+        
+        # Merge all batch assessments into the final response
+        if response is not None and all_assessments:
+            response.lever_assessments = all_assessments
             
         # Step 3: Select the "vital few" levers based on the assessment
         vital_levers = cls.select_top_levers(

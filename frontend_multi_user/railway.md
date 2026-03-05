@@ -1,5 +1,9 @@
 # Railway Configuration for `frontend_multi_user`
 
+See [PlanExe on Railway](https://docs.planexe.org/railway/) documentation for more details.
+
+## Env vars
+
 ```
 PLANEXE_FRONTEND_MULTIUSER_PUBLIC_URL="https://home.planexe.org"
 PLANEXE_FRONTEND_MULTIUSER_ADMIN_PASSWORD="insert-your-password"

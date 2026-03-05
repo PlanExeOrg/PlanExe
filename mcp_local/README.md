@@ -1,4 +1,4 @@
-# PlanExe MCP locally - Experimental, likely to be changed a lot!
+# PlanExe MCP locally
 
 Model Context Protocol (MCP) local proxy for PlanExe.
 
@@ -8,7 +8,8 @@ proxy forwards tool calls over HTTP and downloads artifacts from `/download/{pla
 
 ## Tools
 
-`prompt_examples` - Return example prompts. Use these as examples for plan_create. You can also call `plan_create` with any prompt—short prompts produce less detailed plans.
+`example_plans` - Return curated example plans with download links for reports and zip bundles.
+`example_prompts` - Return example prompts. Use these as examples for plan_create. You can also call `plan_create` with any prompt—short prompts produce less detailed plans.
 `model_profiles` - Show model_profile options and currently available models in each profile.
 `plan_create` - Initiate creation of a plan.
 `plan_status` - Get status and progress about the creation of a plan.
@@ -34,7 +35,7 @@ Minimal error contract:
 - Local proxy specific codes: `REMOTE_ERROR`, `DOWNLOAD_FAILED`.
 - `plan_file_info` (called under the hood by plan_download) may return `{}` while output is not ready.
 
-**Tip**: Call `prompt_examples` to get example prompts to use with plan_create. The full catalog lives at `worker_plan/worker_plan_api/prompt/data/simple_plan_prompts.jsonl`.
+**Tip**: Call `example_plans` to preview example output, then call `example_prompts` to get example prompts to use with plan_create. The full catalog lives at `worker_plan/worker_plan_api/prompt/data/simple_plan_prompts.jsonl`.
 
 `plan_download` is a synthetic tool provided by the local proxy. It calls the
 remote MCP tool `plan_file_info` to obtain a download URL, then downloads the
@@ -51,7 +52,7 @@ file locally into `PLANEXE_PATH`.
 
 Some MCP clients (e.g. the MCP Inspector) show a **"Run as task"** option for tools. That refers to the MCP **tasks** protocol: a separate mechanism where the client runs a tool in the background using RPC methods like `tasks/run`, `tasks/get`, `tasks/result`, and `tasks/cancel`, instead of a single blocking tool call.
 
-**PlanExe does not use or advertise the MCP tasks protocol.** Our interface is **tool-based** only: the agent calls `prompt_examples` and `model_profiles` for setup, completes a non-tool prompt drafting/approval step, then `plan_create` → gets a `plan_id` → polls `plan_status` → optionally calls `plan_retry` if failed → uses `plan_download`. That flow is defined in `docs/mcp/planexe_mcp_interface.md` and is the intended design.
+**PlanExe does not use or advertise the MCP tasks protocol.** Our interface is **tool-based** only: the agent calls `example_plans`, `example_prompts`, and `model_profiles` for setup, completes a non-tool prompt drafting/approval step, then `plan_create` → gets a `plan_id` → polls `plan_status` → optionally calls `plan_retry` if failed → uses `plan_download`. That flow is defined in `docs/mcp/planexe_mcp_interface.md` and is the intended design.
 
 You should **not** enable "Run as task" for PlanExe. The Python MCP SDK and clients like Cursor do not properly support the tasks protocol (method registration and initialization fail). Use the tools directly: create a task, poll status, then download when done.
 
@@ -125,3 +126,7 @@ directory where PlanExe is allowed to save files.
   }
 }
 ```
+
+## Ideas
+
+I’m considering dropping `mcp_local`. The benefit of having the `plan_download` is too small, vs. using `plan_file_info` and downloading the url afterwards. It saves 1 reasoning step. Alas the UX of configuring `mcp_local` is terrible. The documentation can be less confusing by not covering `mcp_local`.

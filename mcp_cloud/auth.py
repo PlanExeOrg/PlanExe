@@ -44,6 +44,7 @@ def _resolve_user_from_api_key(raw_key: str) -> Optional[dict[str, Any]]:
         user_context = {
             "user_id": str(user.id),
             "credits_balance": float(user.credits_balance or 0),
+            "api_key_id": str(api_key.id),
         }
         api_key.last_used_at = datetime.now(UTC)
         db.session.commit()

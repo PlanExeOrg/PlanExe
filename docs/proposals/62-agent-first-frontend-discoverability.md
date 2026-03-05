@@ -32,7 +32,7 @@ This section records what is currently implemented in the repository and what st
 - `public/llms.txt` now reflects current production guidance:
   - MCP endpoint is `/mcp` (not `/sse`)
   - MCP auth uses `X-API-Key`
-  - Tool names match current MCP tools (`prompt_examples`, `task_create`, `task_status`, `task_stop`, `task_file_info`)
+  - Tool names match current MCP tools (`example_prompts`, `task_create`, `task_status`, `task_stop`, `task_file_info`)
   - Pricing/cost docs point to `https://docs.planexe.org/costs_and_models/`
   - Support contact includes Discord: `https://planexe.org/discord`
 - Current positioning is documented:
@@ -88,14 +88,14 @@ PlanExe turns broad goals into structured strategic-plan drafts and downloadable
 
 ## MCP Tools
 
-- prompt_examples
+- example_prompts
 - task_create
 - task_status
 - task_stop
 - task_file_info
 
 Recommended flow:
-1) prompt_examples
+1) example_prompts
 2) task_create
 3) task_status (poll every 5 minutes)
 4) task_file_info
@@ -289,7 +289,7 @@ Recommended flow:
     "name": "PlanExe",
     "description": "Strategic plan generation via MCP tools",
     "tools": [
-      {"name": "prompt_examples"},
+      {"name": "example_prompts"},
       {"name": "task_create"},
       {"name": "task_status"},
       {"name": "task_stop"},
@@ -494,7 +494,7 @@ print(response.output_text)
 
 | Tool | Input | Output | Use Case |
 |------|-------|--------|----------|
-| `prompt_examples` | none | prompt samples | Bootstrap high-quality prompts |
+| `example_prompts` | none | prompt samples | Bootstrap high-quality prompts |
 | `task_create` | prompt, speed_vs_detail | task_id | Start plan generation |
 | `task_status` | task_id | state, progress | Poll long-running execution |
 | `task_file_info` | task_id, artifact | download metadata/url | Retrieve output files |

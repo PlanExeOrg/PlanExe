@@ -37,6 +37,8 @@ class CreditHistory(db.Model):
     source = db.Column(db.String(32), nullable=False)
     # Optional external payment or invoice id.
     external_id = db.Column(db.String(256), nullable=True)
+    # Which API key's plan incurred this charge (NULL for purchases/legacy).
+    api_key_id = db.Column(db.String(36), nullable=True, index=True)
     # When the ledger entry was created.
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(UTC))
 

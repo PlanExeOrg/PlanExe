@@ -5,7 +5,7 @@ import logging
 import os
 import time
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, Optional
 
 from mcp.types import CallToolResult, Tool, TextContent, ToolAnnotations
 
@@ -47,8 +47,8 @@ from mcp_cloud.worker_fetchers import (
     fetch_user_downloadable_zip,
 )
 from mcp_cloud.model_profiles import _get_model_profiles_sync
-from mcp_cloud.download_tokens import build_report_download_url, build_zip_download_url
-from mcp_cloud.prompt_examples import _load_mcp_example_prompts
+from mcp_cloud.download_tokens import build_report_download_url, build_zip_download_url, _get_download_base_url
+from mcp_cloud.example_prompts import _load_mcp_example_prompts
 from mcp_cloud.schemas import TOOL_DEFINITIONS
 
 logger = logging.getLogger(__name__)
@@ -149,12 +149,20 @@ async def handle_plan_create(arguments: dict[str, Any]) -> CallToolResult:
             isError=True,
         )
 
+    metadata = None
+    if user_context:
+        metadata = {"user_id": str(user_context["user_id"])}
+        if user_context.get("api_key_id"):
+            metadata["api_key_id"] = user_context["api_key_id"]
     response = await asyncio.to_thread(
         _create_plan_sync,
         req.prompt,
         merged_config,
-        {"user_id": str(user_context["user_id"])} if user_context else None,
+        metadata,
     )
+    base_url = _get_download_base_url()
+    if base_url and response.get("plan_id"):
+        response["sse_url"] = f"{base_url}/sse/plan/{response['plan_id']}"
     return CallToolResult(
         content=[TextContent(type="text", text=json.dumps(response))],
         structuredContent=response,
@@ -162,7 +170,7 @@ async def handle_plan_create(arguments: dict[str, Any]) -> CallToolResult:
     )
 
 
-async def handle_prompt_examples(arguments: dict[str, Any]) -> CallToolResult:
+async def handle_example_prompts(arguments: dict[str, Any]) -> CallToolResult:
     """Return curated prompts from the catalog (mcp_example true) so LLMs can see example detail."""
     samples = _load_mcp_example_prompts()
     payload = {
@@ -176,6 +184,35 @@ async def handle_prompt_examples(arguments: dict[str, Any]) -> CallToolResult:
             "Only after approval, call plan_create. "
             "Do not use PlanExe for tiny one-shot requests (e.g., rewrite this email, summarize this document). "
             "PlanExe always runs the full fixed planning pipeline; callers cannot run only selected internal steps."
+        ),
+    }
+    return CallToolResult(
+        content=[TextContent(type="text", text=json.dumps(payload))],
+        structuredContent=payload,
+        isError=False,
+    )
+
+
+async def handle_example_plans(arguments: dict[str, Any]) -> CallToolResult:
+    """Return a curated list of example plans with download links."""
+    payload = {
+        "plans": [
+            {
+                "title": "CBC Validation",
+                "report_url": "https://planexe.org/20260114_cbc_validation_report.html",
+                "zip_url": "https://planexe.org/20260114_cbc_validation.zip",
+            },
+            {
+                "title": "Minecraft Escape",
+                "report_url": "https://planexe.org/20251016_minecraft_escape_report.html",
+                "zip_url": "https://planexe.org/20251016_minecraft_escape.zip",
+            },
+        ],
+        "message": (
+            "These are curated example plans showing what PlanExe output looks like. "
+            "Open the report URLs in a browser to see the interactive HTML reports with "
+            "collapsible sections and Gantt charts. The zip bundles contain the intermediary "
+            "pipeline files (md, json, csv) that fed each report."
         ),
     }
     return CallToolResult(
@@ -287,6 +324,11 @@ async def handle_plan_status(arguments: dict[str, Any]) -> CallToolResult:
         "files": files[:10],  # Limit to 10 most recent
     }
 
+    if state not in ("completed", "failed"):
+        base_url = _get_download_base_url()
+        if base_url:
+            response["sse_url"] = f"{base_url}/sse/plan/{plan_uuid}"
+
     return CallToolResult(
         content=[TextContent(type="text", text=json.dumps(response))],
         structuredContent=response,
@@ -337,7 +379,18 @@ async def handle_plan_retry(arguments: dict[str, Any]) -> CallToolResult:
     """Retry a failed plan by resetting it back to pending."""
     req = PlanRetryRequest(**arguments)
     plan_id = req.plan_id
-    retry_result = await asyncio.to_thread(_retry_failed_plan_sync, plan_id, req.model_profile)
+
+    # Resolve caller identity so the retried plan is attributed to the new key.
+    user_api_key = arguments.get("user_api_key")
+    caller_metadata: Optional[dict[str, str]] = None
+    if user_api_key:
+        user_context = _resolve_user_from_api_key(user_api_key.strip())
+        if user_context:
+            caller_metadata = {"user_id": str(user_context["user_id"])}
+            if user_context.get("api_key_id"):
+                caller_metadata["api_key_id"] = user_context["api_key_id"]
+
+    retry_result = await asyncio.to_thread(_retry_failed_plan_sync, plan_id, req.model_profile, caller_metadata)
 
     if retry_result is None:
         response = {
@@ -543,12 +596,13 @@ async def handle_plan_list(arguments: dict[str, Any]) -> CallToolResult:
 
 
 TOOL_HANDLERS = {
+    "example_plans": handle_example_plans,
+    "example_prompts": handle_example_prompts,
+    "model_profiles": handle_model_profiles,
     "plan_create": handle_plan_create,
     "plan_status": handle_plan_status,
     "plan_stop": handle_plan_stop,
     "plan_retry": handle_plan_retry,
     "plan_file_info": handle_plan_file_info,
     "plan_list": handle_plan_list,
-    "prompt_examples": handle_prompt_examples,
-    "model_profiles": handle_model_profiles,
 }

@@ -152,7 +152,7 @@ class EnrichPotentialLevers:
             except PipelineStopRequested:
                 raise
             except Exception as e:
-                logger.error(f"LLM batch interaction failed for levers {[lever.id for lever in batch]}.", exc_info=True)
+                logger.error(f"LLM batch interaction failed for levers {[lever.lever_id for lever in batch]}.", exc_info=True)
                 raise ValueError("LLM batch interaction failed.") from e
 
         final_characterized_levers = []

@@ -30,6 +30,8 @@ class TokenMetrics(db.Model):
     task_id = db.Column(String(255), nullable=True, index=True)
     # UserAccount.id associated with the task for billing and support investigations.
     user_id = db.Column(String(255), nullable=True, index=True)
+    # UserApiKey.id that was active when this LLM call was made.
+    api_key_id = db.Column(String(36), nullable=True, index=True)
 
     # Provider/model route selected upstream (for gateway providers like OpenRouter).
     upstream_provider = db.Column(String(255), nullable=True, index=True)

@@ -170,12 +170,12 @@ class TestPublicMcpNoAuthRules(unittest.TestCase):
         result = asyncio.run(http_server._is_public_mcp_request_without_auth(request))
         self.assertTrue(result)
 
-    def test_public_streamable_tools_call_prompt_examples(self):
+    def test_public_streamable_tools_call_example_prompts(self):
         request = _RequestStub(
             headers={},
             method="POST",
             path="/mcp/",
-            body=b'{"jsonrpc":"2.0","id":9,"method":"tools/call","params":{"name":"prompt_examples","arguments":{}}}',
+            body=b'{"jsonrpc":"2.0","id":9,"method":"tools/call","params":{"name":"example_prompts","arguments":{}}}',
         )
         result = asyncio.run(http_server._is_public_mcp_request_without_auth(request))
         self.assertTrue(result)

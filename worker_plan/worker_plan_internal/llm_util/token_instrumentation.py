@@ -18,10 +18,13 @@ __all__ = [
     "set_current_task_id",
     "get_current_user_id",
     "set_current_user_id",
+    "get_current_api_key_id",
+    "set_current_api_key_id",
 ]
 
 _current_task_id: Optional[str] = None
 _current_user_id: Optional[str] = None
+_current_api_key_id: Optional[str] = None
 
 def set_current_task_id(task_id: Optional[str]) -> None:
     """Set the current PlanItem.id for token tracking."""
@@ -45,6 +48,17 @@ def set_current_user_id(user_id: Optional[str]) -> None:
 def get_current_user_id() -> Optional[str]:
     """Get the current UserAccount.id for token tracking."""
     return _current_user_id
+
+
+def set_current_api_key_id(api_key_id: Optional[str]) -> None:
+    """Set the current UserApiKey.id for token tracking."""
+    global _current_api_key_id
+    _current_api_key_id = api_key_id
+
+
+def get_current_api_key_id() -> Optional[str]:
+    """Get the current UserApiKey.id for token tracking."""
+    return _current_api_key_id
 
 
 def record_llm_tokens(
@@ -93,6 +107,7 @@ def record_llm_tokens(
                     store.record_token_usage(
                         task_id=resolved_task_id,
                         user_id=get_current_user_id(),
+                        api_key_id=get_current_api_key_id(),
                         llm_model=llm_model,
                         upstream_provider=token_count.upstream_provider,
                         upstream_model=token_count.upstream_model,
@@ -166,6 +181,7 @@ def record_attempt_tokens(
         store.record_token_usage(
             task_id=task_id,
             user_id=user_id,
+            api_key_id=get_current_api_key_id(),
             llm_model=llm_model,
             upstream_provider=token_count.upstream_provider if token_count else None,
             upstream_model=token_count.upstream_model if token_count else None,

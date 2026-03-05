@@ -14,9 +14,25 @@ This document lists the MCP tools exposed by PlanExe and example prompts for age
 
 ## Tool Catalog, `mcp_cloud`
 
-### prompt_examples
+### example_plans
 
-Returns around five example prompts that show what good prompts look like. Each sample is typically 300-800 words. Usually the AI does the heavy lifting: the user has a vague idea, the agent calls `prompt_examples`, then expands that idea into a high-quality prompt (300-800 words). A compact prompt shape works best: objective, scope, constraints, timeline, stakeholders, budget/resources, and success criteria. The prompt is shown to the user, who can ask for further changes or confirm it’s good to go. When the user confirms, the agent then calls `plan_create`. Shorter or vaguer prompts produce lower-quality plans.
+Returns a curated list of example plans with download links for reports and zip bundles. Use this to preview what PlanExe output looks like before creating your own plan. No API key required.
+
+Example prompt:
+```
+Show me example plans.
+```
+
+Example call:
+```json
+{}
+```
+
+Response includes `plans` (array of objects with `title`, `report_url`, `zip_url`) and `message`.
+
+### example_prompts
+
+Returns around five example prompts that show what good prompts look like. Each sample is typically 300-800 words. Usually the AI does the heavy lifting: the user has a vague idea, the agent calls `example_prompts`, then expands that idea into a high-quality prompt (300-800 words). A compact prompt shape works best: objective, scope, constraints, timeline, stakeholders, budget/resources, and success criteria. The prompt is shown to the user, who can ask for further changes or confirm it’s good to go. When the user confirms, the agent then calls `plan_create`. Shorter or vaguer prompts produce lower-quality plans.
 
 Example prompt:
 ```
@@ -58,7 +74,7 @@ Response includes:
 
 ### plan_create
 
-Create a new plan task.
+Create a new plan.
 
 Example prompt:
 > Create a plan for: Weekly meetup for humans where participants are randomly paired every 5 minutes...
@@ -94,16 +110,16 @@ What to do instead:
 
 ### plan_status
 
-Fetch status/progress and recent files for a task.
+Fetch status/progress and recent files for a plan.
 
 Example prompt:
 ```
-Get status for task 2d57a448-1b09-45aa-ad37-e69891ff6ec7.
+Get status for plan 2d57a448-1b09-45aa-ad37-e69891ff6ec7.
 ```
 
 Example call:
 ```json
-{"task_id": "2d57a448-1b09-45aa-ad37-e69891ff6ec7"}
+{"plan_id": "2d57a448-1b09-45aa-ad37-e69891ff6ec7"}
 ```
 
 State contract:
@@ -115,36 +131,36 @@ State contract:
 
 ### plan_stop
 
-Request an active task to stop.
+Request an active plan to stop.
 
 Example prompt:
 ```
-Stop task 2d57a448-1b09-45aa-ad37-e69891ff6ec7.
+Stop plan 2d57a448-1b09-45aa-ad37-e69891ff6ec7.
 ```
 
 Example call:
 ```json
-{"task_id": "2d57a448-1b09-45aa-ad37-e69891ff6ec7"}
+{"plan_id": "2d57a448-1b09-45aa-ad37-e69891ff6ec7"}
 ```
 
 ### plan_retry
 
-Retry a failed task by requeueing the same `task_id`.
+Retry a failed plan by requeueing the same `plan_id`.
 
 Example prompt:
 ```
-Retry failed task 2d57a448-1b09-45aa-ad37-e69891ff6ec7 with baseline profile.
+Retry failed plan 2d57a448-1b09-45aa-ad37-e69891ff6ec7 with baseline profile.
 ```
 
 Example call:
 ```json
-{"task_id": "2d57a448-1b09-45aa-ad37-e69891ff6ec7", "model_profile": "baseline"}
+{"plan_id": "2d57a448-1b09-45aa-ad37-e69891ff6ec7", "model_profile": "baseline"}
 ```
 
 Notes:
 - `model_profile` is optional and defaults to `baseline`.
-- Only failed tasks can be retried.
-- Non-failed tasks return `TASK_NOT_FAILED`.
+- Only failed plans can be retried.
+- Non-failed plans return `PLAN_NOT_FAILED`.
 
 ### plan_file_info
 
@@ -152,12 +168,12 @@ Return download metadata for report or zip artifacts.
 
 Example prompt:
 ```
-Get report info for task 2d57a448-1b09-45aa-ad37-e69891ff6ec7.
+Get report info for plan 2d57a448-1b09-45aa-ad37-e69891ff6ec7.
 ```
 
 Example call:
 ```json
-{"task_id": "2d57a448-1b09-45aa-ad37-e69891ff6ec7", "artifact": "report"}
+{"plan_id": "2d57a448-1b09-45aa-ad37-e69891ff6ec7", "artifact": "report"}
 ```
 
 Available artifacts:
@@ -171,7 +187,7 @@ Typical successful response:
   "content_type": "application/zip",
   "sha256": "f8ad556b635b14e375222150664e85b426bf7f9209ede2f37f47a8975e286323",
   "download_size": 17262032,
-  "download_url": "https://mcp.planexe.org/download/<task_id>/run.zip"
+  "download_url": "https://mcp.planexe.org/download/<plan_id>/run.zip"
 }
 ```
 
@@ -199,19 +215,19 @@ Download report or zip to a local path.
 
 Example prompt:
 ```
-Download the report for task 2d57a448-1b09-45aa-ad37-e69891ff6ec7.
+Download the report for plan 2d57a448-1b09-45aa-ad37-e69891ff6ec7.
 ```
 
 Example call:
 ```json
-{"task_id": "2d57a448-1b09-45aa-ad37-e69891ff6ec7", "artifact": "report"}
+{"plan_id": "2d57a448-1b09-45aa-ad37-e69891ff6ec7", "artifact": "report"}
 ```
 
 `PLANEXE_PATH` behavior for `plan_download`:
 - Save directory is `PLANEXE_PATH`, or current working directory if unset.
 - Non-existing directories are created automatically.
 - If `PLANEXE_PATH` points to a file, download fails.
-- Filename is prefixed with task id (for example `<task_id>-030-report.html`).
+- Filename is prefixed with plan id (for example `<plan_id>-030-report.html`).
 - Response includes `saved_path` with the exact local file location.
 
 ## Minimal error-handling contract
@@ -222,8 +238,8 @@ Error payload shape:
 ```
 
 Common cloud/core error codes:
-- `TASK_NOT_FOUND`
-- `TASK_NOT_FAILED`
+- `PLAN_NOT_FOUND`
+- `PLAN_NOT_FAILED`
 - `INVALID_USER_API_KEY`
 - `USER_API_KEY_REQUIRED`
 - `INSUFFICIENT_CREDITS`
@@ -241,18 +257,32 @@ Special case:
 
 ## Concurrency semantics (practical)
 
-- Each `plan_create` call creates a new task with a new `task_id`.
-- The server does not enforce a global “one active task per client” cap.
+- Each `plan_create` call creates a new plan with a new `plan_id`.
+- The server does not enforce a global “one active plan per client” cap.
 - Parallelism is a client orchestration concern:
-  - start with 1 task
+  - start with 1 plan
   - scale to 2 in parallel if needed
-  - avoid more than 4 unless you have strong task-tracking UX
+  - avoid more than 4 unless you have strong plan-tracking UX
 
 ## Typical Flow
 
-### 1. Get example prompts
+### 1. Preview example plans (optional)
 
-The user often starts with a vague idea. The AI calls `prompt_examples` first to see what good prompts look like (around five samples, typically 300-800 words each), then expands the user’s idea into a high-quality prompt using this compact shape: objective, scope, constraints, timeline, stakeholders, budget/resources, and success criteria.
+Call `example_plans` to see curated example plans with download links, so you can preview what PlanExe output looks like before creating your own plan.
+
+Prompt:
+```
+Show me example plans.
+```
+
+Tool call:
+```json
+{}
+```
+
+### 2. Get example prompts
+
+The user often starts with a vague idea. The AI calls `example_prompts` first to see what good prompts look like (around five samples, typically 300-800 words each), then expands the user’s idea into a high-quality prompt using this compact shape: objective, scope, constraints, timeline, stakeholders, budget/resources, and success criteria.
 
 Prompt:
 ```
@@ -264,7 +294,7 @@ Tool call:
 {}
 ```
 
-### 2. Inspect model profiles (optional but recommended)
+### 3. Inspect model profiles (optional but recommended)
 
 Prompt:
 ```
@@ -276,11 +306,11 @@ Tool call:
 {}
 ```
 
-### 3. Draft and approve the prompt (non-tool step)
+### 4. Draft and approve the prompt (non-tool step)
 
 At this step, the agent writes a high-quality prompt draft (typically 300-800 words, with objective, scope, constraints, timeline, stakeholders, budget/resources, and success criteria), shows it to the user, and waits for approval.
 
-### 4. Create a plan
+### 5. Create a plan
 
 The user reviews the prompt and either asks for further changes or confirms it’s good to go. When the user confirms, the agent calls `plan_create` with that prompt.
 
@@ -289,33 +319,33 @@ Tool call:
 {"prompt": "..."}
 ```
 
-### 5. Get status
+### 6. Get status
 
 Prompt:
 ```
-Get status for my latest task.
+Get status for my latest plan.
 ```
 
 Tool call:
 ```json
-{"task_id": "<task_id_from_plan_create>"}
+{"plan_id": "<plan_id_from_plan_create>"}
 ```
 
 If state is `failed`, optional retry:
 
 Tool call:
 ```json
-{"task_id": "<task_id_from_plan_create>", "model_profile": "baseline"}
+{"plan_id": "<plan_id_from_plan_create>", "model_profile": "baseline"}
 ```
 
-### 6. Download the report
+### 7. Download the report
 
 Prompt:
 ```
-Download the report for my task.
+Download the report for my plan.
 ```
 
 Tool call:
 ```json
-{"task_id": "<task_id_from_plan_create>", "artifact": "report"}
+{"plan_id": "<plan_id_from_plan_create>", "artifact": "report"}
 ```

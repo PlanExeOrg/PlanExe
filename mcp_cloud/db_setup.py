@@ -73,8 +73,25 @@ def ensure_planitem_stop_columns() -> None:
             except Exception as exc:
                 logger.warning("Schema update failed for %s: %s", statement, exc, exc_info=True)
 
+def ensure_multi_api_key_columns() -> None:
+    """Add columns for multi-API-key support (idempotent)."""
+    statements = (
+        "ALTER TABLE user_api_key ADD COLUMN IF NOT EXISTS label VARCHAR(128)",
+        "ALTER TABLE user_api_key ADD COLUMN IF NOT EXISTS key_plaintext VARCHAR(64)",
+        "ALTER TABLE task_item ADD COLUMN IF NOT EXISTS api_key_id VARCHAR(36)",
+        "ALTER TABLE credit_history ADD COLUMN IF NOT EXISTS api_key_id VARCHAR(36)",
+        "ALTER TABLE token_metrics ADD COLUMN IF NOT EXISTS api_key_id VARCHAR(36)",
+    )
+    with db.engine.begin() as conn:
+        for stmt in statements:
+            try:
+                conn.execute(text(stmt))
+            except Exception as exc:
+                logger.warning("Schema update failed for %s: %s", stmt, exc, exc_info=True)
+
 with app.app_context():
     ensure_planitem_stop_columns()
+    ensure_multi_api_key_columns()
 
 # Shown in MCP initialize (e.g. Inspector) so clients know what PlanExe does.
 PLANEXE_SERVER_INSTRUCTIONS = (
@@ -87,7 +104,8 @@ PLANEXE_SERVER_INSTRUCTIONS = (
     "Use PlanExe for substantial multi-phase projects with constraints, stakeholders, budgets, and timelines. "
     "Do not use PlanExe for tiny one-shot outputs (for example: 'give me a 5-point checklist'); use a normal LLM response for that. "
     "The planning pipeline is fixed end-to-end; callers cannot select individual internal pipeline steps to run. "
-    "Required interaction order: call prompt_examples first. "
+    "Required interaction order: call example_plans first (optional, to preview what PlanExe output looks like — curated example reports and zip bundles). "
+    "Then call example_prompts. "
     "Optional before plan_create: call model_profiles to see profile guidance and available models in each profile. "
     "Then perform a non-tool step: draft a strong prompt as flowing prose (not structured markdown with headers or bullets), "
     "typically ~300-800 words, and get user approval. "
@@ -96,6 +114,12 @@ PLANEXE_SERVER_INSTRUCTIONS = (
     "Only after approval, call plan_create. "
     "Each plan_create call creates a new plan_id; the server does not enforce a global per-client concurrency limit. "
     "Then poll plan_status (about every 5 minutes); use plan_file_info when complete. "
+    "plan_create and plan_status responses include an sse_url field (a plain GET endpoint returning text/event-stream). "
+    "Instead of polling plan_status, you can monitor progress in real time by opening sse_url — "
+    "for example, run `curl -N -H 'X-API-Key: <key>' <sse_url>` in a background shell. "
+    "The stream emits 'status' events when progress changes, 'heartbeat' every ~20 s, and a final "
+    "'complete' event (state completed or failed) then closes automatically. "
+    "Polling plan_status and SSE are both supported — use whichever fits your runtime. "
     "If a run fails, call plan_retry with the failed plan_id to requeue it (optional model_profile, defaults to baseline). "
     "To stop, call plan_stop with the plan_id from plan_create; stopping is asynchronous and the plan will eventually transition to failed. "
     "If model_profiles returns MODEL_PROFILES_UNAVAILABLE, inform the user that no models are currently configured and the server administrator needs to set up model profiles. "

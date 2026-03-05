@@ -63,7 +63,8 @@ MCP Inspector setup guide:
 ### MCP Tools (Current)
 
 The MCP server exposes tool-based workflows (not MCP tasks protocol):
-- prompt_examples
+- example_plans
+- example_prompts
 - model_profiles
 - plan_create
 - plan_status
@@ -96,14 +97,15 @@ Minimal error-handling contract:
 - `plan_file_info` may return `{}` while artifact output is not ready yet.
 
 Recommended interaction order:
-1. Call prompt_examples.
-2. Optionally call model_profiles to choose model_profile based on current availability.
-3. Non-tool step: prepare and approve a strong prompt as flowing prose (not structured markdown), typically ~300-800 words, with objective, scope, constraints, timeline, stakeholders, budget/resources, and success criteria.
-4. Call plan_create.
-5. Poll plan_status until complete (repeat every 5 minutes).
-6. If failed, optionally call plan_retry (defaults to baseline model_profile).
-7. Use plan_file_info to get download URLs.
-8. Use plan_stop if the run must be cancelled.
+1. Optionally call example_plans to preview what PlanExe output looks like.
+2. Call example_prompts.
+3. Optionally call model_profiles to choose model_profile based on current availability.
+4. Non-tool step: prepare and approve a strong prompt as flowing prose (not structured markdown), typically ~300-800 words, with objective, scope, constraints, timeline, stakeholders, budget/resources, and success criteria.
+5. Call plan_create.
+6. Poll plan_status until complete (repeat every 5 minutes).
+7. If failed, optionally call plan_retry (defaults to baseline model_profile).
+8. Use plan_file_info to get download URLs.
+9. Use plan_stop if the run must be cancelled.
 
 Concurrency semantics:
 - Each plan_create call creates a new task_id.

@@ -18,13 +18,14 @@ from typing import Annotated, Any, Awaitable, Callable, Literal, Optional, Seque
 
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, StreamingResponse
 from pydantic import BaseModel, Field
 from mcp.server.fastmcp import FastMCP
 from mcp.types import CallToolResult, ContentBlock, TextContent, ToolAnnotations
 
 from mcp_cloud.http_utils import strip_redundant_content
 from mcp_cloud.tool_models import (
+    ExamplePlansOutput,
     ModelProfilesOutput,
     PlanCreateOutput,
     PlanFileInfoOutput,
@@ -65,7 +66,8 @@ from mcp_cloud.app import (
     handle_plan_retry,
     handle_plan_stop,
     handle_plan_file_info,
-    handle_prompt_examples,
+    handle_example_prompts,
+    handle_example_plans,
     resolve_plan_by_id,
     set_download_base_url,
     validate_download_token,
@@ -73,6 +75,8 @@ from mcp_cloud.app import (
 )
 from mcp_cloud.auth import validate_api_key_secret
 from mcp_cloud.download_tokens import validate_download_token_secret
+
+SERVER_VERSION = "1.0.1"
 
 REQUIRED_API_KEY = os.environ.get("PLANEXE_MCP_API_KEY")
 
@@ -163,13 +167,15 @@ PUBLIC_JSONRPC_METHODS_NO_AUTH = {
     "notifications/initialized",
     "tools/list",
     "prompts/list",
+    "prompts/get",
     "resources/list",
     "resources/templates/list",
     "ping",
 }
 PUBLIC_TOOL_CALLS_NO_AUTH = {
+    "example_plans",
+    "example_prompts",
     "model_profiles",
-    "prompt_examples",
 }
 
 
@@ -192,7 +198,7 @@ def _append_cors_headers(request: Request, response: Response) -> Response:
 
     headers = response.headers
     headers.setdefault("Access-Control-Allow-Origin", allow_origin)
-    headers.setdefault("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+    headers.setdefault("Access-Control-Allow-Methods", "GET, HEAD, POST, OPTIONS")
 
     request_headers = request.headers.get("access-control-request-headers")
     if request_headers:
@@ -391,6 +397,12 @@ def _extract_api_key(request: Request) -> Optional[str]:
         if value:
             return value
 
+    # Fall back to query parameter (e.g. Smithery passes ?X-API-Key=...).
+    for param_name in ("X-API-Key", "api_key", "api-key"):
+        value = _normalize_api_key_value(request.query_params.get(param_name))
+        if value:
+            return value
+
     return None
 
 
@@ -399,10 +411,31 @@ async def _validate_api_key(request: Request) -> Optional[JSONResponse]:
     Accepts: (1) valid UserApiKey from DB, or (2) PLANEXE_MCP_API_KEY if set.
     Authentication can be disabled with PLANEXE_MCP_REQUIRE_AUTH=false.
     """
+    provided_key = _extract_api_key(request)
+
     if not AUTH_REQUIRED:
+        # Auth disabled — still resolve the key for attribution (last_used_at,
+        # per-key billing).  If a key IS provided but invalid, reject: the
+        # caller clearly intends to authenticate, so silently ignoring a bad
+        # key is worse than telling them.
+        if provided_key:
+            user = await asyncio.to_thread(_resolve_user_from_api_key, provided_key)
+            if user:
+                _authenticated_user_api_key_ctx.set(provided_key)
+            else:
+                await _log_auth_rejection(request, reason="invalid_api_key_local")
+                return JSONResponse(
+                    status_code=403,
+                    content={
+                        "detail": (
+                            "Invalid API key. "
+                            "Remove the X-API-Key header for local access, "
+                            "or get a valid key at https://home.planexe.org/"
+                        )
+                    },
+                )
         return None
 
-    provided_key = _extract_api_key(request)
     if not provided_key:
         await _log_auth_rejection(request, reason="missing_api_key")
         return JSONResponse(
@@ -634,7 +667,7 @@ async def plan_create(
         Field(description="Model profile: baseline, premium, frontier, custom. Call model_profiles to inspect options."),
     ] = "baseline",
 ) -> Annotated[CallToolResult, PlanCreateOutput]:
-    """Create a new PlanExe task. Use prompt_examples first for example prompts."""
+    """Create a new PlanExe task. Use example_prompts first for example prompts."""
     authenticated_user_api_key = _get_authenticated_user_api_key()
     arguments: dict[str, Any] = {
         "prompt": prompt,
@@ -666,7 +699,11 @@ async def plan_retry(
         Field(description="Model profile used for retry. Defaults to baseline."),
     ] = "baseline",
 ) -> Annotated[CallToolResult, PlanRetryOutput]:
-    return await handle_plan_retry({"plan_id": plan_id, "model_profile": model_profile})
+    arguments: dict[str, Any] = {"plan_id": plan_id, "model_profile": model_profile}
+    authenticated_user_api_key = _get_authenticated_user_api_key()
+    if authenticated_user_api_key:
+        arguments["user_api_key"] = authenticated_user_api_key
+    return await handle_plan_retry(arguments)
 
 
 async def plan_file_info(
@@ -679,14 +716,19 @@ async def plan_file_info(
     return await handle_plan_file_info({"plan_id": plan_id, "artifact": artifact})
 
 
-async def prompt_examples() -> CallToolResult:
+async def example_prompts() -> CallToolResult:
     """Return curated example prompts from the catalog (no arguments)."""
-    return await handle_prompt_examples({})
+    return await handle_example_prompts({})
 
 
 async def model_profiles() -> Annotated[CallToolResult, ModelProfilesOutput]:
     """Return model_profile options with currently available models."""
     return await handle_model_profiles({})
+
+
+async def example_plans() -> Annotated[CallToolResult, ExamplePlansOutput]:
+    """Return curated example plans with download links (no arguments)."""
+    return await handle_example_plans({})
 
 
 async def plan_list(
@@ -702,14 +744,15 @@ async def plan_list(
 
 def _register_tools(server: FastMCP) -> None:
     handler_map = {
+        "example_plans": example_plans,
+        "example_prompts": example_prompts,
+        "model_profiles": model_profiles,
         "plan_create": plan_create,
         "plan_status": plan_status,
         "plan_stop": plan_stop,
         "plan_retry": plan_retry,
         "plan_file_info": plan_file_info,
         "plan_list": plan_list,
-        "prompt_examples": prompt_examples,
-        "model_profiles": model_profiles,
     }
     for tool in TOOL_DEFINITIONS:
         handler = handler_map.get(tool.name)
@@ -733,6 +776,57 @@ fastmcp_server = FastMCP(
     stateless_http=True,
 )
 _register_tools(fastmcp_server)
+
+
+# ---------------------------------------------------------------------------
+# MCP Prompts — reusable prompt templates discoverable by MCP clients.
+# These improve the Smithery quality score (Server Capabilities → Prompts).
+# ---------------------------------------------------------------------------
+
+@fastmcp_server.prompt()
+def getting_started() -> str:
+    """Quick-start guide for using PlanExe to create a project plan."""
+    return (
+        "You have access to PlanExe, an MCP server that generates strategic "
+        "project-plan drafts from a natural-language prompt.\n\n"
+        "To get started:\n"
+        "1. Call the example_prompts tool to see what good prompts look like.\n"
+        "2. Optionally call model_profiles to see available quality tiers.\n"
+        "3. Draft a detailed prompt (300-800 words) covering: objective, scope, "
+        "constraints, timeline, stakeholders, budget, and success criteria. "
+        "Write it as flowing prose, not bullet lists.\n"
+        "4. Show the draft to the user for approval. Iterate — the user may "
+        "want to refine scope, add constraints, or adjust priorities. "
+        "A few rounds of feedback typically produce the best plans.\n"
+        "5. Once the user is satisfied, call plan_create with the approved prompt.\n"
+        "6. Poll plan_status every 5 minutes until state is completed.\n"
+        "7. Call plan_file_info to get the download URL for the HTML report.\n\n"
+        "The report contains 20+ sections including executive summary, Gantt charts, "
+        "risk analysis, SWOT, governance, investor pitch, and adversarial stress-tests."
+    )
+
+
+@fastmcp_server.prompt()
+def plan_a_project(topic: str, location: str = "") -> str:
+    """Draft a project plan for a given topic. Guides the agent through the full PlanExe workflow."""
+    location_line = f"\nLocation/region: {location}\n" if location else ""
+    return (
+        f"The user wants to create a project plan about: {topic}\n"
+        f"{location_line}\n"
+        "Follow these steps:\n"
+        "1. Call example_prompts to see baseline prompt quality and structure.\n"
+        "2. Using those examples as inspiration, expand the user's topic into a "
+        "detailed prompt of 300-800 words. Include: objective, scope, constraints, "
+        "timeline, stakeholders, budget/resources, and success criteria. Write as "
+        "flowing prose — weave specs and targets naturally into sentences.\n"
+        "3. Present the draft prompt to the user and ask for approval or changes.\n"
+        "4. Once approved, call plan_create with the prompt.\n"
+        "5. Poll plan_status every 5 minutes (plan generation takes 10-20 minutes).\n"
+        "6. When state is completed, call plan_file_info with artifact='report' "
+        "and share the download URL with the user."
+    )
+
+
 fastmcp_http_app = fastmcp_server.streamable_http_app()
 
 
@@ -761,7 +855,7 @@ async def _lifespan(app: FastAPI):
 app = FastAPI(
     title="PlanExe – AI Project Planning",
     description="MCP server that generates strategic project-plan drafts from a natural-language prompt",
-    version="1.0.0",
+    version=SERVER_VERSION,
     lifespan=_lifespan,
 )
 
@@ -769,7 +863,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
     allow_credentials=False,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["GET", "HEAD", "POST", "OPTIONS"],
     allow_headers=["*"],  # Allow any header (e.g. X-API-Key) for CORS preflight
 )
 
@@ -811,18 +905,29 @@ async def enforce_api_key(
     call_next: Callable[[Request], Awaitable[Response]],
 ) -> Response:
     # OPTIONS (CORS preflight) must not require auth; browser does not send custom headers
-    if request.method != "OPTIONS" and not await _is_public_mcp_request_without_auth(request) and (
+    if request.method != "OPTIONS" and (
         request.url.path.startswith("/mcp") or request.url.path.startswith("/download")
     ):
-        # /download with a valid signed token is self-authenticating — no API key needed.
-        is_tokenized_download = (
-            request.url.path.startswith("/download")
-            and _has_valid_download_token(request)
-        )
-        if not is_tokenized_download:
+        is_public = await _is_public_mcp_request_without_auth(request)
+
+        # Even for public/discovery methods (initialize, tools/list, etc.),
+        # validate the API key if one was provided.  This lets callers discover
+        # a bad key at connection time instead of on the first paid tool call.
+        if is_public and _extract_api_key(request):
             error_response = await _validate_api_key(request)
             if error_response:
                 return _append_cors_headers(request, error_response)
+
+        if not is_public:
+            # /download with a valid signed token is self-authenticating — no API key needed.
+            is_tokenized_download = (
+                request.url.path.startswith("/download")
+                and _has_valid_download_token(request)
+            )
+            if not is_tokenized_download:
+                error_response = await _validate_api_key(request)
+                if error_response:
+                    return _append_cors_headers(request, error_response)
 
     error_response = await _enforce_body_size(request)
     if error_response:
@@ -895,10 +1000,36 @@ async def options_mcp() -> Response:
     return Response(status_code=200)
 
 
-@app.api_route("/mcp", methods=["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE"])
-async def redirect_mcp_no_trailing_slash() -> RedirectResponse:
-    """Normalize '/mcp' to '/mcp/' so streamable HTTP requests avoid 405 mismatches."""
-    return RedirectResponse(url="/mcp/", status_code=307)
+@app.head("/mcp/")
+async def head_mcp_trailing_slash() -> Response:
+    """Handle HEAD /mcp/ for health-check probes (e.g. Smithery scanner).
+
+    The mounted FastMCP Streamable HTTP app does not support HEAD and returns
+    405.  This explicit route intercepts the request so scanners get a clean
+    200 instead of bouncing off the sub-app.
+    """
+    return Response(
+        status_code=200,
+        headers={"Content-Type": "application/json"},
+    )
+
+
+class _NormalizeMcpPath:
+    """ASGI middleware: rewrite ``/mcp`` → ``/mcp/`` at the scope level.
+
+    Smithery (and possibly other registries) POST to ``/mcp`` but refuse to
+    follow 307 redirects.  By rewriting the path *before* routing, the mounted
+    FastMCP sub-app receives the request directly — no HTTP redirect needed.
+    """
+
+    def __init__(self, app: Any) -> None:
+        self.app = app
+
+    async def __call__(self, scope: dict, receive: Any, send: Any) -> None:
+        if scope["type"] == "http" and scope.get("path") == "/mcp":
+            scope = dict(scope)
+            scope["path"] = "/mcp/"
+        await self.app(scope, receive, send)
 
 
 @app.post("/mcp/tools/call", response_model=MCPToolCallResponse)
@@ -956,6 +1087,11 @@ async def list_tools(fastmcp_server: FastMCP = Depends(_get_fastmcp)) -> dict[st
 # REST endpoints with a 404 from the sub-app.
 app.mount("/mcp", fastmcp_http_app)
 
+# Rewrite /mcp → /mcp/ at the ASGI level so clients that refuse to follow
+# 307 redirects (e.g. Smithery) still reach the mounted FastMCP app.
+# Added last so it becomes the outermost middleware (runs first).
+app.add_middleware(_NormalizeMcpPath)
+
 @app.get("/download/{plan_id}/{filename}")
 async def download_report(
     plan_id: str,
@@ -991,6 +1127,61 @@ async def download_report(
     return Response(content=content_bytes, media_type=REPORT_CONTENT_TYPE, headers=headers)
 
 
+# ---------------------------------------------------------------------------
+# SSE endpoint for real-time plan progress monitoring
+#
+# IMPORTANT: This endpoint must NOT go through @app.middleware("http")
+# (Starlette's BaseHTTPMiddleware).  BaseHTTPMiddleware pipes the response
+# body through an internal anyio MemoryObjectStream; for long-lived SSE
+# streams this keeps the middleware's task-group alive indefinitely, which
+# can starve concurrent requests going through the same middleware.
+#
+# We therefore handle auth inline here (reusing _validate_api_key) and
+# excluded /sse/ from the enforce_api_key middleware path check.
+# ---------------------------------------------------------------------------
+
+@app.get("/sse/plan/{plan_id}")
+async def sse_plan_progress(plan_id: str, request: Request) -> Response:
+    """SSE endpoint that streams real-time plan progress updates."""
+    from mcp_cloud.sse import (
+        SSEConnectionLimitError,
+        _track_sse_connection,
+        plan_progress_stream,
+    )
+
+    # Inline auth — bypasses BaseHTTPMiddleware to avoid blocking other requests.
+    auth_error = await _validate_api_key(request)
+    if auth_error:
+        return _append_cors_headers(request, auth_error)
+
+    client_ip = request.client.host if request.client else "unknown"
+
+    try:
+        async def event_generator():
+            async with _track_sse_connection(client_ip):
+                disconnect_event = asyncio.Event()
+                async for event in plan_progress_stream(plan_id, disconnect_event):
+                    if await request.is_disconnected():
+                        disconnect_event.set()
+                        break
+                    yield event
+
+        return StreamingResponse(
+            event_generator(),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no",
+            },
+        )
+    except SSEConnectionLimitError as exc:
+        return JSONResponse(
+            status_code=429,
+            content={"error": {"code": "SSE_CONNECTION_LIMIT", "message": str(exc)}},
+        )
+
+
 @app.get("/healthcheck")
 def healthcheck() -> dict[str, Any]:
     """Health check endpoint."""
@@ -1007,14 +1198,16 @@ def root() -> dict[str, Any]:
     return {
         "service": "PlanExe – AI Project Planning",
         "description": "MCP server that generates rough-draft project plans from a natural-language prompt",
-        "version": "1.0.0",
+        "version": SERVER_VERSION,
         "endpoints": {
             "mcp": "/mcp",
             "tools": "/mcp/tools",
             "call": "/mcp/tools/call",
             "health": "/healthcheck",
+            "mcp_server_card": "/.well-known/mcp/server-card.json",
             "glama_connector": "/.well-known/glama.json",
             "download": f"/download/{{plan_id}}/{REPORT_FILENAME}",
+            "sse": "/sse/plan/{plan_id}",
             "llms_txt": "/llms.txt",
         },
         "documentation": "See /docs for OpenAPI documentation",
@@ -1035,6 +1228,47 @@ def _llms_txt_path() -> str:
     if not os.path.exists(path):
         raise HTTPException(status_code=404, detail="llms.txt not found")
     return path
+
+
+@app.get("/.well-known/mcp/server-card.json")
+def mcp_server_card() -> dict[str, Any]:
+    """Serve MCP Server Card for discovery (SEP-1649).
+    https://github.com/modelcontextprotocol/modelcontextprotocol/tree/main/schema/2025-06-18
+
+    This allows registries like Smithery to discover the server's capabilities
+    without performing a full MCP handshake.
+    """
+    return {
+        "version": "1.0",
+        "protocolVersion": "2025-06-18",
+        "serverInfo": {
+            "name": "planexe-mcp-server",
+            "title": "PlanExe - AI Project Planning",
+            "version": SERVER_VERSION,
+        },
+        "description": (
+            "MCP server that generates strategic project-plan drafts from a "
+            "natural-language prompt. Output is a self-contained interactive "
+            "HTML report with 20+ sections including executive summary, "
+            "interactive Gantt charts, risk analysis, SWOT, governance, "
+            "investor pitch, and adversarial stress-test sections."
+        ),
+        "documentationUrl": "https://docs.planexe.org/",
+        "transport": {
+            "type": "streamable-http",
+            "endpoint": "/mcp/",
+        },
+        "capabilities": {
+            "tools": {},
+        },
+        "authentication": {
+            "required": AUTH_REQUIRED,
+            "schemes": ["api-key"],
+        },
+        "tools": ["dynamic"],
+        "prompts": ["dynamic"],
+        "resources": ["dynamic"],
+    }
 
 
 @app.get("/.well-known/glama.json")

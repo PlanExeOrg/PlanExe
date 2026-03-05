@@ -5,8 +5,10 @@ from typing import Any, Optional
 from mcp_cloud.tool_models import (
     ModelProfilesInput,
     ModelProfilesOutput,
-    PromptExamplesInput,
-    PromptExamplesOutput,
+    ExamplePromptsInput,
+    ExamplePromptsOutput,
+    ExamplePlansInput,
+    ExamplePlansOutput,
     PlanCreateInput,
     PlanCreateOutput,
     PlanRetryInput,
@@ -56,10 +58,12 @@ PLAN_STOP_INPUT_SCHEMA = PlanStopInput.model_json_schema()
 PLAN_RETRY_INPUT_SCHEMA = PlanRetryInput.model_json_schema()
 PLAN_FILE_INFO_INPUT_SCHEMA = PlanFileInfoInput.model_json_schema()
 
-PROMPT_EXAMPLES_INPUT_SCHEMA = PromptExamplesInput.model_json_schema()
-PROMPT_EXAMPLES_OUTPUT_SCHEMA = PromptExamplesOutput.model_json_schema()
+EXAMPLE_PROMPTS_INPUT_SCHEMA = ExamplePromptsInput.model_json_schema()
+EXAMPLE_PROMPTS_OUTPUT_SCHEMA = ExamplePromptsOutput.model_json_schema()
 MODEL_PROFILES_INPUT_SCHEMA = ModelProfilesInput.model_json_schema()
 MODEL_PROFILES_OUTPUT_SCHEMA = ModelProfilesOutput.model_json_schema()
+EXAMPLE_PLANS_INPUT_SCHEMA = ExamplePlansInput.model_json_schema()
+EXAMPLE_PLANS_OUTPUT_SCHEMA = ExamplePlansOutput.model_json_schema()
 PLAN_LIST_INPUT_SCHEMA = PlanListInput.model_json_schema()
 PLAN_LIST_OUTPUT_SCHEMA = PlanListOutput.model_json_schema()
 
@@ -74,7 +78,24 @@ class ToolDefinition:
 
 TOOL_DEFINITIONS = [
     ToolDefinition(
-        name="prompt_examples",
+        name="example_plans",
+        description=(
+            "Returns a curated list of example plans with download links for reports and zip bundles. "
+            "Use this to preview what PlanExe output looks like before creating your own plan. "
+            "Especially useful when the user asks what the output looks like before committing to a plan. "
+            "No API key required."
+        ),
+        input_schema=EXAMPLE_PLANS_INPUT_SCHEMA,
+        output_schema=EXAMPLE_PLANS_OUTPUT_SCHEMA,
+        annotations={
+            "readOnlyHint": True,
+            "destructiveHint": False,
+            "idempotentHint": True,
+            "openWorldHint": False,
+        },
+    ),
+    ToolDefinition(
+        name="example_prompts",
         description=(
             "Call this first. Returns example prompts that define what a good prompt looks like. "
             "Do NOT call plan_create yet. Optional before plan_create: call model_profiles to choose model_profile. "
@@ -86,8 +107,8 @@ TOOL_DEFINITIONS = [
             "Then call plan_create. "
             "PlanExe is not for tiny one-shot outputs like a 5-point checklist; and it does not support selecting only some internal pipeline steps."
         ),
-        input_schema=PROMPT_EXAMPLES_INPUT_SCHEMA,
-        output_schema=PROMPT_EXAMPLES_OUTPUT_SCHEMA,
+        input_schema=EXAMPLE_PROMPTS_INPUT_SCHEMA,
+        output_schema=EXAMPLE_PROMPTS_OUTPUT_SCHEMA,
         annotations={
             "readOnlyHint": True,
             "destructiveHint": False,
@@ -114,7 +135,7 @@ TOOL_DEFINITIONS = [
     ToolDefinition(
         name="plan_create",
         description=(
-            "Call only after prompt_examples and after you have completed prompt drafting/approval (non-tool step). "
+            "Call only after example_prompts and after you have completed prompt drafting/approval (non-tool step). "
             "PlanExe turns the approved prompt into a strategic project-plan draft (20+ sections) in ~10-20 min. "
             "Sections include: executive summary, interactive Gantt charts, investor pitch, project plan with SMART criteria, "
             "strategic decision analysis, scenario comparison, assumptions with expert review, governance structure, "
@@ -122,7 +143,10 @@ TOOL_DEFINITIONS = [
             "plan review (critical issues, KPIs, financial strategy, automation opportunities), Q&A, "
             "premortem with failure scenarios, self-audit checklist, and adversarial premise attacks that argue against the project. "
             "The adversarial sections (premortem, self-audit, premise attacks) surface risks and questions the prompter may not have considered. "
-            "Returns plan_id (UUID); use it for plan_status, plan_stop, plan_retry, and plan_file_info. "
+            "Returns plan_id (UUID) and sse_url; use plan_id for plan_status, plan_stop, plan_retry, and plan_file_info. "
+            "sse_url is a GET endpoint (text/event-stream) for real-time progress — "
+            "e.g. `curl -N -H 'X-API-Key: <key>' <sse_url>` in a background shell. "
+            "The stream emits status/complete events and auto-closes on terminal state. Polling plan_status also works. "
             "If you lose a plan_id, call plan_list to recover it. "
             "Each plan_create call creates a new plan_id (no server-side dedup). "
             "If you are unsure which model_profile to choose, call model_profiles first. "
@@ -144,6 +168,8 @@ TOOL_DEFINITIONS = [
             "Returns status and progress of the plan currently being created. "
             "Poll at reasonable intervals only (e.g. every 5 minutes): plan generation typically takes 10-20 minutes "
             "(baseline profile) and may take longer on higher-quality profiles. "
+            "Alternative to polling: the response includes sse_url (when not terminal) — a GET endpoint streaming "
+            "real-time events; see plan_create description or server instructions for usage. "
             "State contract: pending/processing => keep polling; completed => download is ready; failed => terminal error. "
             "progress_percentage is 0-100 (integer-like float); 100 when completed. "
             "files lists intermediate outputs produced so far; use their updated_at timestamps to detect stalls. "

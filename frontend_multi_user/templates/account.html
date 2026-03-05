@@ -159,6 +159,110 @@
         padding: 16px 20px;
     }
 
+    /* ── API key overflow menu ───────────────────────── */
+    .key-overflow-btn {
+        background: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        cursor: pointer;
+        padding: 4px 6px;
+        line-height: 1;
+        color: var(--color-text-secondary);
+        transition: background 0.15s, border-color 0.15s;
+    }
+    .key-overflow-btn:hover {
+        background: var(--color-bg-muted);
+        border-color: var(--color-border);
+        color: var(--color-text);
+    }
+    .key-overflow-btn.active {
+        background: var(--color-bg-muted);
+        border-color: var(--color-border);
+        color: var(--color-text);
+    }
+    .key-overflow-menu {
+        display: none;
+        position: fixed;
+        background: var(--color-card-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        min-width: 160px;
+        z-index: 1000;
+        padding: 4px 0;
+    }
+    .key-overflow-menu.open { display: block; }
+    .key-overflow-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        padding: 8px 14px;
+        border: none;
+        background: none;
+        text-align: left;
+        font-size: 0.82rem;
+        font-family: var(--font-sans);
+        color: var(--color-text);
+        cursor: pointer;
+        transition: background 0.1s;
+    }
+    .key-overflow-item:hover { background: var(--color-bg-muted); }
+
+    /* ── API key rename ──────────────────────────────── */
+    .key-name-display {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .key-rename-btn {
+        background: none;
+        border: none;
+        padding: 2px;
+        cursor: pointer;
+        color: var(--color-text-secondary);
+        border-radius: 4px;
+        line-height: 1;
+        opacity: 0;
+        transition: opacity 0.15s, color 0.15s;
+    }
+    tr:hover .key-rename-btn { opacity: 1; }
+    .key-rename-btn:hover { color: var(--color-text); background: var(--color-bg-muted); }
+    .key-rename-old {
+        font-size: 0.72rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 4px;
+    }
+    .key-rename-input {
+        width: 140px;
+        padding: 3px 6px;
+        border: 1px solid var(--color-primary);
+        border-radius: 4px;
+        font-size: 0.82rem;
+        font-family: var(--font-sans);
+        outline: none;
+    }
+
+    /* ── Inline copy button ──────────────────────────── */
+    .key-secret-full {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .key-copy-btn {
+        background: none;
+        border: none;
+        padding: 2px;
+        cursor: pointer;
+        color: var(--color-text-secondary);
+        border-radius: 4px;
+        line-height: 1;
+        opacity: 0;
+        transition: opacity 0.15s, color 0.15s;
+    }
+    tr:hover .key-copy-btn { opacity: 1; }
+    .key-copy-btn:hover { color: var(--color-text); background: var(--color-bg-muted); }
+
     /* ── API key section ───────────────────────────── */
     .key-display {
         background: var(--color-bg-muted);
@@ -279,13 +383,13 @@
         margin: 14px 0;
     }
 
-    /* ── Payments table ────────────────────────────── */
-    .payments-table {
+    /* ── Data table ───────────────────────────────── */
+    .data-table {
         width: 100%;
         border-collapse: collapse;
         font-size: 0.82rem;
     }
-    .payments-table th {
+    .data-table th {
         text-align: left;
         font-size: 0.7rem;
         font-weight: 700;
@@ -295,14 +399,16 @@
         padding: 8px 10px;
         border-bottom: 2px solid var(--color-border);
     }
-    .payments-table td {
+    .data-table td {
         padding: 8px 10px;
         border-bottom: 1px solid var(--color-border);
         color: var(--color-text);
         vertical-align: middle;
     }
-    .payments-table tr:last-child td { border-bottom: none; }
-    .payments-table code {
+    .data-table tbody tr { transition: background 0.1s; }
+    .data-table tbody tr:hover { background: var(--color-bg-soft); }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table code {
         font-size: 0.75rem;
         background: var(--color-bg-muted);
         padding: 1px 6px;
@@ -356,16 +462,9 @@
         <h1>Account</h1>
         <a href="{{ url_for('logout') }}" class="btn-acct btn-acct-secondary">Logout</a>
     </div>
-    <p>Manage your profile, API access, and billing.</p>
+    <p>Manage your {% if admin_mode %}API access.{% else %}profile, API access, and billing.{% endif %}</p>
 </div>
 
-{% if admin_mode %}
-<div class="card">
-    <p style="margin: 0 0 10px;"><strong>Admin account</strong></p>
-    <p style="margin: 0 0 14px; color: var(--color-text-secondary);">You are signed in with admin credentials.</p>
-    <a href="{{ url_for('admin.index') }}" class="btn-acct btn-acct-primary">Open Admin Panel</a>
-</div>
-{% else %}
 <div class="acct-grid">
     {# ── Left: profile sidebar ─────────────────────────────────── #}
     <aside>
@@ -388,8 +487,10 @@
             </div>
 
             <dl class="profile-meta">
+                {% if not admin_mode %}
                 <dt>Pricing</dt>
                 <dd>1 credit = ${{ "%.2f"|format((credit_price_cents or 100) / 100.0) }}</dd>
+                {% endif %}
                 <dt>Signed in with</dt>
                 <dd>{{ signed_in_with }}</dd>
                 {% if linked_sign_in_methods %}
@@ -406,17 +507,17 @@
 
     {# ── Right: content sections ───────────────────────────────── #}
     <div>
-        {# ── API Key ────────────────────────────────────────────── #}
+        {# ── API Keys ───────────────────────────────────────────── #}
         <div class="acct-section">
             <div class="acct-section-header">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
-                <h2>API Key</h2>
+                <h2>API Keys</h2>
             </div>
             <div class="acct-section-body">
-                {% if new_api_key %}
+                {% if new_api_key and api_key_show_once %}
                     <span class="key-new-badge">New — shown once</span>
                     <div class="key-display" id="new-api-key">{{ new_api_key }}</div>
-                    <p class="key-hint">Copy this key now. You will not be able to see it again.</p>
+                    <p class="key-hint">Copy this secret now. You will not be able to see it again.</p>
                     <div class="key-actions">
                         <button type="button" class="btn-acct btn-acct-primary" id="copy-api-key">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
@@ -424,26 +525,123 @@
                         </button>
                         <span id="copy-api-key-status" class="copy-status"></span>
                     </div>
-                {% elif active_key %}
-                    <p style="margin: 0 0 4px; font-size: 0.85rem;">Active key: <span class="key-prefix">{{ active_key.key_prefix }}…</span></p>
-                    <p class="key-hint">Use the full key you saved when it was created.</p>
-                {% else %}
-                    <p style="margin: 0 0 4px; font-size: 0.85rem; color: var(--color-text-secondary);">No API key yet. Generate one to use PlanExe via the MCP or HTTP API.</p>
                 {% endif %}
 
-                <div class="key-actions">
-                    <form method="POST" style="margin: 0;">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                        <input type="hidden" name="action" value="regenerate_api_key">
-                        <button class="btn-acct btn-acct-secondary">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-                            {{ "Regenerate key" if active_key else "Generate key" }}
-                        </button>
-                    </form>
+                {% if active_keys %}
+                <div style="overflow-x: auto; margin-top: {% if new_api_key %}16{% else %}0{% endif %}px;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Secret</th>
+                                <th title="Date the key was created (YYYY-MM-DD)">Created</th>
+                                <th title="Date the key was last used (YYYY-MM-DD)">Last Used</th>
+                                <th title="Accumulated LLM calls made with this key">LLM Calls</th>
+                                <th title="Total credits consumed by this key">Credits Used</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for key in active_keys %}
+                            <tr>
+                                <td class="key-name-cell">
+                                    {# ── Display mode ── #}
+                                    <span class="key-name-display" data-key-id="{{ key.id }}">
+                                        <span class="key-name-text">{{ key.name or "Untitled" }}</span>
+                                        <button type="button" class="key-rename-btn" title="Rename" onclick="keyRenameStart(this)">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                                        </button>
+                                    </span>
+                                    {# ── Edit mode (hidden by default) ── #}
+                                    <div class="key-name-edit" data-key-id="{{ key.id }}" style="display:none;">
+                                        <div class="key-rename-old">Renaming: <strong>{{ key.name or "Untitled" }}</strong></div>
+                                        <form method="POST" style="margin:0;">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                            <input type="hidden" name="action" value="rename_api_key">
+                                            <input type="hidden" name="key_id" value="{{ key.id }}">
+                                            <div style="display:flex; gap:4px; align-items:center;">
+                                                <input type="text" name="name" value="{{ key.name or '' }}" placeholder="Untitled" maxlength="128" class="key-rename-input">
+                                                <button type="submit" class="btn-acct btn-acct-primary" style="padding:4px 10px; font-size:0.75rem;">Save</button>
+                                                <button type="button" class="btn-acct btn-acct-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="keyRenameCancel(this)">Cancel</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="key-secret-full">
+                                        <code class="key-prefix">{{ key.key_prefix }}...</code>
+                                        {% if key.key_plaintext %}
+                                        <button type="button" class="key-copy-btn" title="Copy" onclick="copyKeySecret(this, '{{ key.key_plaintext }}')">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                        </button>
+                                        {% endif %}
+                                    </span>
+                                </td>
+                                <td>{{ key.created_at.strftime("%Y-%m-%d") if key.created_at else "—" }}</td>
+                                <td>{{ key.last_used_at.strftime("%Y-%m-%d") if key.last_used_at else "Never" }}</td>
+                                <td>{{ llm_call_counts.get(key.id|string, 0) }}</td>
+                                <td>{{ credit_usage.get(key.id|string, "0") }}</td>
+                                <td>
+                                    <div class="key-overflow">
+                                        <button type="button" class="key-overflow-btn" onclick="keyMenuToggle(this)" aria-label="Actions">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                                        </button>
+                                        <div class="key-overflow-menu">
+                                            <form method="POST" style="margin:0;">
+                                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                                <input type="hidden" name="action" value="reset_api_key">
+                                                <input type="hidden" name="key_id" value="{{ key.id }}">
+                                                <button class="key-overflow-item"
+                                                    data-key-name="{{ key.name or 'Untitled' }}"
+                                                    onclick="return confirmResetKey(this)">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M21 21v-5h-5"/></svg>
+                                                    Reset secret
+                                                </button>
+                                            </form>
+                                            <form method="POST" style="margin:0;">
+                                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                                <input type="hidden" name="action" value="revoke_api_key">
+                                                <input type="hidden" name="key_id" value="{{ key.id }}">
+                                                <button class="key-overflow-item"
+                                                    data-key-name="{{ key.name or 'Untitled' }}"
+                                                    onclick="return confirmDeleteKey(this)">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
+                {% else %}
+                    <p style="margin: 0 0 4px; font-size: 0.85rem; color: var(--color-text-secondary);">No API keys yet. Create one to use PlanExe via MCP.</p>
+                {% endif %}
+
+                {% if can_create_key %}
+                <form method="POST" style="margin-top: 12px; display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="action" value="create_api_key">
+                    <div class="billing-input-group">
+                        <label for="key-name">Name (optional)</label>
+                        <input type="text" name="name" id="key-name" maxlength="128" placeholder="e.g. Claude Code"
+                            style="width: 200px; padding: 8px 10px; border: 1px solid var(--color-border); border-radius: var(--radius); font-size: 0.9rem; font-family: var(--font-sans); outline: none;">
+                    </div>
+                    <button class="btn-acct btn-acct-primary">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Create API Key
+                    </button>
+                </form>
+                {% else %}
+                <p class="key-hint" style="margin-top: 12px;">Maximum of 10 secrets reached. Delete an unused one to create a new one.</p>
+                {% endif %}
             </div>
         </div>
 
+        {% if not admin_mode %}
         {# ── Buy Credits ───────────────────────────────────────── #}
         <div class="acct-section">
             <div class="acct-section-header">
@@ -491,7 +689,7 @@
             </div>
             {% if recent_payments %}
             <div style="overflow-x: auto;">
-                <table class="payments-table">
+                <table class="data-table">
                     <thead>
                         <tr>
                             <th>Date</th>
@@ -520,11 +718,11 @@
                 <div class="empty-hint">No payments yet.</div>
             {% endif %}
         </div>
+        {% endif %}{# not admin_mode #}
     </div>
 </div>
-{% endif %}
 
-{% if new_api_key %}
+{% if new_api_key and api_key_show_once %}
 <script>
     // clipboard copy handler for the new API key
     (function () {
@@ -556,4 +754,79 @@
     })();
 </script>
 {% endif %}
+<script>
+    function copyKeySecret(btn, text) {
+        function showCopied() {
+            var orig = btn.innerHTML;
+            btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+            btn.style.opacity = '1';
+            setTimeout(function() { btn.innerHTML = orig; btn.style.opacity = ''; }, 1500);
+        }
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(showCopied);
+            return;
+        }
+        var ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly', '');
+        ta.style.position = 'absolute'; ta.style.left = '-9999px';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); showCopied(); }
+        catch(e) {}
+        document.body.removeChild(ta);
+    }
+    function keyRenameStart(btn) {
+        var cell = btn.closest('.key-name-cell');
+        cell.querySelector('.key-name-display').style.display = 'none';
+        var editEl = cell.querySelector('.key-name-edit');
+        editEl.style.display = '';
+        var input = editEl.querySelector('.key-rename-input');
+        input.focus();
+        input.select();
+        input.onkeydown = function(e) {
+            if (e.key === 'Escape') { keyRenameCancel(input); }
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (!e.shiftKey) { input.closest('form').submit(); }
+            }
+        };
+    }
+    function keyRenameCancel(btn) {
+        var cell = btn.closest('.key-name-cell');
+        cell.querySelector('.key-name-edit').style.display = 'none';
+        cell.querySelector('.key-name-display').style.display = '';
+        // Reset input to original value
+        var input = cell.querySelector('.key-rename-input');
+        input.value = input.defaultValue;
+    }
+    function keyMenuToggle(btn) {
+        var menu = btn.nextElementSibling;
+        var isOpen = menu.classList.contains('open');
+        keyMenuCloseAll();
+        if (!isOpen) {
+            var rect = btn.getBoundingClientRect();
+            menu.classList.add('open');
+            btn.classList.add('active');
+            var menuH = menu.offsetHeight;
+            var top = rect.bottom + 4;
+            if (top + menuH > window.innerHeight - 4) top = rect.top - menuH - 4;
+            menu.style.top = top + 'px';
+            menu.style.left = (rect.right - menu.offsetWidth) + 'px';
+        }
+    }
+    function keyMenuCloseAll() {
+        document.querySelectorAll('.key-overflow-menu.open').forEach(function(m) { m.classList.remove('open'); });
+        document.querySelectorAll('.key-overflow-btn.active').forEach(function(b) { b.classList.remove('active'); });
+    }
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.key-overflow')) { keyMenuCloseAll(); }
+    });
+    function confirmResetKey(btn) {
+        var name = btn.getAttribute('data-key-name') || 'Untitled';
+        return confirm('You\u2019re about to reset the secret for: \u201c' + name + '\u201d.\n\nThe old secret will stop working immediately. A new secret will be shown once.');
+    }
+    function confirmDeleteKey(btn) {
+        var name = btn.getAttribute('data-key-name') || 'Untitled';
+        return confirm('You\u2019re about to delete: \u201c' + name + '\u201d.\n\nIntegrations using it will stop working.');
+    }
+</script>
 {% endblock %}

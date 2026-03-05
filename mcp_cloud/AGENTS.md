@@ -4,11 +4,58 @@ Scope: Model Context Protocol (MCP) server that provides a standardized interfac
 for AI agents and developer tools to interact with PlanExe. Communicates with
 `worker_plan_database` via the shared Postgres database (`database_api` models).
 
+## Module map
+
+| File | Purpose | Key exports |
+|------|---------|-------------|
+| `app.py` | Re-export facade for backward compatibility | 60+ symbols from all sub-modules |
+| `http_server.py` | FastAPI HTTP wrapper: routes, middleware stack, FastMCP mount, SSE endpoint | `app` (FastAPI instance) |
+| `handlers.py` | MCP tool handlers dispatched by `TOOL_HANDLERS` dict | `handle_plan_create`, `handle_plan_status`, etc. |
+| `db_setup.py` | Flask + SQLAlchemy init, constants, request DTOs | `app` (Flask), `db`, `mcp_cloud_server`, `PLANEXE_SERVER_INSTRUCTIONS` |
+| `db_queries.py` | Sync DB queries (run via `asyncio.to_thread()`) | `_create_plan_sync`, `_get_plan_status_snapshot_sync`, `get_plan_state_mapping` |
+| `tool_models.py` | Pydantic input/output models for all 9 tools | `PlanCreateInput`, `PlanCreateOutput`, `PlanStatusOutput`, etc. |
+| `schemas.py` | Auto-generate JSON Schema from tool_models via `.model_json_schema()` | `TOOL_DEFINITIONS` (list of `ToolDefinition` dataclasses) |
+| `auth.py` | API key SHA-256 hashing + user resolution | `_hash_user_api_key`, `_resolve_user_from_api_key` |
+| `download_tokens.py` | Signed HMAC-SHA256 download tokens + URL builders | `generate_download_token`, `validate_download_token`, `_get_download_base_url` |
+| `sse.py` | SSE stream generator with connection tracking | `plan_progress_stream`, `_track_sse_connection`, `SSEConnectionLimitError` |
+| `worker_fetchers.py` | Fetch artifacts (report, zip) from worker HTTP / local FS / DB | `fetch_artifact_from_worker_plan`, `fetch_user_downloadable_zip` |
+| `model_profiles.py` | Load LLM models per profile from `llm_config/*.json` | `_get_model_profiles_sync` |
+| `example_prompts.py` | Load example prompts from catalog or built-in fallbacks | `_load_mcp_example_prompts` |
+| `zip_utils.py` | Zip extraction, legacy sanitization, SHA-256 | `list_files_from_zip_snapshot`, `_sanitize_legacy_zip_snapshot` |
+| `http_utils.py` | Strip redundant `content` when `structuredContent` exists | `strip_redundant_content` |
+| `dotenv_utils.py` | Load `.env` from mcp_cloud/ or repo root | `load_planexe_dotenv` |
+| `config.py` | Flask config (`SQLALCHEMY_TRACK_MODIFICATIONS = False`) | — |
+
+## Import graph
+
+```
+app.py (facade — re-exports everything)
+├── db_setup.py (Flask, DB, constants)
+├── auth.py (key hashing, user lookup)
+├── db_queries.py (sync queries; uses db_setup.app context)
+├── zip_utils.py (zip ops; uses db_setup.app context)
+├── worker_fetchers.py (HTTP + local + DB fallbacks; uses zip_utils)
+├── model_profiles.py (profile loading from llm_config/)
+├── download_tokens.py (HMAC tokens, context var for base URL)
+├── example_prompts.py (catalog loading)
+├── schemas.py (auto-generated from tool_models.py)
+└── handlers.py (tool handlers; imports all above)
+
+http_server.py (top-level entry point)
+├── app.py (re-export facade)
+├── tool_models.py (type annotations for FastAPI)
+├── auth.py (validate_api_key_secret)
+├── download_tokens.py (validate_download_token_secret)
+├── sse.py (SSE implementation)
+└── http_utils.py (content stripping)
+```
+
 ## Guidelines
 - Keep database access wired through `database_api.planexe_db_singleton.db`;
   do not create new engine/session instances here.
-- Preserve the startup sequence in `mcp_cloud/app.py`:
+- Preserve the startup sequence in `mcp_cloud/db_setup.py`:
   `.env` loading, logging setup, Flask app config, then `db.init_app(app)`.
+  `app.py` is a thin re-export facade; actual init happens in `db_setup.py`.
 - Maintain the DB connection logic:
   - Prefer `SQLALCHEMY_DATABASE_URI` when set.
   - Otherwise build from `PLANEXE_POSTGRES_*` (see root `AGENTS.md` for keys).
@@ -31,6 +78,43 @@ for AI agents and developer tools to interact with PlanExe. Communicates with
 - Forbidden imports: `worker_plan.app`, `worker_plan_internal`, `frontend_*`,
   `open_dir_server`.
 
+## Async/sync boundary
+
+All handlers in `handlers.py` are `async`. All database operations in `db_queries.py`
+are sync (require Flask app context). Bridge pattern:
+
+```python
+result = await asyncio.to_thread(_sync_db_function, args)
+```
+
+`db_queries.py` functions check `has_app_context()` and open one if needed, so they
+work from both sync and async callers.
+
+## Context variables
+
+Two `contextvars.ContextVar` instances are set per-request by the middleware in
+`http_server.py` and cleared in the `finally` block:
+
+- `_download_base_url_ctx` (in `download_tokens.py`): Base URL for building download
+  and SSE URLs. Set from request origin for `/mcp` and `/sse/` paths. Read by
+  `_get_download_base_url()` — used in `handlers.py` to build `download_url` and
+  `sse_url` fields.
+- `_authenticated_user_api_key_ctx` (in `http_server.py`): Authenticated user's raw
+  API key. Injected into `plan_create` and `plan_list` arguments by FastMCP wrappers.
+
+## Schema auto-generation
+
+`schemas.py` generates JSON Schema from `tool_models.py` Pydantic classes:
+
+1. Define input/output models in `tool_models.py` using `BaseModel` + `Field()`
+2. `schemas.py` calls `.model_json_schema()` on each class
+3. Wraps output schemas in `oneOf` for error/success variants
+4. Packages into `ToolDefinition` dataclasses in `TOOL_DEFINITIONS` list
+5. `handlers.py` returns `TOOL_DEFINITIONS` to MCP clients via `handle_list_tools()`
+
+When adding a field to a tool response: update `tool_models.py` model → schemas
+auto-update → no manual schema changes needed.
+
 ## plan_create contract
 - Expose `model_profiles` as the discovery tool for profile selection.
 - `model_profiles` must report profile guidance and currently available models after class whitelist filtering.
@@ -40,6 +124,40 @@ for AI agents and developer tools to interact with PlanExe. Communicates with
   - `prompt`
   - `model_profile` (`baseline`, `premium`, `frontier`, `custom`)
   - `user_api_key` (optional)
+- Billing attribution: when `user_api_key` is provided, `handle_plan_create`
+  resolves the user and sets `metadata["user_id"]` (UUID) and
+  `metadata["api_key_id"]` on the PlanItem. Without `user_api_key` (local dev
+  with `PLANEXE_MCP_REQUIRE_AUTH=false`), the plan gets `user_id="admin"` and
+  no `api_key_id` — billing is skipped and per-key stats won't show usage.
+  This is by design; pass `user_api_key` to enable credit tracking via MCP.
+- Auth-disabled key resolution: when `PLANEXE_MCP_REQUIRE_AUTH=false`,
+  `_validate_api_key` still resolves any provided API key for attribution
+  (`last_used_at`, per-key billing) — it just never rejects unauthenticated
+  requests. This sets `_authenticated_user_api_key_ctx` so `plan_create` and
+  `plan_retry` can inject the key for billing attribution.
+- Plan retry attribution: `handle_plan_retry` resolves caller identity from
+  `user_api_key` and passes `caller_metadata` to `_retry_failed_plan_sync`,
+  which updates `plan.user_id` and `plan.api_key_id`. Old incremental billing
+  entries are archived (`usage_billing_progress` → `usage_billing_settled`),
+  not deleted, so the previous key's credit history is preserved.
+
+## HTTP middleware stack
+
+The middleware in `http_server.py` processes requests in this order:
+
+1. **`_NormalizeMcpPath`** (ASGI middleware): Rewrites `/mcp` → `/mcp/` at scope level
+   (avoids 307 redirect that breaks Smithery)
+2. **`CORSMiddleware`** (FastAPI built-in): Added first, handles OPTIONS preflight
+3. **`enforce_api_key`** (HTTP middleware via `BaseHTTPMiddleware`): Auth, body size,
+   rate limiting, context var setup
+   - Paths requiring auth: `/mcp`, `/download`
+   - **`/sse/` is intentionally excluded** — `BaseHTTPMiddleware` pipes the response
+     body through an internal `anyio.MemoryObjectStream`; for long-lived SSE streams
+     this keeps the middleware's task-group alive indefinitely and starves concurrent
+     requests. The SSE endpoint handles auth inline instead.
+   - Download tokens are self-authenticating (signed HMAC, no API key needed)
+   - Sets `_download_base_url_ctx` for `/mcp` paths
+   - Strips redundant `content` from `/mcp` JSON responses on the way out
 
 ## MCP Protocol
 - The server communicates over stdio (standard input/output) following the MCP protocol.
@@ -52,29 +170,72 @@ for AI agents and developer tools to interact with PlanExe. Communicates with
 ## Authentication Policy
 - PlanExe MCP cloud authentication is API-key header based.
 - Canonical client header is `X-API-Key: pex_...`.
+- API key sources (checked in order): `Authorization: Bearer {key}`, `X-API-Key` header, `api_key` query param.
+- Validation order: `PLANEXE_MCP_API_KEY` (shared secret) → `UserApiKey` table lookup (SHA-256 hash).
 - OAuth is not supported for the MCP API. Do not document, imply, or advertise OAuth support.
 - In docs and user-facing error/help text, instruct clients to use `X-API-Key` custom headers.
 - Keep the auth split used for connector health checks:
   - Unauthenticated discovery/handshake is allowed for:
-    - MCP methods: `initialize`, `notifications/initialized`, `tools/list`, `prompts/list`, `resources/list`, `resources/templates/list`, `ping`
+    - MCP methods: `initialize`, `notifications/initialized`, `tools/list`, `prompts/list`, `prompts/get`, `resources/list`, `resources/templates/list`, `ping`
     - Probe compatibility: `GET/HEAD/POST /mcp`, `GET/HEAD /mcp/`, and `GET /mcp/tools`
   - `tools/call` without API key is allowed **only** for free setup tools:
+    - `example_plans`
+    - `example_prompts`
     - `model_profiles`
-    - `prompt_examples`
   - All other tool invocations (for example `plan_create`) must remain API-key protected.
 - Keep auth-denial logging explicit (`Auth rejected: ...`) with method/path/user-agent and parsed JSON-RPC methods to make Railway debugging easier.
+
+## SSE endpoint
+
+`GET /sse/plan/{plan_id}` streams real-time plan progress as Server-Sent Events.
+This is a complementary REST endpoint, **not** an MCP transport replacement.
+
+Implementation in `sse.py`:
+- `plan_progress_stream(plan_id, disconnect_event)`: Async generator that polls
+  `_get_plan_status_snapshot_sync()` every ~3s and yields SSE-formatted events.
+- Deduplication: only emits `status` events when `state` or `progress_percentage` changes.
+- Heartbeat every ~20s of silence (keeps reverse proxies alive).
+- `complete` event on terminal state (completed/failed), then generator closes.
+- 60-minute absolute timeout.
+- Connection tracking via `_track_sse_connection(client_id)` async context manager:
+  per-client limit (5) and server-wide limit (200). Raises `SSEConnectionLimitError` (HTTP 429).
+
+Auth: `/sse/` paths require API key (handled inline in the endpoint, NOT via the
+`enforce_api_key` middleware — see HTTP middleware stack section for rationale).
+URL building: `handlers.py` adds `sse_url` to `plan_create` and `plan_status` responses
+using `_get_download_base_url()` from `download_tokens.py`.
+
+Event types: `status`, `heartbeat`, `complete`, `error`.
+
+Config env vars: `PLANEXE_SSE_POLL_INTERVAL`, `PLANEXE_SSE_HEARTBEAT_INTERVAL`,
+`PLANEXE_SSE_MAX_DURATION`, `PLANEXE_SSE_MAX_CONNECTIONS`, `PLANEXE_SSE_MAX_TOTAL_CONNECTIONS`.
+
+## Download token system
+
+`download_tokens.py` generates signed, time-limited HMAC-SHA256 tokens scoped to
+a specific plan + artifact. Token format: `{expiry_unix_ts}.{hmac_hex}`.
+
+- HMAC message: `plan_id:filename:expiry` — prevents token reuse across artifacts.
+- Secret priority: `PLANEXE_DOWNLOAD_TOKEN_SECRET` → `PLANEXE_API_KEY_SECRET` → per-process random (dev only).
+- Default TTL: 900 seconds (15 minutes), configurable via `PLANEXE_DOWNLOAD_TOKEN_TTL`.
+- Tokens are stateless (no server-side storage or revocation tracking).
+
+The same `_get_download_base_url()` function is used to build both `download_url`
+(in `plan_file_info`) and `sse_url` (in `plan_create`/`plan_status`).
+
+## Download URL environment behavior
+- `plan_file_info.download_url` and `sse_url` are built from `PLANEXE_MCP_PUBLIC_BASE_URL` when set.
+- If `PLANEXE_MCP_PUBLIC_BASE_URL` is unset in HTTP mode, use request host/scheme
+  (via `_download_base_url_ctx` context var set in middleware).
+- If no public base URL is available, `download_url` and `sse_url` may be absent;
+  document this and guide operators to set `PLANEXE_MCP_PUBLIC_BASE_URL`.
 
 ## HTTP Compatibility and Crawler Endpoints
 - Keep `/mcp` -> `/mcp/` redirect behavior for slashless clients/probers.
 - Keep CORS headers on early error responses (401/403/429/etc.) so browser inspectors do not fail with opaque CORS errors.
 - Keep `PLANEXE_MCP_CORS_ORIGINS` parsing tolerant to quoted CSV and JSON-array env formats.
 - Keep `GET /robots.txt` available (200) for crawler health checks and metadata discovery.
-- FastMCP session lifecycle lines like `Terminating session: None` are expected informational logs; do not treat them as application failures solely based on Railway’s log-level labeling.
-
-## Download URL environment behavior
-- `plan_file_info.download_url` should be built from `PLANEXE_MCP_PUBLIC_BASE_URL` when set.
-- If `PLANEXE_MCP_PUBLIC_BASE_URL` is unset in HTTP mode, use request host/scheme.
-- If no public base URL is available, `download_url` may be absent; document this and guide operators to set `PLANEXE_MCP_PUBLIC_BASE_URL`.
+- FastMCP session lifecycle lines like `Terminating session: None` are expected informational logs; do not treat them as application failures solely based on Railway's log-level labeling.
 
 ## mcp_local integration
 - `mcp_local` runs on the user's machine and forwards tool calls to this server over HTTP.
@@ -127,8 +288,13 @@ for AI agents and developer tools to interact with PlanExe. Communicates with
 
 ## Testing
 - Automated tests exist under `mcp_cloud/tests/`.
+- Tests require Docker dependencies (flask_sqlalchemy, mcp, database_api) — they
+  run inside the Docker container, not from the host Python directly.
 - If you change MCP tool behavior, state mapping, or tool surface, update/add unit
   tests close to the changed logic.
+- Test pattern: `unittest.TestCase` + `unittest.mock.patch` on `mcp_cloud.handlers.*`
+  and `mcp_cloud.sse.*` to mock DB calls without a real database.
 - Run focused tests from repo root, for example:
   - `python -m unittest mcp_cloud.tests.test_tool_surface_consistency`
   - `python -m unittest mcp_cloud.tests.test_plan_status_tool`
+  - `python -m pytest mcp_cloud/tests/test_sse.py -v`

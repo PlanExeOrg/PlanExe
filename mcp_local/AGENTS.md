@@ -6,7 +6,7 @@ to mcp_cloud, a MCP server running in the cloud, over HTTP.
 ## Interaction model
 - The local proxy exposes MCP tools over stdio and forwards requests to mcp_cloud
   using `PLANEXE_URL` (defaults to the hosted `/mcp` endpoint).
-- Supported tools: `prompt_examples`, `model_profiles`, `plan_create`, `plan_status`, `plan_stop`, `plan_retry`, `plan_download`.
+- Supported tools: `example_plans`, `example_prompts`, `model_profiles`, `plan_create`, `plan_status`, `plan_stop`, `plan_retry`, `plan_download`.
 - `plan_download` calls the remote `plan_file_info` tool to obtain a download URL,
   then downloads the artifact to `PLANEXE_PATH` on the local machine.
 - `plan_create` visible input schema includes `prompt`, optional `model_profile`, and optional `user_api_key`.

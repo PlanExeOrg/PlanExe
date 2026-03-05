@@ -9,7 +9,7 @@ class ErrorDetail(BaseModel):
     details: dict[str, Any] | None = None
 
 
-class PromptExamplesOutput(BaseModel):
+class ExamplePromptsOutput(BaseModel):
     samples: list[str] = Field(
         ...,
         description=(
@@ -22,9 +22,28 @@ class PromptExamplesOutput(BaseModel):
     message: str
 
 
-class PromptExamplesInput(BaseModel):
+class ExamplePromptsInput(BaseModel):
     """No input parameters."""
     pass
+
+
+class ExamplePlansInput(BaseModel):
+    """No input parameters."""
+    pass
+
+
+class ExamplePlanItem(BaseModel):
+    title: str = Field(..., description="Short title describing the example plan.")
+    report_url: str = Field(..., description="URL to the static HTML report for this example plan.")
+    zip_url: str = Field(..., description="URL to the zip bundle for this example plan.")
+
+
+class ExamplePlansOutput(BaseModel):
+    plans: list[ExamplePlanItem] = Field(
+        ...,
+        description="Curated example plans with download links for reports and zip bundles.",
+    )
+    message: str
 
 
 class ModelProfilesInput(BaseModel):
@@ -115,6 +134,16 @@ class PlanCreateOutput(BaseModel):
         description="Plan UUID returned by plan_create. Stable across plan_status/plan_stop/plan_file_info."
     )
     created_at: str
+    sse_url: str | None = Field(
+        default=None,
+        description=(
+            "GET endpoint returning text/event-stream with real-time plan progress. "
+            "Usage: `curl -N -H 'X-API-Key: <same key>' <sse_url>`. "
+            "Emits 'status' events on progress changes, 'heartbeat' every ~20 s, "
+            "and a final 'complete' event (state completed/failed) then auto-closes. "
+            "Alternative to polling plan_status."
+        ),
+    )
 
 
 class PlanStatusTiming(BaseModel):
@@ -152,6 +181,14 @@ class PlanStatusSuccess(BaseModel):
             "These files are included in the zip artifact when the plan completes."
         ),
     )
+    sse_url: str | None = Field(
+        default=None,
+        description=(
+            "GET endpoint (text/event-stream) for real-time progress. "
+            "Available when plan is not in a terminal state. "
+            "See plan_create sse_url description for usage."
+        ),
+    )
 
 
 class PlanStatusOutput(BaseModel):
@@ -177,6 +214,14 @@ class PlanStatusOutput(BaseModel):
             "Intermediate output files produced so far. "
             "Use updated_at timestamps to detect stalls. "
             "These files are included in the zip artifact when the plan completes."
+        ),
+    )
+    sse_url: str | None = Field(
+        default=None,
+        description=(
+            "GET endpoint (text/event-stream) for real-time progress. "
+            "Available when plan is not in a terminal state. "
+            "See plan_create sse_url description for usage."
         ),
     )
     error: ErrorDetail | None = None
@@ -274,7 +319,7 @@ class PlanCreateInput(BaseModel):
         ...,
         description=(
             "What the plan should cover (goal, context, constraints). "
-            "Use prompt_examples to get example prompts; use these as examples for plan_create. "
+            "Use example_prompts to get example prompts; use these as examples for plan_create. "
             "For best results, provide a detailed prompt (typically ~300-800 words). "
             "Good prompt shape: objective, scope, constraints, timeline, stakeholders, "
             "budget/resources, and success criteria. "

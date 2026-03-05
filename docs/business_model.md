@@ -65,7 +65,7 @@ Example with `PLANEXE_CREDIT_PRICE_CENTS=100`:
 
 ## Billing timing
 
-Billing is applied at **task completion time** in `worker_plan_database`, not at task creation time.
+Billing is applied at **plan completion time** in `worker_plan_database`, not at plan creation time.
 
 This ensures we can bill based on final observed inference usage and success/failure outcome.
 
@@ -130,15 +130,15 @@ Hosted web UI supports one free plan per user account.
 - First plan can be flagged to skip usage billing.
 - Subsequent plans are usage-billed according to formulas above.
 
-This is implemented as an explicit task parameter so billing logic remains deterministic and auditable.
+This is implemented as an explicit plan parameter so billing logic remains deterministic and auditable.
 
 ---
 
 ## Operational notes
 
-- Billing is idempotent per task: usage charge is applied once.
-- Billing records should be traceable to task id and run output.
-- Payment/support investigations should join `CreditHistory` with `token_metrics` via task context and `user_id`.
+- Billing is idempotent per plan: usage charge is applied once.
+- Billing records should be traceable to plan id and run output.
+- Payment/support investigations should join `CreditHistory` with `token_metrics` via plan context and `user_id`.
 - If pricing policy changes, update this document and relevant env defaults together.
 
 ---

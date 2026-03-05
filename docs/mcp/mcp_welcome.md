@@ -22,7 +22,7 @@ No MCP experience is required to get started.
 - **Get example prompts** — See what good prompts look like (detailed, typically ~300-800 words). It is the **caller’s responsibility** to take inspiration from these examples and ensure the prompt sent to PlanExe is of similar or better quality. A compact prompt shape works best: objective, scope, constraints, timeline, stakeholders, budget/resources, and success criteria. The agent can refine a vague idea into a high-quality prompt and show it to the user for approval before creating the plan.
 - **Create a plan** — Send a prompt; PlanExe starts creating the plan (typically takes 10–20 minutes on baseline profile). If the input prompt is of low quality, the output plan will be crap too. Visible `plan_create` options include `model_profile`.
 - **Check progress** — Ask for status and see how far the plan has gotten.
-- **Retry failed runs** — If status is `failed`, call `plan_retry` (defaults to baseline model profile) to requeue the same task id.
+- **Retry failed runs** — If status is `failed`, call `plan_retry` (defaults to baseline model profile) to requeue the same `plan_id`.
 - **Download the report** — When the plan is ready, the user specifies whether to download the HTML report or the zip of intermediary files (JSON, MD, CSV).
 
 ---
@@ -41,6 +41,7 @@ The MCP user chooses which artifact to download:
 - **Setup** — [MCP setup](mcp_setup.md): recommended path to a working integration.
 - **Publish to MCP Registry** — [MCP registry publishing](mcp_registry.md): publish `mcp.planexe.org` metadata so it appears in `github.com/mcp`.
 - **See the tools and a typical flow** — [MCP details](mcp_details.md): tool list, example prompts, and step-by-step flow without heavy protocol detail.
+ - **Set up in Claude** — [Claude](claude.md): Claude desktop app and Claude Code, with cloud and local Docker options.
  - **Set up in Cursor** — [Cursor](cursor.md): video, prerequisites, and how to connect PlanExe to Cursor.
  - **Set up in Windsurf** — [Windsurf](windsurf.md): setup steps and example interaction.
  - **Set up in LM Studio** — [LM Studio](lm_studio.md): setup steps and example interaction.

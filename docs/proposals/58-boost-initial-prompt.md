@@ -35,7 +35,7 @@ When this happens, later stages can look polished but still be impractical becau
 
 There is already a quality gap between two prompt sources:
 
-- MCP tool-driven prompt assembly that follows `prompt_examples` (high structure, better constraints).
+- MCP tool-driven prompt assembly that follows `example_prompts` (high structure, better constraints).
 - Direct human input that is often shorter, incomplete, or inconsistent.
 
 This proposal targets that gap by lifting weak human prompts toward the same baseline used in MCP flows.
@@ -47,7 +47,7 @@ Why now:
 
 - We already have high-quality prompt examples in `worker_plan/worker_plan_api/prompt/data/simple_plan_prompts.jsonl`.
 - We already document strong prompt shape in `docs/prompt_writing_guide.md`.
-- MCP usage already enforces prompt-quality workflow via `docs/mcp/planexe_mcp_interface.md` (`prompt_examples` -> formulate -> `task_create`).
+- MCP usage already enforces prompt-quality workflow via `docs/mcp/planexe_mcp_interface.md` (`example_prompts` -> formulate -> `task_create`).
 - PlanExe already contains assumption-oriented components (`assume/*`) that can consume cleaner input.
 - The rewrite stage can be bounded, deterministic in structure, and audited with artifacts.
 
@@ -170,7 +170,7 @@ Decision rule:
   - `worker_plan/worker_plan_api/prompt/data/simple_plan_prompts.jsonl` (including MCP-curated examples)
 
 ## MCP Baseline Alignment
-Use MCP `prompt_examples` as the reference quality target for rewritten human prompts.
+Use MCP `example_prompts` as the reference quality target for rewritten human prompts.
 
 Concretely:
 

@@ -8,14 +8,14 @@ PlanExe is a service that generates **strategic project-plan drafts** from a nat
 
 ### 1.2 What kind of plan does it create
 
-The plan is a **project plan**: a DAG of steps (Luigi pipeline stages) that produce artifacts including a Gantt chart, risk analysis, and other project management deliverables. The main output is a self-contained interactive HTML report (~700KB) with collapsible sections, interactive Gantt charts, and embedded JavaScript. The report contains 20+ sections including executive summary, investor pitch, project plan with SMART criteria, strategic decision analysis, scenario comparison, assumptions with expert review, governance structure, SWOT analysis, team role profiles, simulated expert criticism, work breakdown structure, plan review, Q&A, premortem with failure scenarios, self-audit checklist, and adversarial premise attacks. There is also a zip file containing all intermediary pipeline files (md, json, csv) that fed the report. Plan quality depends on prompt quality; use the prompt_examples tool to see the baseline before calling plan_create.
+The plan is a **project plan**: a DAG of steps (Luigi pipeline stages) that produce artifacts including a Gantt chart, risk analysis, and other project management deliverables. The main output is a self-contained interactive HTML report (~700KB) with collapsible sections, interactive Gantt charts, and embedded JavaScript. The report contains 20+ sections including executive summary, investor pitch, project plan with SMART criteria, strategic decision analysis, scenario comparison, assumptions with expert review, governance structure, SWOT analysis, team role profiles, simulated expert criticism, work breakdown structure, plan review, Q&A, premortem with failure scenarios, self-audit checklist, and adversarial premise attacks. There is also a zip file containing all intermediary pipeline files (md, json, csv) that fed the report. Plan quality depends on prompt quality; use the example_prompts tool to see the baseline before calling plan_create.
 
 #### 1.2.1 Agent-facing summary (for server instructions / tool descriptions)
 
 Implementors should expose the following to agents so they understand what PlanExe does:
 
 - **What:** PlanExe turns a plain-English goal into a strategic project-plan draft (20+ sections) in ~10–20 min. Sections include executive summary, interactive Gantt charts, investor pitch, SWOT, governance, team profiles, work breakdown, scenario comparison, expert criticism, and adversarial sections (premortem, self-audit, premise attacks) that stress-test the plan. The output is a draft to refine, not an executable or final document — but it surfaces hard questions the prompter may not have considered.
-- **Required interaction order:** Call `prompt_examples` first. Optional before `plan_create`: call `model_profiles` to inspect profile guidance and available models in each profile. Then complete a non-tool step: formulate a detailed prompt as flowing prose (not structured markdown), typically ~300-800 words, using the examples as a baseline; include objective, scope, constraints, timeline, stakeholders, budget/resources, and success criteria; get user approval. Only after approval, call `plan_create`. Then poll `plan_status` (about every 5 minutes); use `plan_download` (mcp_local helper) or `plan_file_info` (mcp_cloud tool) when complete (`pending`/`processing` = keep polling, `completed` = download now, `failed` = terminal). If a plan fails and the caller wants another attempt for the same `plan_id`, call `plan_retry` (optional `model_profile`, default `baseline`). To stop, call `plan_stop` with the `plan_id` from `plan_create`.
+- **Required interaction order:** Call `example_plans` (optional) and `example_prompts` first. Optional before `plan_create`: call `model_profiles` to inspect profile guidance and available models in each profile. Then complete a non-tool step: formulate a detailed prompt as flowing prose (not structured markdown), typically ~300-800 words, using the examples as a baseline; include objective, scope, constraints, timeline, stakeholders, budget/resources, and success criteria; get user approval. Only after approval, call `plan_create`. Then poll `plan_status` (about every 5 minutes); use `plan_download` (mcp_local helper) or `plan_file_info` (mcp_cloud tool) when complete (`pending`/`processing` = keep polling, `completed` = download now, `failed` = terminal). If a plan fails and the caller wants another attempt for the same `plan_id`, call `plan_retry` (optional `model_profile`, default `baseline`). To stop, call `plan_stop` with the `plan_id` from `plan_create`.
 - **Output:** Self-contained interactive HTML report (~700KB) with collapsible sections and interactive Gantt charts — open in a browser. The zip contains the intermediary pipeline files (md, json, csv) that fed the report.
 
 ### 1.3 Scope of this document
@@ -73,7 +73,7 @@ The MCP specification defines two different mechanisms:
 - **MCP tools** (e.g. plan_create, plan_status, plan_stop, plan_retry): the server exposes named tools; the client calls them and receives a response. PlanExe's interface is **tool-based**: the agent calls plan_create → receives plan_id → polls plan_status → optionally calls plan_retry on failed → uses plan_file_info (and optionally plan_download via mcp_local). This document specifies those tools.
 - **MCP tasks protocol** ("Run as task" in some UIs): a separate mechanism where the client can run a tool "as a task" using RPC methods such as tasks/run, tasks/get, tasks/result, tasks/cancel, tasks/list, so the tool runs in the background and the client polls for results.
 
-PlanExe **does not** use or advertise the MCP tasks protocol. Implementors and clients should use the **tools only**. Do not enable "Run as task" for PlanExe; many clients (e.g. Cursor) and the Python MCP SDK do not support the tasks protocol properly. Intended flow: call `prompt_examples`; optionally call `model_profiles`; perform the non-tool prompt drafting/approval step; call `plan_create`; poll `plan_status`; if failed call `plan_retry` (optional); then call `plan_file_info` (or `plan_download` via mcp_local) when completed.
+PlanExe **does not** use or advertise the MCP tasks protocol. Implementors and clients should use the **tools only**. Do not enable "Run as task" for PlanExe; many clients (e.g. Cursor) and the Python MCP SDK do not support the tasks protocol properly. Intended flow: optionally call `example_plans`; call `example_prompts`; optionally call `model_profiles`; perform the non-tool prompt drafting/approval step; call `plan_create`; poll `plan_status`; if failed call `plan_retry` (optional); then call `plan_file_info` (or `plan_download` via mcp_local) when completed.
 
 ---
 
@@ -155,9 +155,9 @@ The public MCP `state` field is aligned with `PlanItem.state`:
 
 All tool names below are normative.
 
-### 6.1 prompt_examples
+### 6.1 example_prompts
 
-**Call this first.** Returns example prompts that define the baseline for what a good prompt looks like. Do not call plan_create yet. Correct flow: call this tool; optionally call `model_profiles`; then complete a non-tool step (draft and approve a detailed prompt, typically ~300-800 words); only then call `plan_create`. If you call `plan_create` before formulating and approving a prompt, the resulting plan will be lower quality than it could be.
+**Call this first.** Returns example prompts that define the baseline for what a good prompt looks like. Do not call plan_create yet. Correct flow: optionally call `example_plans`; call this tool; optionally call `model_profiles`; then complete a non-tool step (draft and approve a detailed prompt, typically ~300-800 words); only then call `plan_create`. If you call `plan_create` before formulating and approving a prompt, the resulting plan will be lower quality than it could be.
 
 Write the prompt as flowing prose, not structured markdown with headers or bullet lists. Weave technical specs, constraints, and targets naturally into sentences. Include banned words/approaches and governance structure inline. Typical length: 300–800 words. The examples demonstrate this prose style — match their tone and density.
 
@@ -213,7 +213,7 @@ Use the returned `profile` values directly in `plan_create.model_profile`.
 
 ### 6.2 plan_create
 
-**Call only after prompt_examples and after the non-tool drafting/approval step.** Start creating a new plan with the approved prompt.
+**Call only after example_prompts and after the non-tool drafting/approval step.** Start creating a new plan with the approved prompt.
 
 **Request**
 
@@ -282,7 +282,7 @@ Use a normal single LLM response (not PlanExe) for one-shot micro-tasks. PlanExe
 - model_profile: LLM profile (`baseline` | `premium` | `frontier` | `custom`). If unsure, call `model_profiles` first.
 - user_api_key: user API key for credits and attribution (if your deployment requires it).
 
-Clients can call the MCP tool **prompt_examples** to retrieve example prompts. Use these as examples for plan_create; they can also call plan_create with any prompt—short prompts produce less detailed plans.
+Clients can call the MCP tool **example_prompts** to retrieve example prompts. Use these as examples for plan_create; they can also call plan_create with any prompt—short prompts produce less detailed plans.
 
 For the full catalog file:
 

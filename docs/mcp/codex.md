@@ -15,7 +15,7 @@ Guide for connecting [codex](https://openai.com/codex/) with PlanExe via MCP.
 
 1. Start Codex.
 2. Ask for MCP tools.
-3. Call `prompt_examples` to get examples.
+3. Call `example_prompts` to get examples.
 4. Call `plan_create` to start a plan.
 
 ## Sample prompt

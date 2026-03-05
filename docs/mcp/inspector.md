@@ -69,7 +69,8 @@ When connected follow these steps:
 
 Now there should be a list with tool names and descriptions:
 ```
-prompt_examples
+example_plans
+example_prompts
 model_profiles
 plan_create
 plan_status
@@ -83,9 +84,9 @@ When you inspect `plan_create`, the visible input schema includes `prompt` and o
 Follow these steps:
 ![screenshot of mcp inspector invoke tool](inspector_step5_mcp_planexe_org.webp)
 
-1. In the `Tools` panel; Click on the `prompt_examples` tool.
-2. In the `prompt_examples` right sidepanel; Click on `Run Tool`.
-3. The MCP server should respond with a list of example prompts.
+1. In the `Tools` panel; Click on the `example_plans` tool to preview example output, or `example_prompts` to see prompt examples.
+2. In the right sidepanel; Click on `Run Tool`.
+3. The MCP server should respond with example plans or example prompts.
 4. Optionally run `model_profiles` to inspect available `model_profile` choices before `plan_create`.
 
 ## Approach 2. MCP server inside docker
@@ -121,7 +122,7 @@ Then open the `Tools` tab, click `List Tools`.
 
 ![Screenshot list tools](inspector_step3_docker.webp)
 
-Click `prompt_examples`, click `Run Tool`.
+Click `example_prompts`, click `Run Tool`.
 
 ![Screenshot example prompts](inspector_step4_docker.webp)
 
@@ -173,6 +174,6 @@ Then open the `Tools` tab, click `List Tools`.
 
 ![Screenshot example prompts](inspector_step3_local.webp)
 
-Click `prompt_examples`, click `Run Tool`.
+Click `example_prompts`, click `Run Tool`.
 
 ![Screenshot example prompts](inspector_step4_local.webp)

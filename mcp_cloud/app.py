@@ -110,8 +110,8 @@ from mcp_cloud.download_tokens import (  # noqa: F401
     build_zip_download_path,
 )
 
-# -- prompt_examples: example prompt loading -----------------------------------
-from mcp_cloud.prompt_examples import (  # noqa: F401
+# -- example_prompts: example prompt loading -----------------------------------
+from mcp_cloud.example_prompts import (  # noqa: F401
     _load_mcp_example_prompts,
     _builtin_mcp_example_prompts,
 )
@@ -131,10 +131,12 @@ from mcp_cloud.schemas import (  # noqa: F401
     PLAN_STOP_INPUT_SCHEMA,
     PLAN_RETRY_INPUT_SCHEMA,
     PLAN_FILE_INFO_INPUT_SCHEMA,
-    PROMPT_EXAMPLES_INPUT_SCHEMA,
-    PROMPT_EXAMPLES_OUTPUT_SCHEMA,
+    EXAMPLE_PROMPTS_INPUT_SCHEMA,
+    EXAMPLE_PROMPTS_OUTPUT_SCHEMA,
     MODEL_PROFILES_INPUT_SCHEMA,
     MODEL_PROFILES_OUTPUT_SCHEMA,
+    EXAMPLE_PLANS_INPUT_SCHEMA,
+    EXAMPLE_PLANS_OUTPUT_SCHEMA,
     PLAN_LIST_INPUT_SCHEMA,
     PLAN_LIST_OUTPUT_SCHEMA,
     ToolDefinition,
@@ -145,9 +147,10 @@ from mcp_cloud.schemas import (  # noqa: F401
 from mcp_cloud.handlers import (  # noqa: F401
     handle_list_tools,
     handle_call_tool,
-    handle_plan_create,
-    handle_prompt_examples,
+    handle_example_plans,
+    handle_example_prompts,
     handle_model_profiles,
+    handle_plan_create,
     handle_plan_status,
     handle_plan_stop,
     handle_plan_retry,

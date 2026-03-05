@@ -55,7 +55,7 @@ OpenClaw Agent
   "description": "Gives the agent the ability to plan, budget, and track complex projects via the PlanExe Cloud.",
   "permissions": ["network_access"],
   "mcp_tools": [
-    "prompt_examples",
+    "example_prompts",
     "task_create",
     "task_status",
     "task_stop",
@@ -68,7 +68,7 @@ OpenClaw Agent
 
 The PlanExe MCP exposes the following real tools via `https://mcp.planexe.org/mcp`:
 
-### `prompt_examples()` — Get example prompts
+### `example_prompts()` — Get example prompts
 
 - Input: none
 - Output: List of example planning prompts
@@ -143,7 +143,7 @@ The PlanExe MCP exposes the following real tools via `https://mcp.planexe.org/mc
 ### Phase A — Skill Packaging and Contracts (1–2 weeks)
 
 1. Define skill manifest and MCP tool bindings:
-   - `prompt_examples` — Provide example planning prompts
+   - `example_prompts` — Provide example planning prompts
    - `task_create` — Initiate planning task with goal and parameters
    - `task_status` — Poll task progress (required for async workflows)
    - `task_stop` — Cancel long-running tasks

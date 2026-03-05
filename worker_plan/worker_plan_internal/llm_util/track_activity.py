@@ -254,7 +254,7 @@ class TrackActivity(BaseEventHandler):
     def _record_token_metrics_row(self, event_data: dict, duration_seconds: Optional[float] = None) -> None:
         """Persist per-event token metrics directly from instrumentation payloads."""
         try:
-            from worker_plan_internal.llm_util.token_instrumentation import get_current_task_id, get_current_user_id
+            from worker_plan_internal.llm_util.token_instrumentation import get_current_task_id, get_current_user_id, get_current_api_key_id
             from worker_plan_internal.llm_util.token_metrics_store import get_token_metrics_store
         except Exception as exc:
             logger.debug("Token metrics store unavailable in TrackActivity: %s", exc)
@@ -284,6 +284,7 @@ class TrackActivity(BaseEventHandler):
             store.record_token_usage(
                 task_id=str(task_id),
                 user_id=str(user_id) if user_id else None,
+                api_key_id=get_current_api_key_id(),
                 llm_model=model_name or (upstream_model or "unknown"),
                 upstream_provider=upstream_provider,
                 upstream_model=upstream_model,

@@ -78,6 +78,9 @@ class PlanItem(db.Model):
     # Identifies who invoked the /run endpoint, that is charged credits for generating the plan.
     user_id = db.Column(db.String(256))
 
+    # Which API key created this plan (NULL for legacy/frontend plans).
+    api_key_id = db.Column(db.String(36), nullable=True, index=True)
+
     # Extra parameters provided to the /run endpoint, that may control speedvsdetail, loglevel, and other developer settings.
     parameters = db.Column(JSON, nullable=True, default=None)
 

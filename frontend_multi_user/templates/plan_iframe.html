@@ -99,6 +99,23 @@
         color: var(--color-text-secondary);
         word-break: break-all;
     }
+    .plan-id-copy-btn {
+        background: none;
+        border: 1px solid transparent;
+        border-radius: 3px;
+        cursor: pointer;
+        padding: 1px 4px;
+        margin-left: 4px;
+        color: var(--color-text-secondary);
+        vertical-align: middle;
+        line-height: 1;
+        transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .plan-id-copy-btn:hover {
+        background: var(--color-bg-muted);
+        border-color: var(--color-border);
+        color: var(--color-text);
+    }
     .plan-meta-actions {
         display: flex;
         align-items: center;
@@ -507,7 +524,7 @@
     <div class="plan-meta-top">
         <div class="plan-meta-info">
             <p class="plan-meta-title">Plan</p>
-            <p class="plan-meta-sub">id: {{ task.id }}{% if task.timestamp_created %} · Created: {{ task.timestamp_created.strftime("%Y-%m-%d %H:%M:%S") }}{% endif %}</p>
+            <p class="plan-meta-sub">id: {{ task.id }}<button type="button" class="plan-id-copy-btn" id="copy-plan-id-btn" title="Copy plan ID" data-plan-id="{{ task.id }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>{% if task.timestamp_created %} · Created: {{ task.timestamp_created.strftime("%Y-%m-%d %H:%M:%S") }}{% endif %}</p>
             <p class="plan-state" id="plan-state" {% if task.state and task.state.name == 'completed' %}style="display:none"{% endif %}>
                 Status: <span id="plan-state-text">
                     {% if task.state %}
@@ -665,6 +682,7 @@
             <thead>
                 <tr>
                     <th>Timestamp</th>
+                    <th>Invoked By</th>
                     <th>Provider/Model</th>
                     <th>Duration</th>
                     <th>Status</th>
@@ -672,7 +690,7 @@
                 </tr>
             </thead>
             <tbody id="trace-attempts-body">
-                <tr><td colspan="5" class="plan-trace-no-data">Pending...</td></tr>
+                <tr><td colspan="6" class="plan-trace-no-data">Pending...</td></tr>
             </tbody>
         </table>
     </div>
@@ -717,6 +735,7 @@
         let currentPlanState = initialState;
         let copyStatusTimer = null;
 
+        const copyPlanIdBtn = document.getElementById("copy-plan-id-btn");
         const promptContentEl = document.getElementById("plan-prompt-content");
         const copyPromptBtn = document.getElementById("copy-prompt-btn");
         const togglePromptBtn = document.getElementById("toggle-prompt-btn");
@@ -1023,12 +1042,13 @@
 
             const rows = trace && Array.isArray(trace.execution_trace) ? trace.execution_trace : [];
             if (!rows.length) {
-                body.innerHTML = '<tr><td colspan="5" class="plan-trace-no-data">' + escapeHtml(missingTraceValue(state)) + '</td></tr>';
+                body.innerHTML = '<tr><td colspan="6" class="plan-trace-no-data">' + escapeHtml(missingTraceValue(state)) + '</td></tr>';
                 return;
             }
 
             const htmlRows = rows.map(function (row) {
                 const timestamp = cleanText(row.timestamp) || "-";
+                const invokedBy = cleanText(row.invoked_by) || "-";
                 const provider = cleanText(row.provider);
                 const model = cleanText(row.model);
                 const route = provider && model ? (provider + "/" + model) : (provider || model || "-");
@@ -1037,6 +1057,7 @@
                 const errorText = cleanText(row.error_message) || "-";
                 return '<tr>' +
                     '<td>' + escapeHtml(timestamp) + '</td>' +
+                    '<td>' + escapeHtml(invokedBy) + '</td>' +
                     '<td>' + escapeHtml(route) + '</td>' +
                     '<td>' + escapeHtml(duration) + '</td>' +
                     '<td>' + escapeHtml(success) + '</td>' +
@@ -1229,6 +1250,17 @@
             } else {
                 window.addEventListener("load", measureWhenReady, { once: true });
             }
+        }
+
+        if (copyPlanIdBtn) {
+            copyPlanIdBtn.addEventListener("click", function () {
+                var id = copyPlanIdBtn.getAttribute("data-plan-id");
+                var svg = copyPlanIdBtn.innerHTML;
+                copyText(id).then(function () {
+                    copyPlanIdBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+                    setTimeout(function () { copyPlanIdBtn.innerHTML = svg; }, 1200);
+                });
+            });
         }
 
         updateTelemetryPanel(initialTelemetry, initialState);

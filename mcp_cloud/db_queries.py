@@ -10,6 +10,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from worker_plan_api.model_profile import normalize_model_profile
 
 from mcp_cloud.db_setup import app, db, PlanItem, PlanState, EventItem, EventType
+from database_api.model_credit_history import CreditHistory
 
 logger = logging.getLogger(__name__)
 
@@ -86,6 +87,7 @@ def _create_plan_sync(
             prompt=prompt,
             state=PlanState.pending,
             user_id=metadata.get("user_id", "admin") if metadata else "admin",
+            api_key_id=metadata.get("api_key_id") if metadata else None,
             parameters=parameters,
         )
         db.session.add(plan)
@@ -97,6 +99,7 @@ def _create_plan_sync(
             "task_handle": plan_id,
             "prompt": plan.prompt,
             "user_id": plan.user_id,
+            "api_key_id": plan.api_key_id,
             "config": config,
             "metadata": metadata,
             "parameters": plan.parameters,
@@ -163,7 +166,7 @@ def _request_plan_stop_sync(plan_id: str) -> Optional[dict[str, Any]]:
         }
 
 
-def _retry_failed_plan_sync(plan_id: str, model_profile: str) -> Optional[dict[str, Any]]:
+def _retry_failed_plan_sync(plan_id: str, model_profile: str, caller_metadata: Optional[dict[str, str]] = None) -> Optional[dict[str, Any]]:
     with app.app_context():
         plan = find_plan_by_id(plan_id)
         if plan is None:
@@ -196,6 +199,23 @@ def _retry_failed_plan_sync(plan_id: str, model_profile: str) -> Optional[dict[s
         plan.run_activity_overview_json = None
         plan.run_artifact_layout_version = None
         plan.parameters = parameters
+
+        # Update plan attribution when retried with a different API key.
+        if caller_metadata:
+            if "user_id" in caller_metadata:
+                plan.user_id = caller_metadata["user_id"]
+            if "api_key_id" in caller_metadata:
+                plan.api_key_id = caller_metadata["api_key_id"]
+
+        # Archive old incremental billing entries so the new run starts fresh.
+        # _sum_already_charged_credits only counts source="usage_billing_progress",
+        # so renaming to "usage_billing_settled" lets the new run charge from zero
+        # while preserving the old entries for per-key credit history.
+        CreditHistory.query.filter_by(
+            source="usage_billing_progress",
+            external_id=str(plan.id),
+        ).update({"source": "usage_billing_settled"})
+
         db.session.commit()
 
         event_context = {

@@ -1,4 +1,4 @@
-# PlanExe MCP Cloud - Experimental, likely to be changed a lot!
+# PlanExe MCP Cloud
 
 Model Context Protocol (MCP) interface for PlanExe. Implements the MCP specification defined in [docs/mcp/planexe_mcp_interface.md](https://docs.planexe.org/mcp/planexe_mcp_interface/).
 
@@ -9,12 +9,14 @@ mcp_cloud provides a standardized MCP interface for PlanExe's plan generation wo
 ## Features
 
 - **Task Management**: Create and stop plan generation tasks
-- **Progress Tracking**: Real-time status and progress updates
-- **File Metadata**: Get report/zip metadata and download URLs
+- **Progress Tracking**: Real-time status and progress updates via polling or SSE
+- **Real-Time SSE Streaming**: Subscribe to live plan progress instead of polling
+- **File Metadata**: Get report/zip metadata and signed download URLs
+- **Signed Download Tokens**: Time-limited, artifact-scoped HMAC tokens for secure file delivery
 
 ## Run as task (MCP tasks protocol)
 
-MCP has two ways to run long-running work: **tools** (what we use) and the **tasks** protocol ("Run as task" in some UIs). PlanExe uses **tools only**: `prompt_examples`, `model_profiles`, `plan_create`, `plan_status`, `plan_stop`, `plan_retry`, `plan_file_info` (or `plan_download` via `mcp_local`). The agent creates a task, polls status, retries on failed when needed, then downloads; that is the intended flow per `docs/mcp/planexe_mcp_interface.md`. We do not advertise or implement the MCP tasks protocol (tasks/get, tasks/result, etc.). Clients like Cursor do not support it properly—use the tools directly.
+MCP has two ways to run long-running work: **tools** (what we use) and the **tasks** protocol ("Run as task" in some UIs). PlanExe uses **tools only**: `example_plans`, `example_prompts`, `model_profiles`, `plan_create`, `plan_status`, `plan_stop`, `plan_retry`, `plan_file_info` (or `plan_download` via `mcp_local`). The agent creates a task, polls status, retries on failed when needed, then downloads; that is the intended flow per `docs/mcp/planexe_mcp_interface.md`. We do not advertise or implement the MCP tasks protocol (tasks/get, tasks/result, etc.). Clients like Cursor do not support it properly—use the tools directly.
 Workflow clarity: prompt drafting + user approval is a non-tool step between setup tools and `plan_create`.
 
 ## Client Choice Guide
@@ -42,7 +44,7 @@ mcp_cloud exposes HTTP endpoints on port `8001` (or `${PLANEXE_MCP_HTTP_PORT}`).
 - `true`: provide a valid `X-API-Key`.
 Accepted keys are (1) UserApiKey from home.planexe.org (`pex_...`), or (2) `PLANEXE_MCP_API_KEY` if set (for dev or shared secret).
 OAuth is not supported for the MCP API.
-When auth is enabled, MCP handshake/discovery calls (`initialize`, `notifications/initialized`, `tools/list`, `prompts/list`, `resources/list`, `resources/templates/list`, `ping`, `GET /mcp/tools`, and probe traffic to `/mcp` for redirect/handshake compatibility) are intentionally allowed without API key for connector health checks. In addition, `tools/call` is open without API key only for `model_profiles` and `prompt_examples`; all other tool calls remain protected.
+When auth is enabled, MCP handshake/discovery calls (`initialize`, `notifications/initialized`, `tools/list`, `prompts/list`, `resources/list`, `resources/templates/list`, `ping`, `GET /mcp/tools`, and probe traffic to `/mcp` for redirect/handshake compatibility) are intentionally allowed without API key for connector health checks. In addition, `tools/call` is open without API key only for `example_plans`, `example_prompts`, and `model_profiles`; all other tool calls remain protected.
 
 ### Connecting via HTTP/URL
 
@@ -82,9 +84,18 @@ Use a UserApiKey from [home.planexe.org](https://home.planexe.org/), or set `PLA
 - `POST /mcp` - Main MCP JSON-RPC endpoint (Streamable HTTP; may use SSE for streaming)
 - `GET /mcp/tools` - **List tools (JSON). No SSE required.** Use this if your client reports "SSE error" when connecting to `/mcp`.
 - `POST /mcp/tools/call` - **Call a tool (JSON). No SSE required.**
+- `GET /sse/plan/{plan_id}` - **SSE endpoint for real-time plan progress** (see [SSE section](#real-time-progress-via-sse) below)
+- `GET /download/{plan_id}/{filename}?token=...` - Serve report or zip artifact (signed token or API key required)
 - `GET /healthcheck` - Health check endpoint
 - `GET /docs` - OpenAPI documentation (Swagger UI)
 - `GET /robots.txt` - Crawler rules for public metadata discovery
+
+### Discovery / `.well-known` Endpoints
+
+The `/.well-known/` prefix is an [IETF standard (RFC 8615)](https://www.rfc-editor.org/rfc/rfc8615) for machine-readable metadata. Automated systems (registries, crawlers, AI agents) fetch these to discover what the server offers without performing a full handshake.
+
+- **`GET /.well-known/mcp/server-card.json`** — MCP Server Card ([SEP-1649](https://github.com/modelcontextprotocol/modelcontextprotocol/issues/1649)). Lets MCP registries (Smithery, etc.) discover the server's name, description, transport type, capabilities, and auth requirements in a single JSON fetch — no MCP handshake needed.
+- **`GET /.well-known/glama.json`** — Glama ownership verification. When registering at [glama.ai](https://glama.ai), their crawler fetches this to confirm the server maintainer (contains a maintainer email).
 
 ### "SSE error" or "no Server-SSE stream" from the client
 
@@ -114,6 +125,16 @@ If your client only supports Streamable HTTP and fails on `/mcp`, you have two o
 - `PLANEXE_MCP_MAX_BODY_BYTES`: Max request size for `POST /mcp/tools/call` (default: `1048576`).
 - `PLANEXE_MCP_RATE_LIMIT`: Max requests per window for `POST /mcp/tools/call` (default: `60`).
 - `PLANEXE_MCP_RATE_WINDOW_SECONDS`: Rate limit window in seconds (default: `60`).
+- `PLANEXE_DOWNLOAD_TOKEN_SECRET`: HMAC secret for signed download tokens. Falls back to `PLANEXE_API_KEY_SECRET`, then a per-process random secret (development only; tokens invalidated on restart).
+- `PLANEXE_DOWNLOAD_TOKEN_TTL`: Token time-to-live in seconds (default: `900`, i.e. 15 minutes).
+
+### SSE Configuration
+
+- `PLANEXE_SSE_POLL_INTERVAL`: How often the SSE stream polls the database for changes in seconds (default: `3.0`).
+- `PLANEXE_SSE_HEARTBEAT_INTERVAL`: Seconds of silence before a heartbeat event is sent (default: `20.0`).
+- `PLANEXE_SSE_MAX_DURATION`: Maximum SSE stream lifetime in seconds (default: `3600`, i.e. 1 hour).
+- `PLANEXE_SSE_MAX_CONNECTIONS`: Maximum concurrent SSE connections per client IP (default: `5`).
+- `PLANEXE_SSE_MAX_TOTAL_CONNECTIONS`: Maximum concurrent SSE connections server-wide (default: `200`).
 
 ### Database Configuration
 
@@ -131,7 +152,8 @@ mcp_cloud uses the same database configuration as other PlanExe services:
 
 See `docs/mcp/planexe_mcp_interface.md` for full specification. Available tools:
 
-- `prompt_examples` - Return example prompts. Use these as examples for plan_create.
+- `example_plans` - Return curated example plans with download links for reports and zip bundles.
+- `example_prompts` - Return example prompts. Use these as examples for plan_create.
 - `model_profiles` - List profile options and currently available models in each profile.
 - `plan_create` - Create a new plan (returns plan_id as UUID; may require user_api_key for credits)
 - `plan_status` - Get plan status and progress
@@ -160,11 +182,131 @@ Note: `plan_download` is a synthetic tool provided by `mcp_local`, not by this s
 
 > **Breaking change (v2026-02-26):** External-facing field names were renamed from `task_id` → `plan_id`, `tasks` → `plans`, and error codes from `TASK_NOT_FOUND` → `PLAN_NOT_FOUND`, `TASK_NOT_FAILED` → `PLAN_NOT_FAILED`.
 
-**Tip**: Call `prompt_examples` to get example prompts to use with plan_create, then call `model_profiles` to choose `model_profile` based on current runtime availability. The prompt catalog is the same as in the frontends (`worker_plan.worker_plan_api.PromptCatalog`). When running with `PYTHONPATH` set to the repo root (e.g. stdio setup), the catalog is loaded automatically; otherwise built-in examples are returned.
+**Tip**: Call `example_plans` to preview example output, then call `example_prompts` to get example prompts to use with plan_create, then call `model_profiles` to choose `model_profile` based on current runtime availability. The prompt catalog is the same as in the frontends (`worker_plan.worker_plan_api.PromptCatalog`). When running with `PYTHONPATH` set to the repo root (e.g. stdio setup), the catalog is loaded automatically; otherwise built-in examples are returned.
 
 Download flow: call `plan_file_info` to obtain the `download_url`, then fetch the
 report via `GET /download/{plan_id}/030-report.html` (API key required if configured).
 If `download_url` is missing, configure `PLANEXE_MCP_PUBLIC_BASE_URL` so the server can emit a reachable absolute URL.
+
+## Real-Time Progress via SSE
+
+Plans take 10-20 minutes to generate. Instead of polling `plan_status` every few minutes, clients can subscribe to a Server-Sent Events (SSE) stream for real-time push updates.
+
+**SSE is optional.** The `plan_status` polling workflow remains fully supported. SSE is a complementary REST endpoint on the FastAPI server, not an MCP transport replacement.
+
+### How to connect
+
+`plan_create` and `plan_status` responses include an `sse_url` field when available:
+
+```json
+{
+  "plan_id": "abc-123",
+  "created_at": "2026-03-01T14:00:00Z",
+  "sse_url": "https://mcp.planexe.org/sse/plan/abc-123"
+}
+```
+
+Connect using the same API key header used for MCP calls:
+
+```bash
+curl -N -H "X-API-Key: pex_..." https://mcp.planexe.org/sse/plan/abc-123
+```
+
+### Event types
+
+The stream emits standard SSE events:
+
+```
+retry: 5000
+
+event: status
+data: {"plan_id":"abc-123","state":"processing","progress_percentage":45.0,"elapsed_sec":120.3}
+
+event: heartbeat
+data: {"timestamp":"2026-03-01T14:32:00Z"}
+
+event: complete
+data: {"plan_id":"abc-123","state":"completed","progress_percentage":100.0,"elapsed_sec":720.5}
+```
+
+| Event | When | Action |
+|-------|------|--------|
+| `status` | State or progress changes | Update UI / log progress |
+| `heartbeat` | Every ~20s of silence | Keeps proxies/load balancers alive; ignore in application logic |
+| `complete` | Terminal state (`completed` or `failed`) | Stream closes automatically; proceed to `plan_file_info` |
+| `error` | Plan not found or timeout | Stream closes; check error code |
+
+### Behavior
+
+- The stream polls the database every ~3 seconds but only sends `status` events when state or progress actually changes (deduplication).
+- A `retry: 5000` hint tells the client to reconnect after 5 seconds if the connection drops.
+- The stream closes automatically on terminal states or after 60 minutes (configurable via `PLANEXE_SSE_MAX_DURATION`).
+- Connection limits: 5 per client IP, 200 server-wide. Exceeding returns HTTP 429.
+
+### Verifying SSE works
+
+The SSE endpoint is a plain REST endpoint — test it with `curl`, not the MCP Inspector. The MCP Inspector's "SSE" transport option is for the MCP protocol transport, which is unrelated to plan progress SSE.
+
+**Quick smoke test** (no worker or real plan needed):
+
+```bash
+curl -N http://localhost:8001/sse/plan/00000000-0000-0000-0000-000000000000
+```
+
+Expected output — an error event followed by the stream closing:
+
+```
+retry: 5000
+
+event: error
+data: {"code":"PLAN_NOT_FOUND","message":"Plan not found: 00000000-0000-0000-0000-000000000000"}
+```
+
+**End-to-end test** (requires a running worker):
+
+1. Create a plan:
+
+```bash
+curl -s -X POST http://localhost:8001/mcp/tools/call \
+  -H "Content-Type: application/json" \
+  -d '{"tool": "plan_create", "arguments": {"prompt": "Open a small coffee shop in Copenhagen"}}' \
+  | python3 -m json.tool
+```
+
+2. Check that the response includes `sse_url`:
+
+```json
+{
+  "plan_id": "abc-123",
+  "created_at": "2026-03-01T14:00:00Z",
+  "sse_url": "http://localhost:8001/sse/plan/abc-123"
+}
+```
+
+3. Connect to the SSE stream (use the `plan_id` from step 1):
+
+```bash
+curl -N http://localhost:8001/sse/plan/abc-123
+```
+
+4. You should see events streaming in as the plan progresses:
+
+```
+retry: 5000
+
+event: status
+data: {"plan_id":"abc-123","state":"pending","progress_percentage":0.0,"elapsed_sec":5.2}
+
+event: status
+data: {"plan_id":"abc-123","state":"processing","progress_percentage":12.0,"elapsed_sec":30.1}
+
+event: complete
+data: {"plan_id":"abc-123","state":"completed","progress_percentage":100.0,"elapsed_sec":720.5}
+```
+
+If auth is enabled, add `-H "X-API-Key: pex_..."` to both curl commands.
+
+**Verifying via the MCP Inspector**: Use **Streamable HTTP** transport (not SSE) pointed at `http://localhost:8001/mcp/`. Call `plan_create` — the response JSON should include the `sse_url` field. Then use `curl -N` on that URL in a separate terminal.
 
 ## Debugging with the MCP Inspector
 
@@ -248,6 +390,51 @@ mcp_cloud maps MCP concepts to PlanExe's database models:
 - **Report** → HTML report fetched from `worker_plan` via HTTP API
 
 mcp_cloud reads task state and progress from the database, and fetches artifacts from `worker_plan` via HTTP instead of accessing the run directory directly. This allows mcp_cloud to work without mounting the run directory, making it compatible with Railway and other cloud platforms that don't support shared volumes across services.
+
+### Module overview
+
+| Module | Purpose |
+|--------|---------|
+| `app.py` | Import facade — re-exports symbols from all sub-modules for backward compatibility |
+| `http_server.py` | FastAPI HTTP wrapper: routes, middleware (auth, rate limiting, CORS, body size), FastMCP integration, SSE endpoint |
+| `handlers.py` | MCP tool request handlers (plan_create, plan_status, etc.) dispatched via `TOOL_HANDLERS` dict |
+| `db_setup.py` | Flask app + SQLAlchemy initialization, server constants, request DTOs, `PLANEXE_SERVER_INSTRUCTIONS` |
+| `db_queries.py` | Sync database queries designed to run in `asyncio.to_thread()` from async handlers |
+| `tool_models.py` | Pydantic models for tool input/output schemas |
+| `schemas.py` | Auto-generates JSON Schema from `tool_models.py` via `.model_json_schema()`; defines `TOOL_DEFINITIONS` |
+| `auth.py` | API key hashing (SHA-256) and user resolution against the database |
+| `download_tokens.py` | Signed, time-limited HMAC-SHA256 download tokens and URL builders |
+| `sse.py` | Server-Sent Events stream generator with connection tracking and deduplication |
+| `worker_fetchers.py` | Fetch artifacts from worker_plan HTTP, local filesystem, or database (with fallback ordering) |
+| `model_profiles.py` | Load and expose available LLM models per profile (baseline/premium/frontier/custom) |
+| `example_prompts.py` | Load example prompts from the prompt catalog (or built-in fallbacks) |
+| `zip_utils.py` | Zip extraction, sanitization (remove `track_activity.jsonl` from legacy zips), SHA-256 |
+| `http_utils.py` | Strip redundant `content` field when `structuredContent` exists |
+| `dotenv_utils.py` | Load `.env` from mcp_cloud/ or repo root |
+| `config.py` | Minimal Flask config (`SQLALCHEMY_TRACK_MODIFICATIONS = False`) |
+
+### Request flow
+
+```
+Client → FastAPI (http_server.py)
+         ├─ Middleware: CORS → path normalization → auth → body size → rate limit
+         ├─ /mcp/*  → FastMCP (Streamable HTTP / JSON-RPC)
+         │           → handlers.py → db_queries.py (via asyncio.to_thread)
+         ├─ /mcp/tools/call → REST tool dispatch → handlers.py
+         ├─ /sse/plan/{id} → sse.py (streaming response)
+         ├─ /download/{id}/{file} → worker_fetchers.py (artifact delivery)
+         └─ /, /healthcheck, /.well-known/* → static info
+```
+
+### Artifact resolution order
+
+When fetching plan files (reports, zips), `worker_fetchers.py` tries sources in priority order:
+
+1. **DB zip snapshot** (`PlanItem.run_zip_snapshot`) — fastest, always available for completed plans
+2. **Local run directory** (`PLANEXE_RUN_DIR/{run_id}/`) — low latency if co-located
+3. **Worker HTTP** (`PLANEXE_WORKER_PLAN_URL/runs/{run_id}/...`) — remote fallback (30s timeout)
+
+This layered approach avoids blocking on the worker HTTP API when the data is already available locally or in the database.
 
 ## Connecting via stdio (Advanced / Contributor Mode)
 

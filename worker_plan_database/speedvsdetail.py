@@ -13,7 +13,7 @@ def resolve_speedvsdetail(parameters: Optional[dict[str, Any]]) -> SpeedVsDetail
 
     if isinstance(speed_vs_detail_value, str) and speed_vs_detail_value:
         for enum_value in SpeedVsDetailEnum:
-            if enum_value.value == speed_vs_detail_value:
+            if enum_value.value.lower() == speed_vs_detail_value.lower():
                 return enum_value
         logger.warning("Invalid speed_vs_detail value %r. Falling back to legacy flags.", speed_vs_detail_value)
 

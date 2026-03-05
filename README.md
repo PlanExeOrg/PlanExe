@@ -51,17 +51,18 @@ However, the output has consistent weaknesses that matter: budgets are assumed r
 
 PlanExe exposes an MCP server for AI agents at [https://mcp.planexe.org/](https://mcp.planexe.org/)
 
-Assuming you have an MCP-compatible client (OpenClaw, Cursor, Codex, LM Studio, Windsurf, Inspector).
+Assuming you have an MCP-compatible client ([Claude](https://docs.planexe.org/mcp/claude/), [Cursor](https://docs.planexe.org/mcp/cursor/), [Codex](https://docs.planexe.org/mcp/codex/), [LM Studio](https://docs.planexe.org/mcp/lm_studio/), [Windsurf](https://docs.planexe.org/mcp/windsurf/), OpenClaw, [Antigravity](https://docs.planexe.org/mcp/antigravity/)).
 
-The Tool workflow (tools-only, not MCP tasks protocol)
+The Tool workflow
 
-1. `prompt_examples`
-2. `model_profiles` (optional, helps choose `model_profile`)
-3. non-tool step: draft/approve prompt
-4. `plan_create`
-5. `plan_status` (poll every 5 minutes until done)
-6. optional if failed: `plan_retry`
-7. download the result via `plan_download` or via `plan_file_info`
+1. `example_plans` (optional, preview what PlanExe output looks like)
+2. `example_prompts`
+3. `model_profiles` (optional, helps choose `model_profile`)
+4. non-tool step: draft/approve prompt
+5. `plan_create`
+6. `plan_status` (poll every 5 minutes until done)
+7. optional if failed: `plan_retry`
+8. download the result via `plan_download` or via `plan_file_info`
 
 Concurrency note: each `plan_create` call returns a new `plan_id`; server-side global per-client concurrency is not capped, so clients should track their own parallel plans.
 
@@ -163,9 +164,9 @@ If you want artifacts saved directly to your disk from your MCP client, run the 
 
 - Setup overview: [https://docs.planexe.org/mcp/mcp_setup/](https://docs.planexe.org/mcp/mcp_setup/)
 - Tool details and flow: [https://docs.planexe.org/mcp/mcp_details/](https://docs.planexe.org/mcp/mcp_details/)
-- MCP Inspector guide: [https://docs.planexe.org/mcp/inspector/](https://docs.planexe.org/mcp/inspector/)
-- Cursor setup: [https://docs.planexe.org/mcp/cursor/](https://docs.planexe.org/mcp/cursor/)
-- Codex setup: [https://docs.planexe.org/mcp/codex/](https://docs.planexe.org/mcp/codex/)
+- Claude: [https://docs.planexe.org/mcp/claude/](https://docs.planexe.org/mcp/claude/)
+- Cursor: [https://docs.planexe.org/mcp/cursor/](https://docs.planexe.org/mcp/cursor/)
+- Codex: [https://docs.planexe.org/mcp/codex/](https://docs.planexe.org/mcp/codex/)
 - PlanExe MCP interface: [https://docs.planexe.org/mcp/planexe_mcp_interface/](https://docs.planexe.org/mcp/planexe_mcp_interface/)
 - MCP Registry publishing metadata (`server.json`): `mcp_cloud/server.json`
 - `llms.txt`: [https://mcp.planexe.org/llms.txt](https://mcp.planexe.org/llms.txt)

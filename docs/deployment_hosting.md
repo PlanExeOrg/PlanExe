@@ -17,7 +17,7 @@ This page summarizes ways to deploy PlanExe.
 
 ## Railway
 
-- See the experimental guide: [Railway](railway.md)
+- See this guide: [Railway](railway.md)
 - Expect to tune env vars and ports for production use.
 
 ---

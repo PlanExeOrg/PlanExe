@@ -80,17 +80,17 @@ class TestPlanRetryInputSchemaDefaults(unittest.TestCase):
         self.assertEqual(model_profile.get("default"), "baseline")
 
 
-class TestPromptExamplesAnnotations(unittest.TestCase):
-    def test_cloud_prompt_examples_annotations(self):
-        definition = _tool_def(cloud_app.TOOL_DEFINITIONS, "prompt_examples")
+class TestExamplePromptsAnnotations(unittest.TestCase):
+    def test_cloud_example_prompts_annotations(self):
+        definition = _tool_def(cloud_app.TOOL_DEFINITIONS, "example_prompts")
         annotations = definition.annotations or {}
         self.assertTrue(annotations.get("readOnlyHint"))
         self.assertFalse(annotations.get("destructiveHint"))
         self.assertTrue(annotations.get("idempotentHint"))
         self.assertFalse(annotations.get("openWorldHint"))
 
-    def test_local_prompt_examples_annotations(self):
-        definition = _tool_def(local_app.TOOL_DEFINITIONS, "prompt_examples")
+    def test_local_example_prompts_annotations(self):
+        definition = _tool_def(local_app.TOOL_DEFINITIONS, "example_prompts")
         annotations = definition.annotations or {}
         self.assertTrue(annotations.get("readOnlyHint"))
         self.assertFalse(annotations.get("destructiveHint"))
@@ -146,7 +146,29 @@ class TestRemainingToolAnnotations(unittest.TestCase):
                 self.assertEqual(definition.annotations, expected_annotations)
 
 
+class TestExamplePlansAnnotations(unittest.TestCase):
+    def test_cloud_example_plans_annotations(self):
+        definition = _tool_def(cloud_app.TOOL_DEFINITIONS, "example_plans")
+        annotations = definition.annotations or {}
+        self.assertTrue(annotations.get("readOnlyHint"))
+        self.assertFalse(annotations.get("destructiveHint"))
+        self.assertTrue(annotations.get("idempotentHint"))
+        self.assertFalse(annotations.get("openWorldHint"))
+
+    def test_local_example_plans_annotations(self):
+        definition = _tool_def(local_app.TOOL_DEFINITIONS, "example_plans")
+        annotations = definition.annotations or {}
+        self.assertTrue(annotations.get("readOnlyHint"))
+        self.assertFalse(annotations.get("destructiveHint"))
+        self.assertTrue(annotations.get("idempotentHint"))
+        self.assertFalse(annotations.get("openWorldHint"))
+
+
 class TestCloudToolSurfaceConsistency(unittest.TestCase):
+    def test_cloud_exposes_example_plans_tool(self):
+        cloud_tool_names = {definition.name for definition in cloud_app.TOOL_DEFINITIONS}
+        self.assertIn("example_plans", cloud_tool_names)
+
     def test_cloud_exposes_model_profiles_tool(self):
         cloud_tool_names = {definition.name for definition in cloud_app.TOOL_DEFINITIONS}
         self.assertIn("model_profiles", cloud_tool_names)
@@ -204,6 +226,10 @@ class TestCloudToolSurfaceConsistency(unittest.TestCase):
 
 
 class TestLocalToolSurfaceConsistency(unittest.TestCase):
+    def test_local_exposes_example_plans_tool(self):
+        local_tool_names = {definition.name for definition in local_app.TOOL_DEFINITIONS}
+        self.assertIn("example_plans", local_tool_names)
+
     def test_local_exposes_model_profiles_tool(self):
         local_tool_names = {definition.name for definition in local_app.TOOL_DEFINITIONS}
         self.assertIn("model_profiles", local_tool_names)

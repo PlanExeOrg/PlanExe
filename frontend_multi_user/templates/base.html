@@ -246,10 +246,9 @@
                 {% endif %}
                 <div class="site-nav-spacer"></div>
                 {% if current_user_name %}
+                    <a href="{{ url_for('account') }}" class="nav-user {% if request.endpoint == 'account' %}nav-active{% endif %}">{% if current_user.is_admin %}Account{% else %}{{ current_user_name }}{% endif %}</a>
                     {% if current_user.is_admin %}
                         <a href="{{ url_for('admin.index') }}" class="btn-nav">Admin Panel</a>
-                    {% else %}
-                        <a href="{{ url_for('account') }}" class="nav-user {% if request.endpoint == 'account' %}nav-active{% endif %}">{{ current_user_name }}</a>
                     {% endif %}
                 {% else %}
                     <a href="https://planexe.org/" target="_blank">About</a>

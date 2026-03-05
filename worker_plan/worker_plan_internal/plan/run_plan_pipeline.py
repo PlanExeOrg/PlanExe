@@ -84,7 +84,7 @@ from worker_plan_internal.schedule.project_schedule_populator import ProjectSche
 from worker_plan_internal.schedule.schedule import ProjectSchedule
 from worker_plan_internal.schedule.export_gantt_dhtmlx import ExportGanttDHTMLX
 from worker_plan_internal.schedule.export_gantt_csv import ExportGanttCSV
-from worker_plan_internal.schedule.export_gantt_mermaid import ExportGanttMermaid
+# from worker_plan_internal.schedule.export_gantt_mermaid import ExportGanttMermaid
 from worker_plan_internal.llm_util.llm_executor import LLMExecutor, LLMModelFromName, ShouldStopCallbackParameters, PipelineStopRequested
 from worker_plan_internal.llm_factory import get_llm_names_by_priority, SPECIAL_AUTO_ID, is_valid_llm_name
 from worker_plan_api.model_profile import ModelProfileEnum, normalize_model_profile
@@ -3157,7 +3157,6 @@ class WBSProjectLevel1AndLevel2AndLevel3Task(PlanTask):
 class CreateScheduleTask(PlanTask):
     def output(self):
         return {
-            'mermaid_html': self.local_target(FilenameEnum.SCHEDULE_GANTT_MERMAID_HTML),
             'dhtmlx_html': self.local_target(FilenameEnum.SCHEDULE_GANTT_DHTMLX_HTML),
             'machai_csv': self.local_target(FilenameEnum.SCHEDULE_GANTT_MACHAI_CSV)
         }
@@ -3236,13 +3235,6 @@ class CreateScheduleTask(PlanTask):
         #     project_start=project_start,
         #     task_ids_to_treat_as_project_activities=task_ids_to_treat_as_project_activities
         # )
-
-        # Export the Gantt chart to Mermaid.
-        ExportGanttMermaid.save(
-            project_schedule=project_schedule, 
-            path=self.output()['mermaid_html'].path, 
-            project_start=project_start
-        )
 
         # Export the Gantt chart to DHTMLX.
         ExportGanttDHTMLX.save(
@@ -3715,7 +3707,6 @@ class ReportTask(PlanTask):
 
         rg = ReportGenerator()
         rg.append_markdown('Executive Summary', self.input()['executive_summary']['markdown'].path)
-        rg.append_html('Gantt Overview', self.input()['create_schedule']['mermaid_html'].path)
         rg.append_html('Gantt Interactive', self.input()['create_schedule']['dhtmlx_html'].path)
         rg.append_markdown('Pitch', self.input()['pitch_markdown']['markdown'].path)
         rg.append_markdown('Project Plan', self.input()['project_plan']['markdown'].path)
@@ -4120,7 +4111,7 @@ if __name__ == '__main__':
     if speedvsdetail_value:
         found = False
         for e in SpeedVsDetailEnum:
-            if e.value == speedvsdetail_value:
+            if e.value.lower() == speedvsdetail_value.lower():
                 speedvsdetail = e
                 found = True
                 logger.info(f"Setting Speed vs Detail: {speedvsdetail}")

@@ -52,7 +52,9 @@ Schedule this weakness for the next A/B test improvement iteration.
 
 **Boost initial prompt:** The `initial prompt` has the biggest impact on the generated plan, if it's bad then the final plan is bad.
 If it's well written, concise, there is a higher chance for a realistic/feasible plan.
-Currently I use AIs to write the initial prompt for me by first having a long conversation about the topic,
+Using the current PlanExe MCP interface, and the initial prompts are of high quality, where the LLM looks at some reference prompts of what does a well formatted plan look like, and asks the user follow up questions to gather sufficient details.
+However when using the UI and users entering the prompt manually, the initial prompts are of low quality.
+Before MCP, I use AIs to write the initial prompt for me by first having a long conversation about the topic,
 and showing examples of other initial prompts that have worked well in the past.
 It may by a small tweak to the initial prompt and it yields a better plan.
 It may be an entire rewrite of the initial prompt.
@@ -93,20 +95,28 @@ Obtain info about what resources the user has available, and if they are willing
 
 # Secondary issues
 
-## Polishing of MCP flow via planexe.org
+## MCP - Multiple API keys
 
-As of 2026-feb-18, I'm focusing on improving MCP.
+As of 2026-mar-02, the user can only have 1 api key.
+Now I have quite a few places where PlanExe is integrated, and 
+I want to see stats on what api key is being used, and cost.
+Resetting the api key, and all the integrations dies.
+
+
+## MCP - Polishing of MCP flow via planexe.org
+
+As of 2026-mar-02, I'm focusing on improving MCP.
 PlanExe is already working with OpenClaw.
 But it's not as smooth as I would like.
 
 The user adds credits here. Start with 5 USD, so you can create around 3 plans.
-https://home.planexe.org/
+[https://home.planexe.org/](https://home.planexe.org/)
 
 The agents use the api here. When AI agents connect to the MCP interface, the credits are consumed. Between 1-2 USD per plan creation.
-https://mcp.planexe.org/mcp
+[https://mcp.planexe.org/mcp](https://mcp.planexe.org/mcp)
 
 
-## MCP with BYOK
+## MCP - BYOK
 
 Doing inference in the cloud cost money.
 Users can BYOK (Bring your own key), and choose what models they want to use.
@@ -126,11 +136,6 @@ Or for other AIs to assess the reasoning steps leading up to the response.
 
 Get step-by-step debugging working again.
 Now that I have switched to Docker, I have multiple python projects in the same repo, that use different incompatible packages.
-
-
-## GitHub CI that runs tests
-
-The hard thing is getting the venv's working.
 
 
 ## Table of content

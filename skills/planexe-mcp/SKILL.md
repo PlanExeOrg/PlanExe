@@ -83,9 +83,30 @@ PLANEXE_API_KEY=your_api_key
 
 ## Invoking PlanExe Tools
 
-The PlanExe MCP exposes eight core tools via the `/mcp` endpoint:
+The PlanExe MCP exposes nine core tools via the `/mcp` endpoint:
 
-### Tool 1: `prompt_examples`
+### Tool 1: `example_plans`
+
+Preview curated example plans with download links for reports and zip bundles.
+
+**No parameters required:**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "example_plans",
+    "arguments": {}
+  }
+}
+```
+
+**Returns:** List of example plans with `title`, `report_url`, and `zip_url`.
+
+---
+
+### Tool 2: `example_prompts`
 
 Get example prompts to understand what PlanExe can do.
 
@@ -96,7 +117,7 @@ Get example prompts to understand what PlanExe can do.
   "jsonrpc": "2.0",
   "method": "tools/call",
   "params": {
-    "name": "prompt_examples",
+    "name": "example_prompts",
     "arguments": {}
   }
 }
@@ -106,7 +127,7 @@ Get example prompts to understand what PlanExe can do.
 
 ---
 
-### Tool 2: `plan_create`
+### Tool 3: `plan_create`
 
 Create a new planning task. This is the main entry point for generating plans.
 
@@ -136,7 +157,7 @@ Create a new planning task. This is the main entry point for generating plans.
 
 ---
 
-### Tool 3: `plan_status`
+### Tool 4: `plan_status`
 
 Poll the status of a running planning task.
 
@@ -161,7 +182,7 @@ Poll the status of a running planning task.
 
 ---
 
-### Tool 4: `plan_stop`
+### Tool 5: `plan_stop`
 
 Stop a running planning task.
 
@@ -184,7 +205,7 @@ Stop a running planning task.
 
 ---
 
-### Tool 5: `model_profiles`
+### Tool 6: `model_profiles`
 
 Return available model profiles and their guidance before calling `plan_create`.
 
@@ -205,7 +226,7 @@ Return available model profiles and their guidance before calling `plan_create`.
 
 ---
 
-### Tool 6: `plan_file_info`
+### Tool 7: `plan_file_info`
 
 Retrieve download information for completed plan artifacts.
 
@@ -233,7 +254,7 @@ Retrieve download information for completed plan artifacts.
 
 ---
 
-### Tool 7: `plan_list`
+### Tool 8: `plan_list`
 
 List recent tasks for an authenticated user. Useful for recovering a lost `task_id`.
 
@@ -257,7 +278,7 @@ List recent tasks for an authenticated user. Useful for recovering a lost `task_
 
 ---
 
-### Tool 8: `plan_retry`
+### Tool 9: `plan_retry`
 
 Retry a failed task with an optional upgraded model profile.
 
@@ -283,16 +304,17 @@ Retry a failed task with an optional upgraded model profile.
 
 ## Typical Workflow
 
-1. Call `prompt_examples` to understand available planning scenarios
-2. Optionally call `model_profiles` to choose an appropriate `model_profile`
-3. Formulate your planning prompt
-4. Get user approval for the request
-5. Call `plan_create` with your prompt and parameters → receives `task_id`
-6. Poll `plan_status` every 5+ minutes until status is `completed` or `failed`
-7. If `failed`, optionally call `plan_retry` to requeue with a stronger model
-8. Call `plan_file_info` with completed `task_id` to get download link
-9. Download and use the generated plan
-10. If you lose a `task_id`, call `plan_list` with your `user_api_key` to recover it
+1. Optionally call `example_plans` to preview what PlanExe output looks like
+2. Call `example_prompts` to understand available planning scenarios
+3. Optionally call `model_profiles` to choose an appropriate `model_profile`
+4. Formulate your planning prompt
+5. Get user approval for the request
+6. Call `plan_create` with your prompt and parameters → receives `task_id`
+7. Poll `plan_status` every 5+ minutes until status is `completed` or `failed`
+8. If `failed`, optionally call `plan_retry` to requeue with a stronger model
+9. Call `plan_file_info` with completed `task_id` to get download link
+10. Download and use the generated plan
+11. If you lose a `task_id`, call `plan_list` with your `user_api_key` to recover it
 
 Refer to the [PlanExe API documentation](https://planexe.org/docs) for extended examples and advanced use cases.
 

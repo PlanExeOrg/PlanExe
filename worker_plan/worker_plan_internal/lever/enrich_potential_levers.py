@@ -37,6 +37,31 @@ def repair_json(raw_text: str) -> str:
     except ValueError as exc:
         logger.warning("Failed to repair LLM JSON response: %s", exc)
         return raw_text
+
+
+def normalize_characterizations_json(json_text: str) -> str:
+    try:
+        payload = json.loads(json_text)
+    except json.JSONDecodeError:
+        return json_text
+
+    if 'characterizations' not in payload:
+        for alias_key in ('levers', 'enriched_levers', 'characterized_levers', 'items'):
+            if alias_key in payload and isinstance(payload[alias_key], list):
+                payload['characterizations'] = payload.pop(alias_key)
+                logger.info("Normalized '%s' key to 'characterizations' in EnrichLeversTask output.", alias_key)
+                break
+
+    characterizations = payload.get('characterizations')
+    if isinstance(characterizations, list):
+        for idx, entry in enumerate(characterizations):
+            if not isinstance(entry, dict):
+                continue
+            if 'lever_id' not in entry and 'id' in entry:
+                entry['lever_id'] = entry.pop('id')
+                logger.info("Normalized entry-level 'id' key to 'lever_id' for characterization #%d.", idx)
+
+    return json.dumps(payload)
 # --- Pydantic Models for Data Structuring ---
 
 class InputLever(BaseModel):
@@ -151,9 +176,10 @@ class EnrichPotentialLevers:
                     raw_content = raw_response.message.content
                     logger.debug("Raw LLM response before repair: %s", raw_content)
                     repaired_text = repair_json(raw_content)
-                    logger.debug("Repaired JSON text: %s", repaired_text)
+                    normalized_text = normalize_characterizations_json(repaired_text)
+                    logger.debug("Normalized JSON text: %s", normalized_text)
                     try:
-                        batch_result = BatchCharacterizationResult.model_validate_json(repaired_text)
+                        batch_result = BatchCharacterizationResult.model_validate_json(normalized_text)
                         logger.info("Repair parse succeeded for batch %s", [lever.lever_id for lever in batch])
                     except Exception as ve:
                         logger.error("Manual JSON repair failed for batch", exc_info=True)

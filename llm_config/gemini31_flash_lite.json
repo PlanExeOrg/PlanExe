@@ -1,0 +1,21 @@
+{
+    "openrouter-google/gemini-3.1-flash-lite-preview": {
+        "comment": "Gemini 3.1 Flash Lite Preview. Released Mar 3 2026. 1,048,576 context. $0.25/M input tokens. $1.50/M output tokens. $0.50/M audio tokens. Outperforms Gemini 2.5 Flash Lite, approaches Gemini 2.5 Flash. Supports thinking levels (minimal/low/medium/high). Half the cost of Gemini 3 Flash.",
+        "priority": 1,
+        "luigi_workers": 4,
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "google/gemini-3.1-flash-lite-preview",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 0.1,
+            "timeout": 120.0,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 16384,
+            "max_retries": 5,
+            "context_window": 1048576
+        },
+        "model_info_url": "https://openrouter.ai/google/gemini-3.1-flash-lite-preview",
+        "pricing_kind": "paid"
+    }
+}

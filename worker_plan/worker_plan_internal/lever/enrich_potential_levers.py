@@ -166,14 +166,17 @@ class EnrichPotentialLevers:
                     chat_response = sllm.chat(chat_message_list)
                     batch_result = chat_response.raw
                 except Exception as e:
-                    logger.warning(f"Structured LLM call failed, attempting manual JSON repair for batch: {e}")
+                    logger.warning("Structured LLM call failed, attempting manual JSON repair for batch", exc_info=True)
                     # Fallback: Raw completion + manual repair
                     raw_response = llm.chat(chat_message_list)
-                    repaired_text = repair_json(raw_response.message.content)
+                    raw_content = raw_response.message.content
+                    logger.debug("Raw LLM response before repair: %s", raw_content)
+                    repaired_text = repair_json(raw_content)
+                    logger.debug("Repaired JSON text: %s", repaired_text)
                     try:
                         batch_result = BatchCharacterizationResult.model_validate_json(repaired_text)
                     except Exception as ve:
-                        logger.error(f"Manual JSON repair failed for batch: {ve}")
+                        logger.error("Manual JSON repair failed for batch", exc_info=True)
                         raise
 
                 metadata = dict(llm.metadata)

@@ -35,6 +35,24 @@
         "model_info_url": "https://openrouter.ai/google/gemini-2.5-flash-lite-preview-09-2025",
         "pricing_kind": "paid"
     },
+    "openrouter-google/gemini-3.1-flash-lite-preview": {
+        "comment": "Primary lane for acceptance: Gemini 3.1 Flash Lite Preview via OpenRouter.",
+        "priority": 13,
+        "luigi_workers": 4,
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "google/gemini-3.1-flash-lite-preview",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 1,
+            "timeout": 60.0,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 32000,
+            "max_retries": 5
+        },
+        "model_info_url": "https://openrouter.ai/google/gemini-3.1-flash-lite-preview",
+        "pricing_kind": "paid"
+    },
     "openrouter-minimax-m2.5": {
         "comment": "This is fast. Created Feb 12, 2026. 196,608 context. $0.30/M input tokens. $1.10/M output tokens.",
         "priority": 3,

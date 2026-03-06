@@ -15,6 +15,7 @@ The 2 first experts gets enriched with more info.
 import json
 import time
 import logging
+import re
 from math import ceil
 from uuid import uuid4
 from dataclasses import dataclass
@@ -24,6 +25,34 @@ from llama_index.core.llms import ChatMessage, MessageRole
 from worker_plan_internal.llm_util.llm_executor import LLMExecutor, PipelineStopRequested
 
 logger = logging.getLogger(__name__)
+
+
+def repair_expert_json(raw_text: str) -> str:
+    if not raw_text:
+        return raw_text
+
+    match_list = re.search(r'\[.*\]', raw_text, re.DOTALL)
+    match_obj = re.search(r'\{.*\}', raw_text, re.DOTALL)
+
+    if match_list and (not match_obj or match_list.start() < match_obj.start()):
+        raw_text = match_list.group()
+    elif match_obj:
+        raw_text = match_obj.group()
+
+    raw_text = re.sub(r'^```json\s*', '', raw_text, flags=re.MULTILINE)
+    raw_text = re.sub(r'```$', '', raw_text, flags=re.MULTILINE)
+    raw_text = raw_text.strip()
+
+    raw_text = re.sub(r',\s*([}\]])', r'\1', raw_text)
+
+    return raw_text
+
+
+class DummyChatResponse:
+    def __init__(self, raw_content: str, parsed):
+        self.message = ChatMessage(role=MessageRole.ASSISTANT, content=raw_content)
+        self.raw = parsed
+
 
 class Expert(BaseModel):
     expert_title: str = Field(description="Job title of the expert.")
@@ -179,10 +208,20 @@ class ExpertFinder:
         ]
 
         def execute_function1(llm: LLM) -> dict:
-            sllm = llm.as_structured_llm(ExpertDetails)
             logger.debug("Starting LLM chat interaction 1.")
             start_time = time.perf_counter()
-            chat_response = sllm.chat(chat_message_list1)
+            sllm = llm.as_structured_llm(ExpertDetails)
+            try:
+                chat_response = sllm.chat(chat_message_list1)
+            except Exception as exc:
+                logger.warning("Structured LLM call failed for expert finder interaction 1, attempting manual repair", exc_info=True)
+                raw_response = llm.chat(chat_message_list1)
+                raw_content = raw_response.message.content
+                logger.debug("Raw LLM response before repair: %s", raw_content)
+                repaired_text = repair_expert_json(raw_content)
+                logger.debug("Repaired expert JSON text: %s", repaired_text)
+                parsed = ExpertDetails.model_validate_json(repaired_text)
+                chat_response = DummyChatResponse(repaired_text, parsed)
             end_time = time.perf_counter()
             duration = int(ceil(end_time - start_time))
             response_byte_count = len(chat_response.message.content.encode('utf-8'))
@@ -207,6 +246,59 @@ class ExpertFinder:
             logger.error("LLM chat interaction 1 failed.", exc_info=True)
             raise ValueError("LLM chat interaction 1 failed.") from e
 
+        chat_response1 = result1["chat_response"]
+
+        # Do a follow up question, for obtaining more experts.
+        chat_message_assistant2 = ChatMessage(
+            role=MessageRole.ASSISTANT,
+            content=chat_response1.message.content,
+        )
+        chat_message_user2 = ChatMessage(
+            role=MessageRole.USER,
+            content="4 more please",
+        )
+        chat_message_list2 = chat_message_list1.copy()
+        chat_message_list2.append(chat_message_assistant2)
+        chat_message_list2.append(chat_message_user2)
+
+        def execute_function2(llm: LLM) -> dict:
+            logger.debug("Starting LLM chat interaction 2.")
+            start_time = time.perf_counter()
+            sllm = llm.as_structured_llm(ExpertDetails)
+            try:
+                chat_response = sllm.chat(chat_message_list2)
+            except Exception as exc:
+                logger.warning("Structured LLM call failed for expert finder interaction 2, attempting manual repair", exc_info=True)
+                raw_response = llm.chat(chat_message_list2)
+                raw_content = raw_response.message.content
+                logger.debug("Raw LLM response before repair: %s", raw_content)
+                repaired_text = repair_expert_json(raw_content)
+                logger.debug("Repaired expert JSON text: %s", repaired_text)
+                parsed = ExpertDetails.model_validate_json(repaired_text)
+                chat_response = DummyChatResponse(repaired_text, parsed)
+            end_time = time.perf_counter()
+            duration = int(ceil(end_time - start_time))
+            response_byte_count = len(chat_response.message.content.encode('utf-8'))
+            logger.info(f"LLM chat interaction completed in {duration} seconds. Response byte count: {response_byte_count}")
+            
+            metadata = dict(llm.metadata)
+            metadata["llm_classname"] = llm.class_name()
+            metadata["duration"] = duration
+            metadata["response_byte_count"] = response_byte_count
+            metadata["expert_count"] = len(chat_response.raw.experts)
+            
+            return {
+                "chat_response": chat_response,
+                "metadata": metadata,
+            }
+
+        try:
+            result2 = llm_executor.run(execute_function2)
+        except PipelineStopRequested:
+            raise
+        except Exception as e:
+            logger.error("LLM chat interaction 2 failed.", exc_info=True)
+            raise ValueError("LLM chat interaction 2 failed.") from e
         chat_response1 = result1["chat_response"]
 
         # Do a follow up question, for obtaining more experts.

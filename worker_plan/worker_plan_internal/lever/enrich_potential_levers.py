@@ -196,7 +196,7 @@ class EnrichPotentialLevers:
             # Configure fallback models for this specific task
             # We add a high-quality model as a final fallback for JSON robustness
             original_models = llm_executor.llm_models
-            fallback_model = LLMModelFromName("openrouter-gemini-exp-1206")
+            fallback_model = LLMModelFromName("openrouter-google/gemini-2.5-flash-lite-preview-09-2025")
             if fallback_model.name not in [getattr(m, "name", "") for m in original_models]:
                 llm_executor.llm_models = original_models + [fallback_model]
 

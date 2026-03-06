@@ -141,6 +141,7 @@ class LLMExecutor:
         overall_start_time = time.perf_counter()
 
         for index, llm_model in enumerate(self.llm_models):
+            logger.info("LLMExecutor attempt %d with model %s", index, llm_model)
             # Attempt invoking the execute_function with one LLM.
             attempt = self._try_one_attempt(llm_model, execute_function)
             self.attempts.append(attempt)

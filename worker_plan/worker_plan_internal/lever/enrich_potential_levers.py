@@ -14,7 +14,10 @@ import json
 import logging
 import os
 import re
+import traceback
 from dataclasses import dataclass
+from datetime import datetime
+from pathlib import Path
 from typing import List, Dict, Any
 
 from llama_index.core.llms import ChatMessage, MessageRole
@@ -24,6 +27,33 @@ from pydantic import BaseModel, Field, ValidationError
 from worker_plan_internal.llm_util.llm_executor import LLMExecutor, PipelineStopRequested, LLMModelFromName
 
 logger = logging.getLogger(__name__)
+
+
+def _dump_enrich_failure_artifacts(raw_text: str, repaired_text: str, normalized_text: str, exception_trace: str) -> None:
+    run_id_dir = os.environ.get("RUN_ID_DIR")
+    if not run_id_dir:
+        logger.warning("RUN_ID_DIR not set; cannot dump EnrichLevers artifacts.")
+        return
+
+    dest = Path(run_id_dir)
+    try:
+        dest.mkdir(parents=True, exist_ok=True)
+    except Exception as exc:
+        logger.error("Unable to prepare RUN_ID_DIR %s: %s", dest, exc)
+        return
+
+    suffix = datetime.now().strftime("%Y%m%d%H%M%S")
+    raw_path = dest / f"enrich_levers_raw_{suffix}.txt"
+    repaired_path = dest / f"enrich_levers_repaired_{suffix}.txt"
+    normalized_path = dest / f"enrich_levers_normalized_{suffix}.txt"
+    trace_path = dest / f"enrich_levers_traceback_{suffix}.txt"
+
+    raw_path.write_text(raw_text or "", encoding="utf-8")
+    repaired_path.write_text(repaired_text or "", encoding="utf-8")
+    normalized_path.write_text(normalized_text or "", encoding="utf-8")
+    trace_path.write_text(exception_trace or "", encoding="utf-8")
+
+    logger.info("Dumped EnrichLevers failure artifacts to %s", dest)
 
 # The number of levers to process in a single call to the LLM.
 BATCH_SIZE = 5
@@ -182,6 +212,8 @@ class EnrichPotentialLevers:
                         batch_result = BatchCharacterizationResult.model_validate_json(normalized_text)
                         logger.info("Repair parse succeeded for batch %s", [lever.lever_id for lever in batch])
                     except Exception as ve:
+                        exc_trace = traceback.format_exc()
+                        _dump_enrich_failure_artifacts(raw_content, repaired_text, normalized_text, exc_trace)
                         logger.error("Manual JSON repair failed for batch", exc_info=True)
                         raise
 

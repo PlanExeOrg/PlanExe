@@ -88,5 +88,23 @@
         },
         "model_info_url": "https://openrouter.ai/nvidia/nemotron-3-nano-30b-a3b",
         "pricing_kind": "paid"
+    },
+    "openrouter-gemini-exp-1206": {
+        "comment": "Fallback model for JSON repair. 2,097,152 context. $0.0/M input tokens. $0.0/M output tokens (free tier).",
+        "priority": 20,
+        "luigi_workers": 4,
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "google/gemini-exp-1206",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 1,
+            "timeout": 60.0,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 32000,
+            "max_retries": 5
+        },
+        "model_info_url": "https://openrouter.ai/google/gemini-exp-1206",
+        "pricing_kind": "paid"
     }
 }

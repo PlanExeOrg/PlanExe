@@ -13,6 +13,7 @@ PROMPT> python -m worker_plan_internal.lever.enrich_potential_levers
 import json
 import logging
 import os
+import re
 from dataclasses import dataclass
 from typing import List, Dict, Any
 
@@ -20,12 +21,42 @@ from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
 from pydantic import BaseModel, Field, ValidationError
 
-from worker_plan_internal.llm_util.llm_executor import LLMExecutor, PipelineStopRequested
+from worker_plan_internal.llm_util.llm_executor import LLMExecutor, PipelineStopRequested, LLMModelFromName
 
 logger = logging.getLogger(__name__)
 
 # The number of levers to process in a single call to the LLM.
 BATCH_SIZE = 5
+
+def repair_json(raw_text: str) -> str:
+    """
+    Attempts to repair common JSON issues from LLM responses:
+    1. Extracts content between the first [ and last ] or first { and last }.
+    2. Removes leading/trailing whitespace or markdown blocks.
+    3. Basic comma cleanup (trailing commas).
+    """
+    if not raw_text:
+        return raw_text
+    
+    # 1. Try to find the JSON structure
+    # Look for [ ... ] or { ... }
+    match_list = re.search(r'\[.*\]', raw_text, re.DOTALL)
+    match_obj = re.search(r'\{.*\}', raw_text, re.DOTALL)
+    
+    if match_list and (not match_obj or match_list.start() < match_obj.start()):
+        raw_text = match_list.group()
+    elif match_obj:
+        raw_text = match_obj.group()
+
+    # 2. Strip markdown code fences if they still exist
+    raw_text = re.sub(r'^```json\s*', '', raw_text, flags=re.MULTILINE)
+    raw_text = re.sub(r'```$', '', raw_text, flags=re.MULTILINE)
+    raw_text = raw_text.strip()
+
+    # 3. Handle trailing commas in objects or arrays
+    raw_text = re.sub(r',\s*([}\]])', r'\1', raw_text)
+
+    return raw_text
 
 # --- Pydantic Models for Data Structuring ---
 
@@ -77,7 +108,8 @@ You are an expert systems analyst and strategist. Your task is to enrich a list 
 2.  **`synergy_text`:** (40-60 words) Describe its most important POSITIVE interactions. How does this lever amplify or enable others? You MUST explicitly name one or two other levers from the full list that it has strong synergy with.
 3.  **`conflict_text`:** (40-60 words) Describe its most important NEGATIVE interactions or trade-offs. What difficult choices does this lever create? Which other levers does it constrain? You MUST explicitly name one or two other levers from the full list that it has a strong conflict with.
 
-You MUST respond with a single JSON object that strictly adheres to the `BatchCharacterizationResult` schema. Provide a full characterization for every single lever requested in the user prompt.
+You MUST respond with a single JSON object that strictly adheres to the `BatchCharacterizationResult` schema. Provide a full characterization for every single lever requested in the user prompt. 
+IMPORTANT: Your output must be ONLY the raw JSON object. No markdown code blocks, no preamble, no commentary. Just the JSON.
 """
 
 @dataclass
@@ -128,18 +160,40 @@ class EnrichPotentialLevers:
             chat_message_list = [system_message, ChatMessage(role=MessageRole.USER, content=user_prompt)]
 
             def execute_function(llm: LLM) -> dict:
-                sllm = llm.as_structured_llm(BatchCharacterizationResult)
-                chat_response = sllm.chat(chat_message_list)
+                # First attempt: Structured LLM call
+                try:
+                    sllm = llm.as_structured_llm(BatchCharacterizationResult)
+                    chat_response = sllm.chat(chat_message_list)
+                    batch_result = chat_response.raw
+                except Exception as e:
+                    logger.warning(f"Structured LLM call failed, attempting manual JSON repair for batch: {e}")
+                    # Fallback: Raw completion + manual repair
+                    raw_response = llm.chat(chat_message_list)
+                    repaired_text = repair_json(raw_response.message.content)
+                    try:
+                        batch_result = BatchCharacterizationResult.model_validate_json(repaired_text)
+                    except Exception as ve:
+                        logger.error(f"Manual JSON repair failed for batch: {ve}")
+                        raise
+
                 metadata = dict(llm.metadata)
                 metadata["llm_classname"] = llm.class_name()
-                return {"chat_response": chat_response, "metadata": metadata}
+                return {"batch_result": batch_result, "metadata": metadata}
+
+            # Configure fallback models for this specific task
+            # We add a high-quality model as a final fallback for JSON robustness
+            original_models = llm_executor.llm_models
+            fallback_model = LLMModelFromName("openrouter-gemini-exp-1206")
+            if fallback_model.name not in [getattr(m, "name", "") for m in original_models]:
+                llm_executor.llm_models = original_models + [fallback_model]
 
             try:
                 result = llm_executor.run(execute_function)
-                batch_result: BatchCharacterizationResult = result["chat_response"].raw
+                batch_result: BatchCharacterizationResult = result["batch_result"]
                 all_metadata.append(result["metadata"])
 
                 for char in batch_result.characterizations:
+                    logger.info(f"Processing characterization for lever_id: {char.lever_id}")
                     if char.lever_id in enriched_levers_map:
                         enriched_levers_map[char.lever_id].update({
                             'description': char.description,
@@ -154,6 +208,9 @@ class EnrichPotentialLevers:
             except Exception as e:
                 logger.error(f"LLM batch interaction failed for levers {[lever.lever_id for lever in batch]}.", exc_info=True)
                 raise ValueError("LLM batch interaction failed.") from e
+            finally:
+                # Restore original models to avoid side effects
+                llm_executor.llm_models = original_models
 
         final_characterized_levers = []
         for lever_id, data in enriched_levers_map.items():

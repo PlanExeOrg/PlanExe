@@ -108,7 +108,7 @@ You are an expert systems analyst and strategist. Your task is to enrich a list 
 2.  **`synergy_text`:** (40-60 words) Describe its most important POSITIVE interactions. How does this lever amplify or enable others? You MUST explicitly name one or two other levers from the full list that it has strong synergy with.
 3.  **`conflict_text`:** (40-60 words) Describe its most important NEGATIVE interactions or trade-offs. What difficult choices does this lever create? Which other levers does it constrain? You MUST explicitly name one or two other levers from the full list that it has a strong conflict with.
 
-You MUST respond with a single JSON object that strictly adheres to the `BatchCharacterizationResult` schema. Provide a full characterization for every single lever requested in the user prompt. 
+You MUST respond with a single JSON object that strictly adheres to the `BatchCharacterizationResult` schema. Provide a full characterization for every single lever requested in the user prompt. Trailing commas are not allowed. 
 IMPORTANT: Your output must be ONLY the raw JSON object. No markdown code blocks, no preamble, no commentary. Just the JSON.
 """
 

@@ -9,5 +9,11 @@ def test_schema_invalid_still_fails():
     with pytest.raises(ValidationError):
         BatchCharacterizationResult.model_validate_json(repaired)
 
+
+def test_malformed_not_repairable():
+    raw = '{ NOT JSON'
+    with pytest.raises(ValueError):
+        repaired_json_str(raw)
+
 if __name__ == "__main__":
     pytest.main([__file__])

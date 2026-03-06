@@ -12,6 +12,7 @@ import logging
 from math import ceil
 from dataclasses import dataclass
 from pydantic import BaseModel, Field
+from pydantic import field_validator
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
 
@@ -30,6 +31,13 @@ class InternalGovernanceBody(BaseModel):
     meeting_cadence: str = Field(description="How often this internal body meets.")
     typical_agenda_items: list[str] = Field(description="Example recurring items for this internal body's meetings.")
     escalation_path: str = Field(description="Where or to which *other internal body or senior project/organization role* issues exceeding authority are escalated.")
+
+    @field_validator("decision_rights", "decision_mechanism", "meeting_cadence", "escalation_path", mode="before")
+    @classmethod
+    def coerce_list_to_str(cls, v):
+        if isinstance(v, list):
+            return "\n".join(str(x) for x in v if x is not None).strip()
+        return v
 
 class DocumentDetails(BaseModel):
     internal_governance_bodies: list[InternalGovernanceBody] = Field(

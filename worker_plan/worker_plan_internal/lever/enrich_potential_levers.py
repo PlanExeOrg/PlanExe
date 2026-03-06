@@ -56,6 +56,16 @@ def repair_json(raw_text: str) -> str:
     # 3. Handle trailing commas in objects or arrays
     raw_text = re.sub(r',\s*([}\]])', r'\1', raw_text)
 
+    # 4. Normalize levers -> characterizations if LLM mislabels the key
+    try:
+        parsed = json.loads(raw_text)
+    except json.JSONDecodeError:
+        return raw_text
+
+    if isinstance(parsed, dict) and 'characterizations' not in parsed and 'levers' in parsed:
+        parsed['characterizations'] = parsed.pop('levers')
+        raw_text = json.dumps(parsed)
+
     return raw_text
 
 # --- Pydantic Models for Data Structuring ---

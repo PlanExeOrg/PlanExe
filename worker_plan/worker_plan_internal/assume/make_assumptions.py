@@ -7,6 +7,7 @@ import json
 import time
 from datetime import datetime
 import logging
+import re
 from math import ceil
 from typing import Optional
 from dataclasses import dataclass
@@ -15,6 +16,34 @@ from llama_index.core.llms.llm import LLM
 from llama_index.core.llms import ChatMessage, MessageRole
 
 logger = logging.getLogger(__name__)
+
+
+def repair_make_assumptions_json(raw_text: str) -> str:
+    if not raw_text:
+        return raw_text
+
+    match_list = re.search(r'\[.*\]', raw_text, re.DOTALL)
+    match_obj = re.search(r'\{.*\}', raw_text, re.DOTALL)
+
+    if match_list and (not match_obj or match_list.start() < match_obj.start()):
+        raw_text = match_list.group()
+    elif match_obj:
+        raw_text = match_obj.group()
+
+    raw_text = re.sub(r'^```json\s*', '', raw_text, flags=re.MULTILINE)
+    raw_text = re.sub(r'```$', '', raw_text, flags=re.MULTILINE)
+    raw_text = raw_text.strip()
+
+    raw_text = re.sub(r',\s*([}\]])', r'\1', raw_text)
+
+    return raw_text
+
+
+class DummyChatResponse:
+    def __init__(self, raw_content: str, parsed):
+        self.message = ChatMessage(role=MessageRole.ASSISTANT, content=raw_content)
+        self.raw = parsed
+
 
 class QuestionAssumptionItem(BaseModel):
     item_index: int = Field(description="Index in the list")
@@ -249,9 +278,19 @@ class MakeAssumptions:
         try:
             chat_response = sllm.chat(chat_message_list)
         except Exception as e:
-            logger.debug(f"LLM chat interaction failed: {e}")
-            logger.error("LLM chat interaction failed.", exc_info=True)
-            raise ValueError("LLM chat interaction failed.") from e
+            logger.warning("Structured LLM call failed for MakeAssumptions, attempting manual repair", exc_info=True)
+            raw_response = llm.chat(chat_message_list)
+            raw_content = raw_response.message.content
+            logger.debug("Raw LLM response before repair: %s", raw_content)
+            repaired_text = repair_make_assumptions_json(raw_content)
+            logger.debug("Repaired MakeAssumptions JSON text: %s", repaired_text)
+            parsed = ExpertDetails.model_validate_json(repaired_text)
+            chat_response = DummyChatResponse(repaired_text, parsed)
+
+        end_time = time.perf_counter()
+        duration = int(ceil(end_time - start_time))
+        response_byte_count = len(chat_response.message.content.encode('utf-8'))
+        logger.info(f"LLM chat interaction completed in {duration} seconds. Response byte count: {response_byte_count}")
         end_time = time.perf_counter()
         duration = int(ceil(end_time - start_time))
         response_byte_count = len(chat_response.message.content.encode('utf-8'))

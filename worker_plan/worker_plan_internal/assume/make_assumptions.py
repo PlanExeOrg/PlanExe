@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from pydantic import BaseModel, Field
 from llama_index.core.llms.llm import LLM
 from llama_index.core.llms import ChatMessage, MessageRole
+from worker_plan_internal.utils.json_repair import repaired_json_str
 
 logger = logging.getLogger(__name__)
 
@@ -21,23 +22,11 @@ logger = logging.getLogger(__name__)
 def repair_make_assumptions_json(raw_text: str) -> str:
     if not raw_text:
         return raw_text
-
-    match_list = re.search(r'\[.*\]', raw_text, re.DOTALL)
-    match_obj = re.search(r'\{.*\}', raw_text, re.DOTALL)
-
-    if match_list and (not match_obj or match_list.start() < match_obj.start()):
-        raw_text = match_list.group()
-    elif match_obj:
-        raw_text = match_obj.group()
-
-    raw_text = re.sub(r'^```json\s*', '', raw_text, flags=re.MULTILINE)
-    raw_text = re.sub(r'```$', '', raw_text, flags=re.MULTILINE)
-    raw_text = raw_text.strip()
-
-    raw_text = re.sub(r',\s*([}\]])', r'\1', raw_text)
-
-    return raw_text
-
+    try:
+        return repaired_json_str(raw_text)
+    except ValueError as exc:
+        logger.warning("Failed to repair assumptions JSON: %s", exc)
+        return raw_text
 
 class DummyChatResponse:
     def __init__(self, raw_content: str, parsed):

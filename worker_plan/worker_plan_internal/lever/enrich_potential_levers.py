@@ -28,46 +28,15 @@ logger = logging.getLogger(__name__)
 # The number of levers to process in a single call to the LLM.
 BATCH_SIZE = 5
 
+from worker_plan_internal.utils.json_repair import repaired_json_str
 def repair_json(raw_text: str) -> str:
-    """
-    Attempts to repair common JSON issues from LLM responses:
-    1. Extracts content between the first [ and last ] or first { and last }.
-    2. Removes leading/trailing whitespace or markdown blocks.
-    3. Basic comma cleanup (trailing commas).
-    """
     if not raw_text:
         return raw_text
-    
-    # 1. Try to find the JSON structure
-    # Look for [ ... ] or { ... }
-    match_list = re.search(r'\[.*\]', raw_text, re.DOTALL)
-    match_obj = re.search(r'\{.*\}', raw_text, re.DOTALL)
-    
-    if match_list and (not match_obj or match_list.start() < match_obj.start()):
-        raw_text = match_list.group()
-    elif match_obj:
-        raw_text = match_obj.group()
-
-    # 2. Strip markdown code fences if they still exist
-    raw_text = re.sub(r'^```json\s*', '', raw_text, flags=re.MULTILINE)
-    raw_text = re.sub(r'```$', '', raw_text, flags=re.MULTILINE)
-    raw_text = raw_text.strip()
-
-    # 3. Handle trailing commas in objects or arrays
-    raw_text = re.sub(r',\s*([}\]])', r'\1', raw_text)
-
-    # 4. Normalize levers -> characterizations if LLM mislabels the key
     try:
-        parsed = json.loads(raw_text)
-    except json.JSONDecodeError:
+        return repaired_json_str(raw_text)
+    except ValueError as exc:
+        logger.warning("Failed to repair LLM JSON response: %s", exc)
         return raw_text
-
-    if isinstance(parsed, dict) and 'characterizations' not in parsed and 'levers' in parsed:
-        parsed['characterizations'] = parsed.pop('levers')
-        raw_text = json.dumps(parsed)
-
-    return raw_text
-
 # --- Pydantic Models for Data Structuring ---
 
 class InputLever(BaseModel):

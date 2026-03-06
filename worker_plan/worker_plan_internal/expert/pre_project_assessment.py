@@ -46,7 +46,10 @@ class FeedbackItem(BaseModel):
 class Expert(BaseModel):
     expert_title: str = Field(description="Job title of the expert.")
     expert_full_name: str = Field(description="First name and last name of the expert.")
-    feedback_item_list: List[FeedbackItem] = Field(description="List of feedback items.")
+    feedback_item_list: List[FeedbackItem] = Field(
+        default_factory=list,
+        description="List of feedback items.",
+    )
 
 class ExpertDetails(BaseModel):
     expert1: Expert = Field(description="Perspective from expert 1.")

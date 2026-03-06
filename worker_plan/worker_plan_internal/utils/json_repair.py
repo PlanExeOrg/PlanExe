@@ -14,13 +14,11 @@ def cleanup_json_text(raw_text: str) -> str:
     if not raw_text:
         return raw_text
 
-    match_list = re.search(r'\[.*\]', raw_text, re.DOTALL)
-    match_obj = re.search(r'\{.*\}', raw_text, re.DOTALL)
-
-    if match_list and (not match_obj or match_list.start() < match_obj.start()):
-        raw_text = match_list.group()
-    elif match_obj:
-        raw_text = match_obj.group()
+    match = MATCH_JSON.search(raw_text)
+    if match:
+        raw_text = match.group()
+    else:
+        return raw_text
 
     raw_text = re.sub(r'^```json\s*', '', raw_text, flags=re.MULTILINE)
     raw_text = re.sub(r'```$', '', raw_text, flags=re.MULTILINE)

@@ -1,9 +1,12 @@
 import json
+import logging
 import re
+
+logger = logging.getLogger("worker_plan.json_repair")
 
 try:
     import dirtyjson
-except ImportError:  # dirtyjson may not be installed yet
+except ImportError:
     dirtyjson = None
 
 MATCH_JSON = re.compile(r"(\[.*\]|\{.*\})", flags=re.DOTALL)
@@ -20,7 +23,7 @@ def cleanup_json_text(raw_text: str) -> str:
     else:
         return raw_text
 
-    raw_text = re.sub(r'^```json\s*', '', raw_text, flags=re.MULTILINE)
+    raw_text = re.sub(r'^```json\\s*', '', raw_text, flags=re.MULTILINE)
     raw_text = re.sub(r'```$', '', raw_text, flags=re.MULTILINE)
     raw_text = raw_text.strip()
 
@@ -52,4 +55,4 @@ def parse_tolerant_json(raw_text: str) -> tuple[str, dict]:
 
 def repaired_json_str(raw_text: str) -> str:
     cleaned, parsed = parse_tolerant_json(raw_text)
-    return json.dumps(parsed)
+    return json.dumps(parsed, separators=(',', ':'), ensure_ascii=False)

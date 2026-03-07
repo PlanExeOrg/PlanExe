@@ -51,8 +51,8 @@ class Expert(BaseModel):
 class ExpertDetails(BaseModel):
     expert1: Expert = Field(description="Perspective from expert 1.")
     expert2: Expert = Field(description="Perspective from expert 2.")
-    combined_summary: str = Field(default="", description="Summary of the feedback from both experts.")
-    go_no_go_recommendation: str = Field(default="", description="A 'Go' or 'No Go' recommendation, with an explanation.")
+    combined_summary: Optional[str] = Field(default="", description="Summary of the feedback from both experts.")
+    go_no_go_recommendation: Optional[str] = Field(default="", description="A 'Go' or 'No Go' recommendation, with an explanation.")
 
 # Prompt made with o1mini
 EXPERT_BROAD_SYSTEM_PROMPT_1 = """

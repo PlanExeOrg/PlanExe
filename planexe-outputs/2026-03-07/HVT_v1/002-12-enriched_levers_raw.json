@@ -1,0 +1,144 @@
+{
+  "metadata": [
+    {
+      "context_window": 8192,
+      "num_output": 4096,
+      "is_chat_model": true,
+      "is_function_calling_model": false,
+      "model_name": "qwen/qwen3.5-35b-a3b",
+      "system_role": "system",
+      "llm_classname": "custom_llm"
+    },
+    {
+      "context_window": 8192,
+      "num_output": 4096,
+      "is_chat_model": true,
+      "is_function_calling_model": false,
+      "model_name": "qwen/qwen3.5-35b-a3b",
+      "system_role": "system",
+      "llm_classname": "custom_llm"
+    }
+  ],
+  "characterized_levers": [
+    {
+      "lever_id": "0afd4006-54c4-4e14-8bce-64049e950c3e",
+      "name": "Regulatory Compliance Strategy",
+      "consequences": "Immediate: FAA approval delays extend launch by 6 months \u2192 Systemic: Insurance costs rise 40% due to public liability risk \u2192 Strategic: Restricts expansion to non-federal controlled airspace zones.",
+      "options": [
+        "Operate under existing recreational drone waivers with manual spotters",
+        "Secure commercial Part 107 licenses for expanded flight envelopes",
+        "Establish private airfield status to bypass public airspace restrictions"
+      ],
+      "review": "Controls Regulatory Compliance vs. Operational Flexibility. Weakness: The options fail to consider the impact of sudden airspace lockdowns during national events.",
+      "deduplication_justification": "This lever represents the broad Regulatory Compliance Strategy. It encompasses FAA approvals, insurance costs, and airspace restrictions comprehensively. Other regulatory levers focus on narrower aspects of this same domain. By keeping this general category, we maintain a high-level view of legal constraints without fragmenting the strategic analysis across multiple redundant compliance categories.",
+      "description": "The Regulatory Compliance Strategy governs legal adherence for drone operations within public and private airspace, ensuring all flight activities meet federal aviation standards. Its primary objective is mitigating liability risks while maintaining operational continuity through proper licensing and safety protocols. Success is measured by incident rates below zero and the maintenance of valid commercial airworthiness certifications. This lever dictates permissible flight envelopes, directly influencing hardware deployment capabilities and venue selection constraints to ensure sustainable business operations without regulatory shutdowns or fines.",
+      "synergy_text": "Regulatory Compliance works hand-in-hand with Venue Infrastructure Strategy because zoning laws dictate where drones can legally fly, while Technology Integration relies on compliant flight software for safety certification. Aligning these ensures the physical space supports authorized airspace usage without conflict, enabling smoother operations and reducing legal friction during expansion phases or peak operational hours.",
+      "conflict_text": "This lever creates tension with Revenue Scalability Strategy as strict compliance limits rapid expansion into new territories requiring complex permits. Overemphasis on safety restrictions may constrain the ability to scale quickly, potentially slowing market penetration compared to competitors operating under looser recreational waivers or private airfield exemptions that allow faster operational rollout."
+    },
+    {
+      "lever_id": "851b3708-3625-42ef-ab49-cec8f185dc04",
+      "name": "Venue Infrastructure Strategy",
+      "consequences": "Immediate: Seasonal weather reduces operating days by 35% annually \u2192 Systemic: Fixed asset utilization drops below break-even thresholds \u2192 Strategic: Forces diversification into indoor simulation products.",
+      "options": [
+        "Rent seasonal outdoor fields during summer months only",
+        "Lease year-round industrial warehouse space with safety modifications",
+        "Utilize modular inflatable structures for rapid deployment and zero-permit flexibility"
+      ],
+      "review": "Controls Capital Expenditure vs. Operational Continuity. Weakness: The options fail to consider the logistical complexity of transporting heavy infrastructure between temporary sites.",
+      "deduplication_justification": "This lever covers the physical Venue Infrastructure Strategy, including weather impacts and facility types. It is distinct from site selection as it focuses on operational continuity and capital expenditure for structures. This general classification retains essential details about seasonal utilization and indoor diversification requirements without needing a separate venue-specific lever.",
+      "description": "Venue Infrastructure Strategy manages the acquisition and modification of physical locations required for safe drone engagement arenas. It determines spatial capacity, safety buffer zones, and environmental controls necessary for player immersion and equipment protection. Key metrics include facility utilization rates and maintenance costs per square foot. This strategy balances accessibility with security requirements, ensuring the physical environment supports high-intensity gameplay while protecting spectators and bystanders from accidental drone collisions or debris during active sessions.",
+      "synergy_text": "Venue Infrastructure directly enables Technology Integration by providing the necessary containment zones for autonomous flight testing and safe player movement corridors. It also synergizes with Human Capital Deployment Model, as staff training areas must be integrated into the physical layout to ensure efficient safety monitoring during peak operational times without obstructing gameplay flow or customer pathways.",
+      "conflict_text": "Venue Infrastructure conflicts with Revenue Scalability Strategy because securing large outdoor arenas is capital-intensive and geographically restrictive, limiting how quickly new locations can be opened. High CAPEX requirements for permanent structures reduce flexibility compared to modular options, potentially slowing down the rollout of franchise models required for rapid market expansion across diverse geographic regions."
+    },
+    {
+      "lever_id": "e710191a-4395-40a1-917f-ec637d94b5b5",
+      "name": "Technology Integration Strategy",
+      "consequences": "Immediate: Sensor latency spikes cause player disengagement rates of 15% \u2192 Systemic: Hardware maintenance costs erode margins by 20% year-over-year \u2192 Strategic: Dictates reliance on proprietary vs. off-the-shelf supply chains.",
+      "options": [
+        "Use off-the-shelf quadcopters with standard obstacle avoidance",
+        "Integrate custom collision sensors and real-time player tracking telemetry",
+        "Deploy autonomous AI swarm drones for adaptive pursuit algorithms"
+      ],
+      "review": "Controls User Experience Quality vs. Hardware Maintenance Costs. Weakness: The options fail to account for the cybersecurity risks associated with connected player tracking systems.",
+      "deduplication_justification": "This lever defines the Technology Integration Strategy, covering latency, maintenance costs, and supply chains. It is broader than specific hardware or engagement stacks. Keeping this lever ensures we address system-wide technical dependencies and proprietary versus off-the-shelf decisions holistically rather than fragmenting technology risks across multiple narrow operational levers.",
+      "description": "Technology Integration Strategy oversees the selection and deployment of drone hardware, telemetry systems, and safety sensors essential for gameplay mechanics. Its objective is maximizing flight reliability while minimizing collision risks through real-time tracking and obstacle avoidance capabilities. Success metrics include system uptime percentages and latency rates below critical thresholds. This lever dictates the fidelity of the simulation experience, ensuring players perceive realistic pursuit dynamics without compromising physical safety protocols during high-speed evasion maneuvers within the arena environment.",
+      "synergy_text": "Technology Integration synergizes strongly with Immersive Narrative Architecture by providing the technical backbone required for dynamic story triggers and player tracking data. It also reinforces Regulatory Compliance Strategy, as certified sensors ensure autonomous systems maintain safe distances from humans, allowing for more complex AI behaviors that enhance player immersion while adhering to strict aviation safety standards mandated for public operations.",
+      "conflict_text": "Technology Integration conflicts with Revenue & Pricing Model because advanced custom collision sensors and swarm AI drive up initial hardware costs significantly. High-tech requirements force ticket prices upward, potentially pricing out casual recreational players and limiting the volume of daily sessions needed to achieve break-even targets required for early operational sustainability in a competitive entertainment market."
+    },
+    {
+      "lever_id": "bcdd00c0-0f81-4d65-84e0-99b14406b7d0",
+      "name": "Narrative Branding Strategy",
+      "consequences": "Immediate: Military branding scrutiny reduces youth participation by 30% \u2192 Systemic: Public perception shifts alter brand equity significantly over time \u2192 Strategic: Forces pivot toward tactical sport rather than combat simulation.",
+      "options": [
+        "Market as generic tactical sport avoiding military references",
+        "Partner with veterans groups to legitimize combat simulation narrative",
+        "Develop fictional sci-fi universe to decouple from real-world politics"
+      ],
+      "review": "Controls Authenticity Appeal vs. Public Perception Risk. Weakness: The options fail to consider the legal implications of using 'US Military' terminology in marketing materials.",
+      "deduplication_justification": "This lever addresses Narrative Branding Strategy, focusing on external perception and legal risks regarding military terminology. It is distinct from internal narrative design or product immersion mechanics. Keeping this ensures marketing risks are analyzed separately from content development costs, preserving the distinction between public-facing brand equity and player experience retention.",
+      "description": "Narrative Branding Strategy defines how the HVT concept is communicated to the public, balancing military themes with commercial safety perceptions. It governs marketing materials, partnership alignments, and thematic consistency across all touchpoints. Objectives include maximizing customer acquisition while minimizing backlash regarding violence or politics. Success metrics involve brand sentiment scores and conversion rates from marketing channels. This lever shapes public perception of the venue as a safe recreational activity rather than violent military training, crucial for community acceptance and insurance approval processes.",
+      "synergy_text": "Narrative Branding amplifies Immersive Narrative Architecture by ensuring external marketing promises match internal gameplay storytelling expectations. It also supports Revenue Scalability Strategy as a strong brand identity allows for premium corporate packages and licensing opportunities, enabling the IP to expand beyond single-location operations into broader entertainment franchises without losing core thematic integrity during growth phases.",
+      "conflict_text": "Narrative Branding creates friction with Regulatory Compliance Strategy since emphasizing military combat simulation may attract stricter aviation authority scrutiny regarding public safety concerns. Aggressive marketing around \"combat\" themes can trigger community backlash or regulatory hurdles, forcing a pivot to generic tactical sports narratives that reduce thematic impact and potentially lower engagement from the target military enthusiast demographic seeking authentic experiences."
+    },
+    {
+      "lever_id": "17966e84-5e16-4903-853c-4f53158e00ff",
+      "name": "Revenue Scalability Strategy",
+      "consequences": "Immediate: Per-session pricing caps yield at $50/player revenue \u2192 Systemic: High operational overhead reduces net margin below 10% annually \u2192 Strategic: Requires ancillary data monetization for profitability.",
+      "options": [
+        "Charge per-session ticket fees for individual players",
+        "Launch corporate team-building packages with premium branding rights",
+        "Implement franchise model licensing the HVT IP to regional operators"
+      ],
+      "review": "Controls Short-Term Cash Flow vs. Long-Term Brand Control. Weakness: The options fail to consider the capital requirements needed for franchising support infrastructure.",
+      "deduplication_justification": "This lever outlines the Revenue Scalability Strategy, including franchising and data monetization. It encompasses broader financial growth models beyond simple pricing. Keeping this lever allows us to analyze long-term profitability and expansion potential without duplicating analysis on basic transactional revenue or subscription structures found in other redundant financial levers.",
+      "description": "Revenue Scalability Strategy outlines growth pathways beyond single-location ticket sales, focusing on diversifying income streams through partnerships and licensing models. It aims to increase lifetime value per customer and reduce dependency on foot traffic volume alone. Key success metrics include franchise adoption rates and corporate contract retention percentages. This lever determines whether the business remains a local venue or evolves into a replicable national brand, requiring structural changes in operations and management that support decentralized revenue generation without compromising core service quality standards.",
+      "synergy_text": "Revenue Scalability works effectively with Narrative Branding Strategy because a strong IP identity is required to license successfully to regional operators. It also complements Revenue & Pricing Model by establishing tiered pricing structures that support premium corporate packages, ensuring consistent revenue streams even when individual foot traffic fluctuates due to seasonal weather or local economic conditions affecting demand patterns significantly.",
+      "conflict_text": "This lever conflicts with Venue Infrastructure Strategy as rapid scaling requires securing multiple physical locations simultaneously, which strains capital reserves and management bandwidth. Expanding into franchise models demands standardized venues that may not be feasible in every market due to zoning or availability constraints, creating a bottleneck where revenue growth potential outpaces the ability to physically replicate the operational environment safely across new regions."
+    },
+    {
+      "lever_id": "3bdc2d30-8ccd-4c12-8f42-47cedb40db15",
+      "name": "Immersive Narrative Architecture",
+      "consequences": "Immediate: $120k initial narrative design investment costs incurred upfront \u2192 Systemic: 6-month content refresh cycle required to maintain high engagement levels \u2192 Strategic: diminishing marginal return on engagement as player interest wanes significantly over time.",
+      "options": [
+        "Executing static scenario playbooks with manual adjudication and referees",
+        "Activating dynamic AI-driven missions based on real-time player behavior",
+        "Establishing persistent universe storytelling with cross-venue continuity for retention"
+      ],
+      "review": "Controls Content Cost vs. Retention Rates. Weakness: The options fail to consider seasonal event integration.",
+      "deduplication_justification": "This lever covers Immersive Narrative Architecture and content costs. It focuses on internal product design cycles and retention mechanics. Keeping it separate from branding allows for distinct analysis of content investment versus external market perception, ensuring that narrative refresh budgets are evaluated independently of public relations risks.",
+      "description": "Immersive Narrative Architecture defines the storytelling framework and scenario design for HVT gameplay. It controls how players engage with the High Value Target simulation through static playbooks, dynamic AI-driven missions, or persistent universe continuity across locations. This lever shapes player engagement depth and emotional investment in the military-themed experience. Key success metrics include player retention rates, session duration averages, repeat visit frequency, and customer satisfaction scores regarding narrative immersion quality. The chosen architecture fundamentally determines whether HVT operates as episodic entertainment or a persistent competitive ecosystem.",
+      "synergy_text": "",
+      "conflict_text": ""
+    },
+    {
+      "lever_id": "e4967109-98ee-461d-8300-aa403299b704",
+      "name": "Human Capital Deployment Model",
+      "consequences": "Immediate: $3k specialized safety certification training costs required for every employee \u2192 Systemic: 25% staff turnover in first year challenges overall operational consistency standards \u2192 Strategic: liability insurance premium escalation increases overhead burden on already thin operating margins.",
+      "options": [
+        "Training general retail staff with basic safety protocols and oversight",
+        "Hiring certified flight instructors exclusively for all drone operations management",
+        "Deploying hybrid human-AI monitoring control centers for operational oversight"
+      ],
+      "review": "Controls Training Cost vs. Operational Consistency. Weakness: The options fail to consider psychological stress management.",
+      "deduplication_justification": "This lever focuses on Human Capital Deployment, specifically training costs and staff turnover. It is unique among the levers as it addresses labor management rather than product or regulation. Keeping this lever ensures personnel risks are evaluated independently, preventing the conflation of staffing liabilities with operational safety or financial scalability concerns.",
+      "description": "Human Capital Deployment Model determines staffing strategies for safe and effective drone operations oversight. It controls whether the venue employs general retail staff, certified flight instructors, or hybrid human-AI monitoring control centers. This lever directly impacts operational safety records, liability exposure, and customer service quality during sessions. Key success metrics include incident rates per 1000 hours, labor cost efficiency ratios, and customer satisfaction scores regarding staff professionalism. The deployment model fundamentally shapes both operational risk profile and scalability potential for the venue.",
+      "synergy_text": "",
+      "conflict_text": ""
+    },
+    {
+      "lever_id": "d739d0bb-f540-44c5-8cf9-c3dec9c9ab07",
+      "name": "Revenue & Pricing Model",
+      "consequences": "Immediate: Shift from transactional pricing reduces average order value by 10% \u2192 Systemic: 15% increase in customer retention rates over twelve months \u2192 Strategic: Predictable cash flow reducing reliance on volatile venture capital.",
+      "options": [
+        "Charge standard pay-per-session fees with optional equipment rental add-ons.",
+        "Introduce tiered membership subscriptions offering unlimited weekly access and gear discounts.",
+        "Launch a franchise licensing model allowing third parties to operate regional HVT venues."
+      ],
+      "review": "Controls Volume vs. Premium Experience. Weakness: The options fail to consider the high churn rate typical of novelty-based entertainment sectors.",
+      "deduplication_justification": "Missing deduplication justification. Keeping this lever.",
+      "description": "Revenue & Pricing Model establishes the monetization framework for HVT operations, controlling how customers pay for gameplay access and services. It determines whether revenue comes from standard session fees with rentals, tiered memberships, or franchise licensing models. This lever directly influences customer acquisition costs, lifetime value calculations, and cash flow predictability. Key success metrics include average revenue per user, subscription retention rates, franchise expansion velocity, and overall profit margins across different pricing tiers.",
+      "synergy_text": "",
+      "conflict_text": ""
+    }
+  ]
+}

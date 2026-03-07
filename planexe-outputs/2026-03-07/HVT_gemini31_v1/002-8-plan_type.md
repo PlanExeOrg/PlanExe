@@ -1,0 +1,3 @@
+This plan requires one or more physical locations. It cannot be executed digitally.
+
+**Explanation:** The development and operation of a drone-based combat simulation game is inherently physical. It requires securing and preparing a large outdoor arena, purchasing and maintaining physical drone hardware, ensuring safety compliance for real-world flight, and managing the physical presence of players on-site for the simulation.

@@ -1,0 +1,8 @@
+- The initial launch requires $450,000 in seed capital for infrastructure and a 20-unit drone fleet.
+- The total lead time from site acquisition to the first public session is 9 months.
+- Each site requires 4 full-time staff: one manager, two technicians, and one safety officer.
+- All drones will utilize FAA-compliant Remote ID broadcast modules and software-defined geofencing.
+- Drones will feature physical propeller shrouds and hardware-level kill switches for collision prevention.
+- Facilities will use low-noise propeller designs and a centralized battery recycling program.
+- The project will host quarterly community open days to maintain transparent local relations.
+- The system will use a local-area network to minimize latency for haptic feedback responsiveness.

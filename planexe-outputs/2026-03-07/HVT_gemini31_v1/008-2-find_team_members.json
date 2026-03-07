@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "category": "Aviation Regulatory & Compliance Officer",
+    "explanation": "Manages the complex legal landscape of FAA Part 107/89, FSDO safety cases, and local zoning permits to ensure the facility remains operational.",
+    "consequences": "High risk of immediate fleet grounding, legal fines, and permanent facility shutdown due to non-compliance with federal aviation laws.",
+    "count": "1"
+  },
+  {
+    "id": 2,
+    "category": "Drone Systems & Robotics Engineer",
+    "explanation": "Oversees the technical integrity of the drone fleet, including hardware-level kill switches, proximity sensors, and autonomous flight logic.",
+    "consequences": "Frequent system failures, mid-air collisions, and inability to maintain the 50% downtime reduction target, leading to revenue loss.",
+    "count": "min 2, max 3, depending on fleet size and maintenance frequency requirements."
+  },
+  {
+    "id": 3,
+    "category": "Arena Infrastructure & Safety Architect",
+    "explanation": "Designs and maintains the physical urban-mimicry arena, safety netting, and containment systems to ensure player safety during high-speed drone pursuits.",
+    "consequences": "Increased risk of catastrophic player injury, failure to meet insurance safety standards, and potential for drones to exit the flight zone.",
+    "count": "1"
+  },
+  {
+    "id": 4,
+    "category": "Network & Telemetry Specialist",
+    "explanation": "Deploys and monitors the private 5G/CBRS network to ensure sub-20ms latency, preventing signal interference and ensuring responsive haptic feedback.",
+    "consequences": "High latency and RF interference leading to unpredictable drone behavior, safety incidents, and poor player immersion.",
+    "count": "1"
+  },
+  {
+    "id": 5,
+    "category": "Site Operations & Experience Manager",
+    "explanation": "Coordinates daily operations, manages player throughput, and oversees the implementation of the tiered membership and league ranking systems.",
+    "consequences": "Inefficient player turnover, poor customer service, and failure to achieve the 40% repeat-customer rate necessary for financial sustainability.",
+    "count": "1"
+  },
+  {
+    "id": 6,
+    "category": "Risk Management & Insurance Liaison",
+    "explanation": "Acts as the primary contact for specialty insurance brokers to secure and maintain liability coverage for autonomous drone-human interaction.",
+    "consequences": "Inability to secure affordable insurance, rendering the project financially unviable and legally exposed to catastrophic litigation.",
+    "count": "1"
+  },
+  {
+    "id": 7,
+    "category": "Community & Public Relations Coordinator",
+    "explanation": "Manages community outreach, noise mitigation reporting, and public perception to prevent backlash against the military-style theme.",
+    "consequences": "Negative media coverage, community-led zoning challenges, and potential forced relocation of the facility.",
+    "count": "1"
+  },
+  {
+    "id": 8,
+    "category": "Business Development & Corporate Sales Lead",
+    "explanation": "Focuses on high-margin corporate team-building partnerships and long-term revenue growth to ensure the project breaks even within 18 months.",
+    "consequences": "Over-reliance on low-margin recreational sessions, leading to cash flow insolvency and failure to meet the 18-month break-even goal.",
+    "count": "1"
+  }
+]

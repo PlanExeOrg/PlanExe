@@ -1,0 +1,226 @@
+[
+  {
+    "id": "2ed098db-fae4-45ec-8d96-649ec2ad9296",
+    "document_name": "Project Charter: HVT Simulation Venue",
+    "description": "High-level project authorization document defining the scope, objectives, budget ($450k), and timeline (9 months) for the Pragmatic Foundation strategy.",
+    "responsible_role_type": "Project Manager",
+    "document_template_primary": "PMI Project Charter Template",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Define project goals and success criteria",
+      "Identify key stakeholders and project team",
+      "Outline high-level budget and resource requirements",
+      "Obtain sign-off from primary investors"
+    ],
+    "approval_authorities": "Project Investors",
+    "essential_information": [
+      "Define the project's 'Pragmatic Foundation' scope, explicitly excluding 'Pioneer's Gambit' features to maintain budget and timeline constraints.",
+      "Quantify the $450,000 budget allocation across key categories: site acquisition/zoning, arena construction (modular urban-mimicry), drone fleet procurement (20 units), and insurance/legal fees.",
+      "Detail the 9-month project roadmap, identifying the critical path: (1) Site/Zoning, (2) Construction, (3) Certification/Testing.",
+      "List specific, measurable success criteria: 40% repeat-customer rate, break-even within 18 months, and successful FSDO operational approval.",
+      "Identify key project roles and responsibilities: Site Manager, Drone Technicians, and Safety/Range Officer.",
+      "Outline the high-level risk register, specifically addressing the top three threats: Regulatory/FSDO compliance, Insurance viability, and RF signal interference.",
+      "Define the project's 'license to operate' requirements, including FAA Part 107/89 compliance and local noise/privacy ordinance adherence."
+    ],
+    "risks_of_poor_quality": [
+      "Ambiguous scope definition leads to 'scope creep' where high-cost features from the 'Pioneer's Gambit' path are added, causing budget overruns.",
+      "Inaccurate timeline estimation for regulatory/FSDO approval results in significant project delays and potential cash flow insolvency.",
+      "Failure to clearly define safety responsibilities increases liability exposure and complicates the acquisition of specialty insurance.",
+      "Lack of alignment on the 'Pragmatic' strategy among stakeholders leads to conflicting operational priorities during the construction phase."
+    ],
+    "worst_case_scenario": "The project fails to secure FSDO operational approval or specialty insurance due to an ill-defined safety case, resulting in the total loss of the $450k seed capital and the inability to launch the venue.",
+    "best_case_scenario": "The charter serves as a binding agreement that secures investor confidence, enables the team to maintain strict adherence to the 'Pragmatic' strategy, and provides a clear framework for navigating the 9-month regulatory and construction timeline, leading to a successful, on-budget launch.",
+    "fallback_alternative_approaches": [
+      "Utilize a simplified 'Project Initiation Document' (PID) if the full PMI Charter is too formal for initial investor discussions.",
+      "Conduct a 'Strategy Alignment Workshop' with investors to finalize the 'Pragmatic Foundation' parameters before drafting the formal charter.",
+      "Develop a 'Minimum Viable Charter' that focuses exclusively on the critical path (Regulatory, Budget, and Site) to expedite immediate project authorization."
+    ]
+  },
+  {
+    "id": "aa967fd7-9a7f-4be7-a364-cd5125468a6f",
+    "document_name": "Safety Management System (SMS) Framework",
+    "description": "Foundational document outlining safety protocols, hardware-level kill switch logic, and operational procedures for autonomous drone-human interaction.",
+    "responsible_role_type": "Aviation Regulatory & Compliance Officer",
+    "document_template_primary": "FAA Safety Management System (SMS) Guidance",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Define safety roles and responsibilities",
+      "Document hardware-level failsafe logic",
+      "Establish emergency response procedures",
+      "Align with FSDO safety case requirements"
+    ],
+    "approval_authorities": "Aviation Regulatory & Compliance Officer, FSDO Representative",
+    "essential_information": [
+      "Define clear roles and responsibilities for the Safety/Range Officer and Drone Technicians regarding real-time incident management.",
+      "Detail the technical specifications and logic flow for hardware-level kill switches, including trigger conditions (e.g., proximity threshold, signal loss, geofence breach).",
+      "Establish explicit emergency response procedures for drone-human collisions, including immediate medical protocols and incident reporting chains.",
+      "Document the integration of Remote ID and geofencing parameters as required by FAA Part 107/89 compliance.",
+      "Specify the maintenance schedule and testing protocols for safety-critical hardware (propeller shrouds, sensors, and failsafe circuits).",
+      "Requires inputs from the 'Project Plan' regarding site-specific safety netting and the 'Assumptions' file regarding RF stability and latency thresholds."
+    ],
+    "risks_of_poor_quality": [
+      "Ambiguous emergency procedures lead to delayed response times during a player injury, increasing legal liability.",
+      "Inconsistent hardware-level failsafe logic results in 'fly-aways' or mid-air collisions, causing equipment damage and potential safety incidents.",
+      "Failure to align with FSDO requirements results in permit denial or operational grounding, causing significant project delays.",
+      "Lack of clear safety roles creates confusion during high-stress operational scenarios, increasing the likelihood of human error."
+    ],
+    "worst_case_scenario": "A catastrophic collision or injury occurs due to a failure in the safety logic or emergency response, leading to permanent revocation of the facility's operating license, massive litigation, and total project insolvency.",
+    "best_case_scenario": "The SMS provides a robust, defensible safety case that secures FSDO approval on the first submission, lowers insurance premiums by demonstrating proactive risk management, and establishes a 'gold standard' for safety that enables rapid scaling to new locations.",
+    "fallback_alternative_approaches": [
+      "Engage an external aviation safety consultant to audit the initial draft against current FAA standards.",
+      "Develop a 'Minimum Viable Safety Protocol' (MVSP) focusing exclusively on the most critical hardware-level kill switches and immediate injury response, to be expanded as the project matures.",
+      "Conduct a tabletop simulation exercise with the core team to stress-test the documented procedures and identify gaps before finalizing the formal document."
+    ]
+  },
+  {
+    "id": "31ada6ed-bdf2-42dd-a453-3fec41928fc5",
+    "document_name": "Arena Infrastructure & Safety Design Framework",
+    "description": "Strategic plan for modular urban-mimicry arena construction, including safety netting, containment systems, and power/connectivity layout.",
+    "responsible_role_type": "Arena Infrastructure & Safety Architect",
+    "document_template_primary": "Structural Engineering Design Brief",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Draft modular arena layout",
+      "Specify safety netting and containment materials",
+      "Integrate power/connectivity requirements",
+      "Review against local zoning and insurance safety standards"
+    ],
+    "approval_authorities": "Arena Infrastructure & Safety Architect, Insurance Liaison",
+    "essential_information": [
+      "Define the modular layout for the urban-mimicry arena, including specific dimensions for obstacles and flight corridors.",
+      "Specify materials and installation standards for safety netting and physical containment systems to meet FAA and insurance requirements.",
+      "Detail the power distribution and low-latency network (5G/CBRS) infrastructure layout required for drone charging and haptic feedback systems.",
+      "Identify specific zoning and safety compliance requirements based on the chosen site (e.g., Austin, LA, or RTP).",
+      "Quantify the capital expenditure for infrastructure materials and installation labor.",
+      "List necessary inputs: Site-specific survey data, FAA Part 107/89 safety guidelines, and hardware-level proximity sensor specifications.",
+      "Define the 'Safety-First' design protocols, including emergency egress routes and automated kill-switch zones."
+    ],
+    "risks_of_poor_quality": [
+      "Inadequate containment design leads to drone fly-aways, resulting in FAA regulatory action or site shutdown.",
+      "Poorly planned power/connectivity infrastructure causes latency spikes, degrading the haptic feedback experience and increasing collision rates.",
+      "Failure to align with local zoning ordinances results in permit denial and significant project delays.",
+      "Underestimating infrastructure costs leads to budget overruns that threaten the project's 18-month break-even goal."
+    ],
+    "worst_case_scenario": "A major safety incident occurs due to insufficient containment or signal interference, leading to permanent loss of insurance coverage, legal liability, and total project insolvency.",
+    "best_case_scenario": "The framework provides a scalable, 'plug-and-play' blueprint for modular arenas that enables rapid site deployment, secures favorable insurance premiums, and ensures a consistent, high-immersion experience for all players.",
+    "fallback_alternative_approaches": [
+      "Utilize a pre-approved modular construction template from a partner engineering firm to accelerate the design phase.",
+      "Conduct a 'minimum viable arena' pilot at a smaller scale to validate safety containment before full-site construction.",
+      "Engage a specialized consultant with experience in drone-flight-zone engineering to audit the design for regulatory compliance.",
+      "Develop a phased infrastructure plan that prioritizes core safety and connectivity, deferring non-essential aesthetic urban-mimicry elements."
+    ]
+  },
+  {
+    "id": "fe3db80e-e804-42e3-b311-47674e087be3",
+    "document_name": "Drone Autonomy & Engagement Logic Strategy",
+    "description": "High-level strategy for semi-autonomous flight algorithms, balancing player immersion with safety-critical collision avoidance.",
+    "responsible_role_type": "Drone Systems & Robotics Engineer",
+    "document_template_primary": "Technical Strategy Document",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Define semi-autonomous flight parameters",
+      "Outline collision avoidance logic",
+      "Specify hardware-level integration requirements",
+      "Establish testing and validation protocols"
+    ],
+    "approval_authorities": "Drone Systems & Robotics Engineer, Aviation Regulatory & Compliance Officer",
+    "essential_information": [
+      "Define the specific semi-autonomous flight parameters (e.g., speed caps, altitude limits, and proximity buffers) that balance 'pursuer' intensity with safety.",
+      "Detail the collision avoidance logic, specifically how the system handles real-time obstacle detection and emergency 'return-to-home' or 'hover-in-place' triggers.",
+      "Specify the hardware-level integration requirements, including the interface between the flight controller, proximity sensors, and the independent hardware-level kill switch.",
+      "Establish a rigorous testing and validation protocol, including simulated failure scenarios (e.g., signal loss, sensor obstruction) to ensure the system meets FSDO safety case requirements.",
+      "Identify necessary inputs: Requires the 'Arena Infrastructure Strategy' to understand physical constraints and the 'Safety & Liability Mitigation' document for mandatory safety thresholds.",
+      "Quantify the latency requirements for the drone-to-server communication loop to ensure the haptic feedback and engagement logic remain synchronized."
+    ],
+    "risks_of_poor_quality": [
+      "Inadequate collision avoidance logic leads to high-speed drone-to-player impacts, resulting in severe injury and immediate project shutdown.",
+      "Ambiguous flight parameters cause inconsistent engagement, leading to poor player experience and high churn rates.",
+      "Failure to document hardware integration protocols creates technical debt, complicating future fleet maintenance and scaling.",
+      "Incomplete testing protocols result in failure to secure FSDO operational approval, delaying the project timeline by 3-6 months."
+    ],
+    "worst_case_scenario": "A catastrophic mid-air collision or 'fly-away' incident occurs due to flawed autonomy logic, leading to permanent loss of insurance coverage, legal liability, and total project insolvency.",
+    "best_case_scenario": "The document provides a robust, fail-safe technical framework that enables high-intensity, safe drone-human interaction, directly facilitating FSDO approval and establishing a defensible, proprietary 'simulation' experience.",
+    "fallback_alternative_approaches": [
+      "Develop a 'Minimum Viable Autonomy' document focusing solely on basic 'follow-me' and 'line-of-sight' safety protocols if full semi-autonomy proves too complex.",
+      "Engage an external robotics consultant to audit and validate the proposed collision avoidance algorithms.",
+      "Conduct a series of 'bench-top' hardware-in-the-loop (HITL) simulations to prove logic stability before finalizing the full strategy document.",
+      "Utilize a phased implementation approach: document and test basic manual-assist modes first, then iterate toward full semi-autonomy in subsequent project phases."
+    ]
+  },
+  {
+    "id": "3626bdfc-f4cb-40ad-9a80-386a3ddcdf09",
+    "document_name": "Revenue & Business Model Framework",
+    "description": "Strategic plan for tiered membership models, corporate team-building partnerships, and long-term financial sustainability.",
+    "responsible_role_type": "Business Development & Corporate Sales Lead",
+    "document_template_primary": "Business Model Canvas",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Define pricing tiers and membership benefits",
+      "Outline corporate team-building sales strategy",
+      "Establish financial break-even milestones",
+      "Align with operational cost projections"
+    ],
+    "approval_authorities": "Business Development & Corporate Sales Lead, Project Investors",
+    "essential_information": [
+      "Define specific pricing tiers (e.g., casual, enthusiast, corporate) and the corresponding value propositions for each.",
+      "Quantify the projected Customer Lifetime Value (CLV) and the target repeat-customer rate (aiming for 40%+).",
+      "Detail the corporate team-building sales strategy, including outreach channels and partnership incentives.",
+      "Calculate the break-even analysis based on the $450,000 seed capital and projected operational costs (staffing, maintenance, insurance).",
+      "Establish clear financial milestones for the first 18 months to track progress toward sustainability.",
+      "Analyze the impact of the 'Pragmatic Foundation' strategy on revenue, specifically how tiered memberships offset the high capital intensity of modular arena construction.",
+      "Identify key performance indicators (KPIs) for revenue, such as average revenue per user (ARPU) and monthly recurring revenue (MRR) from memberships."
+    ],
+    "risks_of_poor_quality": [
+      "Inaccurate pricing models may lead to insufficient cash flow to cover high maintenance and insurance costs.",
+      "Failure to define a clear corporate sales strategy will result in reliance on low-margin, high-churn casual players.",
+      "Misalignment between revenue projections and operational costs (e.g., underestimating R&D or repair budgets) could lead to insolvency within the first 12-18 months.",
+      "Lack of a clear membership value proposition will fail to mitigate the 'novelty decay' risk, leading to high customer churn."
+    ],
+    "worst_case_scenario": "The project fails to achieve financial sustainability due to a mismatch between high operational overhead and low-margin revenue streams, resulting in a total loss of the $450,000 seed capital and premature closure of the facility.",
+    "best_case_scenario": "The framework provides a clear, actionable roadmap that secures a 40%+ repeat-customer rate and establishes a predictable recurring revenue stream, enabling the project to reach break-even within 18 months and providing a scalable model for future franchising.",
+    "fallback_alternative_approaches": [
+      "Utilize a standard 'Business Model Canvas' template to rapidly map out revenue streams and cost structures before conducting a deep-dive financial analysis.",
+      "Conduct a 'minimum viable revenue' workshop with stakeholders to identify the absolute floor for pricing and volume required to keep the doors open.",
+      "Engage a financial consultant or fractional CFO to validate the assumptions regarding CLV and operational burn rates.",
+      "Develop a simplified 'Revenue & Pricing' spreadsheet that focuses solely on the first 6 months of operations to ensure immediate liquidity."
+    ]
+  },
+  {
+    "id": "46dec9cc-d20c-476e-9ad4-9e625f5655fe",
+    "document_name": "Risk Register",
+    "description": "Comprehensive log of identified project risks (regulatory, technical, financial, safety), their impact, and mitigation strategies.",
+    "responsible_role_type": "Project Manager",
+    "document_template_primary": "PMI Risk Register Template",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Consolidate risks from project files",
+      "Assign probability and severity ratings",
+      "Define mitigation actions and owners",
+      "Establish review cadence"
+    ],
+    "approval_authorities": "Project Manager",
+    "essential_information": [
+      "Identify and categorize all project risks across the six strategic levers (Arena, Drone Autonomy, Safety, Revenue, Immersion, Hardware) and operational domains.",
+      "Quantify risk exposure using a standard Probability (1-5) x Impact (1-5) matrix to calculate a Risk Priority Number (RPN).",
+      "Detail specific, actionable mitigation strategies for each high-priority risk (e.g., 'Engage aviation counsel for FSDO approval' vs. 'Maintain 20% spare parts buffer').",
+      "Assign a clear 'Risk Owner' for every item, specifically mapping to the Site Manager, Drone Technicians, or Safety/Range Officer roles.",
+      "Define 'Trigger Events' for each risk that necessitate the activation of a contingency plan (e.g., 'If insurance premiums exceed 20% of revenue, initiate hardware-tier downgrade').",
+      "Include a 'Residual Risk' assessment post-mitigation to determine if the remaining risk is within the project's risk appetite.",
+      "Utilize inputs from the 'Identify Risks' section of the assumptions.md file and the 'Risk Assessment' section of the project-plan.md file."
+    ],
+    "risks_of_poor_quality": [
+      "Failure to identify the 'Insurance Market Viability' risk leads to uninsurable operations and project shutdown post-investment.",
+      "Vague mitigation strategies (e.g., 'Monitor safety') result in lack of accountability and delayed response to critical incidents.",
+      "Inaccurate probability assessments cause the team to over-allocate resources to low-impact risks while ignoring high-impact 'black swan' events like regulatory grounding.",
+      "Lack of a review cadence ensures the register becomes a static document, failing to capture new risks as the project moves from planning to construction."
+    ],
+    "worst_case_scenario": "A catastrophic safety incident occurs due to an unmitigated technical failure (e.g., signal interference/collision), resulting in severe injury, permanent loss of insurance coverage, and immediate, irreversible regulatory shutdown of the entire venture.",
+    "best_case_scenario": "The register serves as a dynamic decision-support tool that enables the team to proactively navigate the 9-month timeline, securing insurance and regulatory approvals on schedule while maintaining a 40%+ repeat-customer rate through managed operational stability.",
+    "fallback_alternative_approaches": [
+      "Conduct a 'Pre-Mortem' workshop with the core team to brainstorm failure points if a formal quantitative analysis is too time-consuming.",
+      "Adopt a 'Top 5 Critical Risks' dashboard as a minimum viable document to focus immediate attention on the most existential threats.",
+      "Engage a third-party risk consultant to perform a rapid audit of the current assumptions to validate the register's accuracy.",
+      "Utilize a simplified spreadsheet-based tracker that focuses solely on 'High-Severity' risks until a more robust system can be implemented."
+    ]
+  }
+]

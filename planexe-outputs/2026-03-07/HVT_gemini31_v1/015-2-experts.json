@@ -1,0 +1,74 @@
+[
+  {
+    "id": "998d14d7-875e-462c-8186-b0e462668948",
+    "title": "Aviation Liability Attorney",
+    "knowledge": "FAA regulations, drone law, tort liability, insurance underwriting, recreational safety standards",
+    "why": "Crucial for the 'Safety & Liability Mitigation' lever; ensures the project survives the high-risk classification of autonomous drone-human interaction.",
+    "what": "Review the operational safety case and draft liability waivers to ensure they meet the threshold for specialty insurance underwriting.",
+    "skills": "Risk assessment, legal compliance, contract negotiation, regulatory advocacy",
+    "search_query": "aviation liability attorney, drone law expert, recreational insurance consultant, FAA compliance lawyer"
+  },
+  {
+    "id": "4cb7547a-8572-4007-b5ac-32c7f991c207",
+    "title": "RF Systems Engineer",
+    "knowledge": "Private 5G, CBRS, spectrum analysis, signal latency, wireless interference mitigation",
+    "why": "Directly addresses the 'RF interference and latency' threat; essential for the 'Drone Autonomy' lever to ensure safe, real-time control.",
+    "what": "Design the private 5G/CBRS network architecture to guarantee sub-20ms latency and zero-interference flight zones in urban environments.",
+    "skills": "Network architecture, spectrum management, hardware integration, signal troubleshooting",
+    "search_query": "RF systems engineer, private 5G network consultant, wireless interference expert, CBRS deployment specialist"
+  },
+  {
+    "id": "bc8c6d1e-2681-4d3a-b940-71f4b719aceb",
+    "title": "Location-Based Entertainment (LBE) Operations Manager",
+    "knowledge": "High-throughput venue management, LBE facility design, customer flow optimization, maintenance cycles",
+    "why": "Addresses the 'Operational Complexity' weakness; ensures the 'Arena Infrastructure' and 'Revenue Model' levers are optimized for profitability.",
+    "what": "Audit the 'Pragmatic Foundation' plan to optimize player throughput and maintenance workflows to prevent the 'novelty decay' risk.",
+    "skills": "Operations strategy, facility management, throughput optimization, maintenance scheduling",
+    "search_query": "LBE operations manager, location based entertainment consultant, theme park operations expert, venue throughput optimization"
+  },
+  {
+    "id": "f7beba1c-1466-4739-a8d1-89e458b3569e",
+    "title": "Haptic & Wearable Tech Product Designer",
+    "knowledge": "Haptic feedback systems, wearable electronics, human-computer interaction (HCI), ruggedized hardware",
+    "why": "Essential for the 'Player Immersion & Feedback Loop' lever; ensures the haptic vests are durable enough for rugged outdoor use.",
+    "what": "Evaluate the integration of haptic vests to ensure they are both immersive and sufficiently rugged to minimize maintenance downtime.",
+    "skills": "Hardware design, user experience, wearable tech integration, durability testing",
+    "search_query": "haptic feedback designer, wearable tech engineer, rugged electronics designer, human computer interaction expert"
+  },
+  {
+    "id": "92178978-90e4-49ba-822a-a781309d50cf",
+    "title": "Drone Swarm Software Architect",
+    "knowledge": "Computer vision, swarm intelligence, collision avoidance, real-time telemetry",
+    "why": "Crucial for the 'Drone Autonomy & Engagement Logic' lever; ensures the AI is safe and responsive enough to avoid collisions.",
+    "what": "Review the 'Drone Autonomy' logic to ensure the swarm-AI can handle real-time safety overrides and obstacle avoidance.",
+    "skills": "Robotics, AI development, C++, ROS2, real-time systems",
+    "search_query": "drone swarm software architect, robotics AI engineer, autonomous flight systems expert, computer vision developer"
+  },
+  {
+    "id": "c00a9853-2705-43de-9f91-a33224fed921",
+    "title": "Urban Planning & Zoning Consultant",
+    "knowledge": "Land use, municipal noise ordinances, safety setbacks, urban recreation permits",
+    "why": "Addresses the 'Community and PR backlash' threat; vital for the 'Arena Infrastructure' strategy in urban environments.",
+    "what": "Assess the feasibility of the 'urban-mimicry' arena design against local zoning and noise ordinances in target cities.",
+    "skills": "Zoning law, urban development, community relations, permit acquisition",
+    "search_query": "urban planning consultant, municipal zoning expert, land use planner, recreational facility permitting"
+  },
+  {
+    "id": "44a4f68b-9aaf-4c45-9cc0-b67cf92b54c8",
+    "title": "Corporate Team-Building Strategy Consultant",
+    "knowledge": "Leadership development, corporate training, experiential learning, B2B sales",
+    "why": "Directly supports the 'Corporate Pilot Program' recommendation; ensures the HVT experience is marketable to high-margin B2B clients.",
+    "what": "Develop a curriculum for the 'Corporate Pilot Program' that aligns HVT simulation with leadership and communication training goals.",
+    "skills": "Corporate training, B2B strategy, experiential learning design, sales enablement",
+    "search_query": "corporate team building consultant, leadership development expert, B2B experiential learning, corporate training design"
+  },
+  {
+    "id": "01a3bb18-3d6a-448b-aa72-6d59b34bbdbf",
+    "title": "Supply Chain & Logistics Specialist",
+    "knowledge": "Industrial drone components, inventory management, spare parts logistics, vendor management",
+    "why": "Addresses the 'Operational downtime' weakness; ensures the 20% spare-parts buffer and repair cycle are logistically viable.",
+    "what": "Design a robust supply chain strategy to ensure the 24-hour repair cycle and 95%+ fleet availability targets are met.",
+    "skills": "Inventory management, procurement, logistics optimization, vendor relations",
+    "search_query": "supply chain logistics specialist, industrial drone procurement, inventory management consultant, spare parts logistics"
+  }
+]

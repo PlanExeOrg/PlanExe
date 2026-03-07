@@ -1,0 +1,165 @@
+{
+  "response": {
+    "decisions": [
+      {
+        "lever_id": "e7bef2ec-8bc3-42c2-a85e-6cf714901959",
+        "classification": "keep",
+        "justification": "This lever focuses on the physical site infrastructure and capital expenditure. It is distinct from other infrastructure levers because it specifically addresses the trade-off between entry costs and regulatory friction via site selection and construction types."
+      },
+      {
+        "lever_id": "dc0fa33c-a1a2-4e45-9362-a92ed8c03313",
+        "classification": "keep",
+        "justification": "This lever focuses on the software logic and AI engagement. It is distinct because it addresses the core gameplay loop (manual vs. AI) and the transition from a 'game' to a 'simulation experience' through algorithmic control."
+      },
+      {
+        "lever_id": "36e6d469-bfbf-43d2-981b-93eb937f2788",
+        "classification": "keep",
+        "justification": "This lever addresses safety through hardware-level mitigation (shrouds, sensors, soft-drones). It is distinct from other safety levers by focusing specifically on the physical drone technology and its impact on risk reduction."
+      },
+      {
+        "lever_id": "b38b80ad-0710-412f-9898-9d40f15be90b",
+        "classification": "keep",
+        "justification": "This lever defines the business model and revenue streams. It is distinct because it focuses on the commercial structure (subscriptions, licensing, leagues) rather than the technical or physical aspects of the simulation."
+      },
+      {
+        "lever_id": "d72ec7d3-743c-4b5a-8c5f-eb4821b3bb86",
+        "classification": "keep",
+        "justification": "This lever focuses on the player's sensory experience (haptics, AR HUD). It is distinct because it addresses the human-computer interaction layer and the sensory feedback loop, which is separate from the drone's flight logic or the arena's physical structure."
+      },
+      {
+        "lever_id": "e6e2fe30-f26e-4ad5-a512-bcadec623404",
+        "classification": "absorb",
+        "justification": "This lever overlaps significantly with dc0fa33c-a1a2-4e45-9362-a92ed8c03313. Both address the shift from manual to autonomous flight and the impact on labor/complexity. dc0fa33c is more comprehensive regarding the 'simulation experience' aspect, so this lever is merged into it."
+      },
+      {
+        "lever_id": "d7311f58-097a-414f-949d-0cd871def6a5",
+        "classification": "absorb",
+        "justification": "This lever overlaps with e7bef2ec-8bc3-42c2-a85e-6cf714901959. Both address arena infrastructure and terrain design. e7bef2ec is the more general lever covering the strategic infrastructure strategy, so this is merged into it."
+      },
+      {
+        "lever_id": "d4aec168-26de-40e7-8cbd-1d848949f854",
+        "classification": "absorb",
+        "justification": "This lever overlaps with 36e6d469-bfbf-43d2-981b-93eb937f2788. Both address safety and liability mitigation through gear and proximity systems. 36e6d469 is the more general lever covering safety protocols, so this is merged into it."
+      },
+      {
+        "lever_id": "6b2384f0-8ebc-4977-957a-fbce6a69e16c",
+        "classification": "absorb",
+        "justification": "This lever overlaps with b38b80ad-0710-412f-9898-9d40f15be90b. Both address market positioning, pricing, and business models. b38b80ad is the more general lever covering the revenue model, so this is merged into it."
+      },
+      {
+        "lever_id": "7390c719-b529-4da3-86cb-3bdeb4057361",
+        "classification": "keep",
+        "justification": "This lever is distinct because it focuses on hardware durability and maintenance cycles. While related to infrastructure, it specifically addresses the operational uptime and procurement strategy of the drone fleet itself."
+      },
+      {
+        "lever_id": "0a925f4e-5a84-4d3c-a00b-9b77ee8de466",
+        "classification": "absorb",
+        "justification": "This lever overlaps with dc0fa33c-a1a2-4e45-9362-a92ed8c03313. It covers drone autonomy and flight paths. Since dc0fa33c already covers the shift from manual to autonomous logic, this is merged into it."
+      },
+      {
+        "lever_id": "e3d4293b-663b-4b9a-9ffd-d05b5fa00539",
+        "classification": "absorb",
+        "justification": "This lever overlaps with e7bef2ec-8bc3-42c2-a85e-6cf714901959. It deals with arena infrastructure models and terrain. e7bef2ec is the more general lever for infrastructure strategy, so this is merged into it."
+      },
+      {
+        "lever_id": "a3288561-b5e6-4b32-94f9-55b2605e4f3d",
+        "classification": "absorb",
+        "justification": "This lever overlaps with 36e6d469-bfbf-43d2-981b-93eb937f2788. It focuses on safety frameworks, geofencing, and collision avoidance. 36e6d469 is the more general lever for safety and liability, so this is merged into it."
+      },
+      {
+        "lever_id": "791e767b-7a83-4f69-be31-27f94f0f1e1f",
+        "classification": "absorb",
+        "justification": "This lever overlaps with b38b80ad-0710-412f-9898-9d40f15be90b. It covers monetization strategies and subscription tiers. b38b80ad is the more general lever for revenue and business models, so this is merged into it."
+      },
+      {
+        "lever_id": "13fc26af-c266-42e0-8dc6-a41daa1e3cb7",
+        "classification": "absorb",
+        "justification": "This lever overlaps with d72ec7d3-743c-4b5a-8c5f-eb4821b3bb86. Both address simulation realism and sensory feedback. d72ec7d3 is the more general lever for player immersion and feedback loops, so this is merged into it."
+      }
+    ]
+  },
+  "deduplicated_levers": [
+    {
+      "lever_id": "e7bef2ec-8bc3-42c2-a85e-6cf714901959",
+      "name": "Arena Infrastructure Strategy",
+      "consequences": "Immediate: Increased capital expenditure on safety netting and terrain design \u2192 Systemic: 40% reduction in insurance premiums through controlled flight zones \u2192 Strategic: Enables long-term site scalability by minimizing regulatory friction.",
+      "options": [
+        "Utilize existing open-field paintball sites with minimal modifications to prioritize low entry costs.",
+        "Construct purpose-built, modular urban-mimicry arenas to enhance immersion and safety containment.",
+        "Develop subterranean or indoor-enclosed massive-scale facilities to eliminate weather dependency and FAA flight restrictions."
+      ],
+      "review": "Controls Capital Intensity vs. Immersion Depth. Weakness: The options fail to consider the impact of site location on customer acquisition costs.",
+      "deduplication_justification": "This lever focuses on the physical site infrastructure and capital expenditure. It is distinct from other infrastructure levers because it specifically addresses the trade-off between entry costs and regulatory friction via site selection and construction types."
+    },
+    {
+      "lever_id": "dc0fa33c-a1a2-4e45-9362-a92ed8c03313",
+      "name": "Drone Autonomy & Engagement Logic",
+      "consequences": "Immediate: Shift from manual pilot control to AI-assisted tracking \u2192 Systemic: 30% increase in player throughput via consistent difficulty curves \u2192 Strategic: Shifts the product from a 'drone game' to a 'simulation experience'.",
+      "options": [
+        "Maintain manual pilot control for maximum unpredictability and human-in-the-loop engagement.",
+        "Implement semi-autonomous 'follow-me' and 'line-of-sight' algorithms to reduce pilot fatigue.",
+        "Deploy fully autonomous swarm-AI agents that utilize computer vision to track and intercept players without human intervention."
+      ],
+      "review": "Controls Operational Complexity vs. Player Experience. Weakness: The options fail to address the technical latency requirements for real-time safety overrides.",
+      "deduplication_justification": "This lever focuses on the software logic and AI engagement. It is distinct because it addresses the core gameplay loop (manual vs. AI) and the transition from a 'game' to a 'simulation experience' through algorithmic control."
+    },
+    {
+      "lever_id": "36e6d469-bfbf-43d2-981b-93eb937f2788",
+      "name": "Safety & Liability Mitigation",
+      "consequences": "Immediate: Implementation of physical drone shrouds and geofencing \u2192 Systemic: 50% faster scaling through reduced regulatory scrutiny \u2192 Strategic: Establishes a defensible moat against competitors with higher accident rates.",
+      "options": [
+        "Adopt standard recreational drone safety protocols with mandatory player waivers and basic flight training.",
+        "Integrate hardware-level proximity sensors and automated 'return-to-home' failsafes for all active units.",
+        "Utilize proprietary 'soft-drone' technology with foam-based chassis and non-contact infrared 'tagging' systems to eliminate physical impact risks."
+      ],
+      "review": "Controls Safety Overhead vs. Realism. Weakness: The options fail to consider the impact of 'soft-drone' technology on the perceived 'threat' level of the game.",
+      "deduplication_justification": "This lever addresses safety through hardware-level mitigation (shrouds, sensors, soft-drones). It is distinct from other safety levers by focusing specifically on the physical drone technology and its impact on risk reduction."
+    },
+    {
+      "lever_id": "b38b80ad-0710-412f-9898-9d40f15be90b",
+      "name": "Revenue & Business Model",
+      "consequences": "Immediate: Transition from per-session fees to subscription-based 'combat leagues' \u2192 Systemic: 20% higher customer lifetime value \u2192 Strategic: Shifts the business from a seasonal attraction to a recurring community platform.",
+      "options": [
+        "Operate as a high-turnover, pay-per-session recreational activity similar to traditional paintball.",
+        "Implement a tiered membership model offering exclusive 'HVT' gear, advanced drone loadouts, and league rankings.",
+        "License the proprietary arena software and drone-AI stack as a franchise model for global entertainment operators."
+      ],
+      "review": "Controls Market Reach vs. Operational Control. Weakness: The options fail to consider the potential for corporate team-building events as a primary revenue driver.",
+      "deduplication_justification": "This lever defines the business model and revenue streams. It is distinct because it focuses on the commercial structure (subscriptions, licensing, leagues) rather than the technical or physical aspects of the simulation."
+    },
+    {
+      "lever_id": "d72ec7d3-743c-4b5a-8c5f-eb4821b3bb86",
+      "name": "Player Immersion & Feedback Loop",
+      "consequences": "Immediate: Integration of wearable haptic feedback vests \u2192 Systemic: 60% increase in repeat bookings due to heightened sensory engagement \u2192 Strategic: Differentiates the brand from standard VR or physical combat games.",
+      "options": [
+        "Rely on visual and auditory cues from drones to signal 'hits' or proximity alerts.",
+        "Equip players with wearable haptic feedback systems that simulate 'near-miss' vibrations and impact sensations.",
+        "Deploy an augmented reality (AR) HUD integrated into protective eyewear to visualize drone targeting locks and mission objectives in real-time."
+      ],
+      "review": "Controls Tech Integration vs. Accessibility. Weakness: The options fail to consider the maintenance burden of wearable electronics in a rugged outdoor environment.",
+      "deduplication_justification": "This lever focuses on the player's sensory experience (haptics, AR HUD). It is distinct because it addresses the human-computer interaction layer and the sensory feedback loop, which is separate from the drone's flight logic or the arena's physical structure."
+    },
+    {
+      "lever_id": "7390c719-b529-4da3-86cb-3bdeb4057361",
+      "name": "Hardware Durability and Maintenance",
+      "consequences": "Immediate: Higher initial hardware procurement costs \u2192 Systemic: 50% decrease in downtime per unit \u2192 Strategic: Increases operational uptime, allowing for higher throughput of daily sessions.",
+      "options": [
+        "Off-the-shelf consumer drones with frequent replacement cycles.",
+        "Ruggedized, custom-built frames with modular, field-replaceable components.",
+        "Industrial-grade, carbon-fiber autonomous platforms with rapid-swap battery and motor systems."
+      ],
+      "review": "Controls Upfront Investment vs. Long-term Operational Efficiency. Weakness: The options fail to consider the supply chain risks of specialized, custom-built hardware.",
+      "deduplication_justification": "This lever is distinct because it focuses on hardware durability and maintenance cycles. While related to infrastructure, it specifically addresses the operational uptime and procurement strategy of the drone fleet itself."
+    }
+  ],
+  "metadata": {
+    "context_window": 32768,
+    "num_output": 8192,
+    "is_chat_model": true,
+    "is_function_calling_model": false,
+    "model_name": "google/gemini-3.1-flash-lite-preview",
+    "system_role": "system"
+  },
+  "system_prompt": "Evaluate each of the provided strategic levers individually. Classify every lever explicitly into one of:\n\n- keep: Lever is distinct, unique, and essential.\n- absorb: Lever overlaps significantly with another lever. Explicitly state the lever ID it should be merged into.\n- remove: Lever is fully redundant. Removing it loses no meaningful detail. Use this sparingly.\n\nProvide concise, explicit justifications mentioning lever IDs clearly. Always prefer \"absorb\" over \"remove\" to retain important details.\n\nAlways provide a justification for the classification. Explain why the lever is distinct from others. Don't use the same uninformative boilerplate.\n\nRespect Hierarchy: When absorbing, merge the more specific lever into the more general one.\nDon't take the more general lever and absorb it into a narrower one.\nAlso compare a lever against the group of already-merged levers.\n\nUse \"keep\" if you lack understanding of what the lever is doing. This way a potential important lever is not getting removed.\nDescribe what the issue is in the justification.\n\nDon't play it too safe, so you fail to perform the core task: consolidate the levers and get rid of the duplicates.\n\nYou must classify and justify **every lever** provided in the input.",
+  "user_prompt": "**Project Context:**\nFile 'plan.txt':\nHVT \u2014 a paintball-like combat simulation game where players experience being a High Value Target for the US military, using drones instead of paintball guns. Players get all the excitement of evading drone pursuit in a real outdoor arena.\n\n\nFile 'purpose.md':\n**Purpose:** business\n\n**Purpose Detailed:** Development and operation of a commercial entertainment venture and recreational activity.\n\n**Topic:** HVT paintball-like drone combat simulation game\n\nFile 'plan_type.md':\nThis plan requires one or more physical locations. It cannot be executed digitally.\n\n**Explanation:** The development and operation of a drone-based combat simulation game is inherently physical. It requires securing and preparing a large outdoor arena, purchasing and maintaining physical drone hardware, ensuring safety compliance for real-world flight, and managing the physical presence of players on-site for the simulation.\n\nHere is the full list of strategic levers. Please analyze them for duplicates.\n\n[\n  {\n    \"lever_id\": \"e7bef2ec-8bc3-42c2-a85e-6cf714901959\",\n    \"name\": \"Arena Infrastructure Strategy\",\n    \"consequences\": \"Immediate: Increased capital expenditure on safety netting and terrain design \\u2192 Systemic: 40% reduction in insurance premiums through controlled flight zones \\u2192 Strategic: Enables long-term site scalability by minimizing regulatory friction.\",\n    \"options\": [\n      \"Utilize existing open-field paintball sites with minimal modifications to prioritize low entry costs.\",\n      \"Construct purpose-built, modular urban-mimicry arenas to enhance immersion and safety containment.\",\n      \"Develop subterranean or indoor-enclosed massive-scale facilities to eliminate weather dependency and FAA flight restrictions.\"\n    ],\n    \"review\": \"Controls Capital Intensity vs. Immersion Depth. Weakness: The options fail to consider the impact of site location on customer acquisition costs.\"\n  },\n  {\n    \"lever_id\": \"dc0fa33c-a1a2-4e45-9362-a92ed8c03313\",\n    \"name\": \"Drone Autonomy & Engagement Logic\",\n    \"consequences\": \"Immediate: Shift from manual pilot control to AI-assisted tracking \\u2192 Systemic: 30% increase in player throughput via consistent difficulty curves \\u2192 Strategic: Shifts the product from a 'drone game' to a 'simulation experience'.\",\n    \"options\": [\n      \"Maintain manual pilot control for maximum unpredictability and human-in-the-loop engagement.\",\n      \"Implement semi-autonomous 'follow-me' and 'line-of-sight' algorithms to reduce pilot fatigue.\",\n      \"Deploy fully autonomous swarm-AI agents that utilize computer vision to track and intercept players without human intervention.\"\n    ],\n    \"review\": \"Controls Operational Complexity vs. Player Experience. Weakness: The options fail to address the technical latency requirements for real-time safety overrides.\"\n  },\n  {\n    \"lever_id\": \"36e6d469-bfbf-43d2-981b-93eb937f2788\",\n    \"name\": \"Safety & Liability Mitigation\",\n    \"consequences\": \"Immediate: Implementation of physical drone shrouds and geofencing \\u2192 Systemic: 50% faster scaling through reduced regulatory scrutiny \\u2192 Strategic: Establishes a defensible moat against competitors with higher accident rates.\",\n    \"options\": [\n      \"Adopt standard recreational drone safety protocols with mandatory player waivers and basic flight training.\",\n      \"Integrate hardware-level proximity sensors and automated 'return-to-home' failsafes for all active units.\",\n      \"Utilize proprietary 'soft-drone' technology with foam-based chassis and non-contact infrared 'tagging' systems to eliminate physical impact risks.\"\n    ],\n    \"review\": \"Controls Safety Overhead vs. Realism. Weakness: The options fail to consider the impact of 'soft-drone' technology on the perceived 'threat' level of the game.\"\n  },\n  {\n    \"lever_id\": \"b38b80ad-0710-412f-9898-9d40f15be90b\",\n    \"name\": \"Revenue & Business Model\",\n    \"consequences\": \"Immediate: Transition from per-session fees to subscription-based 'combat leagues' \\u2192 Systemic: 20% higher customer lifetime value \\u2192 Strategic: Shifts the business from a seasonal attraction to a recurring community platform.\",\n    \"options\": [\n      \"Operate as a high-turnover, pay-per-session recreational activity similar to traditional paintball.\",\n      \"Implement a tiered membership model offering exclusive 'HVT' gear, advanced drone loadouts, and league rankings.\",\n      \"License the proprietary arena software and drone-AI stack as a franchise model for global entertainment operators.\"\n    ],\n    \"review\": \"Controls Market Reach vs. Operational Control. Weakness: The options fail to consider the potential for corporate team-building events as a primary revenue driver.\"\n  },\n  {\n    \"lever_id\": \"d72ec7d3-743c-4b5a-8c5f-eb4821b3bb86\",\n    \"name\": \"Player Immersion & Feedback Loop\",\n    \"consequences\": \"Immediate: Integration of wearable haptic feedback vests \\u2192 Systemic: 60% increase in repeat bookings due to heightened sensory engagement \\u2192 Strategic: Differentiates the brand from standard VR or physical combat games.\",\n    \"options\": [\n      \"Rely on visual and auditory cues from drones to signal 'hits' or proximity alerts.\",\n      \"Equip players with wearable haptic feedback systems that simulate 'near-miss' vibrations and impact sensations.\",\n      \"Deploy an augmented reality (AR) HUD integrated into protective eyewear to visualize drone targeting locks and mission objectives in real-time.\"\n    ],\n    \"review\": \"Controls Tech Integration vs. Accessibility. Weakness: The options fail to consider the maintenance burden of wearable electronics in a rugged outdoor environment.\"\n  },\n  {\n    \"lever_id\": \"e6e2fe30-f26e-4ad5-a512-bcadec623404\",\n    \"name\": \"Drone Autonomy and Interaction Strategy\",\n    \"consequences\": \"Immediate: Shift from manual to autonomous flight \\u2192 Systemic: 40% reduction in operator labor costs \\u2192 Strategic: Enables scalable multi-arena deployment by reducing reliance on skilled human pilots.\",\n    \"options\": [\n      \"Manual pilot-controlled drones for maximum safety and predictable flight paths.\",\n      \"Semi-autonomous swarm behavior with human-in-the-loop override for tactical complexity.\",\n      \"Fully autonomous AI-driven pursuit algorithms utilizing computer vision for hyper-realistic evasion scenarios.\"\n    ],\n    \"review\": \"Controls Operational Cost vs. Simulation Realism. Weakness: The options fail to consider the legal liability of autonomous systems in proximity to human players.\"\n  },\n  {\n    \"lever_id\": \"d7311f58-097a-414f-949d-0cd871def6a5\",\n    \"name\": \"Arena Infrastructure Complexity\",\n    \"consequences\": \"Immediate: Increased site development investment \\u2192 Systemic: 60% higher customer retention via dynamic environments \\u2192 Strategic: Creates a defensible moat against low-cost competitors through proprietary terrain design.\",\n    \"options\": [\n      \"Flat, open-field arenas with modular, reusable physical obstacles.\",\n      \"Multi-level urban-simulated environments with integrated IoT sensors for real-time tracking.\",\n      \"Adaptive, reconfigurable terrain using automated pneumatic walls and projection mapping for changing mission parameters.\"\n    ],\n    \"review\": \"Controls Capital Expenditure vs. Customer Engagement. Weakness: The options fail to consider the maintenance burden of high-tech, reconfigurable infrastructure.\"\n  },\n  {\n    \"lever_id\": \"d4aec168-26de-40e7-8cbd-1d848949f854\",\n    \"name\": \"Safety and Liability Mitigation\",\n    \"consequences\": \"Immediate: Higher barrier to entry for players \\u2192 Systemic: 90% reduction in insurance premiums \\u2192 Strategic: Establishes the brand as the industry standard for safe, high-stakes recreation.\",\n    \"options\": [\n      \"Standard protective gear and mandatory pre-game safety briefings.\",\n      \"Full-body impact-resistant suits with integrated biometric monitoring and emergency kill-switches.\",\n      \"Non-contact proximity-based scoring systems that eliminate physical drone-to-player impact risks entirely.\"\n    ],\n    \"review\": \"Controls Player Immersion vs. Risk Exposure. Weakness: The options fail to address the psychological impact of 'safety-first' gear on the perceived intensity of the game.\"\n  },\n  {\n    \"lever_id\": \"6b2384f0-8ebc-4977-957a-fbce6a69e16c\",\n    \"name\": \"Market Positioning and Pricing\",\n    \"consequences\": \"Immediate: Shift in target demographic \\u2192 Systemic: 30% increase in lifetime value through subscription models \\u2192 Strategic: Transitions the business from a one-off attraction to a recurring tactical training community.\",\n    \"options\": [\n      \"Pay-per-session recreational model for casual weekend players.\",\n      \"Tiered membership model offering exclusive access to advanced tactical scenarios and leaderboards.\",\n      \"B2B corporate team-building and professional tactical training packages with performance analytics.\"\n    ],\n    \"review\": \"Controls Accessibility vs. Revenue Stability. Weakness: The options fail to consider the seasonality of outdoor recreational activities.\"\n  },\n  {\n    \"lever_id\": \"7390c719-b529-4da3-86cb-3bdeb4057361\",\n    \"name\": \"Hardware Durability and Maintenance\",\n    \"consequences\": \"Immediate: Higher initial hardware procurement costs \\u2192 Systemic: 50% decrease in downtime per unit \\u2192 Strategic: Increases operational uptime, allowing for higher throughput of daily sessions.\",\n    \"options\": [\n      \"Off-the-shelf consumer drones with frequent replacement cycles.\",\n      \"Ruggedized, custom-built frames with modular, field-replaceable components.\",\n      \"Industrial-grade, carbon-fiber autonomous platforms with rapid-swap battery and motor systems.\"\n    ],\n    \"review\": \"Controls Upfront Investment vs. Long-term Operational Efficiency. Weakness: The options fail to consider the supply chain risks of specialized, custom-built hardware.\"\n  },\n  {\n    \"lever_id\": \"0a925f4e-5a84-4d3c-a00b-9b77ee8de466\",\n    \"name\": \"Hardware Autonomy Strategy\",\n    \"consequences\": \"Immediate: Shift from manual to autonomous flight paths \\u2192 Systemic: 40% reduction in operator labor costs \\u2192 Strategic: Enables multi-drone swarming for higher player density.\",\n    \"options\": [\n      \"Manual pilot-controlled drones for maximum precision and safety oversight\",\n      \"Semi-autonomous flight assistance to stabilize tracking while maintaining human intervention\",\n      \"Fully autonomous AI-driven pursuit algorithms utilizing computer vision for real-time target locking\"\n    ],\n    \"review\": \"Controls Operational Cost vs. Safety Oversight. Weakness: The options fail to consider the latency requirements of real-time AI processing in outdoor environments.\"\n  },\n  {\n    \"lever_id\": \"e3d4293b-663b-4b9a-9ffd-d05b5fa00539\",\n    \"name\": \"Arena Infrastructure Model\",\n    \"consequences\": \"Immediate: Transition from static to modular terrain \\u2192 Systemic: 30% faster site reconfiguration \\u2192 Strategic: Allows for rapid adaptation to diverse geographic markets.\",\n    \"options\": [\n      \"Permanent, fixed-terrain outdoor arenas with high-durability natural obstacles\",\n      \"Modular, semi-permanent inflatable and collapsible obstacle courses for rapid deployment\",\n      \"Dynamic, IoT-integrated smart-terrain that shifts in real-time based on drone telemetry\"\n    ],\n    \"review\": \"Controls Capital Expenditure vs. Experience Variability. Weakness: The options fail to consider the environmental impact and permitting challenges of large-scale modular setups.\"\n  },\n  {\n    \"lever_id\": \"a3288561-b5e6-4b32-94f9-55b2605e4f3d\",\n    \"name\": \"Safety and Liability Framework\",\n    \"consequences\": \"Immediate: Implementation of geofencing and collision avoidance \\u2192 Systemic: 50% decrease in insurance premiums \\u2192 Strategic: Establishes industry-leading safety standards for drone sports.\",\n    \"options\": [\n      \"Strict physical netting and perimeter containment for all flight zones\",\n      \"Software-defined geofencing with redundant hardware-level kill switches\",\n      \"Wearable biometric-linked safety protocols that disable drones upon player proximity breach\"\n    ],\n    \"review\": \"Controls User Immersion vs. Risk Mitigation. Weakness: The options fail to consider the psychological impact of visible safety measures on the 'military simulation' aesthetic.\"\n  },\n  {\n    \"lever_id\": \"791e767b-7a83-4f69-be31-27f94f0f1e1f\",\n    \"name\": \"Engagement Monetization Strategy\",\n    \"consequences\": \"Immediate: Shift from per-game fees to subscription tiers \\u2192 Systemic: 20% increase in customer lifetime value \\u2192 Strategic: Creates a recurring revenue stream for hardware maintenance.\",\n    \"options\": [\n      \"Pay-per-session model focusing on high-volume casual walk-in traffic\",\n      \"Tiered membership model offering exclusive access to advanced drone loadouts\",\n      \"Data-driven 'Pro-League' sponsorship model where players monetize their performance footage\"\n    ],\n    \"review\": \"Controls Accessibility vs. Revenue Stability. Weakness: The options fail to consider the high churn rate inherent in niche physical entertainment.\"\n  },\n  {\n    \"lever_id\": \"13fc26af-c266-42e0-8dc6-a41daa1e3cb7\",\n    \"name\": \"Simulation Realism Depth\",\n    \"consequences\": \"Immediate: Integration of haptic feedback vests \\u2192 Systemic: 60% higher user retention through immersion \\u2192 Strategic: Positions the brand as a premium military-grade training simulation.\",\n    \"options\": [\n      \"Visual-only pursuit simulation focusing on drone proximity and evasion\",\n      \"Audio-visual immersion with simulated 'lock-on' alerts and drone sound profiles\",\n      \"Full-sensory integration using haptic feedback and real-time tactical command radio comms\"\n    ],\n    \"review\": \"Controls Production Complexity vs. Market Differentiation. Weakness: The options fail to consider the technical maintenance burden of wearable haptic hardware.\"\n  }\n]"
+}

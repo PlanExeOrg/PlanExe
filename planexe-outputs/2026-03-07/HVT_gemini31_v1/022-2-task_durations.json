@@ -1,0 +1,130 @@
+[
+  {
+    "task_id": "51767f96-0519-4515-8733-34f09159533f",
+    "delay_risks": "Complex regulatory landscape and potential bureaucratic bottlenecks in local and federal approval processes.",
+    "mitigation_strategy": "Engage specialized legal counsel early to navigate zoning and aviation requirements, and maintain a proactive, transparent communication channel with all regulatory bodies.",
+    "days_min": 90,
+    "days_max": 180,
+    "days_realistic": 120
+  },
+  {
+    "task_id": "47832f6a-9bf8-45a2-8052-2505cccbd9d6",
+    "delay_risks": "Limited availability of underwriters willing to insure autonomous drone-human interaction, leading to extended negotiation periods.",
+    "mitigation_strategy": "Prepare a comprehensive safety dossier and risk-mitigation report to demonstrate low-risk operational parameters to potential insurers, and contact multiple specialty brokers simultaneously.",
+    "days_min": 30,
+    "days_max": 90,
+    "days_realistic": 60
+  },
+  {
+    "task_id": "cf6920c1-9604-4dfb-805d-4fc06d2678da",
+    "delay_risks": "Requests for additional safety documentation or hardware modifications by the FSDO, causing iterative review cycles.",
+    "mitigation_strategy": "Conduct a pre-submission audit with a third-party aviation safety consultant to ensure all documentation meets FSDO standards before formal filing.",
+    "days_min": 45,
+    "days_max": 120,
+    "days_realistic": 75
+  },
+  {
+    "task_id": "06791550-12f2-4336-9aba-7f44ef2539e3",
+    "delay_risks": "Local municipal boards may require additional environmental impact studies or public hearings, leading to extended approval timelines.",
+    "mitigation_strategy": "Engage a local land-use attorney early to pre-screen zoning requirements and maintain proactive, transparent communication with neighborhood councils to address concerns before formal hearings.",
+    "days_min": 45,
+    "days_max": 120,
+    "days_realistic": 75
+  },
+  {
+    "task_id": "578f16aa-ca69-4e97-a608-3ccb27d92be9",
+    "delay_risks": "Supply chain disruptions for specialized construction materials or delays in securing certified contractors for high-tech infrastructure installation.",
+    "mitigation_strategy": "Source materials from multiple pre-vetted vendors and establish fixed-date contracts with penalty clauses for construction delays to ensure project momentum.",
+    "days_min": 60,
+    "days_max": 100,
+    "days_realistic": 80
+  },
+  {
+    "task_id": "a0ac5b23-770d-4067-91d1-7690d71369ec",
+    "delay_risks": "Unforeseen structural issues within the chosen facility or delays in utility upgrades required for high-density drone charging and network equipment.",
+    "mitigation_strategy": "Conduct a comprehensive site survey and engineering audit prior to lease signing; allocate a 15% contingency budget for immediate facility remediation.",
+    "days_min": 20,
+    "days_max": 45,
+    "days_realistic": 30
+  },
+  {
+    "task_id": "2eec65fd-a65b-4a32-a479-0bd28438a0c9",
+    "delay_risks": "Supply chain delays for specialized high-impact netting materials and potential structural engineering revisions required by local building inspectors.",
+    "mitigation_strategy": "Source materials from multiple pre-vetted industrial suppliers and conduct a pre-installation review with local building officials to ensure all containment designs meet code requirements before construction begins.",
+    "days_min": 14,
+    "days_max": 30,
+    "days_realistic": 21
+  },
+  {
+    "task_id": "740edb97-83cc-41cc-8baa-d79f5d3936af",
+    "delay_risks": "Difficulty in obtaining spectrum licensing for private CBRS bands and potential signal interference from external urban RF sources.",
+    "mitigation_strategy": "Engage a professional RF engineer to conduct a comprehensive site survey prior to hardware procurement and maintain a buffer in the timeline for FCC/spectrum coordination filings.",
+    "days_min": 20,
+    "days_max": 45,
+    "days_realistic": 30
+  },
+  {
+    "task_id": "de97e011-fb89-4d01-9155-c2bba9cd6a61",
+    "delay_risks": "Extended lead times for industrial-grade drone hardware and unforeseen software bugs during the integration of semi-autonomous engagement logic.",
+    "mitigation_strategy": "Place orders for hardware immediately upon project initiation and implement an agile development cycle with weekly sprint reviews to identify and resolve software integration issues early.",
+    "days_min": 45,
+    "days_max": 90,
+    "days_realistic": 60
+  },
+  {
+    "task_id": "a6d91a8e-aae4-4e4a-ba54-ee583878e4ec",
+    "delay_risks": "Global supply chain disruptions for specialized industrial-grade drone components and extended lead times from niche manufacturers.",
+    "mitigation_strategy": "Place orders with multiple vetted suppliers simultaneously, maintain a buffer for shipping delays, and secure long-lead items at the project outset.",
+    "days_min": 30,
+    "days_max": 60,
+    "days_realistic": 45
+  },
+  {
+    "task_id": "753ae2df-c92d-43be-9f22-69a18e8ee03a",
+    "delay_risks": "Software bugs in the semi-autonomous engagement logic or unforeseen compatibility issues between the flight controller firmware and custom AI modules.",
+    "mitigation_strategy": "Implement an iterative development cycle with rigorous bench testing before field deployment, and utilize a dedicated simulation environment for logic validation.",
+    "days_min": 45,
+    "days_max": 90,
+    "days_realistic": 60
+  },
+  {
+    "task_id": "194566c7-0c6c-41ce-bfd6-7f1696e5d451",
+    "delay_risks": "Integration failures between wearable haptic hardware and the drone telemetry stream, potentially causing latency or signal drops.",
+    "mitigation_strategy": "Conduct early-stage integration prototyping with a small subset of hardware to identify connectivity bottlenecks before full-scale fleet implementation.",
+    "days_min": 20,
+    "days_max": 40,
+    "days_realistic": 30
+  },
+  {
+    "task_id": "f771f455-fb30-48cf-8795-fc45b29ea0ef",
+    "delay_risks": "Integration failures between the technical drone systems and the operational management software, or delays in final safety certification preventing the soft launch.",
+    "mitigation_strategy": "Implement a phased testing approach starting with internal dry runs before the public soft launch; maintain a buffer period in the schedule to address final regulatory feedback.",
+    "days_min": 30,
+    "days_max": 60,
+    "days_realistic": 45
+  },
+  {
+    "task_id": "93800436-bd52-42d1-a0b2-3470cfe7824c",
+    "delay_risks": "Difficulty in finalizing pricing structures that balance profitability with market competitiveness, or slow feedback loops from potential corporate partners.",
+    "mitigation_strategy": "Conduct rapid market research and competitor analysis early in the process; create a flexible membership framework that allows for iterative adjustments based on initial customer feedback.",
+    "days_min": 15,
+    "days_max": 30,
+    "days_realistic": 20
+  },
+  {
+    "task_id": "d26b908c-332d-4025-b260-5977425b3f0c",
+    "delay_risks": "High turnover of specialized staff or difficulty in finding personnel with the specific combination of drone technical skills and safety management experience.",
+    "mitigation_strategy": "Develop a comprehensive, standardized training manual and certification program to accelerate onboarding; initiate recruitment early to ensure a deep talent pool is available before the launch phase.",
+    "days_min": 14,
+    "days_max": 25,
+    "days_realistic": 21
+  },
+  {
+    "task_id": "0956ded0-06fc-4406-a28a-80cfc63296e8",
+    "delay_risks": "Technical glitches in the semi-autonomous engagement software during live stress tests, or failure to achieve consistent performance metrics under high-load simulation scenarios.",
+    "mitigation_strategy": "Implement a phased 'beta' testing period with controlled user groups to identify software bugs, and maintain a dedicated on-site engineering team to perform rapid patches and hardware recalibrations during the validation phase.",
+    "days_min": 14,
+    "days_max": 30,
+    "days_realistic": 21
+  }
+]

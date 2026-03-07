@@ -1,0 +1,135 @@
+[
+  {
+    "id": "28de972e-04a1-411a-ba91-c1cb8363de0b",
+    "document_name": "Project Charter & Strategic Scope Definition",
+    "description": "Foundational document establishing HVT project goals, high-level scope (Atlanta/Dallas/Pittsburgh locations), key stakeholders (FAA, Insurers, Investors), and initial success criteria. This authorizes the planning phase and defines the strategic boundaries before detailed operational work begins.",
+    "responsible_role_type": "Project Manager",
+    "document_template_primary": "PMI Project Charter Template / Standard Venture Initiation Document",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Define project vision based on SMART criteria from plan summary",
+      "Identify key stakeholders (FAA, Investors, Insurers)",
+      "Draft high-level scope and constraints (CAPEX limits, regulatory gates)",
+      "Secure initial sign-off from executive sponsor/investors"
+    ],
+    "approval_authorities": "Executive Sponsor / Board of Directors"
+  },
+  {
+    "id": "7e12e41a-517c-4de5-b8bd-c4d4e68ed247",
+    "document_name": "Regulatory Compliance Strategy Framework",
+    "description": "High-level framework for navigating FAA Part 107 licensing, airspace waivers (LAANC), and airworthiness certification requirements. Defines the compliance pathway to ensure legal flight envelopes without operational shutdowns.",
+    "responsible_role_type": "Regulatory & Compliance Director",
+    "document_template_primary": "Aviation Regulatory Compliance Framework Template",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Map current FAA regulations against proposed drone operations (Part 107 Subpart E)",
+      "Define waiver application strategy for each location (Atlanta vs DFW vs Pittsburgh)",
+      "Establish compliance reporting and audit protocols",
+      "Align with insurance requirements for liability coverage"
+    ],
+    "approval_authorities": "Regulatory & Compliance Director, Legal Counsel"
+  },
+  {
+    "id": "14215f57-5fe5-44de-aa33-693b0434442d",
+    "document_name": "Venue Infrastructure & Safety Modification Plan",
+    "description": "Strategic plan for warehouse acquisition, HVAC safety modifications, and ballistic netting installation. Ensures physical locations meet year-round operational requirements and safety buffer standards.",
+    "responsible_role_type": "Venue Infrastructure Manager",
+    "document_template_primary": "Facility Acquisition & Modification Plan Template",
+    "document_template_secondary": "Industrial Safety Compliance Checklist",
+    "steps_to_create": [
+      "Evaluate potential warehouse sites against zoning and airspace constraints",
+      "Define HVAC modification requirements for air quality standards",
+      "Specify ballistic netting and safety zone specifications",
+      "Develop CAPEX budget allocation for physical modifications"
+    ],
+    "approval_authorities": "Venue Infrastructure Manager, Financial Controller"
+  },
+  {
+    "id": "c2300435-42c9-4e95-8be3-15f3463ae756",
+    "document_name": "Technology Integration & Cybersecurity Architecture Framework",
+    "description": "Framework governing the selection and deployment of drone hardware (sensors, LiDAR), telemetry systems, and data protection protocols. Balances user experience quality with cybersecurity risks and maintenance costs.",
+    "responsible_role_type": "CTO / Technology Integration Specialist",
+    "document_template_primary": "IoT Security Architecture Framework / Hardware Deployment Plan",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Define hardware specifications for collision sensors and tracking telemetry",
+      "Establish cybersecurity standards (AES-256 encryption) for data streams",
+      "Outline penetration testing requirements prior to launch",
+      "Plan for supply chain resilience regarding custom sensor procurement"
+    ],
+    "approval_authorities": "CTO, Cybersecurity Officer, CFO"
+  },
+  {
+    "id": "9182bbff-d29f-40c1-8458-64353368d303",
+    "document_name": "Narrative Branding & Community Relations Strategy",
+    "description": "Strategic approach to marketing the HVT concept as 'tactical sport' while mitigating community backlash regarding military themes. Includes dual-branding guidelines and partnership frameworks for veterans groups.",
+    "responsible_role_type": "Narrative Branding Strategist / Marketing Lead",
+    "document_template_primary": "Brand Strategy & Community Engagement Framework",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Develop dual-branding messaging (tactical sport vs combat simulation)",
+      "Draft community engagement plan including town halls and grievance channels",
+      "Define partnership criteria for veterans groups to ensure legitimacy without political risk",
+      "Create media relations protocols for public perception management"
+    ],
+    "approval_authorities": "Narrative Branding Strategist, Marketing Director"
+  },
+  {
+    "id": "5f0a005f-a479-4c35-8154-153ef8b0318f",
+    "document_name": "Revenue Scalability & Franchise Business Model Framework",
+    "description": "High-level framework outlining growth pathways beyond ticket sales. Includes corporate team-building package structures and franchise licensing models for regional expansion.",
+    "responsible_role_type": "Revenue & Franchise Director / CFO",
+    "document_template_primary": "Business Model Canvas / Revenue Strategy Framework",
+    "document_template_secondary": "Franchise Licensing Agreement Template (High-Level)",
+    "steps_to_create": [
+      "Define pricing tiers and corporate package structures",
+      "Establish franchise eligibility criteria and IP licensing terms",
+      "Project revenue streams for Year 1 vs. Long-term scalability",
+      "Identify key performance indicators (KPIs) for retention and expansion"
+    ],
+    "approval_authorities": "Revenue Director, CFO, Legal Counsel"
+  },
+  {
+    "id": "ba598c85-18e3-4bd8-ba83-e6809d5c4855",
+    "document_name": "Initial High-Level Budget & CAPEX Allocation Plan",
+    "description": "High-level financial framework outlining the $500,000 per location CAPEX requirements. Includes contingency funds for insurance premiums and regulatory delays.",
+    "responsible_role_type": "Financial Controller / CFO",
+    "document_template_primary": "Project Budget Template (CAPEX Focus)",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Estimate costs for warehouse fit-out, HVAC, and netting per location",
+      "Allocate budget for hardware acquisition ($50k contingency for insurance premiums)",
+      "Define cash flow runway requirements (6-month operating reserve)",
+      "Establish financial reporting cadence for investors"
+    ],
+    "approval_authorities": "CFO / Board of Directors"
+  },
+  {
+    "id": "dee3398f-5acc-4edf-91fe-4c1b272f85f1",
+    "document_name": "Stakeholder Engagement & Communication Plan",
+    "description": "High-level plan detailing communication strategies with key stakeholders including FAA, Insurers, Community Residents, and Corporate Clients.",
+    "responsible_role_type": "Project Manager / Stakeholder Lead",
+    "document_template_primary": "Stakeholder Management Plan Template (PMI)",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Identify primary and secondary stakeholders from SWOT analysis",
+      "Define communication channels for regulatory reporting vs community town halls",
+      "Draft escalation paths for conflict resolution with regulators or neighbors"
+    ],
+    "approval_authorities": "Project Manager / Executive Sponsor"
+  },
+  {
+    "id": "77875c7c-49a2-42f0-9742-b1cc010a7625",
+    "document_name": "Risk Register & Mitigation Framework",
+    "description": "Initial register of top risks (Regulatory, Safety, Financial) with high-level mitigation strategies. Serves as a living document for risk management during planning.",
+    "responsible_role_type": "Project Manager / Risk Officer",
+    "document_template_primary": "Risk Register Template (ISO 31000 aligned)",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "List identified risks from SWOT and Expert Review documents",
+      "Assign probability and impact scores to each risk",
+      "Define mitigation owners for high-priority risks (e.g., Insurance Broker for Liability)"
+    ],
+    "approval_authorities": "Project Manager / Executive Sponsor"
+  }
+]

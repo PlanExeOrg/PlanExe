@@ -1,0 +1,393 @@
+project_key,project_name,project_description,project_start_date,project_end_date,project_progress,project_parent,originating_department
+d47e5ee5-c7e3-49ae-9bf5-d2b61b756a05,HVT Combat Arena,"HVT Combat Arena
+
+Final deliverable:
+Operational Drone Facility",3/7/2026,7/24/2027,0,,PlanExe
+51767f96-0519-4515-8733-34f09159533f,Regulatory and Legal Compliance,,3/7/2026,10/4/2026,0,d47e5ee5-c7e3-49ae-9bf5-d2b61b756a05,PlanExe
+47832f6a-9bf8-45a2-8052-2505cccbd9d6,Secure specialty liability insurance for autonomous drone operations,,3/7/2026,5/6/2026,0,51767f96-0519-4515-8733-34f09159533f,PlanExe
+a1baf03f-7f51-42b1-90cf-5afba73dad74,Draft comprehensive safety dossier,"Draft comprehensive safety dossier
+
+Description:
+Compile technical specifications, risk mitigation strategies, and operational protocols into a formal document to present to potential insurance underwriters.
+
+Resources needed:
+• Project Manager
+• Technical Lead
+• Safety Consultant",3/7/2026,3/27/2026,0,47832f6a-9bf8-45a2-8052-2505cccbd9d6,PlanExe
+e85604c6-84e9-4bda-9167-3ca2484e1dfd,Identify and contact specialty brokers,"Identify and contact specialty brokers
+
+Description:
+Research and reach out to aviation insurance brokers specializing in autonomous systems and recreational liability to request quotes.
+
+Resources needed:
+• Project Manager
+• Risk Management Liaison",3/27/2026,4/16/2026,0,a1baf03f-7f51-42b1-90cf-5afba73dad74,PlanExe
+1a03e247-c548-41c6-83ae-f6ce8cbca7fc,Review and negotiate policy terms,"Review and negotiate policy terms
+
+Description:
+Analyze quotes for coverage limits and exclusion clauses, consulting with legal counsel to ensure the policy adequately covers autonomous drone-human interaction.
+
+Resources needed:
+• Project Manager
+• Aviation Liability Attorney",4/16/2026,5/6/2026,0,47832f6a-9bf8-45a2-8052-2505cccbd9d6,PlanExe
+cf6920c1-9604-4dfb-805d-4fc06d2678da,Submit operational safety case to the local FSDO,,5/6/2026,7/20/2026,0,47832f6a-9bf8-45a2-8052-2505cccbd9d6,PlanExe
+b8b048b8-9b3c-49de-8f6d-8de13a29c636,Draft comprehensive operational safety case,"Draft comprehensive operational safety case
+
+Description:
+Compile technical specifications, flight parameters, and risk mitigation strategies into a formal document for FSDO review.
+
+Resources needed:
+• Aviation Safety Consultant
+• Project Manager
+• Technical Lead",5/6/2026,5/31/2026,0,cf6920c1-9604-4dfb-805d-4fc06d2678da,PlanExe
+2ac3855e-fd4a-4059-9745-04224558e82f,Conduct third-party safety audit,"Conduct third-party safety audit
+
+Description:
+Engage an external auditor to verify that all documentation and proposed safety protocols meet FAA and FSDO standards.
+
+Resources needed:
+• Third-party Aviation Safety Consultant
+• Project Manager",5/31/2026,6/25/2026,0,b8b048b8-9b3c-49de-8f6d-8de13a29c636,PlanExe
+fbc512cc-bbca-4d24-ba08-b54a186f70c5,Submit and present to FSDO,"Submit and present to FSDO
+
+Description:
+Formally file the safety case and attend the pre-application meeting to address regulatory inquiries and secure preliminary approval.
+
+Resources needed:
+• Aviation Regulatory Officer
+• Project Manager
+• Legal Counsel",6/25/2026,7/20/2026,0,cf6920c1-9604-4dfb-805d-4fc06d2678da,PlanExe
+06791550-12f2-4336-9aba-7f44ef2539e3,Obtain local zoning and land-use permits for recreational facility,,7/20/2026,10/4/2026,0,51767f96-0519-4515-8733-34f09159533f,PlanExe
+257433de-c93c-4ae4-ad14-0296cd86daf8,Consult local land-use attorney,"Consult local land-use attorney
+
+Description:
+Engage a specialized land-use attorney to conduct a preliminary audit of zoning codes and identify potential regulatory hurdles for a recreational drone facility.
+
+Resources needed:
+• Project Manager
+• Land-use Attorney",7/20/2026,8/8/2026,0,06791550-12f2-4336-9aba-7f44ef2539e3,PlanExe
+ab34e5e2-38d2-45fc-9383-24d916dd7f09,Prepare zoning and permit applications,"Prepare zoning and permit applications
+
+Description:
+Compile all necessary site plans, safety documentation, and environmental impact statements required for municipal zoning and recreational facility permit submissions.
+
+Resources needed:
+• Project Manager
+• Architect
+• Compliance Officer",8/8/2026,8/27/2026,0,257433de-c93c-4ae4-ad14-0296cd86daf8,PlanExe
+5c5b8287-c27b-44b0-897c-008c25b4f6ae,Engage neighborhood councils,"Engage neighborhood councils
+
+Description:
+Initiate proactive communication with local neighborhood councils to present the project, address noise and privacy concerns, and build community support prior to formal hearings.
+
+Resources needed:
+• Project Manager
+• Community Liaison",8/27/2026,9/15/2026,0,ab34e5e2-38d2-45fc-9383-24d916dd7f09,PlanExe
+9abe2657-6f71-4bf9-aa36-4b3c9e948567,Attend municipal zoning hearings,"Attend municipal zoning hearings
+
+Description:
+Represent the project at public municipal hearings to present the safety case and secure final approval for land-use and facility operation.
+
+Resources needed:
+• Project Manager
+• Land-use Attorney
+• Safety Officer",9/15/2026,10/4/2026,0,06791550-12f2-4336-9aba-7f44ef2539e3,PlanExe
+578f16aa-ca69-4e97-a608-3ccb27d92be9,Infrastructure and Arena Development,,10/4/2026,12/29/2026,0,51767f96-0519-4515-8733-34f09159533f,PlanExe
+a0ac5b23-770d-4067-91d1-7690d71369ec,Acquire and prepare site for modular urban-mimicry construction,,10/4/2026,11/3/2026,0,578f16aa-ca69-4e97-a608-3ccb27d92be9,PlanExe
+80ea4095-6f37-4f91-9d53-0aa3e42b47e3,Conduct comprehensive site engineering audit,"Conduct comprehensive site engineering audit
+
+Description:
+Perform a detailed structural and electrical assessment of the chosen facility to ensure it can support high-density drone charging, network equipment, and modular obstacle weight loads.
+
+Resources needed:
+• Structural Engineer
+• Electrical Contractor
+• Site Manager",10/4/2026,10/14/2026,0,a0ac5b23-770d-4067-91d1-7690d71369ec,PlanExe
+b04c47bb-f3c3-4d16-b97c-ca3d6b6a12ae,Finalize lease and utility upgrade agreements,"Finalize lease and utility upgrade agreements
+
+Description:
+Negotiate and sign the facility lease, including specific clauses for necessary utility upgrades and infrastructure modifications required for the arena.
+
+Resources needed:
+• Project Manager
+• Legal Counsel
+• Property Owner",10/14/2026,10/24/2026,0,80ea4095-6f37-4f91-9d53-0aa3e42b47e3,PlanExe
+260f2b4b-125b-47d0-a7b4-739af091f1ea,Execute facility site preparation and cleanup,"Execute facility site preparation and cleanup
+
+Description:
+Clear the space, perform necessary repairs, and install the required power and data infrastructure to prepare for the modular construction phase.
+
+Resources needed:
+• Construction Crew
+• Electrician
+• Site Manager",10/24/2026,11/3/2026,0,a0ac5b23-770d-4067-91d1-7690d71369ec,PlanExe
+2eec65fd-a65b-4a32-a479-0bd28438a0c9,Install perimeter safety netting and physical containment barriers,,11/3/2026,11/27/2026,0,a0ac5b23-770d-4067-91d1-7690d71369ec,PlanExe
+0206f4ab-4d5a-48d4-90ee-aab9e5939ffa,Source high-impact safety netting,"Source high-impact safety netting
+
+Description:
+Identify and procure industrial-grade, high-impact netting materials that meet recreational combat safety standards and fire codes.
+
+Resources needed:
+• Procurement Officer
+• Safety Consultant
+• Industrial Supplier",11/3/2026,11/9/2026,0,2eec65fd-a65b-4a32-a479-0bd28438a0c9,PlanExe
+7f058f1b-713d-4e86-bd82-df3b3e66f4cd,Review containment design with officials,"Review containment design with officials
+
+Description:
+Conduct a formal pre-installation review of the containment barrier blueprints with local building inspectors to ensure full code compliance.
+
+Resources needed:
+• Project Manager
+• Structural Engineer
+• Local Building Official",11/9/2026,11/15/2026,0,0206f4ab-4d5a-48d4-90ee-aab9e5939ffa,PlanExe
+8235b25f-b1ab-4310-b75d-d242ccf5f956,Install netting and physical barriers,"Install netting and physical barriers
+
+Description:
+Execute the physical installation of perimeter safety netting and structural barriers within the arena to ensure a secure flight environment.
+
+Resources needed:
+• Construction Crew
+• Safety Officer
+• Site Manager",11/15/2026,11/21/2026,0,7f058f1b-713d-4e86-bd82-df3b3e66f4cd,PlanExe
+dd7a17e9-4ef5-4203-b71f-1e1d52e57f07,Perform final safety containment audit,"Perform final safety containment audit
+
+Description:
+Conduct a rigorous stress test and inspection of all installed netting and barriers to verify they meet all safety and regulatory requirements.
+
+Resources needed:
+• Safety Officer
+• Drone Technician
+• Project Manager",11/21/2026,11/27/2026,0,2eec65fd-a65b-4a32-a479-0bd28438a0c9,PlanExe
+740edb97-83cc-41cc-8baa-d79f5d3936af,Deploy private 5G/CBRS network infrastructure,,11/27/2026,12/29/2026,0,578f16aa-ca69-4e97-a608-3ccb27d92be9,PlanExe
+d5d8471b-4f72-4b7e-900a-90fee7351813,Conduct site RF spectrum analysis,"Conduct site RF spectrum analysis
+
+Description:
+Perform a comprehensive sweep of the target facility to identify existing signal interference and map RF propagation patterns in the presence of urban-mimicry obstacles.
+
+Resources needed:
+• RF Systems Engineer
+• Spectrum analyzer hardware
+• Site access permissions",11/27/2026,12/5/2026,0,740edb97-83cc-41cc-8baa-d79f5d3936af,PlanExe
+d822aec9-3cd9-4048-b286-8ee132b54864,Design private network topology,"Design private network topology
+
+Description:
+Develop the architecture for the private 5G/CBRS network, ensuring optimal placement of small cells and gateways to guarantee sub-20ms latency across the entire arena.
+
+Resources needed:
+• Network Architect
+• Network simulation software
+• Hardware specifications",12/5/2026,12/13/2026,0,d5d8471b-4f72-4b7e-900a-90fee7351813,PlanExe
+46118f43-3451-4eb0-a9f9-c64c4cdcb31a,Procure and install network hardware,"Procure and install network hardware
+
+Description:
+Purchase and physically install the CBRS radio units, core network controllers, and signal distribution equipment within the arena perimeter.
+
+Resources needed:
+• Network & Telemetry Specialist
+• CBRS hardware kits
+• Installation tools",12/13/2026,12/21/2026,0,d822aec9-3cd9-4048-b286-8ee132b54864,PlanExe
+38a1b649-c238-4287-b02b-5c5c05c5cac1,Validate network performance and latency,"Validate network performance and latency
+
+Description:
+Conduct stress tests under simulated load to verify that the network maintains consistent sub-20ms latency and zero packet loss during high-density drone operations.
+
+Resources needed:
+• RF Systems Engineer
+• Drone test fleet
+• Latency testing software",12/21/2026,12/29/2026,0,740edb97-83cc-41cc-8baa-d79f5d3936af,PlanExe
+de97e011-fb89-4d01-9155-c2bba9cd6a61,Drone Fleet and Technology Integration,,12/29/2026,5/16/2027,0,578f16aa-ca69-4e97-a608-3ccb27d92be9,PlanExe
+a6d91a8e-aae4-4e4a-ba54-ee583878e4ec,Procure industrial-grade drone fleet and spare components,,12/29/2026,2/15/2027,0,de97e011-fb89-4d01-9155-c2bba9cd6a61,PlanExe
+6422ecb4-aaf0-449d-b734-6baa080addef,Define technical specifications and requirements,"Define technical specifications and requirements
+
+Description:
+Establish precise performance metrics, payload capacities, and durability standards for the industrial-grade drone fleet to ensure they meet the operational demands of the combat arena.
+
+Resources needed:
+• Technical Lead
+• Drone Engineer",12/29/2026,1/10/2027,0,a6d91a8e-aae4-4e4a-ba54-ee583878e4ec,PlanExe
+906d15d9-6dd9-4d29-9e0c-a54b4fee2ca5,Identify and vet global suppliers,"Identify and vet global suppliers
+
+Description:
+Research and qualify multiple manufacturers capable of providing industrial-grade drones and spare parts, ensuring they can meet volume requirements and delivery timelines.
+
+Resources needed:
+• Procurement Specialist
+• Project Manager",1/10/2027,1/22/2027,0,6422ecb4-aaf0-449d-b734-6baa080addef,PlanExe
+c4764d21-6e2c-487e-8696-4c18a5f733a9,Execute procurement and logistics,"Execute procurement and logistics
+
+Description:
+Place formal orders for the primary fleet and spare components, manage import/export compliance, and track shipments to ensure arrival within the project timeline.
+
+Resources needed:
+• Procurement Specialist
+• Logistics Coordinator",1/22/2027,2/3/2027,0,906d15d9-6dd9-4d29-9e0c-a54b4fee2ca5,PlanExe
+b224c338-fbc8-4ba0-a65b-1812acb75e60,Perform hardware inspection and testing,"Perform hardware inspection and testing
+
+Description:
+Conduct rigorous quality control checks upon arrival, including flight testing and component stress tests, to verify all units meet safety and performance standards.
+
+Resources needed:
+• Drone Technicians
+• Safety Officer",2/3/2027,2/15/2027,0,a6d91a8e-aae4-4e4a-ba54-ee583878e4ec,PlanExe
+753ae2df-c92d-43be-9f22-69a18e8ee03a,Implement semi-autonomous engagement logic and geofencing,,2/15/2027,4/16/2027,0,a6d91a8e-aae4-4e4a-ba54-ee583878e4ec,PlanExe
+656beb2c-d4f1-4828-a750-d8d026eedf8b,Develop core flight and AI logic,"Develop core flight and AI logic
+
+Description:
+Architect the semi-autonomous engagement algorithms, including obstacle avoidance, target tracking, and flight path optimization within the simulation environment.
+
+Resources needed:
+• Software Engineers
+• AI/ML Specialists
+• Flight Controller Firmware",2/15/2027,3/7/2027,0,753ae2df-c92d-43be-9f22-69a18e8ee03a,PlanExe
+37ff0a8e-da40-4e9b-b0fa-dbec78f7569b,Implement geofencing and safety protocols,"Implement geofencing and safety protocols
+
+Description:
+Program hard-coded geofencing boundaries and emergency kill-switch triggers to ensure drones remain within the designated arena and respond instantly to safety overrides.
+
+Resources needed:
+• Safety Systems Engineer
+• Firmware Developers
+• Hardware Kill-Switch Modules",3/7/2027,3/27/2027,0,656beb2c-d4f1-4828-a750-d8d026eedf8b,PlanExe
+19f977ed-5090-4534-ab9d-05acaefba043,Conduct bench and simulation testing,"Conduct bench and simulation testing
+
+Description:
+Perform rigorous unit testing and simulated flight stress tests to validate logic stability, latency response, and geofence reliability before field deployment.
+
+Resources needed:
+• QA Testers
+• Simulation Software
+• Test Bench Hardware",3/27/2027,4/16/2027,0,753ae2df-c92d-43be-9f22-69a18e8ee03a,PlanExe
+194566c7-0c6c-41ce-bfd6-7f1696e5d451,Integrate wearable haptic feedback systems and safety kill switches,,4/16/2027,5/16/2027,0,de97e011-fb89-4d01-9155-c2bba9cd6a61,PlanExe
+b9eedb6c-4421-4677-a4e0-e797a7d052da,Prototype Haptic and Kill Switch Integration,"Prototype Haptic and Kill Switch Integration
+
+Description:
+Develop a proof-of-concept bench test connecting the wearable haptic vests to the drone telemetry stream to ensure zero-latency signal transmission and reliable emergency override functionality.
+
+Resources needed:
+• Drone Technician
+• Software Engineer
+• Haptic Hardware Kits
+• Test Bench Drones",4/16/2027,4/26/2027,0,194566c7-0c6c-41ce-bfd6-7f1696e5d451,PlanExe
+8278f5ad-d24e-4488-81c3-4b62b46b96ca,Validate Safety Kill Switch Reliability,"Validate Safety Kill Switch Reliability
+
+Description:
+Conduct rigorous stress testing of the hardware-level kill switches to ensure they maintain priority override control even during software-level communication failures or high-latency events.
+
+Resources needed:
+• Safety Officer
+• Hardware Engineer
+• RF Signal Generator
+• Diagnostic Software",4/26/2027,5/6/2027,0,b9eedb6c-4421-4677-a4e0-e797a7d052da,PlanExe
+54df598d-a6bd-4e2c-9e56-d91bb2bb65ce,Integrate Haptic Feedback with Flight Logic,"Integrate Haptic Feedback with Flight Logic
+
+Description:
+Finalize the software integration between the autonomous engagement AI and the haptic vests to ensure accurate, real-time feedback for players during simulated combat interactions.
+
+Resources needed:
+• AI Developer
+• Systems Integrator
+• Wearable Haptic Vests
+• Flight Controller Firmware",5/6/2027,5/16/2027,0,194566c7-0c6c-41ce-bfd6-7f1696e5d451,PlanExe
+f771f455-fb30-48cf-8795-fc45b29ea0ef,Business Model and Operational Launch,,5/16/2027,7/24/2027,0,d47e5ee5-c7e3-49ae-9bf5-d2b61b756a05,PlanExe
+93800436-bd52-42d1-a0b2-3470cfe7824c,Develop tiered membership and corporate team-building programs,,5/16/2027,6/6/2027,0,f771f455-fb30-48cf-8795-fc45b29ea0ef,PlanExe
+3404b1f2-931e-4f1e-8847-5ad3dee129a0,Analyze market and competitor pricing,"Analyze market and competitor pricing
+
+Description:
+Conduct comprehensive research on local entertainment venues and corporate team-building pricing models to establish a competitive yet profitable baseline for HVT memberships.
+
+Resources needed:
+• Market Analyst
+• Competitor data reports
+• Financial modeling software",5/16/2027,5/23/2027,0,93800436-bd52-42d1-a0b2-3470cfe7824c,PlanExe
+e251ac74-f35a-4843-8426-dc8082842082,Draft tiered membership and corporate packages,"Draft tiered membership and corporate packages
+
+Description:
+Design the structure for individual memberships and corporate partnership tiers, including benefits, pricing, and service level agreements.
+
+Resources needed:
+• Business Development Manager
+• Legal Counsel
+• Marketing Specialist",5/23/2027,5/30/2027,0,3404b1f2-931e-4f1e-8847-5ad3dee129a0,PlanExe
+0a94719a-19f5-4b77-9a4e-7ea14e1f1f8c,Validate pricing with corporate stakeholders,"Validate pricing with corporate stakeholders
+
+Description:
+Present proposed packages to a focus group of potential corporate clients to gather feedback and refine the offering before final implementation.
+
+Resources needed:
+• Business Development Manager
+• Corporate client focus group
+• Presentation materials",5/30/2027,6/6/2027,0,93800436-bd52-42d1-a0b2-3470cfe7824c,PlanExe
+d26b908c-332d-4025-b260-5977425b3f0c,Conduct staff training on safety protocols and range operations,,6/6/2027,6/30/2027,0,93800436-bd52-42d1-a0b2-3470cfe7824c,PlanExe
+796a7b05-5232-4abf-bd81-c3836bb5a132,Develop safety and operational manuals,"Develop safety and operational manuals
+
+Description:
+Draft comprehensive standard operating procedures (SOPs) covering drone flight safety, emergency kill-switch protocols, and range management guidelines.
+
+Resources needed:
+• Safety Officer
+• Technical Writer
+• Drone Lead",6/6/2027,6/12/2027,0,d26b908c-332d-4025-b260-5977425b3f0c,PlanExe
+0ff62946-4ddf-4208-bab9-2edae2e71e4d,Recruit and onboard range staff,"Recruit and onboard range staff
+
+Description:
+Source and hire personnel with drone technical expertise and safety management backgrounds, ensuring all staff meet the required certification standards.
+
+Resources needed:
+• HR Manager
+• Project Manager
+• Recruitment budget",6/12/2027,6/18/2027,0,796a7b05-5232-4abf-bd81-c3836bb5a132,PlanExe
+837650fd-e4af-4e7a-b53b-3ee25461e067,Conduct staff certification workshops,"Conduct staff certification workshops
+
+Description:
+Execute hands-on training sessions for all staff, focusing on emergency response, drone maintenance, and customer safety protocols.
+
+Resources needed:
+• Safety Officer
+• Drone fleet
+• Training facility",6/18/2027,6/24/2027,0,0ff62946-4ddf-4208-bab9-2edae2e71e4d,PlanExe
+f1a2f5ee-3b39-4a59-8e3d-b1fc46e8ff49,Perform final operational readiness drills,"Perform final operational readiness drills
+
+Description:
+Run full-scale simulation drills to verify that staff can effectively manage the range and respond to simulated emergency scenarios.
+
+Resources needed:
+• Range staff
+• Drone fleet
+• Safety Officer",6/24/2027,6/30/2027,0,d26b908c-332d-4025-b260-5977425b3f0c,PlanExe
+0956ded0-06fc-4406-a28a-80cfc63296e8,Execute soft launch and performance validation of simulation experience,,6/30/2027,7/24/2027,0,f771f455-fb30-48cf-8795-fc45b29ea0ef,PlanExe
+3a4fd359-0cc2-4545-9e8a-de235057f22e,Design beta testing protocols,"Design beta testing protocols
+
+Description:
+Develop structured test scripts and safety checklists for controlled user groups to evaluate system performance and identify software bugs.
+
+Resources needed:
+• Project Manager
+• Safety Officer
+• Technical Lead",6/30/2027,7/6/2027,0,0956ded0-06fc-4406-a28a-80cfc63296e8,PlanExe
+87082098-7fb7-48e4-8231-9216aa1f716e,Execute controlled user beta sessions,"Execute controlled user beta sessions
+
+Description:
+Run live stress tests with small, monitored groups to gather performance data and user feedback on the simulation experience.
+
+Resources needed:
+• Drone Technicians
+• Beta Test Participants
+• Range Officer",7/6/2027,7/12/2027,0,3a4fd359-0cc2-4545-9e8a-de235057f22e,PlanExe
+a5382f49-c70f-48ed-818f-8d754a68ac77,Perform rapid system patches and calibration,"Perform rapid system patches and calibration
+
+Description:
+Analyze beta session data to perform immediate software patches, hardware recalibrations, and safety system adjustments.
+
+Resources needed:
+• Software Engineer
+• Drone Technician
+• Diagnostic Tools",7/12/2027,7/18/2027,0,87082098-7fb7-48e4-8231-9216aa1f716e,PlanExe
+45ef24e1-503c-4a12-97d9-226a37d5abd6,Validate final performance metrics,"Validate final performance metrics
+
+Description:
+Verify that the system meets all safety and operational benchmarks required for the full public launch.
+
+Resources needed:
+• Project Manager
+• Safety Officer
+• Technical Lead",7/18/2027,7/24/2027,0,0956ded0-06fc-4406-a28a-80cfc63296e8,PlanExe

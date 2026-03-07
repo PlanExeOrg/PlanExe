@@ -1,0 +1,63 @@
+[
+  {
+    "id": "30e2e8fe-9dc2-442e-bf4f-7ba2478b89fc",
+    "document_name": "FAA Part 107 and Part 89 Regulatory Documentation",
+    "description": "Official FAA guidance on small unmanned aircraft systems (sUAS), Remote ID, and operations over human beings.",
+    "recency_requirement": "Current version",
+    "responsible_role_type": "Aviation Regulatory & Compliance Officer",
+    "steps_to_find": [
+      "Access FAA official website",
+      "Download Advisory Circular 107-2A",
+      "Review Part 89 Remote ID requirements"
+    ],
+    "access_difficulty": "Easy"
+  },
+  {
+    "id": "c523f96d-9889-4e96-a039-411de9463000",
+    "document_name": "Local Municipal Zoning and Noise Ordinance Data",
+    "description": "Official city documents detailing land-use requirements for recreational facilities and decibel limits for outdoor activities in Austin, LA, and RTP.",
+    "recency_requirement": "Most recent available",
+    "responsible_role_type": "Community & Public Relations Coordinator",
+    "steps_to_find": [
+      "Search municipal government websites for zoning codes",
+      "Request noise ordinance documentation from city planning departments"
+    ],
+    "access_difficulty": "Medium"
+  },
+  {
+    "id": "dad07864-83ce-45f4-9259-206c913aa3f1",
+    "document_name": "CBRS Spectrum Sharing and Interference Mitigation Data",
+    "description": "Technical whitepapers and FCC guidelines regarding CBRS frequency usage and interference mitigation in urban environments.",
+    "recency_requirement": "Published within last 3 years",
+    "responsible_role_type": "Network & Telemetry Specialist",
+    "steps_to_find": [
+      "Search Wireless Innovation Forum database",
+      "Review FCC CBRS technical guidelines"
+    ],
+    "access_difficulty": "Medium"
+  },
+  {
+    "id": "5c8a000c-9d06-402f-a801-cb712954ef95",
+    "document_name": "ANSI/ASTM Recreational Combat Safety Standards",
+    "description": "Industry-standard safety guidelines for recreational combat activities, used to benchmark internal safety protocols.",
+    "recency_requirement": "Most recent version",
+    "responsible_role_type": "Arena Infrastructure & Safety Architect",
+    "steps_to_find": [
+      "Search ASTM International standards database",
+      "Purchase relevant safety standard documents"
+    ],
+    "access_difficulty": "Medium"
+  },
+  {
+    "id": "ce7b6e20-d8d6-42ea-a7e4-c3585b7aa464",
+    "document_name": "Specialty Aviation Liability Insurance Policy Templates",
+    "description": "Sample policy language from specialty brokers covering high-risk recreational robotics to inform insurance negotiations.",
+    "recency_requirement": "Current market standards",
+    "responsible_role_type": "Risk Management & Insurance Liaison",
+    "steps_to_find": [
+      "Contact specialty aviation insurance brokers",
+      "Request sample policy exclusions and coverage definitions"
+    ],
+    "access_difficulty": "Hard"
+  }
+]

@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HVT Combat Arena</title>
+  <style>
+    body {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        margin: 2rem;
+    }
+  </style>
+  <!--HTML_HEAD_START-->
+  <!-- 
+  Versions available at:
+  https://www.jsdelivr.com/package/npm/dhtmlx-gantt 
+  Version 9.1.0 breaks the zoom in/out/fit buttons.
+  Version 9.0.15 normal. The zoom in/out/fit buttons works.
+  -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dhtmlx-gantt@9.0.15/codebase/dhtmlxgantt.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/dhtmlx-gantt@9.0.15/codebase/dhtmlxgantt.min.js"></script>
+  <style>
+    .gantt_container_with_controls {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    .gantt_container {
+        width: 100%;
+        height: 80vh;
+        margin-bottom: 1rem;
+    }
+    .gantt_tooltip {
+        max-width: 30rem;
+        white-space: break-spaces;
+    }
+    .gantt-controls {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+    .zoom-buttons {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+    .export-button {
+        position: absolute;
+        right: 0;
+    }
+    .gantt-controls button {
+        padding: 0.5rem 1rem;
+        border: 1px solid #ccc;
+        border-radius: 0.25rem;
+        background: white;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+    .gantt-controls button:hover {
+        background: #f5f5f5;
+    }
+    .project-task.gantt_task_line {
+        background-color: #b67134;
+        border-color: #f57c00;
+    }
+    .project-task .gantt_task_content {
+        color: white;
+    }
+    .project-task.gantt_project.gantt_task_line {
+        border-radius: 0;
+    }
+  </style>
+  <!--HTML_HEAD_END-->
+</head>
+<body>
+    <h1>HVT Combat Arena</h1>
+<!--HTML_BODY_CONTENT_START-->
+<div class="gantt_container_with_controls">
+    <div class="gantt-controls">
+        <div class="zoom-buttons">
+            <button id="zoomFitButton">Zoom Fit</button>
+            <button id="zoomInButton">Zoom In</button>
+            <button id="zoomOutButton">Zoom Out</button>
+        </div>
+        <button id="exportToCSVButton" class="export-button">Export to CSV</button>
+    </div>
+    <div id="gantt_container" class="gantt_container"></div>
+</div>
+<!--HTML_BODY_CONTENT_END-->
+
+<!--HTML_BODY_SCRIPT_START-->
+<script type="module">
+    // When `null`, the "Export to CSV" button is hidden.
+    // When a string, it's the CSV data, eg: `"hello;csv;world"` and the button is shown.
+    const GANTT_DATA_CSV = null;
+
+    // This must be a string, eg: `"planexe_export.csv"`
+    const GANTT_FILENAME_CSV = "PlanExe_Export_HVT_Combat_Arena.csv";
+
+    // This must be json. It's not a string.
+    const GANTT_DATA_DHTMLX = {
+  "tasks": [
+    {
+      "id": "d47e5ee5-c7e3-49ae-9bf5-d2b61b756a05",
+      "text": "HVT Combat Arena",
+      "custom_tooltip": "<b>HVT Combat Arena</b><br><b>Final deliverable:</b><br>Operational Drone Facility",
+      "progress": 0,
+      "open": true,
+      "meta": "",
+      "type": "project"
+    },
+    {
+      "id": "51767f96-0519-4515-8733-34f09159533f",
+      "text": "Regulatory and Legal Compliance",
+      "custom_tooltip": "<b>Regulatory and Legal Compliance</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "d47e5ee5-c7e3-49ae-9bf5-d2b61b756a05 SS",
+      "parent": "d47e5ee5-c7e3-49ae-9bf5-d2b61b756a05",
+      "type": "project"
+    },
+    {
+      "id": "47832f6a-9bf8-45a2-8052-2505cccbd9d6",
+      "text": "Secure specialty liability insurance for autonomous drone operations",
+      "custom_tooltip": "<b>Secure specialty liability insurance for autonomous drone operations</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "51767f96-0519-4515-8733-34f09159533f SS",
+      "parent": "51767f96-0519-4515-8733-34f09159533f",
+      "type": "project"
+    },
+    {
+      "id": "a1baf03f-7f51-42b1-90cf-5afba73dad74",
+      "text": "Draft comprehensive safety dossier",
+      "custom_tooltip": "<b>Draft comprehensive safety dossier</b><br>Compile technical specifications, risk mitigation strategies, and operational protocols into a formal document to present to potential insurance underwriters.<br><b>Resources needed:</b><br><ul><li>Project Manager</li><li>Technical Lead</li><li>Safety Consultant</li></ul>",
+      "start_date": "2026-03-07",
+      "duration": 20.0,
+      "progress": 0,
+      "open": true,
+      "meta": "47832f6a-9bf8-45a2-8052-2505cccbd9d6 SS",
+      "parent": "47832f6a-9bf8-45a2-8052-2505cccbd9d6"
+    },
+    {
+      "id": "e85604c6-84e9-4bda-9167-3ca2484e1dfd",
+      "text": "Identify and contact specialty brokers",
+      "custom_tooltip": "<b>Identify and contact specialty brokers</b><br>Research and reach out to aviation insurance brokers specializing in autonomous systems and recreational liability to request quotes.<br><b>Resources needed:</b><br><ul><li>Project Manager</li><li>Risk Management Liaison</li></ul>",
+      "start_date": "2026-03-27",
+      "duration": 20.0,
+      "progress": 0,
+      "open": true,
+      "meta": "a1baf03f-7f51-42b1-90cf-5afba73dad74 FS",
+      "parent": "47832f6a-9bf8-45a2-8052-2505cccbd9d6"
+    },
+    {
+      "id": "1a03e247-c548-41c6-83ae-f6ce8cbca7fc",
+      "text": "Review and negotiate policy terms",
+      "custom_tooltip": "<b>Review and negotiate policy terms</b><br>Analyze quotes for coverage limits and exclusion clauses, consulting with legal counsel to ensure the policy adequately covers autonomous drone-human interaction.<br><b>Resources needed:</b><br><ul><li>Project Manager</li><li>Aviation Liability Attorney</li></ul>",
+      "start_date": "2026-04-16",
+      "duration": 20.0,
+      "progress": 0,
+      "open": true,
+      "meta": "47832f6a-9bf8-45a2-8052-2505cccbd9d6 FF, e85604c6-84e9-4bda-9167-3ca2484e1dfd FS",
+      "parent": "47832f6a-9bf8-45a2-8052-2505cccbd9d6"
+    },
+    {
+      "id": "cf6920c1-9604-4dfb-805d-4fc06d2678da",
+      "text": "Submit operational safety case to the local FSDO",
+      "custom_tooltip": "<b>Submit operational safety case to the local FSDO</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "47832f6a-9bf8-45a2-8052-2505cccbd9d6 FS",
+      "parent": "51767f96-0519-4515-8733-34f09159533f",
+      "type": "project"
+    },
+    {
+      "id": "b8b048b8-9b3c-49de-8f6d-8de13a29c636",
+      "text": "Draft comprehensive operational safety case",
+      "custom_tooltip": "<b>Draft comprehensive operational safety case</b><br>Compile technical specifications, flight parameters, and risk mitigation strategies into a formal document for FSDO review.<br><b>Resources needed:</b><br><ul><li>Aviation Safety Consultant</li><li>Project Manager</li><li>Technical Lead</li></ul>",
+      "start_date": "2026-05-06",
+      "duration": 25.0,
+      "progress": 0,
+      "open": true,
+      "meta": "cf6920c1-9604-4dfb-805d-4fc06d2678da SS",
+      "parent": "cf6920c1-9604-4dfb-805d-4fc06d2678da"
+    },
+    {
+      "id": "2ac3855e-fd4a-4059-9745-04224558e82f",
+      "text": "Conduct third-party safety audit",
+      "custom_tooltip": "<b>Conduct third-party safety audit</b><br>Engage an external auditor to verify that all documentation and proposed safety protocols meet FAA and FSDO standards.<br><b>Resources needed:</b><br><ul><li>Third-party Aviation Safety Consultant</li><li>Project Manager</li></ul>",
+      "start_date": "2026-05-31",
+      "duration": 25.0,
+      "progress": 0,
+      "open": true,
+      "meta": "b8b048b8-9b3c-49de-8f6d-8de13a29c636 FS",
+      "parent": "cf6920c1-9604-4dfb-805d-4fc06d2678da"
+    },
+    {
+      "id": "fbc512cc-bbca-4d24-ba08-b54a186f70c5",
+      "text": "Submit and present to FSDO",
+      "custom_tooltip": "<b>Submit and present to FSDO</b><br>Formally file the safety case and attend the pre-application meeting to address regulatory inquiries and secure preliminary approval.<br><b>Resources needed:</b><br><ul><li>Aviation Regulatory Officer</li><li>Project Manager</li><li>Legal Counsel</li></ul>",
+      "start_date": "2026-06-25",
+      "duration": 25.0,
+      "progress": 0,
+      "open": true,
+      "meta": "cf6920c1-9604-4dfb-805d-4fc06d2678da FF, 2ac3855e-fd4a-4059-9745-04224558e82f FS",
+      "parent": "cf6920c1-9604-4dfb-805d-4fc06d2678da"
+    },
+    {
+      "id": "06791550-12f2-4336-9aba-7f44ef2539e3",
+      "text": "Obtain local zoning and land-use permits for recreational facility",
+      "custom_tooltip": "<b>Obtain local zoning and land-use permits for recreational facility</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "51767f96-0519-4515-8733-34f09159533f FF, cf6920c1-9604-4dfb-805d-4fc06d2678da FS",
+      "parent": "51767f96-0519-4515-8733-34f09159533f",
+      "type": "project"
+    },
+    {
+      "id": "257433de-c93c-4ae4-ad14-0296cd86daf8",
+      "text": "Consult local land-use attorney",
+      "custom_tooltip": "<b>Consult local land-use attorney</b><br>Engage a specialized land-use attorney to conduct a preliminary audit of zoning codes and identify potential regulatory hurdles for a recreational drone facility.<br><b>Resources needed:</b><br><ul><li>Project Manager</li><li>Land-use Attorney</li></ul>",
+      "start_date": "2026-07-20",
+      "duration": 19.0,
+      "progress": 0,
+      "open": true,
+      "meta": "06791550-12f2-4336-9aba-7f44ef2539e3 SS",
+      "parent": "06791550-12f2-4336-9aba-7f44ef2539e3"
+    },
+    {
+      "id": "ab34e5e2-38d2-45fc-9383-24d916dd7f09",
+      "text": "Prepare zoning and permit applications",
+      "custom_tooltip": "<b>Prepare zoning and permit applications</b><br>Compile all necessary site plans, safety documentation, and environmental impact statements required for municipal zoning and recreational facility permit submissions.<br><b>Resources needed:</b><br><ul><li>Project Manager</li><li>Architect</li><li>Compliance Officer</li></ul>",
+      "start_date": "2026-08-08",
+      "duration": 19.0,
+      "progress": 0,
+      "open": true,
+      "meta": "257433de-c93c-4ae4-ad14-0296cd86daf8 FS",
+      "parent": "06791550-12f2-4336-9aba-7f44ef2539e3"
+    },
+    {
+      "id": "5c5b8287-c27b-44b0-897c-008c25b4f6ae",
+      "text": "Engage neighborhood councils",
+      "custom_tooltip": "<b>Engage neighborhood councils</b><br>Initiate proactive communication with local neighborhood councils to present the project, address noise and privacy concerns, and build community support prior to formal hearings.<br><b>Resources needed:</b><br><ul><li>Project Manager</li><li>Community Liaison</li></ul>",
+      "start_date": "2026-08-27",
+      "duration": 19.0,
+      "progress": 0,
+      "open": true,
+      "meta": "ab34e5e2-38d2-45fc-9383-24d916dd7f09 FS",
+      "parent": "06791550-12f2-4336-9aba-7f44ef2539e3"
+    },
+    {
+      "id": "9abe2657-6f71-4bf9-aa36-4b3c9e948567",
+      "text": "Attend municipal zoning hearings",
+      "custom_tooltip": "<b>Attend municipal zoning hearings</b><br>Represent the project at public municipal hearings to present the safety case and secure final approval for land-use and facility operation.<br><b>Resources needed:</b><br><ul><li>Project Manager</li><li>Land-use Attorney</li><li>Safety Officer</li></ul>",
+      "start_date": "2026-09-15",
+      "duration": 19.0,
+      "progress": 0,
+      "open": true,
+      "meta": "06791550-12f2-4336-9aba-7f44ef2539e3 FF, 5c5b8287-c27b-44b0-897c-008c25b4f6ae FS",
+      "parent": "06791550-12f2-4336-9aba-7f44ef2539e3"
+    },
+    {
+      "id": "578f16aa-ca69-4e97-a608-3ccb27d92be9",
+      "text": "Infrastructure and Arena Development",
+      "custom_tooltip": "<b>Infrastructure and Arena Development</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "51767f96-0519-4515-8733-34f09159533f FS",
+      "parent": "d47e5ee5-c7e3-49ae-9bf5-d2b61b756a05",
+      "type": "project"
+    },
+    {
+      "id": "a0ac5b23-770d-4067-91d1-7690d71369ec",
+      "text": "Acquire and prepare site for modular urban-mimicry construction",
+      "custom_tooltip": "<b>Acquire and prepare site for modular urban-mimicry construction</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "578f16aa-ca69-4e97-a608-3ccb27d92be9 SS",
+      "parent": "578f16aa-ca69-4e97-a608-3ccb27d92be9",
+      "type": "project"
+    },
+    {
+      "id": "80ea4095-6f37-4f91-9d53-0aa3e42b47e3",
+      "text": "Conduct comprehensive site engineering audit",
+      "custom_tooltip": "<b>Conduct comprehensive site engineering audit</b><br>Perform a detailed structural and electrical assessment of the chosen facility to ensure it can support high-density drone charging, network equipment, and modular obstacle weight loads.<br><b>Resources needed:</b><br><ul><li>Structural Engineer</li><li>Electrical Contractor</li><li>Site Manager</li></ul>",
+      "start_date": "2026-10-04",
+      "duration": 10.0,
+      "progress": 0,
+      "open": true,
+      "meta": "a0ac5b23-770d-4067-91d1-7690d71369ec SS",
+      "parent": "a0ac5b23-770d-4067-91d1-7690d71369ec"
+    },
+    {
+      "id": "b04c47bb-f3c3-4d16-b97c-ca3d6b6a12ae",
+      "text": "Finalize lease and utility upgrade agreements",
+      "custom_tooltip": "<b>Finalize lease and utility upgrade agreements</b><br>Negotiate and sign the facility lease, including specific clauses for necessary utility upgrades and infrastructure modifications required for the arena.<br><b>Resources needed:</b><br><ul><li>Project Manager</li><li>Legal Counsel</li><li>Property Owner</li></ul>",
+      "start_date": "2026-10-14",
+      "duration": 10.0,
+      "progress": 0,
+      "open": true,
+      "meta": "80ea4095-6f37-4f91-9d53-0aa3e42b47e3 FS",
+      "parent": "a0ac5b23-770d-4067-91d1-7690d71369ec"
+    },
+    {
+      "id": "260f2b4b-125b-47d0-a7b4-739af091f1ea",
+      "text": "Execute facility site preparation and cleanup",
+      "custom_tooltip": "<b>Execute facility site preparation and cleanup</b><br>Clear the space, perform necessary repairs, and install the required power and data infrastructure to prepare for the modular construction phase.<br><b>Resources needed:</b><br><ul><li>Construction Crew</li><li>Electrician</li><li>Site Manager</li></ul>",
+      "start_date": "2026-10-24",
+      "duration": 10.0,
+      "progress": 0,
+      "open": true,
+      "meta": "a0ac5b23-770d-4067-91d1-7690d71369ec FF, b04c47bb-f3c3-4d16-b97c-ca3d6b6a12ae FS",
+      "parent": "a0ac5b23-770d-4067-91d1-7690d71369ec"
+    },
+    {
+      "id": "2eec65fd-a65b-4a32-a479-0bd28438a0c9",
+      "text": "Install perimeter safety netting and physical containment barriers",
+      "custom_tooltip": "<b>Install perimeter safety netting and physical containment barriers</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "a0ac5b23-770d-4067-91d1-7690d71369ec FS",
+      "parent": "578f16aa-ca69-4e97-a608-3ccb27d92be9",
+      "type": "project"
+    },
+    {
+      "id": "0206f4ab-4d5a-48d4-90ee-aab9e5939ffa",
+      "text": "Source high-impact safety netting",
+      "custom_tooltip": "<b>Source high-impact safety netting</b><br>Identify and procure industrial-grade, high-impact netting materials that meet recreational combat safety standards and fire codes.<br><b>Resources needed:</b><br><ul><li>Procurement Officer</li><li>Safety Consultant</li><li>Industrial Supplier</li></ul>",
+      "start_date": "2026-11-03",
+      "duration": 6.0,
+      "progress": 0,
+      "open": true,
+      "meta": "2eec65fd-a65b-4a32-a479-0bd28438a0c9 SS",
+      "parent": "2eec65fd-a65b-4a32-a479-0bd28438a0c9"
+    },
+    {
+      "id": "7f058f1b-713d-4e86-bd82-df3b3e66f4cd",
+      "text": "Review containment design with officials",
+      "custom_tooltip": "<b>Review containment design with officials</b><br>Conduct a formal pre-installation review of the containment barrier blueprints with local building inspectors to ensure full code compliance.<br><b>Resources needed:</b><br><ul><li>Project Manager</li><li>Structural Engineer</li><li>Local Building Official</li></ul>",
+      "start_date": "2026-11-09",
+      "duration": 6.0,
+      "progress": 0,
+      "open": true,
+      "meta": "0206f4ab-4d5a-48d4-90ee-aab9e5939ffa FS",
+      "parent": "2eec65fd-a65b-4a32-a479-0bd28438a0c9"
+    },
+    {
+      "id": "8235b25f-b1ab-4310-b75d-d242ccf5f956",
+      "text": "Install netting and physical barriers",
+      "custom_tooltip": "<b>Install netting and physical barriers</b><br>Execute the physical installation of perimeter safety netting and structural barriers within the arena to ensure a secure flight environment.<br><b>Resources needed:</b><br><ul><li>Construction Crew</li><li>Safety Officer</li><li>Site Manager</li></ul>",
+      "start_date": "2026-11-15",
+      "duration": 6.0,
+      "progress": 0,
+      "open": true,
+      "meta": "7f058f1b-713d-4e86-bd82-df3b3e66f4cd FS",
+      "parent": "2eec65fd-a65b-4a32-a479-0bd28438a0c9"
+    },
+    {
+      "id": "dd7a17e9-4ef5-4203-b71f-1e1d52e57f07",
+      "text": "Perform final safety containment audit",
+      "custom_tooltip": "<b>Perform final safety containment audit</b><br>Conduct a rigorous stress test and inspection of all installed netting and barriers to verify they meet all safety and regulatory requirements.<br><b>Resources needed:</b><br><ul><li>Safety Officer</li><li>Drone Technician</li><li>Project Manager</li></ul>",
+      "start_date": "2026-11-21",
+      "duration": 6.0,
+      "progress": 0,
+      "open": true,
+      "meta": "2eec65fd-a65b-4a32-a479-0bd28438a0c9 FF, 8235b25f-b1ab-4310-b75d-d242ccf5f956 FS",
+      "parent": "2eec65fd-a65b-4a32-a479-0bd28438a0c9"
+    },
+    {
+      "id": "740edb97-83cc-41cc-8baa-d79f5d3936af",
+      "text": "Deploy private 5G/CBRS network infrastructure",
+      "custom_tooltip": "<b>Deploy private 5G/CBRS network infrastructure</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "578f16aa-ca69-4e97-a608-3ccb27d92be9 FF, 2eec65fd-a65b-4a32-a479-0bd28438a0c9 FS",
+      "parent": "578f16aa-ca69-4e97-a608-3ccb27d92be9",
+      "type": "project"
+    },
+    {
+      "id": "d5d8471b-4f72-4b7e-900a-90fee7351813",
+      "text": "Conduct site RF spectrum analysis",
+      "custom_tooltip": "<b>Conduct site RF spectrum analysis</b><br>Perform a comprehensive sweep of the target facility to identify existing signal interference and map RF propagation patterns in the presence of urban-mimicry obstacles.<br><b>Resources needed:</b><br><ul><li>RF Systems Engineer</li><li>Spectrum analyzer hardware</li><li>Site access permissions</li></ul>",
+      "start_date": "2026-11-27",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "740edb97-83cc-41cc-8baa-d79f5d3936af SS",
+      "parent": "740edb97-83cc-41cc-8baa-d79f5d3936af"
+    },
+    {
+      "id": "d822aec9-3cd9-4048-b286-8ee132b54864",
+      "text": "Design private network topology",
+      "custom_tooltip": "<b>Design private network topology</b><br>Develop the architecture for the private 5G/CBRS network, ensuring optimal placement of small cells and gateways to guarantee sub-20ms latency across the entire arena.<br><b>Resources needed:</b><br><ul><li>Network Architect</li><li>Network simulation software</li><li>Hardware specifications</li></ul>",
+      "start_date": "2026-12-05",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "d5d8471b-4f72-4b7e-900a-90fee7351813 FS",
+      "parent": "740edb97-83cc-41cc-8baa-d79f5d3936af"
+    },
+    {
+      "id": "46118f43-3451-4eb0-a9f9-c64c4cdcb31a",
+      "text": "Procure and install network hardware",
+      "custom_tooltip": "<b>Procure and install network hardware</b><br>Purchase and physically install the CBRS radio units, core network controllers, and signal distribution equipment within the arena perimeter.<br><b>Resources needed:</b><br><ul><li>Network &amp; Telemetry Specialist</li><li>CBRS hardware kits</li><li>Installation tools</li></ul>",
+      "start_date": "2026-12-13",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "d822aec9-3cd9-4048-b286-8ee132b54864 FS",
+      "parent": "740edb97-83cc-41cc-8baa-d79f5d3936af"
+    },
+    {
+      "id": "38a1b649-c238-4287-b02b-5c5c05c5cac1",
+      "text": "Validate network performance and latency",
+      "custom_tooltip": "<b>Validate network performance and latency</b><br>Conduct stress tests under simulated load to verify that the network maintains consistent sub-20ms latency and zero packet loss during high-density drone operations.<br><b>Resources needed:</b><br><ul><li>RF Systems Engineer</li><li>Drone test fleet</li><li>Latency testing software</li></ul>",
+      "start_date": "2026-12-21",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "740edb97-83cc-41cc-8baa-d79f5d3936af FF, 46118f43-3451-4eb0-a9f9-c64c4cdcb31a FS",
+      "parent": "740edb97-83cc-41cc-8baa-d79f5d3936af"
+    },
+    {
+      "id": "de97e011-fb89-4d01-9155-c2bba9cd6a61",
+      "text": "Drone Fleet and Technology Integration",
+      "custom_tooltip": "<b>Drone Fleet and Technology Integration</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "578f16aa-ca69-4e97-a608-3ccb27d92be9 FS",
+      "parent": "d47e5ee5-c7e3-49ae-9bf5-d2b61b756a05",
+      "type": "project"
+    },
+    {
+      "id": "a6d91a8e-aae4-4e4a-ba54-ee583878e4ec",
+      "text": "Procure industrial-grade drone fleet and spare components",
+      "custom_tooltip": "<b>Procure industrial-grade drone fleet and spare components</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "de97e011-fb89-4d01-9155-c2bba9cd6a61 SS",
+      "parent": "de97e011-fb89-4d01-9155-c2bba9cd6a61",
+      "type": "project"
+    },
+    {
+      "id": "6422ecb4-aaf0-449d-b734-6baa080addef",
+      "text": "Define technical specifications and requirements",
+      "custom_tooltip": "<b>Define technical specifications and requirements</b><br>Establish precise performance metrics, payload capacities, and durability standards for the industrial-grade drone fleet to ensure they meet the operational demands of the combat arena.<br><b>Resources needed:</b><br><ul><li>Technical Lead</li><li>Drone Engineer</li></ul>",
+      "start_date": "2026-12-29",
+      "duration": 12.0,
+      "progress": 0,
+      "open": true,
+      "meta": "a6d91a8e-aae4-4e4a-ba54-ee583878e4ec SS",
+      "parent": "a6d91a8e-aae4-4e4a-ba54-ee583878e4ec"
+    },
+    {
+      "id": "906d15d9-6dd9-4d29-9e0c-a54b4fee2ca5",
+      "text": "Identify and vet global suppliers",
+      "custom_tooltip": "<b>Identify and vet global suppliers</b><br>Research and qualify multiple manufacturers capable of providing industrial-grade drones and spare parts, ensuring they can meet volume requirements and delivery timelines.<br><b>Resources needed:</b><br><ul><li>Procurement Specialist</li><li>Project Manager</li></ul>",
+      "start_date": "2027-01-10",
+      "duration": 12.0,
+      "progress": 0,
+      "open": true,
+      "meta": "6422ecb4-aaf0-449d-b734-6baa080addef FS",
+      "parent": "a6d91a8e-aae4-4e4a-ba54-ee583878e4ec"
+    },
+    {
+      "id": "c4764d21-6e2c-487e-8696-4c18a5f733a9",
+      "text": "Execute procurement and logistics",
+      "custom_tooltip": "<b>Execute procurement and logistics</b><br>Place formal orders for the primary fleet and spare components, manage import/export compliance, and track shipments to ensure arrival within the project timeline.<br><b>Resources needed:</b><br><ul><li>Procurement Specialist</li><li>Logistics Coordinator</li></ul>",
+      "start_date": "2027-01-22",
+      "duration": 12.0,
+      "progress": 0,
+      "open": true,
+      "meta": "906d15d9-6dd9-4d29-9e0c-a54b4fee2ca5 FS",
+      "parent": "a6d91a8e-aae4-4e4a-ba54-ee583878e4ec"
+    },
+    {
+      "id": "b224c338-fbc8-4ba0-a65b-1812acb75e60",
+      "text": "Perform hardware inspection and testing",
+      "custom_tooltip": "<b>Perform hardware inspection and testing</b><br>Conduct rigorous quality control checks upon arrival, including flight testing and component stress tests, to verify all units meet safety and performance standards.<br><b>Resources needed:</b><br><ul><li>Drone Technicians</li><li>Safety Officer</li></ul>",
+      "start_date": "2027-02-03",
+      "duration": 12.0,
+      "progress": 0,
+      "open": true,
+      "meta": "a6d91a8e-aae4-4e4a-ba54-ee583878e4ec FF, c4764d21-6e2c-487e-8696-4c18a5f733a9 FS",
+      "parent": "a6d91a8e-aae4-4e4a-ba54-ee583878e4ec"
+    },
+    {
+      "id": "753ae2df-c92d-43be-9f22-69a18e8ee03a",
+      "text": "Implement semi-autonomous engagement logic and geofencing",
+      "custom_tooltip": "<b>Implement semi-autonomous engagement logic and geofencing</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "a6d91a8e-aae4-4e4a-ba54-ee583878e4ec FS",
+      "parent": "de97e011-fb89-4d01-9155-c2bba9cd6a61",
+      "type": "project"
+    },
+    {
+      "id": "656beb2c-d4f1-4828-a750-d8d026eedf8b",
+      "text": "Develop core flight and AI logic",
+      "custom_tooltip": "<b>Develop core flight and AI logic</b><br>Architect the semi-autonomous engagement algorithms, including obstacle avoidance, target tracking, and flight path optimization within the simulation environment.<br><b>Resources needed:</b><br><ul><li>Software Engineers</li><li>AI/ML Specialists</li><li>Flight Controller Firmware</li></ul>",
+      "start_date": "2027-02-15",
+      "duration": 20.0,
+      "progress": 0,
+      "open": true,
+      "meta": "753ae2df-c92d-43be-9f22-69a18e8ee03a SS",
+      "parent": "753ae2df-c92d-43be-9f22-69a18e8ee03a"
+    },
+    {
+      "id": "37ff0a8e-da40-4e9b-b0fa-dbec78f7569b",
+      "text": "Implement geofencing and safety protocols",
+      "custom_tooltip": "<b>Implement geofencing and safety protocols</b><br>Program hard-coded geofencing boundaries and emergency kill-switch triggers to ensure drones remain within the designated arena and respond instantly to safety overrides.<br><b>Resources needed:</b><br><ul><li>Safety Systems Engineer</li><li>Firmware Developers</li><li>Hardware Kill-Switch Modules</li></ul>",
+      "start_date": "2027-03-07",
+      "duration": 20.0,
+      "progress": 0,
+      "open": true,
+      "meta": "656beb2c-d4f1-4828-a750-d8d026eedf8b FS",
+      "parent": "753ae2df-c92d-43be-9f22-69a18e8ee03a"
+    },
+    {
+      "id": "19f977ed-5090-4534-ab9d-05acaefba043",
+      "text": "Conduct bench and simulation testing",
+      "custom_tooltip": "<b>Conduct bench and simulation testing</b><br>Perform rigorous unit testing and simulated flight stress tests to validate logic stability, latency response, and geofence reliability before field deployment.<br><b>Resources needed:</b><br><ul><li>QA Testers</li><li>Simulation Software</li><li>Test Bench Hardware</li></ul>",
+      "start_date": "2027-03-27",
+      "duration": 20.0,
+      "progress": 0,
+      "open": true,
+      "meta": "753ae2df-c92d-43be-9f22-69a18e8ee03a FF, 37ff0a8e-da40-4e9b-b0fa-dbec78f7569b FS",
+      "parent": "753ae2df-c92d-43be-9f22-69a18e8ee03a"
+    },
+    {
+      "id": "194566c7-0c6c-41ce-bfd6-7f1696e5d451",
+      "text": "Integrate wearable haptic feedback systems and safety kill switches",
+      "custom_tooltip": "<b>Integrate wearable haptic feedback systems and safety kill switches</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "de97e011-fb89-4d01-9155-c2bba9cd6a61 FF, 753ae2df-c92d-43be-9f22-69a18e8ee03a FS",
+      "parent": "de97e011-fb89-4d01-9155-c2bba9cd6a61",
+      "type": "project"
+    },
+    {
+      "id": "b9eedb6c-4421-4677-a4e0-e797a7d052da",
+      "text": "Prototype Haptic and Kill Switch Integration",
+      "custom_tooltip": "<b>Prototype Haptic and Kill Switch Integration</b><br>Develop a proof-of-concept bench test connecting the wearable haptic vests to the drone telemetry stream to ensure zero-latency signal transmission and reliable emergency override functionality.<br><b>Resources needed:</b><br><ul><li>Drone Technician</li><li>Software Engineer</li><li>Haptic Hardware Kits</li><li>Test Bench Drones</li></ul>",
+      "start_date": "2027-04-16",
+      "duration": 10.0,
+      "progress": 0,
+      "open": true,
+      "meta": "194566c7-0c6c-41ce-bfd6-7f1696e5d451 SS",
+      "parent": "194566c7-0c6c-41ce-bfd6-7f1696e5d451"
+    },
+    {
+      "id": "8278f5ad-d24e-4488-81c3-4b62b46b96ca",
+      "text": "Validate Safety Kill Switch Reliability",
+      "custom_tooltip": "<b>Validate Safety Kill Switch Reliability</b><br>Conduct rigorous stress testing of the hardware-level kill switches to ensure they maintain priority override control even during software-level communication failures or high-latency events.<br><b>Resources needed:</b><br><ul><li>Safety Officer</li><li>Hardware Engineer</li><li>RF Signal Generator</li><li>Diagnostic Software</li></ul>",
+      "start_date": "2027-04-26",
+      "duration": 10.0,
+      "progress": 0,
+      "open": true,
+      "meta": "b9eedb6c-4421-4677-a4e0-e797a7d052da FS",
+      "parent": "194566c7-0c6c-41ce-bfd6-7f1696e5d451"
+    },
+    {
+      "id": "54df598d-a6bd-4e2c-9e56-d91bb2bb65ce",
+      "text": "Integrate Haptic Feedback with Flight Logic",
+      "custom_tooltip": "<b>Integrate Haptic Feedback with Flight Logic</b><br>Finalize the software integration between the autonomous engagement AI and the haptic vests to ensure accurate, real-time feedback for players during simulated combat interactions.<br><b>Resources needed:</b><br><ul><li>AI Developer</li><li>Systems Integrator</li><li>Wearable Haptic Vests</li><li>Flight Controller Firmware</li></ul>",
+      "start_date": "2027-05-06",
+      "duration": 10.0,
+      "progress": 0,
+      "open": true,
+      "meta": "194566c7-0c6c-41ce-bfd6-7f1696e5d451 FF, 8278f5ad-d24e-4488-81c3-4b62b46b96ca FS",
+      "parent": "194566c7-0c6c-41ce-bfd6-7f1696e5d451"
+    },
+    {
+      "id": "f771f455-fb30-48cf-8795-fc45b29ea0ef",
+      "text": "Business Model and Operational Launch",
+      "custom_tooltip": "<b>Business Model and Operational Launch</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "d47e5ee5-c7e3-49ae-9bf5-d2b61b756a05 FF, de97e011-fb89-4d01-9155-c2bba9cd6a61 FS",
+      "parent": "d47e5ee5-c7e3-49ae-9bf5-d2b61b756a05",
+      "type": "project"
+    },
+    {
+      "id": "93800436-bd52-42d1-a0b2-3470cfe7824c",
+      "text": "Develop tiered membership and corporate team-building programs",
+      "custom_tooltip": "<b>Develop tiered membership and corporate team-building programs</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "f771f455-fb30-48cf-8795-fc45b29ea0ef SS",
+      "parent": "f771f455-fb30-48cf-8795-fc45b29ea0ef",
+      "type": "project"
+    },
+    {
+      "id": "3404b1f2-931e-4f1e-8847-5ad3dee129a0",
+      "text": "Analyze market and competitor pricing",
+      "custom_tooltip": "<b>Analyze market and competitor pricing</b><br>Conduct comprehensive research on local entertainment venues and corporate team-building pricing models to establish a competitive yet profitable baseline for HVT memberships.<br><b>Resources needed:</b><br><ul><li>Market Analyst</li><li>Competitor data reports</li><li>Financial modeling software</li></ul>",
+      "start_date": "2027-05-16",
+      "duration": 7.0,
+      "progress": 0,
+      "open": true,
+      "meta": "93800436-bd52-42d1-a0b2-3470cfe7824c SS",
+      "parent": "93800436-bd52-42d1-a0b2-3470cfe7824c"
+    },
+    {
+      "id": "e251ac74-f35a-4843-8426-dc8082842082",
+      "text": "Draft tiered membership and corporate packages",
+      "custom_tooltip": "<b>Draft tiered membership and corporate packages</b><br>Design the structure for individual memberships and corporate partnership tiers, including benefits, pricing, and service level agreements.<br><b>Resources needed:</b><br><ul><li>Business Development Manager</li><li>Legal Counsel</li><li>Marketing Specialist</li></ul>",
+      "start_date": "2027-05-23",
+      "duration": 7.0,
+      "progress": 0,
+      "open": true,
+      "meta": "3404b1f2-931e-4f1e-8847-5ad3dee129a0 FS",
+      "parent": "93800436-bd52-42d1-a0b2-3470cfe7824c"
+    },
+    {
+      "id": "0a94719a-19f5-4b77-9a4e-7ea14e1f1f8c",
+      "text": "Validate pricing with corporate stakeholders",
+      "custom_tooltip": "<b>Validate pricing with corporate stakeholders</b><br>Present proposed packages to a focus group of potential corporate clients to gather feedback and refine the offering before final implementation.<br><b>Resources needed:</b><br><ul><li>Business Development Manager</li><li>Corporate client focus group</li><li>Presentation materials</li></ul>",
+      "start_date": "2027-05-30",
+      "duration": 7.0,
+      "progress": 0,
+      "open": true,
+      "meta": "93800436-bd52-42d1-a0b2-3470cfe7824c FF, e251ac74-f35a-4843-8426-dc8082842082 FS",
+      "parent": "93800436-bd52-42d1-a0b2-3470cfe7824c"
+    },
+    {
+      "id": "d26b908c-332d-4025-b260-5977425b3f0c",
+      "text": "Conduct staff training on safety protocols and range operations",
+      "custom_tooltip": "<b>Conduct staff training on safety protocols and range operations</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "93800436-bd52-42d1-a0b2-3470cfe7824c FS",
+      "parent": "f771f455-fb30-48cf-8795-fc45b29ea0ef",
+      "type": "project"
+    },
+    {
+      "id": "796a7b05-5232-4abf-bd81-c3836bb5a132",
+      "text": "Develop safety and operational manuals",
+      "custom_tooltip": "<b>Develop safety and operational manuals</b><br>Draft comprehensive standard operating procedures (SOPs) covering drone flight safety, emergency kill-switch protocols, and range management guidelines.<br><b>Resources needed:</b><br><ul><li>Safety Officer</li><li>Technical Writer</li><li>Drone Lead</li></ul>",
+      "start_date": "2027-06-06",
+      "duration": 6.0,
+      "progress": 0,
+      "open": true,
+      "meta": "d26b908c-332d-4025-b260-5977425b3f0c SS",
+      "parent": "d26b908c-332d-4025-b260-5977425b3f0c"
+    },
+    {
+      "id": "0ff62946-4ddf-4208-bab9-2edae2e71e4d",
+      "text": "Recruit and onboard range staff",
+      "custom_tooltip": "<b>Recruit and onboard range staff</b><br>Source and hire personnel with drone technical expertise and safety management backgrounds, ensuring all staff meet the required certification standards.<br><b>Resources needed:</b><br><ul><li>HR Manager</li><li>Project Manager</li><li>Recruitment budget</li></ul>",
+      "start_date": "2027-06-12",
+      "duration": 6.0,
+      "progress": 0,
+      "open": true,
+      "meta": "796a7b05-5232-4abf-bd81-c3836bb5a132 FS",
+      "parent": "d26b908c-332d-4025-b260-5977425b3f0c"
+    },
+    {
+      "id": "837650fd-e4af-4e7a-b53b-3ee25461e067",
+      "text": "Conduct staff certification workshops",
+      "custom_tooltip": "<b>Conduct staff certification workshops</b><br>Execute hands-on training sessions for all staff, focusing on emergency response, drone maintenance, and customer safety protocols.<br><b>Resources needed:</b><br><ul><li>Safety Officer</li><li>Drone fleet</li><li>Training facility</li></ul>",
+      "start_date": "2027-06-18",
+      "duration": 6.0,
+      "progress": 0,
+      "open": true,
+      "meta": "0ff62946-4ddf-4208-bab9-2edae2e71e4d FS",
+      "parent": "d26b908c-332d-4025-b260-5977425b3f0c"
+    },
+    {
+      "id": "f1a2f5ee-3b39-4a59-8e3d-b1fc46e8ff49",
+      "text": "Perform final operational readiness drills",
+      "custom_tooltip": "<b>Perform final operational readiness drills</b><br>Run full-scale simulation drills to verify that staff can effectively manage the range and respond to simulated emergency scenarios.<br><b>Resources needed:</b><br><ul><li>Range staff</li><li>Drone fleet</li><li>Safety Officer</li></ul>",
+      "start_date": "2027-06-24",
+      "duration": 6.0,
+      "progress": 0,
+      "open": true,
+      "meta": "d26b908c-332d-4025-b260-5977425b3f0c FF, 837650fd-e4af-4e7a-b53b-3ee25461e067 FS",
+      "parent": "d26b908c-332d-4025-b260-5977425b3f0c"
+    },
+    {
+      "id": "0956ded0-06fc-4406-a28a-80cfc63296e8",
+      "text": "Execute soft launch and performance validation of simulation experience",
+      "custom_tooltip": "<b>Execute soft launch and performance validation of simulation experience</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "f771f455-fb30-48cf-8795-fc45b29ea0ef FF, d26b908c-332d-4025-b260-5977425b3f0c FS",
+      "parent": "f771f455-fb30-48cf-8795-fc45b29ea0ef",
+      "type": "project"
+    },
+    {
+      "id": "3a4fd359-0cc2-4545-9e8a-de235057f22e",
+      "text": "Design beta testing protocols",
+      "custom_tooltip": "<b>Design beta testing protocols</b><br>Develop structured test scripts and safety checklists for controlled user groups to evaluate system performance and identify software bugs.<br><b>Resources needed:</b><br><ul><li>Project Manager</li><li>Safety Officer</li><li>Technical Lead</li></ul>",
+      "start_date": "2027-06-30",
+      "duration": 6.0,
+      "progress": 0,
+      "open": true,
+      "meta": "0956ded0-06fc-4406-a28a-80cfc63296e8 SS",
+      "parent": "0956ded0-06fc-4406-a28a-80cfc63296e8"
+    },
+    {
+      "id": "87082098-7fb7-48e4-8231-9216aa1f716e",
+      "text": "Execute controlled user beta sessions",
+      "custom_tooltip": "<b>Execute controlled user beta sessions</b><br>Run live stress tests with small, monitored groups to gather performance data and user feedback on the simulation experience.<br><b>Resources needed:</b><br><ul><li>Drone Technicians</li><li>Beta Test Participants</li><li>Range Officer</li></ul>",
+      "start_date": "2027-07-06",
+      "duration": 6.0,
+      "progress": 0,
+      "open": true,
+      "meta": "3a4fd359-0cc2-4545-9e8a-de235057f22e FS",
+      "parent": "0956ded0-06fc-4406-a28a-80cfc63296e8"
+    },
+    {
+      "id": "a5382f49-c70f-48ed-818f-8d754a68ac77",
+      "text": "Perform rapid system patches and calibration",
+      "custom_tooltip": "<b>Perform rapid system patches and calibration</b><br>Analyze beta session data to perform immediate software patches, hardware recalibrations, and safety system adjustments.<br><b>Resources needed:</b><br><ul><li>Software Engineer</li><li>Drone Technician</li><li>Diagnostic Tools</li></ul>",
+      "start_date": "2027-07-12",
+      "duration": 6.0,
+      "progress": 0,
+      "open": true,
+      "meta": "87082098-7fb7-48e4-8231-9216aa1f716e FS",
+      "parent": "0956ded0-06fc-4406-a28a-80cfc63296e8"
+    },
+    {
+      "id": "45ef24e1-503c-4a12-97d9-226a37d5abd6",
+      "text": "Validate final performance metrics",
+      "custom_tooltip": "<b>Validate final performance metrics</b><br>Verify that the system meets all safety and operational benchmarks required for the full public launch.<br><b>Resources needed:</b><br><ul><li>Project Manager</li><li>Safety Officer</li><li>Technical Lead</li></ul>",
+      "start_date": "2027-07-18",
+      "duration": 6.0,
+      "progress": 0,
+      "open": true,
+      "meta": "0956ded0-06fc-4406-a28a-80cfc63296e8 FF, a5382f49-c70f-48ed-818f-8d754a68ac77 FS",
+      "parent": "0956ded0-06fc-4406-a28a-80cfc63296e8"
+    }
+  ],
+  "links": [
+    {
+      "id": "link_1",
+      "source": "d47e5ee5-c7e3-49ae-9bf5-d2b61b756a05",
+      "target": "51767f96-0519-4515-8733-34f09159533f",
+      "type": "1",
+      "lag": 0.0
+    },
+    {
+      "id": "link_2",
+      "source": "51767f96-0519-4515-8733-34f09159533f",
+      "target": "47832f6a-9bf8-45a2-8052-2505cccbd9d6",
+      "type": "1",
+      "lag": 0.0
+    },
+    {
+      "id": "link_3",
+      "source": "a1baf03f-7f51-42b1-90cf-5afba73dad74",
+      "target": "e85604c6-84e9-4bda-9167-3ca2484e1dfd",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_4",
+      "source": "e85604c6-84e9-4bda-9167-3ca2484e1dfd",
+      "target": "1a03e247-c548-41c6-83ae-f6ce8cbca7fc",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_5",
+      "source": "47832f6a-9bf8-45a2-8052-2505cccbd9d6",
+      "target": "cf6920c1-9604-4dfb-805d-4fc06d2678da",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_6",
+      "source": "b8b048b8-9b3c-49de-8f6d-8de13a29c636",
+      "target": "2ac3855e-fd4a-4059-9745-04224558e82f",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_7",
+      "source": "2ac3855e-fd4a-4059-9745-04224558e82f",
+      "target": "fbc512cc-bbca-4d24-ba08-b54a186f70c5",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_8",
+      "source": "51767f96-0519-4515-8733-34f09159533f",
+      "target": "06791550-12f2-4336-9aba-7f44ef2539e3",
+      "type": "2",
+      "lag": 0.0
+    },
+    {
+      "id": "link_9",
+      "source": "cf6920c1-9604-4dfb-805d-4fc06d2678da",
+      "target": "06791550-12f2-4336-9aba-7f44ef2539e3",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_10",
+      "source": "257433de-c93c-4ae4-ad14-0296cd86daf8",
+      "target": "ab34e5e2-38d2-45fc-9383-24d916dd7f09",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_11",
+      "source": "ab34e5e2-38d2-45fc-9383-24d916dd7f09",
+      "target": "5c5b8287-c27b-44b0-897c-008c25b4f6ae",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_12",
+      "source": "5c5b8287-c27b-44b0-897c-008c25b4f6ae",
+      "target": "9abe2657-6f71-4bf9-aa36-4b3c9e948567",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_13",
+      "source": "51767f96-0519-4515-8733-34f09159533f",
+      "target": "578f16aa-ca69-4e97-a608-3ccb27d92be9",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_14",
+      "source": "578f16aa-ca69-4e97-a608-3ccb27d92be9",
+      "target": "a0ac5b23-770d-4067-91d1-7690d71369ec",
+      "type": "1",
+      "lag": 0.0
+    },
+    {
+      "id": "link_15",
+      "source": "80ea4095-6f37-4f91-9d53-0aa3e42b47e3",
+      "target": "b04c47bb-f3c3-4d16-b97c-ca3d6b6a12ae",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_16",
+      "source": "b04c47bb-f3c3-4d16-b97c-ca3d6b6a12ae",
+      "target": "260f2b4b-125b-47d0-a7b4-739af091f1ea",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_17",
+      "source": "a0ac5b23-770d-4067-91d1-7690d71369ec",
+      "target": "2eec65fd-a65b-4a32-a479-0bd28438a0c9",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_18",
+      "source": "0206f4ab-4d5a-48d4-90ee-aab9e5939ffa",
+      "target": "7f058f1b-713d-4e86-bd82-df3b3e66f4cd",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_19",
+      "source": "7f058f1b-713d-4e86-bd82-df3b3e66f4cd",
+      "target": "8235b25f-b1ab-4310-b75d-d242ccf5f956",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_20",
+      "source": "8235b25f-b1ab-4310-b75d-d242ccf5f956",
+      "target": "dd7a17e9-4ef5-4203-b71f-1e1d52e57f07",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_21",
+      "source": "578f16aa-ca69-4e97-a608-3ccb27d92be9",
+      "target": "740edb97-83cc-41cc-8baa-d79f5d3936af",
+      "type": "2",
+      "lag": 0.0
+    },
+    {
+      "id": "link_22",
+      "source": "2eec65fd-a65b-4a32-a479-0bd28438a0c9",
+      "target": "740edb97-83cc-41cc-8baa-d79f5d3936af",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_23",
+      "source": "d5d8471b-4f72-4b7e-900a-90fee7351813",
+      "target": "d822aec9-3cd9-4048-b286-8ee132b54864",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_24",
+      "source": "d822aec9-3cd9-4048-b286-8ee132b54864",
+      "target": "46118f43-3451-4eb0-a9f9-c64c4cdcb31a",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_25",
+      "source": "46118f43-3451-4eb0-a9f9-c64c4cdcb31a",
+      "target": "38a1b649-c238-4287-b02b-5c5c05c5cac1",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_26",
+      "source": "578f16aa-ca69-4e97-a608-3ccb27d92be9",
+      "target": "de97e011-fb89-4d01-9155-c2bba9cd6a61",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_27",
+      "source": "de97e011-fb89-4d01-9155-c2bba9cd6a61",
+      "target": "a6d91a8e-aae4-4e4a-ba54-ee583878e4ec",
+      "type": "1",
+      "lag": 0.0
+    },
+    {
+      "id": "link_28",
+      "source": "6422ecb4-aaf0-449d-b734-6baa080addef",
+      "target": "906d15d9-6dd9-4d29-9e0c-a54b4fee2ca5",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_29",
+      "source": "906d15d9-6dd9-4d29-9e0c-a54b4fee2ca5",
+      "target": "c4764d21-6e2c-487e-8696-4c18a5f733a9",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_30",
+      "source": "c4764d21-6e2c-487e-8696-4c18a5f733a9",
+      "target": "b224c338-fbc8-4ba0-a65b-1812acb75e60",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_31",
+      "source": "a6d91a8e-aae4-4e4a-ba54-ee583878e4ec",
+      "target": "753ae2df-c92d-43be-9f22-69a18e8ee03a",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_32",
+      "source": "656beb2c-d4f1-4828-a750-d8d026eedf8b",
+      "target": "37ff0a8e-da40-4e9b-b0fa-dbec78f7569b",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_33",
+      "source": "37ff0a8e-da40-4e9b-b0fa-dbec78f7569b",
+      "target": "19f977ed-5090-4534-ab9d-05acaefba043",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_34",
+      "source": "de97e011-fb89-4d01-9155-c2bba9cd6a61",
+      "target": "194566c7-0c6c-41ce-bfd6-7f1696e5d451",
+      "type": "2",
+      "lag": 0.0
+    },
+    {
+      "id": "link_35",
+      "source": "753ae2df-c92d-43be-9f22-69a18e8ee03a",
+      "target": "194566c7-0c6c-41ce-bfd6-7f1696e5d451",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_36",
+      "source": "b9eedb6c-4421-4677-a4e0-e797a7d052da",
+      "target": "8278f5ad-d24e-4488-81c3-4b62b46b96ca",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_37",
+      "source": "8278f5ad-d24e-4488-81c3-4b62b46b96ca",
+      "target": "54df598d-a6bd-4e2c-9e56-d91bb2bb65ce",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_38",
+      "source": "d47e5ee5-c7e3-49ae-9bf5-d2b61b756a05",
+      "target": "f771f455-fb30-48cf-8795-fc45b29ea0ef",
+      "type": "2",
+      "lag": 0.0
+    },
+    {
+      "id": "link_39",
+      "source": "de97e011-fb89-4d01-9155-c2bba9cd6a61",
+      "target": "f771f455-fb30-48cf-8795-fc45b29ea0ef",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_40",
+      "source": "f771f455-fb30-48cf-8795-fc45b29ea0ef",
+      "target": "93800436-bd52-42d1-a0b2-3470cfe7824c",
+      "type": "1",
+      "lag": 0.0
+    },
+    {
+      "id": "link_41",
+      "source": "3404b1f2-931e-4f1e-8847-5ad3dee129a0",
+      "target": "e251ac74-f35a-4843-8426-dc8082842082",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_42",
+      "source": "e251ac74-f35a-4843-8426-dc8082842082",
+      "target": "0a94719a-19f5-4b77-9a4e-7ea14e1f1f8c",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_43",
+      "source": "93800436-bd52-42d1-a0b2-3470cfe7824c",
+      "target": "d26b908c-332d-4025-b260-5977425b3f0c",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_44",
+      "source": "796a7b05-5232-4abf-bd81-c3836bb5a132",
+      "target": "0ff62946-4ddf-4208-bab9-2edae2e71e4d",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_45",
+      "source": "0ff62946-4ddf-4208-bab9-2edae2e71e4d",
+      "target": "837650fd-e4af-4e7a-b53b-3ee25461e067",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_46",
+      "source": "837650fd-e4af-4e7a-b53b-3ee25461e067",
+      "target": "f1a2f5ee-3b39-4a59-8e3d-b1fc46e8ff49",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_47",
+      "source": "f771f455-fb30-48cf-8795-fc45b29ea0ef",
+      "target": "0956ded0-06fc-4406-a28a-80cfc63296e8",
+      "type": "2",
+      "lag": 0.0
+    },
+    {
+      "id": "link_48",
+      "source": "d26b908c-332d-4025-b260-5977425b3f0c",
+      "target": "0956ded0-06fc-4406-a28a-80cfc63296e8",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_49",
+      "source": "3a4fd359-0cc2-4545-9e8a-de235057f22e",
+      "target": "87082098-7fb7-48e4-8231-9216aa1f716e",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_50",
+      "source": "87082098-7fb7-48e4-8231-9216aa1f716e",
+      "target": "a5382f49-c70f-48ed-818f-8d754a68ac77",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_51",
+      "source": "a5382f49-c70f-48ed-818f-8d754a68ac77",
+      "target": "45ef24e1-503c-4a12-97d9-226a37d5abd6",
+      "type": "0",
+      "lag": 0.0
+    }
+  ]
+};
+
+    function zoomFit() {
+        const tasks = gantt.getTaskByTime();
+        if (tasks.length > 0) {
+            const firstTask = tasks[0];
+            const lastTask = tasks[tasks.length - 1];
+            gantt.showDate(firstTask.start_date);
+            
+            // Calculate total duration in days
+            const startDate = new Date(firstTask.start_date);
+            const endDate = new Date(lastTask.end_date);
+            const durationDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
+            
+            // Choose appropriate scale based on duration
+            if (durationDays > 3650) { // More than 10 years
+                gantt.config.scale_unit = "year";
+                gantt.config.step = 10;
+                gantt.config.subscales = [
+                    {unit: "year", step: 1, date: "%Y"}
+                ];
+            } else if (durationDays > 365) { // More than 1 year
+                gantt.config.scale_unit = "year";
+                gantt.config.step = 1;
+                gantt.config.subscales = [
+                    {unit: "month", step: 1, date: "%M"}
+                ];
+            } else if (durationDays > 30) { // More than 1 month
+                gantt.config.scale_unit = "month";
+                gantt.config.step = 1;
+                gantt.config.subscales = [
+                    {unit: "day", step: 1, date: "%d"}
+                ];
+            } else if (durationDays > 7) { // More than 1 week
+                gantt.config.scale_unit = "week";
+                gantt.config.step = 1;
+                gantt.config.subscales = [
+                    {unit: "day", step: 1, date: "%d"}
+                ];
+            } else {
+                gantt.config.scale_unit = "day";
+                gantt.config.step = 1;
+                gantt.config.subscales = [];
+            }
+            gantt.render();
+        }
+    }
+
+    function zoomIn() {
+        const currentUnit = gantt.config.scale_unit;
+        const currentStep = gantt.config.step;
+        
+        if (currentUnit === "year" && currentStep === 10) {
+            gantt.config.scale_unit = "year";
+            gantt.config.step = 1;
+            gantt.config.subscales = [
+                {unit: "month", step: 1, date: "%M"}
+            ];
+        } else if (currentUnit === "year") {
+            gantt.config.scale_unit = "month";
+            gantt.config.step = 1;
+            gantt.config.subscales = [
+                {unit: "day", step: 1, date: "%d"}
+            ];
+        } else if (currentUnit === "month") {
+            gantt.config.scale_unit = "week";
+            gantt.config.step = 1;
+            gantt.config.subscales = [
+                {unit: "day", step: 1, date: "%d"}
+            ];
+        } else if (currentUnit === "week") {
+            gantt.config.scale_unit = "day";
+            gantt.config.step = 1;
+            gantt.config.subscales = [];
+        }
+        gantt.render();
+    }
+
+    function zoomOut() {
+        const currentUnit = gantt.config.scale_unit;
+        const currentStep = gantt.config.step;
+        
+        if (currentUnit === "day") {
+            gantt.config.scale_unit = "week";
+            gantt.config.step = 1;
+            gantt.config.subscales = [
+                {unit: "day", step: 1, date: "%d"}
+            ];
+        } else if (currentUnit === "week") {
+            gantt.config.scale_unit = "month";
+            gantt.config.step = 1;
+            gantt.config.subscales = [
+                {unit: "day", step: 1, date: "%d"}
+            ];
+        } else if (currentUnit === "month") {
+            gantt.config.scale_unit = "year";
+            gantt.config.step = 1;
+            gantt.config.subscales = [
+                {unit: "month", step: 1, date: "%M"}
+            ];
+        } else if (currentUnit === "year") {
+            gantt.config.scale_unit = "year";
+            gantt.config.step = 10;
+            gantt.config.subscales = [
+                {unit: "year", step: 1, date: "%Y"}
+            ];
+        }
+        gantt.render();
+    }
+
+    function downloadCSV() {
+        if (GANTT_DATA_CSV === null) {
+            return;
+        }
+        const blob = new Blob([GANTT_DATA_CSV], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', GANTT_FILENAME_CSV);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Gantt Initialization
+    gantt.config.readonly = true;
+    gantt.config.date_format = "%Y-%m-%d";
+    gantt.config.scale_unit = "month";
+    gantt.config.step = 1;
+    gantt.config.subscales = [
+        {unit: "day", step: 1, date: "%d"}
+    ];
+
+    gantt.config.columns = [
+        {name:"text", label:"Task name", width:"*", tree:true},
+        // {name:"start_date", label:"Start time", align: "center"},
+        // {name:"duration", label:"Duration", align: "center"}
+    ];
+
+    gantt.templates.task_class = function(start, end, task) {
+        if (task.type === "project") {
+            return "project-task";
+        }
+        return "";
+    };
+
+    gantt.templates.tooltip_text = function(start, end, task) {
+        return task.custom_tooltip || "No tooltip";
+    };
+    
+	gantt.plugins({
+		tooltip: true
+	});
+	gantt.attachEvent("onGanttReady", function(){
+		var tooltips = gantt.ext.tooltips;
+		tooltips.tooltip.setViewport(gantt.$task_data);
+	});
+    gantt.init("gantt_container");
+    gantt.parse(GANTT_DATA_DHTMLX);
+
+    // Hide the export to CSV button if there is no CSV data
+    if (GANTT_DATA_CSV === null) {
+        document.getElementById('exportToCSVButton').style.display = 'none';
+    }
+
+    document.getElementById('zoomFitButton').addEventListener('click', zoomFit);
+    document.getElementById('zoomInButton').addEventListener('click', zoomIn);
+    document.getElementById('zoomOutButton').addEventListener('click', zoomOut);
+    document.getElementById('exportToCSVButton').addEventListener('click', downloadCSV);
+</script>
+<!--HTML_BODY_SCRIPT_END-->
+</body>
+</html>

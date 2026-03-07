@@ -1,0 +1,92 @@
+[
+  {
+    "id": "2ed098db-fae4-45ec-8d96-649ec2ad9296",
+    "document_name": "Project Charter: HVT Simulation Venue",
+    "description": "High-level project authorization document defining the scope, objectives, budget ($450k), and timeline (9 months) for the Pragmatic Foundation strategy.",
+    "responsible_role_type": "Project Manager",
+    "document_template_primary": "PMI Project Charter Template",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Define project goals and success criteria",
+      "Identify key stakeholders and project team",
+      "Outline high-level budget and resource requirements",
+      "Obtain sign-off from primary investors"
+    ],
+    "approval_authorities": "Project Investors"
+  },
+  {
+    "id": "aa967fd7-9a7f-4be7-a364-cd5125468a6f",
+    "document_name": "Safety Management System (SMS) Framework",
+    "description": "Foundational document outlining safety protocols, hardware-level kill switch logic, and operational procedures for autonomous drone-human interaction.",
+    "responsible_role_type": "Aviation Regulatory & Compliance Officer",
+    "document_template_primary": "FAA Safety Management System (SMS) Guidance",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Define safety roles and responsibilities",
+      "Document hardware-level failsafe logic",
+      "Establish emergency response procedures",
+      "Align with FSDO safety case requirements"
+    ],
+    "approval_authorities": "Aviation Regulatory & Compliance Officer, FSDO Representative"
+  },
+  {
+    "id": "31ada6ed-bdf2-42dd-a453-3fec41928fc5",
+    "document_name": "Arena Infrastructure & Safety Design Framework",
+    "description": "Strategic plan for modular urban-mimicry arena construction, including safety netting, containment systems, and power/connectivity layout.",
+    "responsible_role_type": "Arena Infrastructure & Safety Architect",
+    "document_template_primary": "Structural Engineering Design Brief",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Draft modular arena layout",
+      "Specify safety netting and containment materials",
+      "Integrate power/connectivity requirements",
+      "Review against local zoning and insurance safety standards"
+    ],
+    "approval_authorities": "Arena Infrastructure & Safety Architect, Insurance Liaison"
+  },
+  {
+    "id": "fe3db80e-e804-42e3-b311-47674e087be3",
+    "document_name": "Drone Autonomy & Engagement Logic Strategy",
+    "description": "High-level strategy for semi-autonomous flight algorithms, balancing player immersion with safety-critical collision avoidance.",
+    "responsible_role_type": "Drone Systems & Robotics Engineer",
+    "document_template_primary": "Technical Strategy Document",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Define semi-autonomous flight parameters",
+      "Outline collision avoidance logic",
+      "Specify hardware-level integration requirements",
+      "Establish testing and validation protocols"
+    ],
+    "approval_authorities": "Drone Systems & Robotics Engineer, Aviation Regulatory & Compliance Officer"
+  },
+  {
+    "id": "3626bdfc-f4cb-40ad-9a80-386a3ddcdf09",
+    "document_name": "Revenue & Business Model Framework",
+    "description": "Strategic plan for tiered membership models, corporate team-building partnerships, and long-term financial sustainability.",
+    "responsible_role_type": "Business Development & Corporate Sales Lead",
+    "document_template_primary": "Business Model Canvas",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Define pricing tiers and membership benefits",
+      "Outline corporate team-building sales strategy",
+      "Establish financial break-even milestones",
+      "Align with operational cost projections"
+    ],
+    "approval_authorities": "Business Development & Corporate Sales Lead, Project Investors"
+  },
+  {
+    "id": "46dec9cc-d20c-476e-9ad4-9e625f5655fe",
+    "document_name": "Risk Register",
+    "description": "Comprehensive log of identified project risks (regulatory, technical, financial, safety), their impact, and mitigation strategies.",
+    "responsible_role_type": "Project Manager",
+    "document_template_primary": "PMI Risk Register Template",
+    "document_template_secondary": null,
+    "steps_to_create": [
+      "Consolidate risks from project files",
+      "Assign probability and severity ratings",
+      "Define mitigation actions and owners",
+      "Establish review cadence"
+    ],
+    "approval_authorities": "Project Manager"
+  }
+]

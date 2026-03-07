@@ -1,0 +1,60 @@
+Level 1;Level 2;Level 3;Level 4;Task ID
+HVT Combat Arena;;;;d47e5ee5-c7e3-49ae-9bf5-d2b61b756a05
+;Regulatory and Legal Compliance;;;51767f96-0519-4515-8733-34f09159533f
+;;Secure specialty liability insurance for autonomous drone operations;;47832f6a-9bf8-45a2-8052-2505cccbd9d6
+;;;Draft comprehensive safety dossier;a1baf03f-7f51-42b1-90cf-5afba73dad74
+;;;Identify and contact specialty brokers;e85604c6-84e9-4bda-9167-3ca2484e1dfd
+;;;Review and negotiate policy terms;1a03e247-c548-41c6-83ae-f6ce8cbca7fc
+;;Submit operational safety case to the local FSDO;;cf6920c1-9604-4dfb-805d-4fc06d2678da
+;;;Draft comprehensive operational safety case;b8b048b8-9b3c-49de-8f6d-8de13a29c636
+;;;Conduct third-party safety audit;2ac3855e-fd4a-4059-9745-04224558e82f
+;;;Submit and present to FSDO;fbc512cc-bbca-4d24-ba08-b54a186f70c5
+;;Obtain local zoning and land-use permits for recreational facility;;06791550-12f2-4336-9aba-7f44ef2539e3
+;;;Consult local land-use attorney;257433de-c93c-4ae4-ad14-0296cd86daf8
+;;;Prepare zoning and permit applications;ab34e5e2-38d2-45fc-9383-24d916dd7f09
+;;;Engage neighborhood councils;5c5b8287-c27b-44b0-897c-008c25b4f6ae
+;;;Attend municipal zoning hearings;9abe2657-6f71-4bf9-aa36-4b3c9e948567
+;Infrastructure and Arena Development;;;578f16aa-ca69-4e97-a608-3ccb27d92be9
+;;Acquire and prepare site for modular urban-mimicry construction;;a0ac5b23-770d-4067-91d1-7690d71369ec
+;;;Conduct comprehensive site engineering audit;80ea4095-6f37-4f91-9d53-0aa3e42b47e3
+;;;Finalize lease and utility upgrade agreements;b04c47bb-f3c3-4d16-b97c-ca3d6b6a12ae
+;;;Execute facility site preparation and cleanup;260f2b4b-125b-47d0-a7b4-739af091f1ea
+;;Install perimeter safety netting and physical containment barriers;;2eec65fd-a65b-4a32-a479-0bd28438a0c9
+;;;Source high-impact safety netting;0206f4ab-4d5a-48d4-90ee-aab9e5939ffa
+;;;Review containment design with officials;7f058f1b-713d-4e86-bd82-df3b3e66f4cd
+;;;Install netting and physical barriers;8235b25f-b1ab-4310-b75d-d242ccf5f956
+;;;Perform final safety containment audit;dd7a17e9-4ef5-4203-b71f-1e1d52e57f07
+;;Deploy private 5G/CBRS network infrastructure;;740edb97-83cc-41cc-8baa-d79f5d3936af
+;;;Conduct site RF spectrum analysis;d5d8471b-4f72-4b7e-900a-90fee7351813
+;;;Design private network topology;d822aec9-3cd9-4048-b286-8ee132b54864
+;;;Procure and install network hardware;46118f43-3451-4eb0-a9f9-c64c4cdcb31a
+;;;Validate network performance and latency;38a1b649-c238-4287-b02b-5c5c05c5cac1
+;Drone Fleet and Technology Integration;;;de97e011-fb89-4d01-9155-c2bba9cd6a61
+;;Procure industrial-grade drone fleet and spare components;;a6d91a8e-aae4-4e4a-ba54-ee583878e4ec
+;;;Define technical specifications and requirements;6422ecb4-aaf0-449d-b734-6baa080addef
+;;;Identify and vet global suppliers;906d15d9-6dd9-4d29-9e0c-a54b4fee2ca5
+;;;Execute procurement and logistics;c4764d21-6e2c-487e-8696-4c18a5f733a9
+;;;Perform hardware inspection and testing;b224c338-fbc8-4ba0-a65b-1812acb75e60
+;;Implement semi-autonomous engagement logic and geofencing;;753ae2df-c92d-43be-9f22-69a18e8ee03a
+;;;Develop core flight and AI logic;656beb2c-d4f1-4828-a750-d8d026eedf8b
+;;;Implement geofencing and safety protocols;37ff0a8e-da40-4e9b-b0fa-dbec78f7569b
+;;;Conduct bench and simulation testing;19f977ed-5090-4534-ab9d-05acaefba043
+;;Integrate wearable haptic feedback systems and safety kill switches;;194566c7-0c6c-41ce-bfd6-7f1696e5d451
+;;;Prototype Haptic and Kill Switch Integration;b9eedb6c-4421-4677-a4e0-e797a7d052da
+;;;Validate Safety Kill Switch Reliability;8278f5ad-d24e-4488-81c3-4b62b46b96ca
+;;;Integrate Haptic Feedback with Flight Logic;54df598d-a6bd-4e2c-9e56-d91bb2bb65ce
+;Business Model and Operational Launch;;;f771f455-fb30-48cf-8795-fc45b29ea0ef
+;;Develop tiered membership and corporate team-building programs;;93800436-bd52-42d1-a0b2-3470cfe7824c
+;;;Analyze market and competitor pricing;3404b1f2-931e-4f1e-8847-5ad3dee129a0
+;;;Draft tiered membership and corporate packages;e251ac74-f35a-4843-8426-dc8082842082
+;;;Validate pricing with corporate stakeholders;0a94719a-19f5-4b77-9a4e-7ea14e1f1f8c
+;;Conduct staff training on safety protocols and range operations;;d26b908c-332d-4025-b260-5977425b3f0c
+;;;Develop safety and operational manuals;796a7b05-5232-4abf-bd81-c3836bb5a132
+;;;Recruit and onboard range staff;0ff62946-4ddf-4208-bab9-2edae2e71e4d
+;;;Conduct staff certification workshops;837650fd-e4af-4e7a-b53b-3ee25461e067
+;;;Perform final operational readiness drills;f1a2f5ee-3b39-4a59-8e3d-b1fc46e8ff49
+;;Execute soft launch and performance validation of simulation experience;;0956ded0-06fc-4406-a28a-80cfc63296e8
+;;;Design beta testing protocols;3a4fd359-0cc2-4545-9e8a-de235057f22e
+;;;Execute controlled user beta sessions;87082098-7fb7-48e4-8231-9216aa1f716e
+;;;Perform rapid system patches and calibration;a5382f49-c70f-48ed-818f-8d754a68ac77
+;;;Validate final performance metrics;45ef24e1-503c-4a12-97d9-226a37d5abd6

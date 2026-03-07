@@ -1,0 +1,605 @@
+{
+  "wbs_project": {
+    "id": "d47e5ee5-c7e3-49ae-9bf5-d2b61b756a05",
+    "description": "HVT Combat Arena",
+    "extra_fields": {
+      "final_deliverable": "Operational Drone Facility"
+    },
+    "task_children": [
+      {
+        "id": "51767f96-0519-4515-8733-34f09159533f",
+        "description": "Regulatory and Legal Compliance",
+        "task_children": [
+          {
+            "id": "47832f6a-9bf8-45a2-8052-2505cccbd9d6",
+            "description": "Secure specialty liability insurance for autonomous drone operations",
+            "task_children": [
+              {
+                "id": "a1baf03f-7f51-42b1-90cf-5afba73dad74",
+                "description": "Draft comprehensive safety dossier",
+                "extra_fields": {
+                  "detailed_description": "Compile technical specifications, risk mitigation strategies, and operational protocols into a formal document to present to potential insurance underwriters.",
+                  "resources_needed": [
+                    "Project Manager",
+                    "Technical Lead",
+                    "Safety Consultant"
+                  ]
+                }
+              },
+              {
+                "id": "e85604c6-84e9-4bda-9167-3ca2484e1dfd",
+                "description": "Identify and contact specialty brokers",
+                "extra_fields": {
+                  "detailed_description": "Research and reach out to aviation insurance brokers specializing in autonomous systems and recreational liability to request quotes.",
+                  "resources_needed": [
+                    "Project Manager",
+                    "Risk Management Liaison"
+                  ]
+                }
+              },
+              {
+                "id": "1a03e247-c548-41c6-83ae-f6ce8cbca7fc",
+                "description": "Review and negotiate policy terms",
+                "extra_fields": {
+                  "detailed_description": "Analyze quotes for coverage limits and exclusion clauses, consulting with legal counsel to ensure the policy adequately covers autonomous drone-human interaction.",
+                  "resources_needed": [
+                    "Project Manager",
+                    "Aviation Liability Attorney"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "cf6920c1-9604-4dfb-805d-4fc06d2678da",
+            "description": "Submit operational safety case to the local FSDO",
+            "task_children": [
+              {
+                "id": "b8b048b8-9b3c-49de-8f6d-8de13a29c636",
+                "description": "Draft comprehensive operational safety case",
+                "extra_fields": {
+                  "detailed_description": "Compile technical specifications, flight parameters, and risk mitigation strategies into a formal document for FSDO review.",
+                  "resources_needed": [
+                    "Aviation Safety Consultant",
+                    "Project Manager",
+                    "Technical Lead"
+                  ]
+                }
+              },
+              {
+                "id": "2ac3855e-fd4a-4059-9745-04224558e82f",
+                "description": "Conduct third-party safety audit",
+                "extra_fields": {
+                  "detailed_description": "Engage an external auditor to verify that all documentation and proposed safety protocols meet FAA and FSDO standards.",
+                  "resources_needed": [
+                    "Third-party Aviation Safety Consultant",
+                    "Project Manager"
+                  ]
+                }
+              },
+              {
+                "id": "fbc512cc-bbca-4d24-ba08-b54a186f70c5",
+                "description": "Submit and present to FSDO",
+                "extra_fields": {
+                  "detailed_description": "Formally file the safety case and attend the pre-application meeting to address regulatory inquiries and secure preliminary approval.",
+                  "resources_needed": [
+                    "Aviation Regulatory Officer",
+                    "Project Manager",
+                    "Legal Counsel"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "06791550-12f2-4336-9aba-7f44ef2539e3",
+            "description": "Obtain local zoning and land-use permits for recreational facility",
+            "task_children": [
+              {
+                "id": "257433de-c93c-4ae4-ad14-0296cd86daf8",
+                "description": "Consult local land-use attorney",
+                "extra_fields": {
+                  "detailed_description": "Engage a specialized land-use attorney to conduct a preliminary audit of zoning codes and identify potential regulatory hurdles for a recreational drone facility.",
+                  "resources_needed": [
+                    "Project Manager",
+                    "Land-use Attorney"
+                  ]
+                }
+              },
+              {
+                "id": "ab34e5e2-38d2-45fc-9383-24d916dd7f09",
+                "description": "Prepare zoning and permit applications",
+                "extra_fields": {
+                  "detailed_description": "Compile all necessary site plans, safety documentation, and environmental impact statements required for municipal zoning and recreational facility permit submissions.",
+                  "resources_needed": [
+                    "Project Manager",
+                    "Architect",
+                    "Compliance Officer"
+                  ]
+                }
+              },
+              {
+                "id": "5c5b8287-c27b-44b0-897c-008c25b4f6ae",
+                "description": "Engage neighborhood councils",
+                "extra_fields": {
+                  "detailed_description": "Initiate proactive communication with local neighborhood councils to present the project, address noise and privacy concerns, and build community support prior to formal hearings.",
+                  "resources_needed": [
+                    "Project Manager",
+                    "Community Liaison"
+                  ]
+                }
+              },
+              {
+                "id": "9abe2657-6f71-4bf9-aa36-4b3c9e948567",
+                "description": "Attend municipal zoning hearings",
+                "extra_fields": {
+                  "detailed_description": "Represent the project at public municipal hearings to present the safety case and secure final approval for land-use and facility operation.",
+                  "resources_needed": [
+                    "Project Manager",
+                    "Land-use Attorney",
+                    "Safety Officer"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "578f16aa-ca69-4e97-a608-3ccb27d92be9",
+        "description": "Infrastructure and Arena Development",
+        "task_children": [
+          {
+            "id": "a0ac5b23-770d-4067-91d1-7690d71369ec",
+            "description": "Acquire and prepare site for modular urban-mimicry construction",
+            "task_children": [
+              {
+                "id": "80ea4095-6f37-4f91-9d53-0aa3e42b47e3",
+                "description": "Conduct comprehensive site engineering audit",
+                "extra_fields": {
+                  "detailed_description": "Perform a detailed structural and electrical assessment of the chosen facility to ensure it can support high-density drone charging, network equipment, and modular obstacle weight loads.",
+                  "resources_needed": [
+                    "Structural Engineer",
+                    "Electrical Contractor",
+                    "Site Manager"
+                  ]
+                }
+              },
+              {
+                "id": "b04c47bb-f3c3-4d16-b97c-ca3d6b6a12ae",
+                "description": "Finalize lease and utility upgrade agreements",
+                "extra_fields": {
+                  "detailed_description": "Negotiate and sign the facility lease, including specific clauses for necessary utility upgrades and infrastructure modifications required for the arena.",
+                  "resources_needed": [
+                    "Project Manager",
+                    "Legal Counsel",
+                    "Property Owner"
+                  ]
+                }
+              },
+              {
+                "id": "260f2b4b-125b-47d0-a7b4-739af091f1ea",
+                "description": "Execute facility site preparation and cleanup",
+                "extra_fields": {
+                  "detailed_description": "Clear the space, perform necessary repairs, and install the required power and data infrastructure to prepare for the modular construction phase.",
+                  "resources_needed": [
+                    "Construction Crew",
+                    "Electrician",
+                    "Site Manager"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "2eec65fd-a65b-4a32-a479-0bd28438a0c9",
+            "description": "Install perimeter safety netting and physical containment barriers",
+            "task_children": [
+              {
+                "id": "0206f4ab-4d5a-48d4-90ee-aab9e5939ffa",
+                "description": "Source high-impact safety netting",
+                "extra_fields": {
+                  "detailed_description": "Identify and procure industrial-grade, high-impact netting materials that meet recreational combat safety standards and fire codes.",
+                  "resources_needed": [
+                    "Procurement Officer",
+                    "Safety Consultant",
+                    "Industrial Supplier"
+                  ]
+                }
+              },
+              {
+                "id": "7f058f1b-713d-4e86-bd82-df3b3e66f4cd",
+                "description": "Review containment design with officials",
+                "extra_fields": {
+                  "detailed_description": "Conduct a formal pre-installation review of the containment barrier blueprints with local building inspectors to ensure full code compliance.",
+                  "resources_needed": [
+                    "Project Manager",
+                    "Structural Engineer",
+                    "Local Building Official"
+                  ]
+                }
+              },
+              {
+                "id": "8235b25f-b1ab-4310-b75d-d242ccf5f956",
+                "description": "Install netting and physical barriers",
+                "extra_fields": {
+                  "detailed_description": "Execute the physical installation of perimeter safety netting and structural barriers within the arena to ensure a secure flight environment.",
+                  "resources_needed": [
+                    "Construction Crew",
+                    "Safety Officer",
+                    "Site Manager"
+                  ]
+                }
+              },
+              {
+                "id": "dd7a17e9-4ef5-4203-b71f-1e1d52e57f07",
+                "description": "Perform final safety containment audit",
+                "extra_fields": {
+                  "detailed_description": "Conduct a rigorous stress test and inspection of all installed netting and barriers to verify they meet all safety and regulatory requirements.",
+                  "resources_needed": [
+                    "Safety Officer",
+                    "Drone Technician",
+                    "Project Manager"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "740edb97-83cc-41cc-8baa-d79f5d3936af",
+            "description": "Deploy private 5G/CBRS network infrastructure",
+            "task_children": [
+              {
+                "id": "d5d8471b-4f72-4b7e-900a-90fee7351813",
+                "description": "Conduct site RF spectrum analysis",
+                "extra_fields": {
+                  "detailed_description": "Perform a comprehensive sweep of the target facility to identify existing signal interference and map RF propagation patterns in the presence of urban-mimicry obstacles.",
+                  "resources_needed": [
+                    "RF Systems Engineer",
+                    "Spectrum analyzer hardware",
+                    "Site access permissions"
+                  ]
+                }
+              },
+              {
+                "id": "d822aec9-3cd9-4048-b286-8ee132b54864",
+                "description": "Design private network topology",
+                "extra_fields": {
+                  "detailed_description": "Develop the architecture for the private 5G/CBRS network, ensuring optimal placement of small cells and gateways to guarantee sub-20ms latency across the entire arena.",
+                  "resources_needed": [
+                    "Network Architect",
+                    "Network simulation software",
+                    "Hardware specifications"
+                  ]
+                }
+              },
+              {
+                "id": "46118f43-3451-4eb0-a9f9-c64c4cdcb31a",
+                "description": "Procure and install network hardware",
+                "extra_fields": {
+                  "detailed_description": "Purchase and physically install the CBRS radio units, core network controllers, and signal distribution equipment within the arena perimeter.",
+                  "resources_needed": [
+                    "Network & Telemetry Specialist",
+                    "CBRS hardware kits",
+                    "Installation tools"
+                  ]
+                }
+              },
+              {
+                "id": "38a1b649-c238-4287-b02b-5c5c05c5cac1",
+                "description": "Validate network performance and latency",
+                "extra_fields": {
+                  "detailed_description": "Conduct stress tests under simulated load to verify that the network maintains consistent sub-20ms latency and zero packet loss during high-density drone operations.",
+                  "resources_needed": [
+                    "RF Systems Engineer",
+                    "Drone test fleet",
+                    "Latency testing software"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "de97e011-fb89-4d01-9155-c2bba9cd6a61",
+        "description": "Drone Fleet and Technology Integration",
+        "task_children": [
+          {
+            "id": "a6d91a8e-aae4-4e4a-ba54-ee583878e4ec",
+            "description": "Procure industrial-grade drone fleet and spare components",
+            "task_children": [
+              {
+                "id": "6422ecb4-aaf0-449d-b734-6baa080addef",
+                "description": "Define technical specifications and requirements",
+                "extra_fields": {
+                  "detailed_description": "Establish precise performance metrics, payload capacities, and durability standards for the industrial-grade drone fleet to ensure they meet the operational demands of the combat arena.",
+                  "resources_needed": [
+                    "Technical Lead",
+                    "Drone Engineer"
+                  ]
+                }
+              },
+              {
+                "id": "906d15d9-6dd9-4d29-9e0c-a54b4fee2ca5",
+                "description": "Identify and vet global suppliers",
+                "extra_fields": {
+                  "detailed_description": "Research and qualify multiple manufacturers capable of providing industrial-grade drones and spare parts, ensuring they can meet volume requirements and delivery timelines.",
+                  "resources_needed": [
+                    "Procurement Specialist",
+                    "Project Manager"
+                  ]
+                }
+              },
+              {
+                "id": "c4764d21-6e2c-487e-8696-4c18a5f733a9",
+                "description": "Execute procurement and logistics",
+                "extra_fields": {
+                  "detailed_description": "Place formal orders for the primary fleet and spare components, manage import/export compliance, and track shipments to ensure arrival within the project timeline.",
+                  "resources_needed": [
+                    "Procurement Specialist",
+                    "Logistics Coordinator"
+                  ]
+                }
+              },
+              {
+                "id": "b224c338-fbc8-4ba0-a65b-1812acb75e60",
+                "description": "Perform hardware inspection and testing",
+                "extra_fields": {
+                  "detailed_description": "Conduct rigorous quality control checks upon arrival, including flight testing and component stress tests, to verify all units meet safety and performance standards.",
+                  "resources_needed": [
+                    "Drone Technicians",
+                    "Safety Officer"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "753ae2df-c92d-43be-9f22-69a18e8ee03a",
+            "description": "Implement semi-autonomous engagement logic and geofencing",
+            "task_children": [
+              {
+                "id": "656beb2c-d4f1-4828-a750-d8d026eedf8b",
+                "description": "Develop core flight and AI logic",
+                "extra_fields": {
+                  "detailed_description": "Architect the semi-autonomous engagement algorithms, including obstacle avoidance, target tracking, and flight path optimization within the simulation environment.",
+                  "resources_needed": [
+                    "Software Engineers",
+                    "AI/ML Specialists",
+                    "Flight Controller Firmware"
+                  ]
+                }
+              },
+              {
+                "id": "37ff0a8e-da40-4e9b-b0fa-dbec78f7569b",
+                "description": "Implement geofencing and safety protocols",
+                "extra_fields": {
+                  "detailed_description": "Program hard-coded geofencing boundaries and emergency kill-switch triggers to ensure drones remain within the designated arena and respond instantly to safety overrides.",
+                  "resources_needed": [
+                    "Safety Systems Engineer",
+                    "Firmware Developers",
+                    "Hardware Kill-Switch Modules"
+                  ]
+                }
+              },
+              {
+                "id": "19f977ed-5090-4534-ab9d-05acaefba043",
+                "description": "Conduct bench and simulation testing",
+                "extra_fields": {
+                  "detailed_description": "Perform rigorous unit testing and simulated flight stress tests to validate logic stability, latency response, and geofence reliability before field deployment.",
+                  "resources_needed": [
+                    "QA Testers",
+                    "Simulation Software",
+                    "Test Bench Hardware"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "194566c7-0c6c-41ce-bfd6-7f1696e5d451",
+            "description": "Integrate wearable haptic feedback systems and safety kill switches",
+            "task_children": [
+              {
+                "id": "b9eedb6c-4421-4677-a4e0-e797a7d052da",
+                "description": "Prototype Haptic and Kill Switch Integration",
+                "extra_fields": {
+                  "detailed_description": "Develop a proof-of-concept bench test connecting the wearable haptic vests to the drone telemetry stream to ensure zero-latency signal transmission and reliable emergency override functionality.",
+                  "resources_needed": [
+                    "Drone Technician",
+                    "Software Engineer",
+                    "Haptic Hardware Kits",
+                    "Test Bench Drones"
+                  ]
+                }
+              },
+              {
+                "id": "8278f5ad-d24e-4488-81c3-4b62b46b96ca",
+                "description": "Validate Safety Kill Switch Reliability",
+                "extra_fields": {
+                  "detailed_description": "Conduct rigorous stress testing of the hardware-level kill switches to ensure they maintain priority override control even during software-level communication failures or high-latency events.",
+                  "resources_needed": [
+                    "Safety Officer",
+                    "Hardware Engineer",
+                    "RF Signal Generator",
+                    "Diagnostic Software"
+                  ]
+                }
+              },
+              {
+                "id": "54df598d-a6bd-4e2c-9e56-d91bb2bb65ce",
+                "description": "Integrate Haptic Feedback with Flight Logic",
+                "extra_fields": {
+                  "detailed_description": "Finalize the software integration between the autonomous engagement AI and the haptic vests to ensure accurate, real-time feedback for players during simulated combat interactions.",
+                  "resources_needed": [
+                    "AI Developer",
+                    "Systems Integrator",
+                    "Wearable Haptic Vests",
+                    "Flight Controller Firmware"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "f771f455-fb30-48cf-8795-fc45b29ea0ef",
+        "description": "Business Model and Operational Launch",
+        "task_children": [
+          {
+            "id": "93800436-bd52-42d1-a0b2-3470cfe7824c",
+            "description": "Develop tiered membership and corporate team-building programs",
+            "task_children": [
+              {
+                "id": "3404b1f2-931e-4f1e-8847-5ad3dee129a0",
+                "description": "Analyze market and competitor pricing",
+                "extra_fields": {
+                  "detailed_description": "Conduct comprehensive research on local entertainment venues and corporate team-building pricing models to establish a competitive yet profitable baseline for HVT memberships.",
+                  "resources_needed": [
+                    "Market Analyst",
+                    "Competitor data reports",
+                    "Financial modeling software"
+                  ]
+                }
+              },
+              {
+                "id": "e251ac74-f35a-4843-8426-dc8082842082",
+                "description": "Draft tiered membership and corporate packages",
+                "extra_fields": {
+                  "detailed_description": "Design the structure for individual memberships and corporate partnership tiers, including benefits, pricing, and service level agreements.",
+                  "resources_needed": [
+                    "Business Development Manager",
+                    "Legal Counsel",
+                    "Marketing Specialist"
+                  ]
+                }
+              },
+              {
+                "id": "0a94719a-19f5-4b77-9a4e-7ea14e1f1f8c",
+                "description": "Validate pricing with corporate stakeholders",
+                "extra_fields": {
+                  "detailed_description": "Present proposed packages to a focus group of potential corporate clients to gather feedback and refine the offering before final implementation.",
+                  "resources_needed": [
+                    "Business Development Manager",
+                    "Corporate client focus group",
+                    "Presentation materials"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "d26b908c-332d-4025-b260-5977425b3f0c",
+            "description": "Conduct staff training on safety protocols and range operations",
+            "task_children": [
+              {
+                "id": "796a7b05-5232-4abf-bd81-c3836bb5a132",
+                "description": "Develop safety and operational manuals",
+                "extra_fields": {
+                  "detailed_description": "Draft comprehensive standard operating procedures (SOPs) covering drone flight safety, emergency kill-switch protocols, and range management guidelines.",
+                  "resources_needed": [
+                    "Safety Officer",
+                    "Technical Writer",
+                    "Drone Lead"
+                  ]
+                }
+              },
+              {
+                "id": "0ff62946-4ddf-4208-bab9-2edae2e71e4d",
+                "description": "Recruit and onboard range staff",
+                "extra_fields": {
+                  "detailed_description": "Source and hire personnel with drone technical expertise and safety management backgrounds, ensuring all staff meet the required certification standards.",
+                  "resources_needed": [
+                    "HR Manager",
+                    "Project Manager",
+                    "Recruitment budget"
+                  ]
+                }
+              },
+              {
+                "id": "837650fd-e4af-4e7a-b53b-3ee25461e067",
+                "description": "Conduct staff certification workshops",
+                "extra_fields": {
+                  "detailed_description": "Execute hands-on training sessions for all staff, focusing on emergency response, drone maintenance, and customer safety protocols.",
+                  "resources_needed": [
+                    "Safety Officer",
+                    "Drone fleet",
+                    "Training facility"
+                  ]
+                }
+              },
+              {
+                "id": "f1a2f5ee-3b39-4a59-8e3d-b1fc46e8ff49",
+                "description": "Perform final operational readiness drills",
+                "extra_fields": {
+                  "detailed_description": "Run full-scale simulation drills to verify that staff can effectively manage the range and respond to simulated emergency scenarios.",
+                  "resources_needed": [
+                    "Range staff",
+                    "Drone fleet",
+                    "Safety Officer"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "0956ded0-06fc-4406-a28a-80cfc63296e8",
+            "description": "Execute soft launch and performance validation of simulation experience",
+            "task_children": [
+              {
+                "id": "3a4fd359-0cc2-4545-9e8a-de235057f22e",
+                "description": "Design beta testing protocols",
+                "extra_fields": {
+                  "detailed_description": "Develop structured test scripts and safety checklists for controlled user groups to evaluate system performance and identify software bugs.",
+                  "resources_needed": [
+                    "Project Manager",
+                    "Safety Officer",
+                    "Technical Lead"
+                  ]
+                }
+              },
+              {
+                "id": "87082098-7fb7-48e4-8231-9216aa1f716e",
+                "description": "Execute controlled user beta sessions",
+                "extra_fields": {
+                  "detailed_description": "Run live stress tests with small, monitored groups to gather performance data and user feedback on the simulation experience.",
+                  "resources_needed": [
+                    "Drone Technicians",
+                    "Beta Test Participants",
+                    "Range Officer"
+                  ]
+                }
+              },
+              {
+                "id": "a5382f49-c70f-48ed-818f-8d754a68ac77",
+                "description": "Perform rapid system patches and calibration",
+                "extra_fields": {
+                  "detailed_description": "Analyze beta session data to perform immediate software patches, hardware recalibrations, and safety system adjustments.",
+                  "resources_needed": [
+                    "Software Engineer",
+                    "Drone Technician",
+                    "Diagnostic Tools"
+                  ]
+                }
+              },
+              {
+                "id": "45ef24e1-503c-4a12-97d9-226a37d5abd6",
+                "description": "Validate final performance metrics",
+                "extra_fields": {
+                  "detailed_description": "Verify that the system meets all safety and operational benchmarks required for the full public launch.",
+                  "resources_needed": [
+                    "Project Manager",
+                    "Safety Officer",
+                    "Technical Lead"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

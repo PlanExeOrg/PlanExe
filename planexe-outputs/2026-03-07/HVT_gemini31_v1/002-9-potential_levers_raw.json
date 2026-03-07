@@ -1,0 +1,385 @@
+{
+  "responses": [
+    {
+      "strategic_rationale": "The HVT project faces a fundamental tension between high-fidelity immersive realism and the regulatory/safety constraints of operating autonomous aerial hardware near civilians. Success depends on balancing the 'thrill' of the experience against the 'liability' of physical drone flight. The selected levers address this by optimizing the arena environment, the sophistication of the drone-human interaction, the safety-to-immersion ratio, the business model for scaling, and the technological integration of the 'target' experience. These levers force a choice between a low-cost, high-volume recreational model and a high-end, premium simulation experience, navigating the critical path between entertainment value and operational risk.",
+      "levers": [
+        {
+          "lever_index": 1,
+          "name": "Arena Infrastructure Strategy",
+          "consequences": "Immediate: Increased capital expenditure on safety netting and terrain design \u2192 Systemic: 40% reduction in insurance premiums through controlled flight zones \u2192 Strategic: Enables long-term site scalability by minimizing regulatory friction.",
+          "options": [
+            "Utilize existing open-field paintball sites with minimal modifications to prioritize low entry costs.",
+            "Construct purpose-built, modular urban-mimicry arenas to enhance immersion and safety containment.",
+            "Develop subterranean or indoor-enclosed massive-scale facilities to eliminate weather dependency and FAA flight restrictions."
+          ],
+          "review_lever": "Controls Capital Intensity vs. Immersion Depth. Weakness: The options fail to consider the impact of site location on customer acquisition costs."
+        },
+        {
+          "lever_index": 2,
+          "name": "Drone Autonomy & Engagement Logic",
+          "consequences": "Immediate: Shift from manual pilot control to AI-assisted tracking \u2192 Systemic: 30% increase in player throughput via consistent difficulty curves \u2192 Strategic: Shifts the product from a 'drone game' to a 'simulation experience'.",
+          "options": [
+            "Maintain manual pilot control for maximum unpredictability and human-in-the-loop engagement.",
+            "Implement semi-autonomous 'follow-me' and 'line-of-sight' algorithms to reduce pilot fatigue.",
+            "Deploy fully autonomous swarm-AI agents that utilize computer vision to track and intercept players without human intervention."
+          ],
+          "review_lever": "Controls Operational Complexity vs. Player Experience. Weakness: The options fail to address the technical latency requirements for real-time safety overrides."
+        },
+        {
+          "lever_index": 3,
+          "name": "Safety & Liability Mitigation",
+          "consequences": "Immediate: Implementation of physical drone shrouds and geofencing \u2192 Systemic: 50% faster scaling through reduced regulatory scrutiny \u2192 Strategic: Establishes a defensible moat against competitors with higher accident rates.",
+          "options": [
+            "Adopt standard recreational drone safety protocols with mandatory player waivers and basic flight training.",
+            "Integrate hardware-level proximity sensors and automated 'return-to-home' failsafes for all active units.",
+            "Utilize proprietary 'soft-drone' technology with foam-based chassis and non-contact infrared 'tagging' systems to eliminate physical impact risks."
+          ],
+          "review_lever": "Controls Safety Overhead vs. Realism. Weakness: The options fail to consider the impact of 'soft-drone' technology on the perceived 'threat' level of the game."
+        },
+        {
+          "lever_index": 4,
+          "name": "Revenue & Business Model",
+          "consequences": "Immediate: Transition from per-session fees to subscription-based 'combat leagues' \u2192 Systemic: 20% higher customer lifetime value \u2192 Strategic: Shifts the business from a seasonal attraction to a recurring community platform.",
+          "options": [
+            "Operate as a high-turnover, pay-per-session recreational activity similar to traditional paintball.",
+            "Implement a tiered membership model offering exclusive 'HVT' gear, advanced drone loadouts, and league rankings.",
+            "License the proprietary arena software and drone-AI stack as a franchise model for global entertainment operators."
+          ],
+          "review_lever": "Controls Market Reach vs. Operational Control. Weakness: The options fail to consider the potential for corporate team-building events as a primary revenue driver."
+        },
+        {
+          "lever_index": 5,
+          "name": "Player Immersion & Feedback Loop",
+          "consequences": "Immediate: Integration of wearable haptic feedback vests \u2192 Systemic: 60% increase in repeat bookings due to heightened sensory engagement \u2192 Strategic: Differentiates the brand from standard VR or physical combat games.",
+          "options": [
+            "Rely on visual and auditory cues from drones to signal 'hits' or proximity alerts.",
+            "Equip players with wearable haptic feedback systems that simulate 'near-miss' vibrations and impact sensations.",
+            "Deploy an augmented reality (AR) HUD integrated into protective eyewear to visualize drone targeting locks and mission objectives in real-time."
+          ],
+          "review_lever": "Controls Tech Integration vs. Accessibility. Weakness: The options fail to consider the maintenance burden of wearable electronics in a rugged outdoor environment."
+        }
+      ],
+      "summary": "The levers are well-balanced, covering the critical pillars of infrastructure, technology, safety, business, and user experience. They effectively force a progression from 'recreational paintball' to 'high-tech simulation'. However, a critical missing dimension is the 'Human Factor'\u2014specifically, the training and management of the drone pilots or AI supervisors who oversee the safety of the game. I recommend adding 'Human-in-the-Loop Oversight Strategy' to the levers, with options ranging from 'Manual Pilot Oversight' to 'Automated AI-Supervisor Monitoring' to 'Hybrid Human-AI Command Centers' to address the operational reality of managing live drone flight."
+    },
+    {
+      "strategic_rationale": "The HVT project faces a fundamental tension between high-fidelity immersive realism and the operational constraints of safety, liability, and regulatory compliance. Because the venture relies on physical drone-human interaction, the primary strategic challenge is balancing the 'thrill' of the simulation against the 'cost' of risk mitigation. These levers address the core trade-offs: hardware durability vs. agility, site accessibility vs. environmental complexity, and the regulatory burden of autonomous flight. By manipulating these, the business can pivot between a low-cost, high-volume recreational model and a high-end, premium-priced tactical simulation experience.",
+      "levers": [
+        {
+          "lever_index": 1,
+          "name": "Drone Autonomy and Interaction Strategy",
+          "consequences": "Immediate: Shift from manual to autonomous flight \u2192 Systemic: 40% reduction in operator labor costs \u2192 Strategic: Enables scalable multi-arena deployment by reducing reliance on skilled human pilots.",
+          "options": [
+            "Manual pilot-controlled drones for maximum safety and predictable flight paths.",
+            "Semi-autonomous swarm behavior with human-in-the-loop override for tactical complexity.",
+            "Fully autonomous AI-driven pursuit algorithms utilizing computer vision for hyper-realistic evasion scenarios."
+          ],
+          "review_lever": "Controls Operational Cost vs. Simulation Realism. Weakness: The options fail to consider the legal liability of autonomous systems in proximity to human players."
+        },
+        {
+          "lever_index": 2,
+          "name": "Arena Infrastructure Complexity",
+          "consequences": "Immediate: Increased site development investment \u2192 Systemic: 60% higher customer retention via dynamic environments \u2192 Strategic: Creates a defensible moat against low-cost competitors through proprietary terrain design.",
+          "options": [
+            "Flat, open-field arenas with modular, reusable physical obstacles.",
+            "Multi-level urban-simulated environments with integrated IoT sensors for real-time tracking.",
+            "Adaptive, reconfigurable terrain using automated pneumatic walls and projection mapping for changing mission parameters."
+          ],
+          "review_lever": "Controls Capital Expenditure vs. Customer Engagement. Weakness: The options fail to consider the maintenance burden of high-tech, reconfigurable infrastructure."
+        },
+        {
+          "lever_index": 3,
+          "name": "Safety and Liability Mitigation",
+          "consequences": "Immediate: Higher barrier to entry for players \u2192 Systemic: 90% reduction in insurance premiums \u2192 Strategic: Establishes the brand as the industry standard for safe, high-stakes recreation.",
+          "options": [
+            "Standard protective gear and mandatory pre-game safety briefings.",
+            "Full-body impact-resistant suits with integrated biometric monitoring and emergency kill-switches.",
+            "Non-contact proximity-based scoring systems that eliminate physical drone-to-player impact risks entirely."
+          ],
+          "review_lever": "Controls Player Immersion vs. Risk Exposure. Weakness: The options fail to address the psychological impact of 'safety-first' gear on the perceived intensity of the game."
+        },
+        {
+          "lever_index": 4,
+          "name": "Market Positioning and Pricing",
+          "consequences": "Immediate: Shift in target demographic \u2192 Systemic: 30% increase in lifetime value through subscription models \u2192 Strategic: Transitions the business from a one-off attraction to a recurring tactical training community.",
+          "options": [
+            "Pay-per-session recreational model for casual weekend players.",
+            "Tiered membership model offering exclusive access to advanced tactical scenarios and leaderboards.",
+            "B2B corporate team-building and professional tactical training packages with performance analytics."
+          ],
+          "review_lever": "Controls Accessibility vs. Revenue Stability. Weakness: The options fail to consider the seasonality of outdoor recreational activities."
+        },
+        {
+          "lever_index": 5,
+          "name": "Hardware Durability and Maintenance",
+          "consequences": "Immediate: Higher initial hardware procurement costs \u2192 Systemic: 50% decrease in downtime per unit \u2192 Strategic: Increases operational uptime, allowing for higher throughput of daily sessions.",
+          "options": [
+            "Off-the-shelf consumer drones with frequent replacement cycles.",
+            "Ruggedized, custom-built frames with modular, field-replaceable components.",
+            "Industrial-grade, carbon-fiber autonomous platforms with rapid-swap battery and motor systems."
+          ],
+          "review_lever": "Controls Upfront Investment vs. Long-term Operational Efficiency. Weakness: The options fail to consider the supply chain risks of specialized, custom-built hardware."
+        }
+      ],
+      "summary": "The levers are well-balanced, covering the critical pillars of technology, infrastructure, safety, business model, and hardware. They successfully navigate the tension between the 'fun' of the game and the 'reality' of running a high-risk physical business. A critical missing dimension is the 'Regulatory and Permitting Strategy,' as drone flight in public or semi-public spaces is highly sensitive to local aviation laws. Add 'Regulatory Engagement Strategy: [Local compliance-focused, Regional lobbying-led, Global standards-setting]' to a new lever to address the legal viability of the project."
+    },
+    {
+      "strategic_rationale": "The HVT project sits at the intersection of high-intensity physical entertainment and complex regulatory/safety constraints. The core tension lies between creating an immersive, high-stakes 'military-grade' experience and maintaining the operational safety required for public liability. These levers prioritize the trade-offs between hardware reliability, regulatory compliance, and the scalability of the physical arena model. By focusing on these, we address the fundamental conflict: how to maximize the 'thrill' of drone pursuit without incurring catastrophic insurance costs or operational downtime due to hardware failure or legal scrutiny.",
+      "levers": [
+        {
+          "lever_index": 1,
+          "name": "Hardware Autonomy Strategy",
+          "consequences": "Immediate: Shift from manual to autonomous flight paths \u2192 Systemic: 40% reduction in operator labor costs \u2192 Strategic: Enables multi-drone swarming for higher player density.",
+          "options": [
+            "Manual pilot-controlled drones for maximum precision and safety oversight",
+            "Semi-autonomous flight assistance to stabilize tracking while maintaining human intervention",
+            "Fully autonomous AI-driven pursuit algorithms utilizing computer vision for real-time target locking"
+          ],
+          "review_lever": "Controls Operational Cost vs. Safety Oversight. Weakness: The options fail to consider the latency requirements of real-time AI processing in outdoor environments."
+        },
+        {
+          "lever_index": 2,
+          "name": "Arena Infrastructure Model",
+          "consequences": "Immediate: Transition from static to modular terrain \u2192 Systemic: 30% faster site reconfiguration \u2192 Strategic: Allows for rapid adaptation to diverse geographic markets.",
+          "options": [
+            "Permanent, fixed-terrain outdoor arenas with high-durability natural obstacles",
+            "Modular, semi-permanent inflatable and collapsible obstacle courses for rapid deployment",
+            "Dynamic, IoT-integrated smart-terrain that shifts in real-time based on drone telemetry"
+          ],
+          "review_lever": "Controls Capital Expenditure vs. Experience Variability. Weakness: The options fail to consider the environmental impact and permitting challenges of large-scale modular setups."
+        },
+        {
+          "lever_index": 3,
+          "name": "Safety and Liability Framework",
+          "consequences": "Immediate: Implementation of geofencing and collision avoidance \u2192 Systemic: 50% decrease in insurance premiums \u2192 Strategic: Establishes industry-leading safety standards for drone sports.",
+          "options": [
+            "Strict physical netting and perimeter containment for all flight zones",
+            "Software-defined geofencing with redundant hardware-level kill switches",
+            "Wearable biometric-linked safety protocols that disable drones upon player proximity breach"
+          ],
+          "review_lever": "Controls User Immersion vs. Risk Mitigation. Weakness: The options fail to consider the psychological impact of visible safety measures on the 'military simulation' aesthetic."
+        },
+        {
+          "lever_index": 4,
+          "name": "Engagement Monetization Strategy",
+          "consequences": "Immediate: Shift from per-game fees to subscription tiers \u2192 Systemic: 20% increase in customer lifetime value \u2192 Strategic: Creates a recurring revenue stream for hardware maintenance.",
+          "options": [
+            "Pay-per-session model focusing on high-volume casual walk-in traffic",
+            "Tiered membership model offering exclusive access to advanced drone loadouts",
+            "Data-driven 'Pro-League' sponsorship model where players monetize their performance footage"
+          ],
+          "review_lever": "Controls Accessibility vs. Revenue Stability. Weakness: The options fail to consider the high churn rate inherent in niche physical entertainment."
+        },
+        {
+          "lever_index": 5,
+          "name": "Simulation Realism Depth",
+          "consequences": "Immediate: Integration of haptic feedback vests \u2192 Systemic: 60% higher user retention through immersion \u2192 Strategic: Positions the brand as a premium military-grade training simulation.",
+          "options": [
+            "Visual-only pursuit simulation focusing on drone proximity and evasion",
+            "Audio-visual immersion with simulated 'lock-on' alerts and drone sound profiles",
+            "Full-sensory integration using haptic feedback and real-time tactical command radio comms"
+          ],
+          "review_lever": "Controls Production Complexity vs. Market Differentiation. Weakness: The options fail to consider the technical maintenance burden of wearable haptic hardware."
+        }
+      ],
+      "summary": "The levers effectively balance the physical, operational, and financial requirements of the HVT project. They address the core tension between safety and immersion well. However, a critical missing dimension is the 'Regulatory Compliance Strategy' regarding local airspace laws (FAA/CAA). I prescribe adding 'Regulatory Compliance Strategy: [Option: Localized airspace compliance, Option: National-level regulatory lobbying, Option: Private-land restricted-airspace acquisition]' to the lever set to ensure the business model remains legally viable as it scales."
+    }
+  ],
+  "levers": [
+    {
+      "lever_id": "e7bef2ec-8bc3-42c2-a85e-6cf714901959",
+      "name": "Arena Infrastructure Strategy",
+      "consequences": "Immediate: Increased capital expenditure on safety netting and terrain design \u2192 Systemic: 40% reduction in insurance premiums through controlled flight zones \u2192 Strategic: Enables long-term site scalability by minimizing regulatory friction.",
+      "options": [
+        "Utilize existing open-field paintball sites with minimal modifications to prioritize low entry costs.",
+        "Construct purpose-built, modular urban-mimicry arenas to enhance immersion and safety containment.",
+        "Develop subterranean or indoor-enclosed massive-scale facilities to eliminate weather dependency and FAA flight restrictions."
+      ],
+      "review": "Controls Capital Intensity vs. Immersion Depth. Weakness: The options fail to consider the impact of site location on customer acquisition costs."
+    },
+    {
+      "lever_id": "dc0fa33c-a1a2-4e45-9362-a92ed8c03313",
+      "name": "Drone Autonomy & Engagement Logic",
+      "consequences": "Immediate: Shift from manual pilot control to AI-assisted tracking \u2192 Systemic: 30% increase in player throughput via consistent difficulty curves \u2192 Strategic: Shifts the product from a 'drone game' to a 'simulation experience'.",
+      "options": [
+        "Maintain manual pilot control for maximum unpredictability and human-in-the-loop engagement.",
+        "Implement semi-autonomous 'follow-me' and 'line-of-sight' algorithms to reduce pilot fatigue.",
+        "Deploy fully autonomous swarm-AI agents that utilize computer vision to track and intercept players without human intervention."
+      ],
+      "review": "Controls Operational Complexity vs. Player Experience. Weakness: The options fail to address the technical latency requirements for real-time safety overrides."
+    },
+    {
+      "lever_id": "36e6d469-bfbf-43d2-981b-93eb937f2788",
+      "name": "Safety & Liability Mitigation",
+      "consequences": "Immediate: Implementation of physical drone shrouds and geofencing \u2192 Systemic: 50% faster scaling through reduced regulatory scrutiny \u2192 Strategic: Establishes a defensible moat against competitors with higher accident rates.",
+      "options": [
+        "Adopt standard recreational drone safety protocols with mandatory player waivers and basic flight training.",
+        "Integrate hardware-level proximity sensors and automated 'return-to-home' failsafes for all active units.",
+        "Utilize proprietary 'soft-drone' technology with foam-based chassis and non-contact infrared 'tagging' systems to eliminate physical impact risks."
+      ],
+      "review": "Controls Safety Overhead vs. Realism. Weakness: The options fail to consider the impact of 'soft-drone' technology on the perceived 'threat' level of the game."
+    },
+    {
+      "lever_id": "b38b80ad-0710-412f-9898-9d40f15be90b",
+      "name": "Revenue & Business Model",
+      "consequences": "Immediate: Transition from per-session fees to subscription-based 'combat leagues' \u2192 Systemic: 20% higher customer lifetime value \u2192 Strategic: Shifts the business from a seasonal attraction to a recurring community platform.",
+      "options": [
+        "Operate as a high-turnover, pay-per-session recreational activity similar to traditional paintball.",
+        "Implement a tiered membership model offering exclusive 'HVT' gear, advanced drone loadouts, and league rankings.",
+        "License the proprietary arena software and drone-AI stack as a franchise model for global entertainment operators."
+      ],
+      "review": "Controls Market Reach vs. Operational Control. Weakness: The options fail to consider the potential for corporate team-building events as a primary revenue driver."
+    },
+    {
+      "lever_id": "d72ec7d3-743c-4b5a-8c5f-eb4821b3bb86",
+      "name": "Player Immersion & Feedback Loop",
+      "consequences": "Immediate: Integration of wearable haptic feedback vests \u2192 Systemic: 60% increase in repeat bookings due to heightened sensory engagement \u2192 Strategic: Differentiates the brand from standard VR or physical combat games.",
+      "options": [
+        "Rely on visual and auditory cues from drones to signal 'hits' or proximity alerts.",
+        "Equip players with wearable haptic feedback systems that simulate 'near-miss' vibrations and impact sensations.",
+        "Deploy an augmented reality (AR) HUD integrated into protective eyewear to visualize drone targeting locks and mission objectives in real-time."
+      ],
+      "review": "Controls Tech Integration vs. Accessibility. Weakness: The options fail to consider the maintenance burden of wearable electronics in a rugged outdoor environment."
+    },
+    {
+      "lever_id": "e6e2fe30-f26e-4ad5-a512-bcadec623404",
+      "name": "Drone Autonomy and Interaction Strategy",
+      "consequences": "Immediate: Shift from manual to autonomous flight \u2192 Systemic: 40% reduction in operator labor costs \u2192 Strategic: Enables scalable multi-arena deployment by reducing reliance on skilled human pilots.",
+      "options": [
+        "Manual pilot-controlled drones for maximum safety and predictable flight paths.",
+        "Semi-autonomous swarm behavior with human-in-the-loop override for tactical complexity.",
+        "Fully autonomous AI-driven pursuit algorithms utilizing computer vision for hyper-realistic evasion scenarios."
+      ],
+      "review": "Controls Operational Cost vs. Simulation Realism. Weakness: The options fail to consider the legal liability of autonomous systems in proximity to human players."
+    },
+    {
+      "lever_id": "d7311f58-097a-414f-949d-0cd871def6a5",
+      "name": "Arena Infrastructure Complexity",
+      "consequences": "Immediate: Increased site development investment \u2192 Systemic: 60% higher customer retention via dynamic environments \u2192 Strategic: Creates a defensible moat against low-cost competitors through proprietary terrain design.",
+      "options": [
+        "Flat, open-field arenas with modular, reusable physical obstacles.",
+        "Multi-level urban-simulated environments with integrated IoT sensors for real-time tracking.",
+        "Adaptive, reconfigurable terrain using automated pneumatic walls and projection mapping for changing mission parameters."
+      ],
+      "review": "Controls Capital Expenditure vs. Customer Engagement. Weakness: The options fail to consider the maintenance burden of high-tech, reconfigurable infrastructure."
+    },
+    {
+      "lever_id": "d4aec168-26de-40e7-8cbd-1d848949f854",
+      "name": "Safety and Liability Mitigation",
+      "consequences": "Immediate: Higher barrier to entry for players \u2192 Systemic: 90% reduction in insurance premiums \u2192 Strategic: Establishes the brand as the industry standard for safe, high-stakes recreation.",
+      "options": [
+        "Standard protective gear and mandatory pre-game safety briefings.",
+        "Full-body impact-resistant suits with integrated biometric monitoring and emergency kill-switches.",
+        "Non-contact proximity-based scoring systems that eliminate physical drone-to-player impact risks entirely."
+      ],
+      "review": "Controls Player Immersion vs. Risk Exposure. Weakness: The options fail to address the psychological impact of 'safety-first' gear on the perceived intensity of the game."
+    },
+    {
+      "lever_id": "6b2384f0-8ebc-4977-957a-fbce6a69e16c",
+      "name": "Market Positioning and Pricing",
+      "consequences": "Immediate: Shift in target demographic \u2192 Systemic: 30% increase in lifetime value through subscription models \u2192 Strategic: Transitions the business from a one-off attraction to a recurring tactical training community.",
+      "options": [
+        "Pay-per-session recreational model for casual weekend players.",
+        "Tiered membership model offering exclusive access to advanced tactical scenarios and leaderboards.",
+        "B2B corporate team-building and professional tactical training packages with performance analytics."
+      ],
+      "review": "Controls Accessibility vs. Revenue Stability. Weakness: The options fail to consider the seasonality of outdoor recreational activities."
+    },
+    {
+      "lever_id": "7390c719-b529-4da3-86cb-3bdeb4057361",
+      "name": "Hardware Durability and Maintenance",
+      "consequences": "Immediate: Higher initial hardware procurement costs \u2192 Systemic: 50% decrease in downtime per unit \u2192 Strategic: Increases operational uptime, allowing for higher throughput of daily sessions.",
+      "options": [
+        "Off-the-shelf consumer drones with frequent replacement cycles.",
+        "Ruggedized, custom-built frames with modular, field-replaceable components.",
+        "Industrial-grade, carbon-fiber autonomous platforms with rapid-swap battery and motor systems."
+      ],
+      "review": "Controls Upfront Investment vs. Long-term Operational Efficiency. Weakness: The options fail to consider the supply chain risks of specialized, custom-built hardware."
+    },
+    {
+      "lever_id": "0a925f4e-5a84-4d3c-a00b-9b77ee8de466",
+      "name": "Hardware Autonomy Strategy",
+      "consequences": "Immediate: Shift from manual to autonomous flight paths \u2192 Systemic: 40% reduction in operator labor costs \u2192 Strategic: Enables multi-drone swarming for higher player density.",
+      "options": [
+        "Manual pilot-controlled drones for maximum precision and safety oversight",
+        "Semi-autonomous flight assistance to stabilize tracking while maintaining human intervention",
+        "Fully autonomous AI-driven pursuit algorithms utilizing computer vision for real-time target locking"
+      ],
+      "review": "Controls Operational Cost vs. Safety Oversight. Weakness: The options fail to consider the latency requirements of real-time AI processing in outdoor environments."
+    },
+    {
+      "lever_id": "e3d4293b-663b-4b9a-9ffd-d05b5fa00539",
+      "name": "Arena Infrastructure Model",
+      "consequences": "Immediate: Transition from static to modular terrain \u2192 Systemic: 30% faster site reconfiguration \u2192 Strategic: Allows for rapid adaptation to diverse geographic markets.",
+      "options": [
+        "Permanent, fixed-terrain outdoor arenas with high-durability natural obstacles",
+        "Modular, semi-permanent inflatable and collapsible obstacle courses for rapid deployment",
+        "Dynamic, IoT-integrated smart-terrain that shifts in real-time based on drone telemetry"
+      ],
+      "review": "Controls Capital Expenditure vs. Experience Variability. Weakness: The options fail to consider the environmental impact and permitting challenges of large-scale modular setups."
+    },
+    {
+      "lever_id": "a3288561-b5e6-4b32-94f9-55b2605e4f3d",
+      "name": "Safety and Liability Framework",
+      "consequences": "Immediate: Implementation of geofencing and collision avoidance \u2192 Systemic: 50% decrease in insurance premiums \u2192 Strategic: Establishes industry-leading safety standards for drone sports.",
+      "options": [
+        "Strict physical netting and perimeter containment for all flight zones",
+        "Software-defined geofencing with redundant hardware-level kill switches",
+        "Wearable biometric-linked safety protocols that disable drones upon player proximity breach"
+      ],
+      "review": "Controls User Immersion vs. Risk Mitigation. Weakness: The options fail to consider the psychological impact of visible safety measures on the 'military simulation' aesthetic."
+    },
+    {
+      "lever_id": "791e767b-7a83-4f69-be31-27f94f0f1e1f",
+      "name": "Engagement Monetization Strategy",
+      "consequences": "Immediate: Shift from per-game fees to subscription tiers \u2192 Systemic: 20% increase in customer lifetime value \u2192 Strategic: Creates a recurring revenue stream for hardware maintenance.",
+      "options": [
+        "Pay-per-session model focusing on high-volume casual walk-in traffic",
+        "Tiered membership model offering exclusive access to advanced drone loadouts",
+        "Data-driven 'Pro-League' sponsorship model where players monetize their performance footage"
+      ],
+      "review": "Controls Accessibility vs. Revenue Stability. Weakness: The options fail to consider the high churn rate inherent in niche physical entertainment."
+    },
+    {
+      "lever_id": "13fc26af-c266-42e0-8dc6-a41daa1e3cb7",
+      "name": "Simulation Realism Depth",
+      "consequences": "Immediate: Integration of haptic feedback vests \u2192 Systemic: 60% higher user retention through immersion \u2192 Strategic: Positions the brand as a premium military-grade training simulation.",
+      "options": [
+        "Visual-only pursuit simulation focusing on drone proximity and evasion",
+        "Audio-visual immersion with simulated 'lock-on' alerts and drone sound profiles",
+        "Full-sensory integration using haptic feedback and real-time tactical command radio comms"
+      ],
+      "review": "Controls Production Complexity vs. Market Differentiation. Weakness: The options fail to consider the technical maintenance burden of wearable haptic hardware."
+    }
+  ],
+  "metadata": {
+    "metadata_1": {
+      "context_window": 32768,
+      "num_output": 8192,
+      "is_chat_model": true,
+      "is_function_calling_model": false,
+      "model_name": "google/gemini-3.1-flash-lite-preview",
+      "system_role": "system",
+      "llm_classname": "OpenRouter_LLM"
+    },
+    "metadata_2": {
+      "context_window": 32768,
+      "num_output": 8192,
+      "is_chat_model": true,
+      "is_function_calling_model": false,
+      "model_name": "google/gemini-3.1-flash-lite-preview",
+      "system_role": "system",
+      "llm_classname": "OpenRouter_LLM"
+    },
+    "metadata_3": {
+      "context_window": 32768,
+      "num_output": 8192,
+      "is_chat_model": true,
+      "is_function_calling_model": false,
+      "model_name": "google/gemini-3.1-flash-lite-preview",
+      "system_role": "system",
+      "llm_classname": "OpenRouter_LLM"
+    }
+  },
+  "system_prompt": "You are an expert strategic analyst. Generate solution space parameters following these directives:\n\n1. **Output Requirements**\n   - You must generate EXACTLY 5 levers per response. Do not generate more or fewer than 5 levers.\n   - Format options as discrete JSON list items with 3 QUALITATIVE choices:\n     ```json\n     \"options\": [\"Descriptive Strategic Choice\", \"Descriptive Strategic Choice\", \"Descriptive Strategic Choice\"]\n     ```\n\n2. **Lever Quality Standards**\n   - Consequences MUST:\n     \u2022 Chain three SPECIFIC effects: \"Immediate: [effect] \u2192 Systemic: [impact] \u2192 Strategic: [implication]\"\n     \u2022 Include measurable outcomes: \"Systemic: 25% faster scaling through...\"\n     \u2022 Explicitly describe trade-offs between core tensions\n   - Options MUST:\n     \u2022 Represent distinct strategic pathways (not just labels)\n     \u2022 Include at least one unconventional/innovative approach\n     \u2022 Show clear progression: conservative \u2192 moderate \u2192 radical\n     \u2022 NO prefixes (e.g., \"Option A:\", \"Choice 1:\")\n\n3. **Strategic Framing**\n   - Name levers as strategic concepts (e.g., \"Material Adaptation Strategy\")\n   - Frame options as complete strategic approaches\n   - Ensure levers challenge core project assumptions\n\n4. **Validation Protocols**\n   - For `review_lever`:\n     \u2022 State the trade-off explicitly: \"Controls [Tension A] vs. [Tension B].\"\n     \u2022 Identify a specific weakness: \"Weakness: The options fail to consider [specific factor].\"\n   - For `summary`:\n     \u2022 Identify ONE critical missing dimension\n     \u2022 Prescribe CONCRETE addition: \"Add '[full strategic option]' to [lever]\"\n\n5. **Prohibitions**\n   - NO prefixes/labels in options (e.g., \"Option A:\", \"Choice 1:\")\n   - NO generic option labels (e.g., \"Optimize X\", \"Tolerate Y\")\n   - NO placeholder consequences\n   - NO \"[specific innovative option]\" placeholders\n   - NO value sets without clear strategic progression\n\n6. **Option Structure Enforcement**\n   - Radical option must include emerging tech/business model\n   - Maintain parallel grammatical structure across options\n   - Ensure options are self-contained descriptions",
+  "user_prompt": "File 'plan.txt':\nHVT \u2014 a paintball-like combat simulation game where players experience being a High Value Target for the US military, using drones instead of paintball guns. Players get all the excitement of evading drone pursuit in a real outdoor arena.\n\n\nFile 'purpose.md':\n**Purpose:** business\n\n**Purpose Detailed:** Development and operation of a commercial entertainment venture and recreational activity.\n\n**Topic:** HVT paintball-like drone combat simulation game\n\nFile 'plan_type.md':\nThis plan requires one or more physical locations. It cannot be executed digitally.\n\n**Explanation:** The development and operation of a drone-based combat simulation game is inherently physical. It requires securing and preparing a large outdoor arena, purchasing and maintaining physical drone hardware, ensuring safety compliance for real-world flight, and managing the physical presence of players on-site for the simulation."
+}

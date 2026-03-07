@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "category": "Aviation Regulatory & Compliance Officer",
+    "explanation": "Manages the complex legal landscape of FAA Part 107/89, FSDO safety cases, and local zoning permits to ensure the facility remains operational.",
+    "consequences": "High risk of immediate fleet grounding, legal fines, and permanent facility shutdown due to non-compliance with federal aviation laws.",
+    "count": "1",
+    "contract_type": "full_time_employee",
+    "contract_type_justification": "Regulatory compliance is a continuous, high-stakes operational requirement that demands deep, ongoing integration with the company's internal safety protocols and FSDO relationships."
+  },
+  {
+    "id": 2,
+    "category": "Drone Systems & Robotics Engineer",
+    "explanation": "Oversees the technical integrity of the drone fleet, including hardware-level kill switches, proximity sensors, and autonomous flight logic.",
+    "consequences": "Frequent system failures, mid-air collisions, and inability to maintain the 50% downtime reduction target, leading to revenue loss.",
+    "count": "min 2, max 3, depending on fleet size and maintenance frequency requirements.",
+    "contract_type": "full_time_employee",
+    "contract_type_justification": "These engineers are core to the product's technical IP and safety systems; their constant presence is required for daily maintenance and rapid iteration of the drone fleet."
+  },
+  {
+    "id": 3,
+    "category": "Arena Infrastructure & Safety Architect",
+    "explanation": "Designs and maintains the physical urban-mimicry arena, safety netting, and containment systems to ensure player safety during high-speed drone pursuits.",
+    "consequences": "Increased risk of catastrophic player injury, failure to meet insurance safety standards, and potential for drones to exit the flight zone.",
+    "count": "1",
+    "contract_type": "full_time_employee",
+    "contract_type_justification": "The arena is a permanent, safety-critical asset that requires constant monitoring, maintenance, and adaptation to ensure ongoing insurance compliance."
+  },
+  {
+    "id": 4,
+    "category": "Network & Telemetry Specialist",
+    "explanation": "Deploys and monitors the private 5G/CBRS network to ensure sub-20ms latency, preventing signal interference and ensuring responsive haptic feedback.",
+    "consequences": "High latency and RF interference leading to unpredictable drone behavior, safety incidents, and poor player immersion.",
+    "count": "1",
+    "contract_type": "independent_contractor",
+    "contract_type_justification": "While critical, the initial deployment and optimization of a private 5G/CBRS network is a specialized, project-based task that does not require a permanent full-time role once the system is stable."
+  },
+  {
+    "id": 5,
+    "category": "Site Operations & Experience Manager",
+    "explanation": "Coordinates daily operations, manages player throughput, and oversees the implementation of the tiered membership and league ranking systems.",
+    "consequences": "Inefficient player turnover, poor customer service, and failure to achieve the 40% repeat-customer rate necessary for financial sustainability.",
+    "count": "1",
+    "contract_type": "full_time_employee",
+    "contract_type_justification": "The Site Manager is the face of the operation and is responsible for daily throughput, customer experience, and safety enforcement, making them essential for ongoing operations."
+  },
+  {
+    "id": 6,
+    "category": "Risk Management & Insurance Liaison",
+    "explanation": "Acts as the primary contact for specialty insurance brokers to secure and maintain liability coverage for autonomous drone-human interaction.",
+    "consequences": "Inability to secure affordable insurance, rendering the project financially unviable and legally exposed to catastrophic litigation.",
+    "count": "1",
+    "contract_type": "independent_contractor",
+    "contract_type_justification": "Securing specialty insurance is a high-level, periodic negotiation task that is best handled by a specialized consultant rather than a full-time internal employee."
+  },
+  {
+    "id": 7,
+    "category": "Community & Public Relations Coordinator",
+    "explanation": "Manages community outreach, noise mitigation reporting, and public perception to prevent backlash against the military-style theme.",
+    "consequences": "Negative media coverage, community-led zoning challenges, and potential forced relocation of the facility.",
+    "count": "1",
+    "contract_type": "part_time_employee",
+    "contract_type_justification": "Community outreach and PR are vital but episodic; a part-time role provides the necessary coverage for community meetings and reporting without the overhead of a full-time position."
+  },
+  {
+    "id": 8,
+    "category": "Business Development & Corporate Sales Lead",
+    "explanation": "Focuses on high-margin corporate team-building partnerships and long-term revenue growth to ensure the project breaks even within 18 months.",
+    "consequences": "Over-reliance on low-margin recreational sessions, leading to cash flow insolvency and failure to meet the 18-month break-even goal.",
+    "count": "1",
+    "contract_type": "full_time_employee",
+    "contract_type_justification": "Driving corporate partnerships and tiered memberships is a primary revenue lever that requires consistent, long-term relationship building and sales effort."
+  }
+]

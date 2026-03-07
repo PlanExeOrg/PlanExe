@@ -29,21 +29,22 @@ class LeverClassification(str, Enum):
     absorb = "absorb"
     remove = "remove"
 
-class LeverDecision(BaseModel):
-    lever_id: str = Field(
-        description="The uuid of the lever."
-    )
+class LeverClassificationDecision(BaseModel):
+    """Minimal per-lever schema. lever_id is assigned by code, not the LLM."""
     classification: LeverClassification = Field(
-        description="What should happen to this lever."
+        description="What should happen to this lever: keep (distinct), absorb (overlaps another), or remove (fully redundant)."
     )
     justification: str = Field(
-        description="A concise justification for the classification. Use the lever_id to reference the lever that is being kept in its place. Use ~80 words."
+        description="A concise justification for the classification (~80 words). If absorbing, state which lever id it merges into."
     )
 
+class LeverDecision(BaseModel):
+    lever_id: str
+    classification: LeverClassification
+    justification: str
+
 class DeduplicationAnalysis(BaseModel):
-    decisions: List[LeverDecision] = Field(
-        description="A list of all levers with their classification and justification."
-    )
+    decisions: List[LeverDecision]
 
 class InputLever(BaseModel):
     """Represents a single lever loaded from the initial brainstormed file."""
@@ -112,38 +113,72 @@ class DeduplicateLevers:
 
         logger.info(f"Starting deduplication for {len(input_levers)} levers.")
 
-        levers_json = json.dumps([lever.model_dump() for lever in input_levers], indent=2)        
-        user_prompt = (
-            f"**Project Context:**\n{project_context}\n\n"
-            "Here is the full list of strategic levers. Please analyze them for duplicates.\n\n"
-            f"{levers_json}"
-        )
+        levers_json = json.dumps([lever.model_dump() for lever in input_levers], indent=2)
 
         system_prompt = DEDUPLICATE_SYSTEM_PROMPT.strip()
-        chat_message_list = [
-            ChatMessage(role=MessageRole.SYSTEM, content=system_prompt),
-            ChatMessage(role=MessageRole.USER, content=user_prompt)
-        ]
 
-        def execute_function(llm: LLM) -> dict:
-            sllm = llm.as_structured_llm(DeduplicationAnalysis)
-            chat_response = sllm.chat(chat_message_list)
-            metadata = dict(llm.metadata)
-            return {"chat_response": chat_response, "metadata": metadata}
+        # Build a summary of all levers for comparison context (shared across all per-lever calls).
+        all_levers_summary = "\n".join(
+            f"- [{lever.lever_id}] {lever.name}: {lever.consequences[:120]}..."
+            for lever in input_levers
+        )
 
-        try:
-            result = llm_executor.run(execute_function)
-            analysis_result: DeduplicationAnalysis = result["chat_response"].raw
-            metadata = result["metadata"]
-        except PipelineStopRequested:
-            raise
-        except Exception as e:
-            logger.error("Deduplication failed.", exc_info=True)
-            raise ValueError("Deduplication failed.") from e
+        decisions: List[LeverDecision] = []
+        metadata: dict = {}
+        max_retries = 3
 
-        # The LLM is supposed to return the same number of levers as the input.
-        # However sometimes LLMs skips some levers. So I cannot assume that all the levers in the input are returned.
-        # In case a lever is not returned, then I want to `keep` it. Otherwise, I might lose an important lever.
+        for lever in input_levers:
+            lever_json = json.dumps(lever.model_dump(), indent=2)
+            per_lever_user_prompt = (
+                f"**Project Context:**\n{project_context}\n\n"
+                f"**All levers under review:**\n{all_levers_summary}\n\n"
+                f"**Lever to classify now:**\n{lever_json}\n\n"
+                "Classify this single lever (keep / absorb / remove) with a justification."
+            )
+            chat_message_list = [
+                ChatMessage(role=MessageRole.SYSTEM, content=system_prompt),
+                ChatMessage(role=MessageRole.USER, content=per_lever_user_prompt),
+            ]
+
+            decision: LeverClassificationDecision | None = None
+            for attempt in range(max_retries):
+                try:
+                    def execute_function(llm: LLM) -> dict:
+                        sllm = llm.as_structured_llm(LeverClassificationDecision)
+                        chat_response = sllm.chat(chat_message_list)
+                        nonlocal metadata
+                        metadata = dict(llm.metadata)
+                        return {"chat_response": chat_response}
+
+                    result = llm_executor.run(execute_function)
+                    raw = result["chat_response"].raw
+                    if raw is None:
+                        logger.warning(f"Lever {lever.lever_id}: attempt {attempt+1} returned None raw. Retrying.")
+                        continue
+                    decision = raw
+                    break
+                except PipelineStopRequested:
+                    raise
+                except Exception as e:
+                    logger.warning(f"Lever {lever.lever_id}: attempt {attempt+1} failed: {e}")
+
+            if decision is None:
+                logger.warning(f"Lever {lever.lever_id}: all {max_retries} attempts failed. Defaulting to keep.")
+                decision = LeverClassificationDecision(
+                    classification=LeverClassification.keep,
+                    justification="Classification failed after retries. Keeping this lever to avoid data loss."
+                )
+
+            decisions.append(LeverDecision(
+                lever_id=lever.lever_id,
+                classification=decision.classification,
+                justification=decision.justification,
+            ))
+
+        analysis_result = DeduplicationAnalysis(decisions=decisions)
+
+        # The LLM may have been unable to classify some levers. Missing decisions default to keep.
+        # Code assembles DeduplicationAnalysis from per-lever results; LLM never sees lever_id in the schema.
 
         # Perform the deduplication.
         output_levers = []
@@ -181,7 +216,7 @@ class DeduplicateLevers:
             output_levers.append(output_lever)
 
         return cls(
-            user_prompt=user_prompt,
+            user_prompt=levers_json,
             system_prompt=system_prompt,
             response=analysis_result,
             deduplicated_levers=output_levers,

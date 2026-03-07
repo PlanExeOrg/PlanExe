@@ -157,18 +157,27 @@ class Premortem:
                     "duration": duration,
                 }
 
-            try:
-                result = llm_executor.run(execute_function)
-            except PipelineStopRequested:
-                raise
-            except Exception as e:
-                logger.warning(f"LLM chat interaction failed for archetype {archetype}: {e}. Skipping — premortem will be partial.")
+            MAX_RETRIES = 5
+            archetype_result = None
+            for attempt in range(1, MAX_RETRIES + 1):
+                try:
+                    result = llm_executor.run(execute_function)
+                    archetype_result = result["pydantic_response"]
+                    metadata_list.append(result["metadata"])
+                    logger.info(f"Archetype {archetype} succeeded on attempt {attempt}.")
+                    break
+                except PipelineStopRequested:
+                    raise
+                except Exception as e:
+                    logger.warning(f"Archetype {archetype} attempt {attempt}/{MAX_RETRIES} failed: {e}")
+                    if attempt == MAX_RETRIES:
+                        logger.warning(f"Archetype {archetype} exhausted {MAX_RETRIES} attempts. Skipping — premortem will be partial.")
+
+            if archetype_result is None:
                 continue
 
-            archetype_result: ArchetypeAnalysis = result["pydantic_response"]
             assumptions_to_kill.append(archetype_result.assumption)
             failure_modes.append(archetype_result.failure_mode)
-            metadata_list.append(result["metadata"])
 
         final_response = PremortemAnalysis(
             assumptions_to_kill=assumptions_to_kill,

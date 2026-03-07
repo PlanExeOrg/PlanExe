@@ -1,0 +1,162 @@
+[
+  {
+    "task_id": "6f004f4a-9caa-40af-916c-b6372850e8e1",
+    "delay_risks": "External regulatory bodies may experience processing delays beyond standard timelines, and airspace restrictions near DFW could require additional waivers.",
+    "mitigation_strategy": "Engage aviation consultants early for pre-filing analysis and initiate applications immediately upon securing lease agreements to maximize parallel processing time.",
+    "days_min": 60,
+    "days_max": 150,
+    "days_realistic": 90
+  },
+  {
+    "task_id": "03692554-ab01-48b5-8e11-6d25033c3956",
+    "delay_risks": "Incomplete documentation leading to rejection or complex airspace restrictions near Dallas International Airport causing extended review periods.",
+    "mitigation_strategy": "Conduct detailed airspace analysis with an aviation consultant prior to submission and utilize certified legal counsel for application accuracy.",
+    "days_min": 30,
+    "days_max": 90,
+    "days_realistic": 45
+  },
+  {
+    "task_id": "06bc7a3b-578d-41e9-a902-ec27142371ad",
+    "delay_risks": "Specialized carriers may deny coverage due to perceived liability risks from combat drone operations or underwriting processes exceeding budgeted timelines.",
+    "mitigation_strategy": "Engage multiple specialized brokers simultaneously and prepare comprehensive risk management documentation in advance of requests for quotes.",
+    "days_min": 20,
+    "days_max": 60,
+    "days_realistic": 35
+  },
+  {
+    "task_id": "65aa6107-f2f6-4c60-80b2-a117e0bd9573",
+    "delay_risks": "Consultant availability bottlenecks or complex FAA data retrieval processes extending the analysis timeline.",
+    "mitigation_strategy": "Engage aviation consultants with immediate availability and establish a dedicated communication channel for daily status updates during the analysis phase.",
+    "days_min": 5,
+    "days_max": 21,
+    "days_realistic": 14
+  },
+  {
+    "task_id": "95814c22-80a4-46e1-a20d-b3bbbfd0a30f",
+    "delay_risks": "Supply chain disruptions or unforeseen structural issues within the warehouse delaying material installation and fit-out completion.",
+    "mitigation_strategy": "Secure binding contracts with suppliers early and conduct a comprehensive pre-demolition structural audit to identify hidden infrastructure costs.",
+    "days_min": 45,
+    "days_max": 90,
+    "days_realistic": 70
+  },
+  {
+    "task_id": "125bd836-1a42-48c3-a11e-fa6b4a7184fe",
+    "delay_risks": "Extended legal review cycles or zoning board approval delays preventing lease execution within the required timeline.",
+    "mitigation_strategy": "Retain specialized commercial real estate counsel immediately and identify secondary warehouse locations as contingency options to mitigate negotiation risks.",
+    "days_min": 14,
+    "days_max": 60,
+    "days_realistic": 30
+  },
+  {
+    "task_id": "1eeec10e-aba9-48be-afbf-e73be7dd1370",
+    "delay_risks": "Delays in commercial ventilation permit approvals, unexpected structural incompatibilities within the industrial warehouse facility.",
+    "mitigation_strategy": "Engage specialized HVAC contractors early to conduct site surveys before lease signing; submit permit applications immediately upon securing venue access.",
+    "days_min": 14,
+    "days_max": 60,
+    "days_realistic": 30
+  },
+  {
+    "task_id": "ba88213b-60ad-416f-9f47-2bb4e3266733",
+    "delay_risks": "Supply chain disruptions for specialized ballistic materials, structural integrity concerns regarding ceiling mounting points in older warehouse spaces.",
+    "mitigation_strategy": "Source certified netting materials with confirmed lead times prior to lease finalization; perform load-bearing assessments on ceiling trusses during design phase.",
+    "days_min": 7,
+    "days_max": 30,
+    "days_realistic": 15
+  },
+  {
+    "task_id": "cb67b184-e7bc-4829-b21f-687efbb110b5",
+    "delay_risks": "Custom collision sensor integration failures causing latency spikes, cybersecurity penetration testing revealing vulnerabilities requiring system architecture rework.",
+    "mitigation_strategy": "Conduct preliminary hardware stress tests in a sandbox environment before full deployment; engage security auditors during the initial design phase rather than waiting for pre-launch.",
+    "days_min": 30,
+    "days_max": 90,
+    "days_realistic": 60
+  },
+  {
+    "task_id": "baa32992-ea13-4079-99c8-5dc52211c50b",
+    "delay_risks": "Supply chain disruptions for specialized LiDAR hardware leading to procurement delays exceeding standard lead times due to high industrial demand.",
+    "mitigation_strategy": "Engage multiple approved vendors early and secure binding purchase orders with expedited shipping clauses to ensure timely delivery.",
+    "days_min": 25,
+    "days_max": 75,
+    "days_realistic": 40
+  },
+  {
+    "task_id": "1a64d547-336a-4f7e-bc04-621e11575fd3",
+    "delay_risks": "Hardware integration failures or latency spikes during sensor calibration creating safety liability risks and requiring rework.",
+    "mitigation_strategy": "Implement redundant safety systems and conduct weekly hardware stress tests prior to final deployment to verify reliability.",
+    "days_min": 15,
+    "days_max": 50,
+    "days_realistic": 30
+  },
+  {
+    "task_id": "1eec6375-9274-4036-bc12-2c6c08fc74bf",
+    "delay_risks": "Cybersecurity vulnerabilities in telemetry streams exposing customer data to potential breaches or regulatory penalties under GDPR-like protocols.",
+    "mitigation_strategy": "Engage specialized cybersecurity firms for penetration testing and implement end-to-end encryption protocols immediately upon development completion.",
+    "days_min": 10,
+    "days_max": 40,
+    "days_realistic": 20
+  },
+  {
+    "task_id": "6485ae11-8fc2-45f9-9bc3-557e9f4e6e32",
+    "delay_risks": "Prolonged negotiations with external partners and potential market resistance to military-themed branding affecting adoption rates.",
+    "mitigation_strategy": "Initiate early stakeholder consultations, conduct preliminary focus groups to gauge sentiment before finalizing brand assets.",
+    "days_min": 30,
+    "days_max": 65,
+    "days_realistic": 45
+  },
+  {
+    "task_id": "a7c86427-a3c0-42ed-b36f-d1c650be4eb4",
+    "delay_risks": "Sensitivity regarding active military conflict endorsement causing delays in agreement signing or reputational backlash from community stakeholders.",
+    "mitigation_strategy": "Schedule consultation sessions ensuring legal boundaries are respected, draft clear non-binding MOUs for review by legal counsel.",
+    "days_min": 15,
+    "days_max": 40,
+    "days_realistic": 25
+  },
+  {
+    "task_id": "be1cd5ea-1a4b-4353-ba5f-e15351731e5e",
+    "delay_risks": "Incorrect price points leading to low corporate uptake or reduced net margins below the 10% target threshold due to market volatility.",
+    "mitigation_strategy": "Perform structured market testing with potential corporate clients, utilize tiered pricing models to optimize revenue before launch.",
+    "days_min": 10,
+    "days_max": 35,
+    "days_realistic": 20
+  },
+  {
+    "task_id": "10b68b59-adc1-408e-8250-e8d7befb12a1",
+    "delay_risks": "Regional partners may hesitate due to uncertainty regarding commercial sustainability and safety compliance.",
+    "mitigation_strategy": "Provide detailed financial projections and safety compliance documentation to demonstrate business viability.",
+    "days_min": 20,
+    "days_max": 60,
+    "days_realistic": 35
+  },
+  {
+    "task_id": "1fa30365-74e6-46c7-ac4a-d14d9d2f1d52",
+    "delay_risks": "Cross-functional dependencies between facility modifications and regulatory approvals may create critical path bottlenecks.",
+    "mitigation_strategy": "Implement integrated project management dashboard for real-time tracking of all parallel workstreams including safety audits.",
+    "days_min": 30,
+    "days_max": 90,
+    "days_realistic": 45
+  },
+  {
+    "task_id": "b3801889-e477-4c01-a004-f010c629f267",
+    "delay_risks": "FAA certification exam backlog or instructor availability constraints could delay staff operational readiness.",
+    "mitigation_strategy": "Enroll instructors in accelerated training cohorts immediately and schedule exams with buffer time before opening day.",
+    "days_min": 7,
+    "days_max": 30,
+    "days_realistic": 15
+  },
+  {
+    "task_id": "d260ec68-9ab8-4407-9c49-89805361683e",
+    "delay_risks": "Regulatory body scheduling conflicts causing inspection delays, or non-compliance findings requiring remediation work before final sign-off.",
+    "mitigation_strategy": "Schedule inspections early with buffer time and conduct comprehensive internal pre-audits to resolve issues proactively.",
+    "days_min": 7,
+    "days_max": 30,
+    "days_realistic": 14
+  },
+  {
+    "task_id": "5ef34f05-ce5f-4d20-ae98-2866368345a0",
+    "delay_risks": "Creative asset approval bottlenecks delaying campaign start, or lower-than-expected engagement rates requiring mid-campaign adjustments.",
+    "mitigation_strategy": "Finalize creative briefs prior to launch date and maintain flexible media buying budgets for real-time optimization based on performance data.",
+    "days_min": 10,
+    "days_max": 45,
+    "days_realistic": 21
+  }
+]

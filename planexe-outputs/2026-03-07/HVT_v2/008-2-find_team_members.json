@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "category": "Regulatory & Compliance Director",
+    "explanation": "Manages FAA Part 107 licensing, airspace waivers, legal compliance across all three locations (Atlanta, Dallas-Fort Worth, Pittsburgh), and maintains relationships with aviation authorities to ensure operational continuity without regulatory shutdowns.",
+    "consequences": "Without this role, the venture faces 3-6 month launch delays from FAA approval issues, potential fines up to $10,000 per violation, and risk of complete operational shutdown due to airspace violations near airports like DFW.",
+    "count": "1-2 depending on location complexity"
+  },
+  {
+    "id": 2,
+    "category": "Venue Infrastructure Manager",
+    "explanation": "Oversees industrial warehouse acquisition, HVAC safety modifications, ballistic netting installation, and physical arena setup across multiple locations while managing CAPEX budgets of $500,000 per site.",
+    "consequences": "Without proper venue management, seasonal weather reduces operating days by 35%, facility utilization drops below break-even thresholds, and safety modifications may fail to meet ventilation or structural standards.",
+    "count": "min 1, max 3 depending on concurrent location count"
+  },
+  {
+    "id": 3,
+    "category": "Safety Operations Lead",
+    "explanation": "Designs collision prevention protocols, oversees kill-switch systems, manages incident response procedures, coordinates with insurance underwriters on liability coverage for high-speed drone operations.",
+    "consequences": "Injury lawsuits and class actions could occur from sensor failures or collisions, insurance premiums rise 40-60%, and operational shutdowns lasting 2-8 weeks may result from liability incidents.",
+    "count": "min 1, max 2 depending on operational hours and locations"
+  },
+  {
+    "id": 4,
+    "category": "Technology Integration Specialist",
+    "explanation": "Coordinates custom collision sensor procurement, drone hardware deployment, telemetry system integration, and maintains relationships with suppliers to ensure delivery within 90-day timelines.",
+    "consequences": "Hardware lead times extend beyond 90 days due to supply chain volatility, sensor latency spikes cause 15% player disengagement rates, and maintenance costs erode margins by 20% year-over-year.",
+    "count": "1-2 depending on hardware complexity and supplier coordination needs"
+  },
+  {
+    "id": 5,
+    "category": "Cybersecurity Officer",
+    "explanation": "Implements AES-256 encryption for telemetry data, conducts penetration testing prior to launch, manages GDPR-like privacy compliance, and establishes incident response protocols for player tracking systems.",
+    "consequences": "Data breaches expose customer information leading to $50k+ regulatory fines, reputational damage causes 30% booking drop, and loss of corporate contracts from data privacy concerns.",
+    "count": "1 fixed level due to specialized security requirements"
+  },
+  {
+    "id": 6,
+    "category": "Narrative Branding Strategist",
+    "explanation": "Develops dual-branding approach (tactical sport vs combat simulation), manages veteran group partnerships for legitimacy, balances military themes with community acceptance to avoid zoning complaints.",
+    "consequences": "Military branding scrutiny reduces youth participation by 30%, community backlash triggers regulatory scrutiny, and marketing pivot costs of $40k become necessary mid-launch.",
+    "count": "1 fixed level due to strategic brand positioning role"
+  },
+  {
+    "id": 7,
+    "category": "Revenue & Franchise Director",
+    "explanation": "Develops corporate team-building packages with premium branding rights, establishes franchise licensing framework for regional expansion, manages pricing tiers to achieve 15% monthly retention before scaling.",
+    "consequences": "Per-session pricing caps yield at $50/player limiting revenue growth, high operational overhead reduces net margin below 10% annually, and venture remains local venue rather than scalable national brand.",
+    "count": "min 1, max 2 depending on revenue complexity and growth stage"
+  },
+  {
+    "id": 8,
+    "category": "Human Capital & Training Coordinator",
+    "explanation": "Manages hybrid staff model (40% certified flight instructors, 60% retail), oversees $3k specialized training per employee, implements retention programs to reduce 25% first-year turnover rates.",
+    "consequences": "Staff turnover challenges operational consistency standards, liability insurance premiums escalate due to training gaps, and customer satisfaction scores decline from untrained retail staff.",
+    "count": "min 1, max 3 depending on total workforce across all locations"
+  }
+]

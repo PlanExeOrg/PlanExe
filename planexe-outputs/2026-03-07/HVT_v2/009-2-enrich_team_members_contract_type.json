@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "category": "Regulatory & Compliance Director",
+    "explanation": "Manages FAA Part 107 licensing, airspace waivers, legal compliance across all three locations (Atlanta, Dallas-Fort Worth, Pittsburgh), and maintains relationships with aviation authorities to ensure operational continuity without regulatory shutdowns.",
+    "consequences": "Without this role, the venture faces 3-6 month launch delays from FAA approval issues, potential fines up to $10,000 per violation, and risk of complete operational shutdown due to airspace violations near airports like DFW.",
+    "count": "1-2 depending on location complexity",
+    "contract_type": "full_time_employee",
+    "contract_type_justification": "Critical liability role requiring long-term alignment and direct control over FAA compliance and regulatory risk management; ensures availability for audits/investigations during high-stakes launch phase."
+  },
+  {
+    "id": 2,
+    "category": "Venue Infrastructure Manager",
+    "explanation": "Oversees industrial warehouse acquisition, HVAC safety modifications, ballistic netting installation, and physical arena setup across multiple locations while managing CAPEX budgets of $500,000 per site.",
+    "consequences": "Without proper venue management, seasonal weather reduces operating days by 35%, facility utilization drops below break-even thresholds, and safety modifications may fail to meet ventilation or structural standards.",
+    "count": "min 1, max 3 depending on concurrent location count",
+    "contract_type": "independent_contractor",
+    "contract_type_justification": "Project-based role focused on warehouse acquisition and CAPEX modifications; specialized expertise needed for construction/leasing without long-term overhead commitment during pre-launch build-out."
+  },
+  {
+    "id": 3,
+    "category": "Safety Operations Lead",
+    "explanation": "Designs collision prevention protocols, oversees kill-switch systems, manages incident response procedures, coordinates with insurance underwriters on liability coverage for high-speed drone operations.",
+    "consequences": "Injury lawsuits and class actions could occur from sensor failures or collisions, insurance premiums rise 40-60%, and operational shutdowns lasting 2-8 weeks may result from liability incidents.",
+    "count": "min 1, max 2 depending on operational hours and locations",
+    "contract_type": "full_time_employee",
+    "contract_type_justification": "Safety-critical operational role requiring daily oversight of incident response and liability protocols; direct employment ensures accountability for player safety and insurance compliance."
+  },
+  {
+    "id": 4,
+    "category": "Technology Integration Specialist",
+    "explanation": "Coordinates custom collision sensor procurement, drone hardware deployment, telemetry system integration, and maintains relationships with suppliers to ensure delivery within 90-day timelines.",
+    "consequences": "Hardware lead times extend beyond 90 days due to supply chain volatility, sensor latency spikes cause 15% player disengagement rates, and maintenance costs erode margins by 20% year-over-year.",
+    "count": "1-2 depending on hardware complexity and supplier coordination needs",
+    "contract_type": "independent_contractor",
+    "contract_type_justification": "Specialized technical expertise required for custom sensor procurement and telemetry integration; flexibility allows access to niche hardware supply chain knowledge without long-term payroll obligation."
+  },
+  {
+    "id": 5,
+    "category": "Cybersecurity Officer",
+    "explanation": "Implements AES-256 encryption for telemetry data, conducts penetration testing prior to launch, manages GDPR-like privacy compliance, and establishes incident response protocols for player tracking systems.",
+    "consequences": "Data breaches expose customer information leading to $50k+ regulatory fines, reputational damage causes 30% booking drop, and loss of corporate contracts from data privacy concerns.",
+    "count": "1 fixed level due to specialized security requirements",
+    "contract_type": "independent_contractor",
+    "contract_type_justification": "Highly specialized cybersecurity function often outsourced initially due to cost; consultants provide penetration testing and encryption setup without requiring full-time executive salary in startup phase."
+  },
+  {
+    "id": 6,
+    "category": "Narrative Branding Strategist",
+    "explanation": "Develops dual-branding approach (tactical sport vs combat simulation), manages veteran group partnerships for legitimacy, balances military themes with community acceptance to avoid zoning complaints.",
+    "consequences": "Military branding scrutiny reduces youth participation by 30%, community backlash triggers regulatory scrutiny, and marketing pivot costs of $40k become necessary mid-launch.",
+    "count": "1 fixed level due to strategic brand positioning role",
+    "contract_type": "independent_contractor",
+    "contract_type_justification": "Strategic branding role allowing flexibility for market pivots (e.g., tactical sport vs combat simulation); specialized marketing expertise avoids long-term overhead before product-market validation."
+  },
+  {
+    "id": 7,
+    "category": "Revenue & Franchise Director",
+    "explanation": "Develops corporate team-building packages with premium branding rights, establishes franchise licensing framework for regional expansion, manages pricing tiers to achieve 15% monthly retention before scaling.",
+    "consequences": "Per-session pricing caps yield at $50/player limiting revenue growth, high operational overhead reduces net margin below 10% annually, and venture remains local venue rather than scalable national brand.",
+    "count": "min 1, max 2 depending on revenue complexity and growth stage",
+    "contract_type": "full_time_employee",
+    "contract_type_justification": "Core business model definition requires deep alignment with safety and operations for franchise scalability; full-time commitment ensures consistent execution of revenue and licensing strategy."
+  },
+  {
+    "id": 8,
+    "category": "Human Capital & Training Coordinator",
+    "explanation": "Manages hybrid staff model (40% certified flight instructors, 60% retail), oversees $3k specialized training per employee, implements retention programs to reduce 25% first-year turnover rates.",
+    "consequences": "Staff turnover challenges operational consistency standards, liability insurance premiums escalate due to training gaps, and customer satisfaction scores decline from untrained retail staff.",
+    "count": "min 1, max 3 depending on total workforce across all locations",
+    "contract_type": "full_time_employee",
+    "contract_type_justification": "Ongoing operational need to manage hybrid staff model, training costs, and retention programs; requires daily oversight of certifications and turnover mitigation across multiple locations."
+  }
+]

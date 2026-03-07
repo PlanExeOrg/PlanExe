@@ -1,0 +1,871 @@
+{
+  "wbs_project": {
+    "id": "863bd09b-0dba-4172-88c6-f687d080b6dc",
+    "description": "Drone Combat Arena",
+    "extra_fields": {
+      "final_deliverable": "Compliant Operational Venue"
+    },
+    "task_children": [
+      {
+        "id": "6f004f4a-9caa-40af-916c-b6372850e8e1",
+        "description": "Regulatory & Compliance Authorization",
+        "task_children": [
+          {
+            "id": "03692554-ab01-48b5-8e11-6d25033c3956",
+            "description": "Submit FAA Part 107 license applications for all locations",
+            "task_children": [
+              {
+                "id": "d1b24981-5ae8-43af-88df-4ba48919540b",
+                "description": "Analyze airspace restrictions near proposed venue locations",
+                "extra_fields": {
+                  "detailed_description": "Map Class B/C/D airspace boundaries against warehouse sites using SkyVector or AirMap software to identify no-fly zones before application submission.",
+                  "resources_needed": [
+                    "Aviation Regulatory Specialist",
+                    "SkyVector Software",
+                    "AirMap Platform"
+                  ]
+                }
+              },
+              {
+                "id": "cbe642a7-5287-4bf0-89a9-ee6d2cde1d66",
+                "description": "Consult specialist for airworthiness gap analysis",
+                "extra_fields": {
+                  "detailed_description": "Hire an Aviation Regulatory Specialist with expertise in UAV liability and commercial drone law to review hardware airworthiness requirements against Part 107 standards.",
+                  "resources_needed": [
+                    "Aviation Regulatory Specialist",
+                    "FAA UAS Data Bank"
+                  ]
+                }
+              },
+              {
+                "id": "4ac326b3-81ea-4490-ba1f-3dd9ce7bbc4c",
+                "description": "Compile documents and pay application fees",
+                "extra_fields": {
+                  "detailed_description": "Gather necessary legal counsel input for accuracy and process the $5,000 per location licensing fees required by the FAA prior to filing applications.",
+                  "resources_needed": [
+                    "Certified Legal Counsel",
+                    "FAA Application Fees",
+                    "CFO"
+                  ]
+                }
+              },
+              {
+                "id": "6547d274-5a6f-457e-bbb7-ee7b00939f58",
+                "description": "Submit FAA Part 107 license applications online",
+                "extra_fields": {
+                  "detailed_description": "File all three location license applications through the FAA DroneZone portal within the March 2026 deadline to ensure operational compliance and launch readiness.",
+                  "resources_needed": [
+                    "Regulatory & Compliance Director",
+                    "FAA DroneZone Portal"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "06bc7a3b-578d-41e9-a902-ec27142371ad",
+            "description": "Secure binding insurance quotes from specialized UAV carriers",
+            "task_children": [
+              {
+                "id": "7b18dfb2-45fc-4d77-aae3-ba801b59f27d",
+                "description": "Prepare internal risk assessment and financial data",
+                "extra_fields": {
+                  "detailed_description": "Compile CAPEX budgets, safety protocols, and operational risk profiles required for underwriting review.",
+                  "resources_needed": [
+                    "CFO",
+                    "Regulatory & Compliance Director",
+                    "Financial Analyst"
+                  ]
+                }
+              },
+              {
+                "id": "0139ba68-ee9b-4019-bed9-f6fc899296d6",
+                "description": "Contact specialized UAV liability insurance carriers",
+                "extra_fields": {
+                  "detailed_description": "Identify and reach out to high-risk aviation underwriters specializing in commercial drone operations.",
+                  "resources_needed": [
+                    "Insurance Broker Network",
+                    "Legal Counsel",
+                    "Procurement Team"
+                  ]
+                }
+              },
+              {
+                "id": "4b1a40dd-f7be-4781-b12d-d2fe82549190",
+                "description": "Review underwriting requirements and submit formal applications",
+                "extra_fields": {
+                  "detailed_description": "Ensure all regulatory proofs are included and complete submission processes for binding quotes.",
+                  "resources_needed": [
+                    "Regulatory & Compliance Director",
+                    "Application Portal Access",
+                    "Specialized Aviation Attorney"
+                  ]
+                }
+              },
+              {
+                "id": "1411654c-2e81-44f5-a0c0-03d7ead54e8d",
+                "description": "Compare quotes and finalize binding coverage agreement",
+                "extra_fields": {
+                  "detailed_description": "Analyze premium costs, exclusions, and liability limits to select optimal carrier and sign contract.",
+                  "resources_needed": [
+                    "CFO",
+                    "Insurance Underwriter Specialist",
+                    "Risk Management Team"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "65aa6107-f2f6-4c60-80b2-a117e0bd9573",
+            "description": "Conduct airspace risk analysis near proposed venue coordinates",
+            "task_children": [
+              {
+                "id": "39424d0a-0e7f-4288-bf53-805209f0e3af",
+                "description": "Engage aviation regulatory specialist consultant",
+                "extra_fields": {
+                  "detailed_description": "Hire an expert with UAV liability expertise to review hardware airworthiness gap analysis and provide feasibility advice for airspace restrictions.",
+                  "resources_needed": [
+                    "Aviation Regulatory Specialist Consultant",
+                    "Consulting Budget",
+                    "Legal Counsel Retainer"
+                  ]
+                }
+              },
+              {
+                "id": "f256c4f3-1a35-44c7-b6e1-890ae851bd64",
+                "description": "Map airspace boundaries near venue sites",
+                "extra_fields": {
+                  "detailed_description": "Utilize SkyVector or AirMap software to map Class B C D airspace boundaries against proposed warehouse sites for flight envelope compliance.",
+                  "resources_needed": [
+                    "GIS Software License",
+                    "GPS Coordinates",
+                    "Venue Blueprints"
+                  ]
+                }
+              },
+              {
+                "id": "2551aa64-a421-440c-9578-b260543ea4d3",
+                "description": "Simulate LAANC requests for target coordinates",
+                "extra_fields": {
+                  "detailed_description": "Use FAA DroneZone portal to simulate LAANC request submissions and verify authorization availability status for all three target coordinates.",
+                  "resources_needed": [
+                    "FAA DroneZone Account",
+                    "Internet Access",
+                    "Site Maps"
+                  ]
+                }
+              },
+              {
+                "id": "a4f32940-9bb1-44a1-a146-4749e157b21c",
+                "description": "Validate restrictions with FAA District Office",
+                "extra_fields": {
+                  "detailed_description": "Consult FAA District Office regarding airspace waiver feasibility and validate Class B C D access permissions before lease signing.",
+                  "resources_needed": [
+                    "FAA District Office Contact Info",
+                    "Legal Counsel",
+                    "Compliance Checklists"
+                  ]
+                }
+              },
+              {
+                "id": "a6effd79-0411-45c1-bfa7-1ff8a745b34f",
+                "description": "Compile risk analysis report for lease decisions",
+                "extra_fields": {
+                  "detailed_description": "Compile findings into a risk analysis report comparing venue options to support final lease decision making and mitigation planning.",
+                  "resources_needed": [
+                    "Report Template",
+                    "Stakeholder Meeting Schedule",
+                    "Final Decision Makers"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "95814c22-80a4-46e1-a20d-b3bbbfd0a30f",
+        "description": "Venue Infrastructure & Safety Fit-out",
+        "task_children": [
+          {
+            "id": "125bd836-1a42-48c3-a11e-fa6b4a7184fe",
+            "description": "Negotiate and sign industrial warehouse lease agreements",
+            "task_children": [
+              {
+                "id": "bf907c25-9f65-4335-b56c-d43ec4f7beb6",
+                "description": "Identify potential warehouse locations",
+                "extra_fields": {
+                  "detailed_description": "Search for industrial properties in target cities meeting size and zoning requirements for drone operations.",
+                  "resources_needed": [
+                    "Real Estate Agent",
+                    "Site Surveyor",
+                    "Zoning Consultant"
+                  ]
+                }
+              },
+              {
+                "id": "ad96ebf6-4e20-40af-a3eb-80b3cb8de6d0",
+                "description": "Negotiate lease terms and conditions",
+                "extra_fields": {
+                  "detailed_description": "Discuss rent rates, duration, CAM fees, and specific clauses regarding high-density drone activity usage rights.",
+                  "resources_needed": [
+                    "Commercial Real Estate Broker",
+                    "Property Manager",
+                    "Legal Counsel"
+                  ]
+                }
+              },
+              {
+                "id": "93c1cada-7080-469d-ba33-a58304dc6b80",
+                "description": "Conduct legal review of documentation",
+                "extra_fields": {
+                  "detailed_description": "Have counsel review lease drafts for liability waivers, insurance requirements, and airspace restriction clauses.",
+                  "resources_needed": [
+                    "Corporate Attorney",
+                    "Insurance Specialist",
+                    "Compliance Officer"
+                  ]
+                }
+              },
+              {
+                "id": "c8e13cb3-0581-41a9-af9d-02be8b6ebfbc",
+                "description": "Execute final lease agreement with owner",
+                "extra_fields": {
+                  "detailed_description": "Sign the finalized contract and pay initial deposits to secure the property rights for venue setup.",
+                  "resources_needed": [
+                    "CFO",
+                    "Property Owner Representative",
+                    "Notary Public"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "1eeec10e-aba9-48be-afbf-e73be7dd1370",
+            "description": "Install HVAC systems meeting ventilation safety standards",
+            "task_children": [
+              {
+                "id": "f8fc9544-407e-445e-b124-4fc0cb73a88f",
+                "description": "Design HVAC system layout for warehouse safety",
+                "extra_fields": {
+                  "detailed_description": "Calculate heat load and fume removal requirements to meet FAA Part 107 ventilation standards. Define ductwork paths avoiding structural conflicts. Deliver approved engineering schematics for permit submission.",
+                  "resources_needed": [
+                    "HVAC Engineer",
+                    "Safety Compliance Officer",
+                    "CAD Software"
+                  ]
+                }
+              },
+              {
+                "id": "c902df29-c872-41c6-9a80-2a116299a6b7",
+                "description": "Secure permits and source specialized equipment",
+                "extra_fields": {
+                  "detailed_description": "Obtain commercial ventilation permit approvals from local authorities. Procure industrial HVAC units capable of high-density drone operation heat loads. Manage supply chain risks for delivery timelines.",
+                  "resources_needed": [
+                    "Commercial Real Estate Counsel",
+                    "HVAC Supplier",
+                    "Permit Coordinator"
+                  ]
+                }
+              },
+              {
+                "id": "508a234f-d768-4d14-a37d-cf54c65184d5",
+                "description": "Mount ventilation units and ductwork infrastructure",
+                "extra_fields": {
+                  "detailed_description": "Physically install HVAC units on warehouse ceiling trusses. Connect ducting to ensure proper air circulation in player corridors. Ensure structural integrity during mounting process.",
+                  "resources_needed": [
+                    "Installation Crew",
+                    "Structural Engineer",
+                    "Heavy Machinery Operator"
+                  ]
+                }
+              },
+              {
+                "id": "2a7beb5c-4778-40bf-a0cd-0d8f8b9ec096",
+                "description": "Conduct airflow testing and safety certification",
+                "extra_fields": {
+                  "detailed_description": "Perform pressure tests to verify air exchange rates meet safety codes. Validate fume removal efficiency during peak simulation loads. Obtain final occupancy clearance for operations.",
+                  "resources_needed": [
+                    "Safety Inspector",
+                    "HVAC Technician",
+                    "Testing Equipment"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "ba88213b-60ad-416f-9f47-2bb4e3266733",
+            "description": "Deploy ballistic netting around player corridors and zones",
+            "task_children": [
+              {
+                "id": "e2f9430b-af65-4f97-99ed-7f4558f2fe79",
+                "description": "Source certified ballistic netting materials",
+                "extra_fields": {
+                  "detailed_description": "Procure safety-rated netting with confirmed lead times to prevent supply chain delays before lease finalization.",
+                  "resources_needed": [
+                    "Specialized material suppliers",
+                    "procurement manager",
+                    "safety compliance officer"
+                  ]
+                }
+              },
+              {
+                "id": "d2218f47-dbd0-4247-a55e-f0c4fe0a5d48",
+                "description": "Assess ceiling truss load-bearing capacity",
+                "extra_fields": {
+                  "detailed_description": "Perform structural engineering analysis on warehouse trusses to verify mounting points can withstand impact forces.",
+                  "resources_needed": [
+                    "Structural engineer",
+                    "facility manager",
+                    "load testing equipment"
+                  ]
+                }
+              },
+              {
+                "id": "ea133437-5ab3-4552-b440-054f7a48f304",
+                "description": "Install netting around player corridors zones",
+                "extra_fields": {
+                  "detailed_description": "Physically mount and secure netting systems along designated flight paths ensuring no gaps in coverage.",
+                  "resources_needed": [
+                    "Installation crew",
+                    "mounting hardware",
+                    "lifting rigging gear"
+                  ]
+                }
+              },
+              {
+                "id": "7d92fd37-98ad-4262-a40f-7b3b2aa16c45",
+                "description": "Conduct tension and impact load verification tests",
+                "extra_fields": {
+                  "detailed_description": "Validate installed system integrity through stress testing to ensure compliance with safety standards prior to opening.",
+                  "resources_needed": [
+                    "Safety inspectors",
+                    "test drones",
+                    "impact measurement tools"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cb67b184-e7bc-4829-b21f-687efbb110b5",
+        "description": "Technology Integration & Cybersecurity",
+        "task_children": [
+          {
+            "id": "baa32992-ea13-4079-99c8-5dc52211c50b",
+            "description": "Procure quadcopters with LiDAR obstacle avoidance systems",
+            "task_children": [
+              {
+                "id": "4a7bd3e4-c113-4de8-a4a8-ffb4124ad38a",
+                "description": "Identify potential drone suppliers",
+                "extra_fields": {
+                  "detailed_description": "Research and vet vendors capable of supplying quadcopters with LiDAR obstacle avoidance systems to ensure hardware availability within budget constraints.",
+                  "resources_needed": [
+                    "Procurement Specialist",
+                    "Technical Engineer"
+                  ]
+                }
+              },
+              {
+                "id": "396419ec-d5c1-4698-8d68-e0d8b98a7072",
+                "description": "Request quotes for LiDAR systems",
+                "extra_fields": {
+                  "detailed_description": "Contact selected vendors to obtain pricing details and technical specifications for required drone models to compare value propositions.",
+                  "resources_needed": [
+                    "Procurement Manager",
+                    "Sales Representatives"
+                  ]
+                }
+              },
+              {
+                "id": "483e0fec-b4ba-4a03-a151-544c42d89aef",
+                "description": "Negotiate binding purchase orders",
+                "extra_fields": {
+                  "detailed_description": "Finalize contract terms including pricing, warranties, and expedited delivery clauses with preferred vendor to secure inventory supply.",
+                  "resources_needed": [
+                    "Legal Counsel",
+                    "CFO",
+                    "Vendor Account Managers"
+                  ]
+                }
+              },
+              {
+                "id": "165743a8-3314-40f1-b414-874b3bc357e8",
+                "description": "Arrange expedited shipping logistics",
+                "extra_fields": {
+                  "detailed_description": "Coordinate transportation logistics to ensure hardware arrives within the required timeline avoiding supply chain delays or bottlenecks.",
+                  "resources_needed": [
+                    "Logistics Coordinator",
+                    "Shipping Carrier"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "1a64d547-336a-4f7e-bc04-621e11575fd3",
+            "description": "Integrate custom collision sensors into drone hardware",
+            "task_children": [
+              {
+                "id": "33a3ef33-e9e5-45bc-b2b3-b1194d741fa9",
+                "description": "Procure custom collision sensor hardware batches",
+                "extra_fields": {
+                  "detailed_description": "Acquire necessary LiDAR or radar sensor units from approved suppliers ensuring compatibility with existing quadcopter models.",
+                  "resources_needed": [
+                    "Procurement Manager",
+                    "Hardware Supplier Contracts",
+                    "Quality Assurance Team"
+                  ]
+                }
+              },
+              {
+                "id": "dfdd6aa4-8709-45cb-a545-775b21ba79ca",
+                "description": "Mount sensors and wire connections on frames",
+                "extra_fields": {
+                  "detailed_description": "Physically attach collision avoidance hardware to drone chassis and secure wiring harnesses for power and data transmission.",
+                  "resources_needed": [
+                    "Assembly Technicians",
+                    "Mounting Brackets",
+                    "Wiring Tools"
+                  ]
+                }
+              },
+              {
+                "id": "c6f6de8c-439d-4f4e-a726-fc86697ec3c6",
+                "description": "Develop software drivers for sensor data integration",
+                "extra_fields": {
+                  "detailed_description": "Create firmware interfaces allowing flight controllers to process real-time obstacle detection data from new sensors.",
+                  "resources_needed": [
+                    "Firmware Engineers",
+                    "Flight Controller API Docs",
+                    "Development Kits"
+                  ]
+                }
+              },
+              {
+                "id": "7a8a374d-0280-446a-a289-230ed0e89595",
+                "description": "Calibrate systems and test latency performance",
+                "extra_fields": {
+                  "detailed_description": "Run calibration routines and stress tests to verify low latency and accurate obstacle detection before deployment.",
+                  "resources_needed": [
+                    "Test Engineers",
+                    "Simulation Environment",
+                    "Data Logging Tools"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "1eec6375-9274-4036-bc12-2c6c08fc74bf",
+            "description": "Implement AES-256 encryption for telemetry data streams",
+            "task_children": [
+              {
+                "id": "5745316f-9efa-460e-9e08-140d6253a178",
+                "description": "Source custom collision sensor hardware components",
+                "extra_fields": {
+                  "detailed_description": "Procure specific LiDAR and ultrasonic sensors required for obstacle avoidance integration into existing quadcopter models ensuring compatibility with flight controllers.",
+                  "resources_needed": [
+                    "Hardware procurement specialist",
+                    "Sensor suppliers",
+                    "Budget allocation"
+                  ]
+                }
+              },
+              {
+                "id": "22cd4519-4765-429a-8973-cdb067a4f7dd",
+                "description": "Physically mount sensors onto quadcopter frames",
+                "extra_fields": {
+                  "detailed_description": "Securely attach collision detection hardware to drone chassis ensuring balance is maintained and wiring is protected from vibration damage.",
+                  "resources_needed": [
+                    "Drone assembly technicians",
+                    "Mounting tools",
+                    "Sensors"
+                  ]
+                }
+              },
+              {
+                "id": "dd8d67ad-abfa-439f-8a64-997d8b78a938",
+                "description": "Calibrate sensor data feeds for low latency",
+                "extra_fields": {
+                  "detailed_description": "Adjust sensitivity thresholds and synchronize data streams to minimize processing delays during flight operations ensuring real-time response.",
+                  "resources_needed": [
+                    "Embedded systems engineer",
+                    "Calibration software",
+                    "Flight controllers"
+                  ]
+                }
+              },
+              {
+                "id": "66949e63-afe6-4a23-9365-7c6dda9f55b7",
+                "description": "Execute redundant safety system stress tests",
+                "extra_fields": {
+                  "detailed_description": "Run repeated high-intensity collision simulations to verify sensor reliability and fail-safe mechanisms under operational pressure conditions.",
+                  "resources_needed": [
+                    "Safety testers",
+                    "Test drones",
+                    "Simulation environment"
+                  ]
+                }
+              },
+              {
+                "id": "ca6557eb-c90c-4298-8f9e-b5d7e5c662e5",
+                "description": "Finalize integration validation prior to deployment",
+                "extra_fields": {
+                  "detailed_description": "Complete final certification of integrated systems confirming all safety protocols meet operational standards before launch to public users.",
+                  "resources_needed": [
+                    "Quality assurance lead",
+                    "Compliance officer",
+                    "Integration logs"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "6485ae11-8fc2-45f9-9bc3-557e9f4e6e32",
+        "description": "Branding, Narrative & Market Validation",
+        "task_children": [
+          {
+            "id": "a7c86427-a3c0-42ed-b36f-d1c650be4eb4",
+            "description": "Establish partnership agreements with veterans groups",
+            "task_children": [
+              {
+                "id": "3a3a4c54-a39e-4ddf-aefb-fed55c91847f",
+                "description": "Identify potential veterans group partners",
+                "extra_fields": {
+                  "detailed_description": "Research and compile a list of local or national veterans organizations that align with the venue's narrative goals while avoiding active conflict endorsement sensitivities.",
+                  "resources_needed": [
+                    "Market Analyst",
+                    "Legal Counsel",
+                    "Veterans Liaison"
+                  ]
+                }
+              },
+              {
+                "id": "d9680188-dac9-4aa6-996f-fb89afdcbef4",
+                "description": "Consult on narrative boundaries and legal limits",
+                "extra_fields": {
+                  "detailed_description": "Schedule meetings with selected groups to discuss acceptable themes, ensuring clear legal boundaries regarding military conflict endorsement to prevent community backlash.",
+                  "resources_needed": [
+                    "Narrative Branding Strategist",
+                    "Veterans Group Representatives",
+                    "Community Liaison"
+                  ]
+                }
+              },
+              {
+                "id": "d9dfb5cd-7b69-4545-b3f1-dd73038070c7",
+                "description": "Draft non-binding MOUs for legal review",
+                "extra_fields": {
+                  "detailed_description": "Create draft MOUs outlining partnership terms, role definitions, and safety compliance commitments requiring legal review before any binding commitments are made.",
+                  "resources_needed": [
+                    "Legal Counsel",
+                    "Contract Administrator",
+                    "Compliance Officer"
+                  ]
+                }
+              },
+              {
+                "id": "dc9fc9b6-132b-4c77-b263-44f79607fd26",
+                "description": "Finalize agreements with legal counsel oversight",
+                "extra_fields": {
+                  "detailed_description": "Review final drafts with stakeholders and legal team, obtain necessary approvals, and execute signed partnership agreements to establish formal collaboration status.",
+                  "resources_needed": [
+                    "Legal Counsel",
+                    "Executive Sponsor",
+                    "Partnership Manager"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "be1cd5ea-1a4b-4353-ba5f-e15351731e5e",
+            "description": "Validate pricing elasticity for corporate team-building packages",
+            "task_children": [
+              {
+                "id": "4f4a103b-30ad-445d-9702-b439780535e0",
+                "description": "Define corporate package tiers and offerings",
+                "extra_fields": {
+                  "detailed_description": "Objective: Establish distinct service levels for team-building events including duration, drone count, and instructor ratios to create a baseline for pricing analysis. Scope: Product definition phase. Steps: Draft tier options and feature sets. Deliverables: Documented package specifications.",
+                  "resources_needed": [
+                    "Revenue Director",
+                    "Product Manager"
+                  ]
+                }
+              },
+              {
+                "id": "5203884e-5960-405e-9494-bf6b99a8201e",
+                "description": "Analyze competitor pricing models for context",
+                "extra_fields": {
+                  "detailed_description": "Objective: Research similar entertainment venues and corporate event providers to benchmark price points. Scope: Market analysis phase. Steps: Identify competitors, collect public pricing data, compare features. Deliverables: Competitor pricing report.",
+                  "resources_needed": [
+                    "Market Analyst",
+                    "Competitor Intelligence Tools"
+                  ]
+                }
+              },
+              {
+                "id": "b8811e98-0e10-452d-8eaa-2a64243ef03d",
+                "description": "Conduct market research with potential clients",
+                "extra_fields": {
+                  "detailed_description": "Objective: Engage target corporate buyers through interviews to understand budget constraints and perceived value. Scope: Customer discovery phase. Steps: Schedule interviews, conduct sessions, record feedback. Deliverables: Client interview transcripts.",
+                  "resources_needed": [
+                    "Sales Team",
+                    "CRM Software",
+                    "Interview Participants"
+                  ]
+                }
+              },
+              {
+                "id": "1ce48fdb-e026-4c3b-aade-e211fadcbf43",
+                "description": "Conduct price sensitivity testing sessions",
+                "extra_fields": {
+                  "detailed_description": "Objective: Execute A/B pricing tests or surveys to measure demand fluctuation across different price points. Scope: Validation phase. Steps: Design survey, distribute samples, analyze response rates. Deliverables: Sensitivity analysis report.",
+                  "resources_needed": [
+                    "Data Analyst",
+                    "Survey Platform",
+                    "Focus Group Lead"
+                  ]
+                }
+              },
+              {
+                "id": "eb94ea5a-4ce5-4a07-9c22-07b408b31417",
+                "description": "Finalize pricing strategy based on collected data",
+                "extra_fields": {
+                  "detailed_description": "Objective: Synthesize research findings to set optimal prices that meet margin targets while ensuring competitive uptake. Scope: Decision making phase. Steps: Review all reports, adjust margins, approve final rates. Deliverables: Approved price list.",
+                  "resources_needed": [
+                    "CFO",
+                    "Revenue Director",
+                    "Finance Team"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "10b68b59-adc1-408e-8250-e8d7befb12a1",
+            "description": "Secure non-binding franchise LOIs from regional partners",
+            "task_children": [
+              {
+                "id": "69380bd3-38e8-4eb3-aa3e-fc7b4d0e7dff",
+                "description": "Identify and vet potential regional franchise partners",
+                "extra_fields": {
+                  "detailed_description": "Research and screen prospective regional operators based on market reach and operational capability criteria to ensure alignment with brand standards before formal engagement.",
+                  "resources_needed": [
+                    "Market Analyst",
+                    "Business Development Manager",
+                    "Legal Counsel"
+                  ]
+                }
+              },
+              {
+                "id": "40ffea50-b049-4170-ae34-f2e202aac48a",
+                "description": "Develop financial viability and safety compliance documentation",
+                "extra_fields": {
+                  "detailed_description": "Compile detailed business case reports including CAPEX breakdowns, ROI projections, and FAA Part 107 certification proof to address partner risk concerns regarding sustainability.",
+                  "resources_needed": [
+                    "CFO",
+                    "Regulatory & Compliance Director",
+                    "Financial Analyst"
+                  ]
+                }
+              },
+              {
+                "id": "2bbbee89-5a2c-49ed-980b-bdba0ef5521c",
+                "description": "Present business viability evidence to potential partners",
+                "extra_fields": {
+                  "detailed_description": "Schedule and conduct pitch meetings where financial models and safety protocols are reviewed with stakeholders to build trust and demonstrate operational readiness for expansion.",
+                  "resources_needed": [
+                    "Revenue & Franchise Director",
+                    "Marketing Strategist",
+                    "Operations Lead"
+                  ]
+                }
+              },
+              {
+                "id": "878df2c5-ecbf-48c8-b449-2b75a40ec0b3",
+                "description": "Finalize agreements and collect signed non-binding LOIs",
+                "extra_fields": {
+                  "detailed_description": "Review terms of engagement drafts with interested parties and obtain formal letters of intent confirming commitment to regional development without binding financial obligations yet.",
+                  "resources_needed": [
+                    "Legal Counsel",
+                    "Revenue & Franchise Director",
+                    "Partner Relations Manager"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "1fa30365-74e6-46c7-ac4a-d14d9d2f1d52",
+        "description": "Operations Setup & Launch Preparation",
+        "task_children": [
+          {
+            "id": "b3801889-e477-4c01-a004-f010c629f267",
+            "description": "Complete staff certification training programs for instructors",
+            "task_children": [
+              {
+                "id": "3952cf3c-edb1-4b0b-91e1-dc5b799442d8",
+                "description": "Enroll instructors in accelerated training cohorts",
+                "extra_fields": {
+                  "detailed_description": "Identify eligible staff members and register them for immediate FAA Part 107 preparation courses to meet opening deadlines.",
+                  "resources_needed": [
+                    "Training Coordinator",
+                    "HR Manager",
+                    "FAA Course Provider"
+                  ]
+                }
+              },
+              {
+                "id": "ed687329-7160-424f-afcf-9a41261ce3c6",
+                "description": "Schedule FAA certification exams with buffer time",
+                "extra_fields": {
+                  "detailed_description": "Coordinate exam dates with testing centers ensuring sufficient lead time before the venue launch date to avoid delays.",
+                  "resources_needed": [
+                    "Operations Manager",
+                    "Testing Center Administrator",
+                    "Certification Tracking Software"
+                  ]
+                }
+              },
+              {
+                "id": "2e9be244-9283-46f1-840c-4fc9f048e269",
+                "description": "Verify operational readiness via practical assessments",
+                "extra_fields": {
+                  "detailed_description": "Conduct flight proficiency checks and safety protocol evaluations to confirm all instructors meet competency standards prior to public opening.",
+                  "resources_needed": [
+                    "Senior Flight Instructor",
+                    "Safety Officer",
+                    "Assessment Checklist"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "d260ec68-9ab8-4407-9c49-89805361683e",
+            "description": "Conduct final safety audits and compliance inspections",
+            "task_children": [
+              {
+                "id": "a0bb09c6-ab2c-4645-8ca2-14f56260080e",
+                "description": "Prepare internal compliance documentation package",
+                "extra_fields": {
+                  "detailed_description": "Compile all safety logs, HVAC test results, and network security audit reports required by regulatory bodies prior to official review.",
+                  "resources_needed": [
+                    "Safety Operations Lead",
+                    "Compliance Director",
+                    "Document Management System"
+                  ]
+                }
+              },
+              {
+                "id": "8e147ad0-e30e-4fbe-a110-d702b8dd6dee",
+                "description": "Schedule regulatory body inspections and audits",
+                "extra_fields": {
+                  "detailed_description": "Contact FAA inspectors, Fire Department officials, and local zoning authorities to secure dates for final venue clearance inspections within the timeline.",
+                  "resources_needed": [
+                    "Regulatory & Compliance Director",
+                    "Venue Manager",
+                    "External Auditors"
+                  ]
+                }
+              },
+              {
+                "id": "4c712fa1-c555-4c32-a7ae-baa6406747b1",
+                "description": "Execute physical safety walkthroughs and checks",
+                "extra_fields": {
+                  "detailed_description": "Perform on-site verification of ballistic netting, emergency stop zones, and ventilation systems against established safety standards during scheduled inspection windows.",
+                  "resources_needed": [
+                    "Safety Operations Lead",
+                    "Facility Engineers",
+                    "Fire Safety Officer"
+                  ]
+                }
+              },
+              {
+                "id": "6eee7fd0-b024-4bde-b523-66027ee91b2f",
+                "description": "Remediate identified non-compliance findings",
+                "extra_fields": {
+                  "detailed_description": "Address any deficiencies flagged during inspections immediately through repairs or procedural changes to ensure full regulatory compliance before launch approval.",
+                  "resources_needed": [
+                    "Maintenance Crew",
+                    "Safety Operations Lead",
+                    "Procurement Team"
+                  ]
+                }
+              },
+              {
+                "id": "9ed9e473-c0c4-4772-a9e5-a250ed45c045",
+                "description": "Secure final operational sign-off certificates",
+                "extra_fields": {
+                  "detailed_description": "Obtain official clearance documents and occupancy permits from all relevant authorities confirming the venue is safe for public operation.",
+                  "resources_needed": [
+                    "Regulatory & Compliance Director",
+                    "Legal Counsel",
+                    "Operations Manager"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "5ef34f05-ce5f-4d20-ae98-2866368345a0",
+            "description": "Execute public launch marketing campaign for venue opening",
+            "task_children": [
+              {
+                "id": "88c36790-8d61-4695-a665-7159b1b81c46",
+                "description": "Finalize creative assets and branding materials",
+                "extra_fields": {
+                  "detailed_description": "Design promotional visuals, draft press releases, and secure brand guidelines approval for the tactical sport theme.",
+                  "resources_needed": [
+                    "Creative Director",
+                    "Graphic Designer",
+                    "Copywriter",
+                    "Brand Manager"
+                  ]
+                }
+              },
+              {
+                "id": "a27592f3-9fe8-4f09-8204-8fc21007e9de",
+                "description": "Secure media channels and schedule ad placements",
+                "extra_fields": {
+                  "detailed_description": "Negotiate contracts with local digital platforms and traditional outlets to maximize reach before opening day launch.",
+                  "resources_needed": [
+                    "Marketing Manager",
+                    "Media Buyer",
+                    "Legal Reviewer",
+                    "Procurement Specialist"
+                  ]
+                }
+              },
+              {
+                "id": "1fc21fda-7a80-4668-82bb-d62fd89913cd",
+                "description": "Monitor engagement metrics and adjust spend dynamically",
+                "extra_fields": {
+                  "detailed_description": "Track click-through rates daily to optimize budget allocation for maximum customer acquisition during the launch window.",
+                  "resources_needed": [
+                    "Data Analyst",
+                    "Social Media Coordinator",
+                    "Campaign Manager",
+                    "Analytics Tool"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

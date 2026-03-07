@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Drone Combat Arena</title>
+  <style>
+    body {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        margin: 2rem;
+    }
+  </style>
+  <!--HTML_HEAD_START-->
+  <!-- 
+  Versions available at:
+  https://www.jsdelivr.com/package/npm/dhtmlx-gantt 
+  Version 9.1.0 breaks the zoom in/out/fit buttons.
+  Version 9.0.15 normal. The zoom in/out/fit buttons works.
+  -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dhtmlx-gantt@9.0.15/codebase/dhtmlxgantt.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/dhtmlx-gantt@9.0.15/codebase/dhtmlxgantt.min.js"></script>
+  <style>
+    .gantt_container_with_controls {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    .gantt_container {
+        width: 100%;
+        height: 80vh;
+        margin-bottom: 1rem;
+    }
+    .gantt_tooltip {
+        max-width: 30rem;
+        white-space: break-spaces;
+    }
+    .gantt-controls {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+    .zoom-buttons {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+    .export-button {
+        position: absolute;
+        right: 0;
+    }
+    .gantt-controls button {
+        padding: 0.5rem 1rem;
+        border: 1px solid #ccc;
+        border-radius: 0.25rem;
+        background: white;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+    .gantt-controls button:hover {
+        background: #f5f5f5;
+    }
+    .project-task.gantt_task_line {
+        background-color: #b67134;
+        border-color: #f57c00;
+    }
+    .project-task .gantt_task_content {
+        color: white;
+    }
+    .project-task.gantt_project.gantt_task_line {
+        border-radius: 0;
+    }
+  </style>
+  <!--HTML_HEAD_END-->
+</head>
+<body>
+    <h1>Drone Combat Arena</h1>
+<!--HTML_BODY_CONTENT_START-->
+<div class="gantt_container_with_controls">
+    <div class="gantt-controls">
+        <div class="zoom-buttons">
+            <button id="zoomFitButton">Zoom Fit</button>
+            <button id="zoomInButton">Zoom In</button>
+            <button id="zoomOutButton">Zoom Out</button>
+        </div>
+        <button id="exportToCSVButton" class="export-button">Export to CSV</button>
+    </div>
+    <div id="gantt_container" class="gantt_container"></div>
+</div>
+<!--HTML_BODY_CONTENT_END-->
+
+<!--HTML_BODY_SCRIPT_START-->
+<script type="module">
+    // When `null`, the "Export to CSV" button is hidden.
+    // When a string, it's the CSV data, eg: `"hello;csv;world"` and the button is shown.
+    const GANTT_DATA_CSV = null;
+
+    // This must be a string, eg: `"planexe_export.csv"`
+    const GANTT_FILENAME_CSV = "PlanExe_Export_Drone_Combat_Arena.csv";
+
+    // This must be json. It's not a string.
+    const GANTT_DATA_DHTMLX = {
+  "tasks": [
+    {
+      "id": "863bd09b-0dba-4172-88c6-f687d080b6dc",
+      "text": "Drone Combat Arena",
+      "custom_tooltip": "<b>Drone Combat Arena</b><br><b>Final deliverable:</b><br>Compliant Operational Venue",
+      "progress": 0,
+      "open": true,
+      "meta": "",
+      "type": "project"
+    },
+    {
+      "id": "6f004f4a-9caa-40af-916c-b6372850e8e1",
+      "text": "Regulatory & Compliance Authorization",
+      "custom_tooltip": "<b>Regulatory &amp; Compliance Authorization</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "863bd09b-0dba-4172-88c6-f687d080b6dc SS",
+      "parent": "863bd09b-0dba-4172-88c6-f687d080b6dc",
+      "type": "project"
+    },
+    {
+      "id": "03692554-ab01-48b5-8e11-6d25033c3956",
+      "text": "Submit FAA Part 107 license applications for all locations",
+      "custom_tooltip": "<b>Submit FAA Part 107 license applications for all locations</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "6f004f4a-9caa-40af-916c-b6372850e8e1 SS",
+      "parent": "6f004f4a-9caa-40af-916c-b6372850e8e1",
+      "type": "project"
+    },
+    {
+      "id": "d1b24981-5ae8-43af-88df-4ba48919540b",
+      "text": "Analyze airspace restrictions near proposed venue locations",
+      "custom_tooltip": "<b>Analyze airspace restrictions near proposed venue locations</b><br>Map Class B/C/D airspace boundaries against warehouse sites using SkyVector or AirMap software to identify no-fly zones before application submission.<br><b>Resources needed:</b><br><ul><li>Aviation Regulatory Specialist</li><li>SkyVector Software</li><li>AirMap Platform</li></ul>",
+      "start_date": "2026-03-07",
+      "duration": 12.0,
+      "progress": 0,
+      "open": true,
+      "meta": "03692554-ab01-48b5-8e11-6d25033c3956 SS",
+      "parent": "03692554-ab01-48b5-8e11-6d25033c3956"
+    },
+    {
+      "id": "cbe642a7-5287-4bf0-89a9-ee6d2cde1d66",
+      "text": "Consult specialist for airworthiness gap analysis",
+      "custom_tooltip": "<b>Consult specialist for airworthiness gap analysis</b><br>Hire an Aviation Regulatory Specialist with expertise in UAV liability and commercial drone law to review hardware airworthiness requirements against Part 107 standards.<br><b>Resources needed:</b><br><ul><li>Aviation Regulatory Specialist</li><li>FAA UAS Data Bank</li></ul>",
+      "start_date": "2026-03-19",
+      "duration": 12.0,
+      "progress": 0,
+      "open": true,
+      "meta": "d1b24981-5ae8-43af-88df-4ba48919540b FS",
+      "parent": "03692554-ab01-48b5-8e11-6d25033c3956"
+    },
+    {
+      "id": "4ac326b3-81ea-4490-ba1f-3dd9ce7bbc4c",
+      "text": "Compile documents and pay application fees",
+      "custom_tooltip": "<b>Compile documents and pay application fees</b><br>Gather necessary legal counsel input for accuracy and process the $5,000 per location licensing fees required by the FAA prior to filing applications.<br><b>Resources needed:</b><br><ul><li>Certified Legal Counsel</li><li>FAA Application Fees</li><li>CFO</li></ul>",
+      "start_date": "2026-03-31",
+      "duration": 12.0,
+      "progress": 0,
+      "open": true,
+      "meta": "cbe642a7-5287-4bf0-89a9-ee6d2cde1d66 FS",
+      "parent": "03692554-ab01-48b5-8e11-6d25033c3956"
+    },
+    {
+      "id": "6547d274-5a6f-457e-bbb7-ee7b00939f58",
+      "text": "Submit FAA Part 107 license applications online",
+      "custom_tooltip": "<b>Submit FAA Part 107 license applications online</b><br>File all three location license applications through the FAA DroneZone portal within the March 2026 deadline to ensure operational compliance and launch readiness.<br><b>Resources needed:</b><br><ul><li>Regulatory &amp; Compliance Director</li><li>FAA DroneZone Portal</li></ul>",
+      "start_date": "2026-04-12",
+      "duration": 12.0,
+      "progress": 0,
+      "open": true,
+      "meta": "03692554-ab01-48b5-8e11-6d25033c3956 FF, 4ac326b3-81ea-4490-ba1f-3dd9ce7bbc4c FS",
+      "parent": "03692554-ab01-48b5-8e11-6d25033c3956"
+    },
+    {
+      "id": "06bc7a3b-578d-41e9-a902-ec27142371ad",
+      "text": "Secure binding insurance quotes from specialized UAV carriers",
+      "custom_tooltip": "<b>Secure binding insurance quotes from specialized UAV carriers</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "03692554-ab01-48b5-8e11-6d25033c3956 FS",
+      "parent": "6f004f4a-9caa-40af-916c-b6372850e8e1",
+      "type": "project"
+    },
+    {
+      "id": "7b18dfb2-45fc-4d77-aae3-ba801b59f27d",
+      "text": "Prepare internal risk assessment and financial data",
+      "custom_tooltip": "<b>Prepare internal risk assessment and financial data</b><br>Compile CAPEX budgets, safety protocols, and operational risk profiles required for underwriting review.<br><b>Resources needed:</b><br><ul><li>CFO</li><li>Regulatory &amp; Compliance Director</li><li>Financial Analyst</li></ul>",
+      "start_date": "2026-04-24",
+      "duration": 9.0,
+      "progress": 0,
+      "open": true,
+      "meta": "06bc7a3b-578d-41e9-a902-ec27142371ad SS",
+      "parent": "06bc7a3b-578d-41e9-a902-ec27142371ad"
+    },
+    {
+      "id": "0139ba68-ee9b-4019-bed9-f6fc899296d6",
+      "text": "Contact specialized UAV liability insurance carriers",
+      "custom_tooltip": "<b>Contact specialized UAV liability insurance carriers</b><br>Identify and reach out to high-risk aviation underwriters specializing in commercial drone operations.<br><b>Resources needed:</b><br><ul><li>Insurance Broker Network</li><li>Legal Counsel</li><li>Procurement Team</li></ul>",
+      "start_date": "2026-05-03",
+      "duration": 9.0,
+      "progress": 0,
+      "open": true,
+      "meta": "7b18dfb2-45fc-4d77-aae3-ba801b59f27d FS",
+      "parent": "06bc7a3b-578d-41e9-a902-ec27142371ad"
+    },
+    {
+      "id": "4b1a40dd-f7be-4781-b12d-d2fe82549190",
+      "text": "Review underwriting requirements and submit formal applications",
+      "custom_tooltip": "<b>Review underwriting requirements and submit formal applications</b><br>Ensure all regulatory proofs are included and complete submission processes for binding quotes.<br><b>Resources needed:</b><br><ul><li>Regulatory &amp; Compliance Director</li><li>Application Portal Access</li><li>Specialized Aviation Attorney</li></ul>",
+      "start_date": "2026-05-12",
+      "duration": 9.0,
+      "progress": 0,
+      "open": true,
+      "meta": "0139ba68-ee9b-4019-bed9-f6fc899296d6 FS",
+      "parent": "06bc7a3b-578d-41e9-a902-ec27142371ad"
+    },
+    {
+      "id": "1411654c-2e81-44f5-a0c0-03d7ead54e8d",
+      "text": "Compare quotes and finalize binding coverage agreement",
+      "custom_tooltip": "<b>Compare quotes and finalize binding coverage agreement</b><br>Analyze premium costs, exclusions, and liability limits to select optimal carrier and sign contract.<br><b>Resources needed:</b><br><ul><li>CFO</li><li>Insurance Underwriter Specialist</li><li>Risk Management Team</li></ul>",
+      "start_date": "2026-05-21",
+      "duration": 9.0,
+      "progress": 0,
+      "open": true,
+      "meta": "06bc7a3b-578d-41e9-a902-ec27142371ad FF, 4b1a40dd-f7be-4781-b12d-d2fe82549190 FS",
+      "parent": "06bc7a3b-578d-41e9-a902-ec27142371ad"
+    },
+    {
+      "id": "65aa6107-f2f6-4c60-80b2-a117e0bd9573",
+      "text": "Conduct airspace risk analysis near proposed venue coordinates",
+      "custom_tooltip": "<b>Conduct airspace risk analysis near proposed venue coordinates</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "6f004f4a-9caa-40af-916c-b6372850e8e1 FF, 06bc7a3b-578d-41e9-a902-ec27142371ad FS",
+      "parent": "6f004f4a-9caa-40af-916c-b6372850e8e1",
+      "type": "project"
+    },
+    {
+      "id": "39424d0a-0e7f-4288-bf53-805209f0e3af",
+      "text": "Engage aviation regulatory specialist consultant",
+      "custom_tooltip": "<b>Engage aviation regulatory specialist consultant</b><br>Hire an expert with UAV liability expertise to review hardware airworthiness gap analysis and provide feasibility advice for airspace restrictions.<br><b>Resources needed:</b><br><ul><li>Aviation Regulatory Specialist Consultant</li><li>Consulting Budget</li><li>Legal Counsel Retainer</li></ul>",
+      "start_date": "2026-05-30",
+      "duration": 3.0,
+      "progress": 0,
+      "open": true,
+      "meta": "65aa6107-f2f6-4c60-80b2-a117e0bd9573 SS",
+      "parent": "65aa6107-f2f6-4c60-80b2-a117e0bd9573"
+    },
+    {
+      "id": "f256c4f3-1a35-44c7-b6e1-890ae851bd64",
+      "text": "Map airspace boundaries near venue sites",
+      "custom_tooltip": "<b>Map airspace boundaries near venue sites</b><br>Utilize SkyVector or AirMap software to map Class B C D airspace boundaries against proposed warehouse sites for flight envelope compliance.<br><b>Resources needed:</b><br><ul><li>GIS Software License</li><li>GPS Coordinates</li><li>Venue Blueprints</li></ul>",
+      "start_date": "2026-06-02",
+      "duration": 3.0,
+      "progress": 0,
+      "open": true,
+      "meta": "39424d0a-0e7f-4288-bf53-805209f0e3af FS",
+      "parent": "65aa6107-f2f6-4c60-80b2-a117e0bd9573"
+    },
+    {
+      "id": "2551aa64-a421-440c-9578-b260543ea4d3",
+      "text": "Simulate LAANC requests for target coordinates",
+      "custom_tooltip": "<b>Simulate LAANC requests for target coordinates</b><br>Use FAA DroneZone portal to simulate LAANC request submissions and verify authorization availability status for all three target coordinates.<br><b>Resources needed:</b><br><ul><li>FAA DroneZone Account</li><li>Internet Access</li><li>Site Maps</li></ul>",
+      "start_date": "2026-06-05",
+      "duration": 3.0,
+      "progress": 0,
+      "open": true,
+      "meta": "f256c4f3-1a35-44c7-b6e1-890ae851bd64 FS",
+      "parent": "65aa6107-f2f6-4c60-80b2-a117e0bd9573"
+    },
+    {
+      "id": "a4f32940-9bb1-44a1-a146-4749e157b21c",
+      "text": "Validate restrictions with FAA District Office",
+      "custom_tooltip": "<b>Validate restrictions with FAA District Office</b><br>Consult FAA District Office regarding airspace waiver feasibility and validate Class B C D access permissions before lease signing.<br><b>Resources needed:</b><br><ul><li>FAA District Office Contact Info</li><li>Legal Counsel</li><li>Compliance Checklists</li></ul>",
+      "start_date": "2026-06-08",
+      "duration": 3.0,
+      "progress": 0,
+      "open": true,
+      "meta": "2551aa64-a421-440c-9578-b260543ea4d3 FS",
+      "parent": "65aa6107-f2f6-4c60-80b2-a117e0bd9573"
+    },
+    {
+      "id": "a6effd79-0411-45c1-bfa7-1ff8a745b34f",
+      "text": "Compile risk analysis report for lease decisions",
+      "custom_tooltip": "<b>Compile risk analysis report for lease decisions</b><br>Compile findings into a risk analysis report comparing venue options to support final lease decision making and mitigation planning.<br><b>Resources needed:</b><br><ul><li>Report Template</li><li>Stakeholder Meeting Schedule</li><li>Final Decision Makers</li></ul>",
+      "start_date": "2026-06-11",
+      "duration": 3.0,
+      "progress": 0,
+      "open": true,
+      "meta": "65aa6107-f2f6-4c60-80b2-a117e0bd9573 FF, a4f32940-9bb1-44a1-a146-4749e157b21c FS",
+      "parent": "65aa6107-f2f6-4c60-80b2-a117e0bd9573"
+    },
+    {
+      "id": "95814c22-80a4-46e1-a20d-b3bbbfd0a30f",
+      "text": "Venue Infrastructure & Safety Fit-out",
+      "custom_tooltip": "<b>Venue Infrastructure &amp; Safety Fit-out</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "6f004f4a-9caa-40af-916c-b6372850e8e1 FS",
+      "parent": "863bd09b-0dba-4172-88c6-f687d080b6dc",
+      "type": "project"
+    },
+    {
+      "id": "125bd836-1a42-48c3-a11e-fa6b4a7184fe",
+      "text": "Negotiate and sign industrial warehouse lease agreements",
+      "custom_tooltip": "<b>Negotiate and sign industrial warehouse lease agreements</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "95814c22-80a4-46e1-a20d-b3bbbfd0a30f SS",
+      "parent": "95814c22-80a4-46e1-a20d-b3bbbfd0a30f",
+      "type": "project"
+    },
+    {
+      "id": "bf907c25-9f65-4335-b56c-d43ec4f7beb6",
+      "text": "Identify potential warehouse locations",
+      "custom_tooltip": "<b>Identify potential warehouse locations</b><br>Search for industrial properties in target cities meeting size and zoning requirements for drone operations.<br><b>Resources needed:</b><br><ul><li>Real Estate Agent</li><li>Site Surveyor</li><li>Zoning Consultant</li></ul>",
+      "start_date": "2026-06-14",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "125bd836-1a42-48c3-a11e-fa6b4a7184fe SS",
+      "parent": "125bd836-1a42-48c3-a11e-fa6b4a7184fe"
+    },
+    {
+      "id": "ad96ebf6-4e20-40af-a3eb-80b3cb8de6d0",
+      "text": "Negotiate lease terms and conditions",
+      "custom_tooltip": "<b>Negotiate lease terms and conditions</b><br>Discuss rent rates, duration, CAM fees, and specific clauses regarding high-density drone activity usage rights.<br><b>Resources needed:</b><br><ul><li>Commercial Real Estate Broker</li><li>Property Manager</li><li>Legal Counsel</li></ul>",
+      "start_date": "2026-06-22",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "bf907c25-9f65-4335-b56c-d43ec4f7beb6 FS",
+      "parent": "125bd836-1a42-48c3-a11e-fa6b4a7184fe"
+    },
+    {
+      "id": "93c1cada-7080-469d-ba33-a58304dc6b80",
+      "text": "Conduct legal review of documentation",
+      "custom_tooltip": "<b>Conduct legal review of documentation</b><br>Have counsel review lease drafts for liability waivers, insurance requirements, and airspace restriction clauses.<br><b>Resources needed:</b><br><ul><li>Corporate Attorney</li><li>Insurance Specialist</li><li>Compliance Officer</li></ul>",
+      "start_date": "2026-06-30",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "ad96ebf6-4e20-40af-a3eb-80b3cb8de6d0 FS",
+      "parent": "125bd836-1a42-48c3-a11e-fa6b4a7184fe"
+    },
+    {
+      "id": "c8e13cb3-0581-41a9-af9d-02be8b6ebfbc",
+      "text": "Execute final lease agreement with owner",
+      "custom_tooltip": "<b>Execute final lease agreement with owner</b><br>Sign the finalized contract and pay initial deposits to secure the property rights for venue setup.<br><b>Resources needed:</b><br><ul><li>CFO</li><li>Property Owner Representative</li><li>Notary Public</li></ul>",
+      "start_date": "2026-07-08",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "125bd836-1a42-48c3-a11e-fa6b4a7184fe FF, 93c1cada-7080-469d-ba33-a58304dc6b80 FS",
+      "parent": "125bd836-1a42-48c3-a11e-fa6b4a7184fe"
+    },
+    {
+      "id": "1eeec10e-aba9-48be-afbf-e73be7dd1370",
+      "text": "Install HVAC systems meeting ventilation safety standards",
+      "custom_tooltip": "<b>Install HVAC systems meeting ventilation safety standards</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "125bd836-1a42-48c3-a11e-fa6b4a7184fe FS",
+      "parent": "95814c22-80a4-46e1-a20d-b3bbbfd0a30f",
+      "type": "project"
+    },
+    {
+      "id": "f8fc9544-407e-445e-b124-4fc0cb73a88f",
+      "text": "Design HVAC system layout for warehouse safety",
+      "custom_tooltip": "<b>Design HVAC system layout for warehouse safety</b><br>Calculate heat load and fume removal requirements to meet FAA Part 107 ventilation standards. Define ductwork paths avoiding structural conflicts. Deliver approved engineering schematics for permit submission.<br><b>Resources needed:</b><br><ul><li>HVAC Engineer</li><li>Safety Compliance Officer</li><li>CAD Software</li></ul>",
+      "start_date": "2026-07-16",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "1eeec10e-aba9-48be-afbf-e73be7dd1370 SS",
+      "parent": "1eeec10e-aba9-48be-afbf-e73be7dd1370"
+    },
+    {
+      "id": "c902df29-c872-41c6-9a80-2a116299a6b7",
+      "text": "Secure permits and source specialized equipment",
+      "custom_tooltip": "<b>Secure permits and source specialized equipment</b><br>Obtain commercial ventilation permit approvals from local authorities. Procure industrial HVAC units capable of high-density drone operation heat loads. Manage supply chain risks for delivery timelines.<br><b>Resources needed:</b><br><ul><li>Commercial Real Estate Counsel</li><li>HVAC Supplier</li><li>Permit Coordinator</li></ul>",
+      "start_date": "2026-07-24",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "f8fc9544-407e-445e-b124-4fc0cb73a88f FS",
+      "parent": "1eeec10e-aba9-48be-afbf-e73be7dd1370"
+    },
+    {
+      "id": "508a234f-d768-4d14-a37d-cf54c65184d5",
+      "text": "Mount ventilation units and ductwork infrastructure",
+      "custom_tooltip": "<b>Mount ventilation units and ductwork infrastructure</b><br>Physically install HVAC units on warehouse ceiling trusses. Connect ducting to ensure proper air circulation in player corridors. Ensure structural integrity during mounting process.<br><b>Resources needed:</b><br><ul><li>Installation Crew</li><li>Structural Engineer</li><li>Heavy Machinery Operator</li></ul>",
+      "start_date": "2026-08-01",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "c902df29-c872-41c6-9a80-2a116299a6b7 FS",
+      "parent": "1eeec10e-aba9-48be-afbf-e73be7dd1370"
+    },
+    {
+      "id": "2a7beb5c-4778-40bf-a0cd-0d8f8b9ec096",
+      "text": "Conduct airflow testing and safety certification",
+      "custom_tooltip": "<b>Conduct airflow testing and safety certification</b><br>Perform pressure tests to verify air exchange rates meet safety codes. Validate fume removal efficiency during peak simulation loads. Obtain final occupancy clearance for operations.<br><b>Resources needed:</b><br><ul><li>Safety Inspector</li><li>HVAC Technician</li><li>Testing Equipment</li></ul>",
+      "start_date": "2026-08-09",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "1eeec10e-aba9-48be-afbf-e73be7dd1370 FF, 508a234f-d768-4d14-a37d-cf54c65184d5 FS",
+      "parent": "1eeec10e-aba9-48be-afbf-e73be7dd1370"
+    },
+    {
+      "id": "ba88213b-60ad-416f-9f47-2bb4e3266733",
+      "text": "Deploy ballistic netting around player corridors and zones",
+      "custom_tooltip": "<b>Deploy ballistic netting around player corridors and zones</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "95814c22-80a4-46e1-a20d-b3bbbfd0a30f FF, 1eeec10e-aba9-48be-afbf-e73be7dd1370 FS",
+      "parent": "95814c22-80a4-46e1-a20d-b3bbbfd0a30f",
+      "type": "project"
+    },
+    {
+      "id": "e2f9430b-af65-4f97-99ed-7f4558f2fe79",
+      "text": "Source certified ballistic netting materials",
+      "custom_tooltip": "<b>Source certified ballistic netting materials</b><br>Procure safety-rated netting with confirmed lead times to prevent supply chain delays before lease finalization.<br><b>Resources needed:</b><br><ul><li>Specialized material suppliers</li><li>procurement manager</li><li>safety compliance officer</li></ul>",
+      "start_date": "2026-08-17",
+      "duration": 4.0,
+      "progress": 0,
+      "open": true,
+      "meta": "ba88213b-60ad-416f-9f47-2bb4e3266733 SS",
+      "parent": "ba88213b-60ad-416f-9f47-2bb4e3266733"
+    },
+    {
+      "id": "d2218f47-dbd0-4247-a55e-f0c4fe0a5d48",
+      "text": "Assess ceiling truss load-bearing capacity",
+      "custom_tooltip": "<b>Assess ceiling truss load-bearing capacity</b><br>Perform structural engineering analysis on warehouse trusses to verify mounting points can withstand impact forces.<br><b>Resources needed:</b><br><ul><li>Structural engineer</li><li>facility manager</li><li>load testing equipment</li></ul>",
+      "start_date": "2026-08-21",
+      "duration": 4.0,
+      "progress": 0,
+      "open": true,
+      "meta": "e2f9430b-af65-4f97-99ed-7f4558f2fe79 FS",
+      "parent": "ba88213b-60ad-416f-9f47-2bb4e3266733"
+    },
+    {
+      "id": "ea133437-5ab3-4552-b440-054f7a48f304",
+      "text": "Install netting around player corridors zones",
+      "custom_tooltip": "<b>Install netting around player corridors zones</b><br>Physically mount and secure netting systems along designated flight paths ensuring no gaps in coverage.<br><b>Resources needed:</b><br><ul><li>Installation crew</li><li>mounting hardware</li><li>lifting rigging gear</li></ul>",
+      "start_date": "2026-08-25",
+      "duration": 4.0,
+      "progress": 0,
+      "open": true,
+      "meta": "d2218f47-dbd0-4247-a55e-f0c4fe0a5d48 FS",
+      "parent": "ba88213b-60ad-416f-9f47-2bb4e3266733"
+    },
+    {
+      "id": "7d92fd37-98ad-4262-a40f-7b3b2aa16c45",
+      "text": "Conduct tension and impact load verification tests",
+      "custom_tooltip": "<b>Conduct tension and impact load verification tests</b><br>Validate installed system integrity through stress testing to ensure compliance with safety standards prior to opening.<br><b>Resources needed:</b><br><ul><li>Safety inspectors</li><li>test drones</li><li>impact measurement tools</li></ul>",
+      "start_date": "2026-08-29",
+      "duration": 4.0,
+      "progress": 0,
+      "open": true,
+      "meta": "ba88213b-60ad-416f-9f47-2bb4e3266733 FF, ea133437-5ab3-4552-b440-054f7a48f304 FS",
+      "parent": "ba88213b-60ad-416f-9f47-2bb4e3266733"
+    },
+    {
+      "id": "cb67b184-e7bc-4829-b21f-687efbb110b5",
+      "text": "Technology Integration & Cybersecurity",
+      "custom_tooltip": "<b>Technology Integration &amp; Cybersecurity</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "95814c22-80a4-46e1-a20d-b3bbbfd0a30f FS",
+      "parent": "863bd09b-0dba-4172-88c6-f687d080b6dc",
+      "type": "project"
+    },
+    {
+      "id": "baa32992-ea13-4079-99c8-5dc52211c50b",
+      "text": "Procure quadcopters with LiDAR obstacle avoidance systems",
+      "custom_tooltip": "<b>Procure quadcopters with LiDAR obstacle avoidance systems</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "cb67b184-e7bc-4829-b21f-687efbb110b5 SS",
+      "parent": "cb67b184-e7bc-4829-b21f-687efbb110b5",
+      "type": "project"
+    },
+    {
+      "id": "4a7bd3e4-c113-4de8-a4a8-ffb4124ad38a",
+      "text": "Identify potential drone suppliers",
+      "custom_tooltip": "<b>Identify potential drone suppliers</b><br>Research and vet vendors capable of supplying quadcopters with LiDAR obstacle avoidance systems to ensure hardware availability within budget constraints.<br><b>Resources needed:</b><br><ul><li>Procurement Specialist</li><li>Technical Engineer</li></ul>",
+      "start_date": "2026-09-02",
+      "duration": 10.0,
+      "progress": 0,
+      "open": true,
+      "meta": "baa32992-ea13-4079-99c8-5dc52211c50b SS",
+      "parent": "baa32992-ea13-4079-99c8-5dc52211c50b"
+    },
+    {
+      "id": "396419ec-d5c1-4698-8d68-e0d8b98a7072",
+      "text": "Request quotes for LiDAR systems",
+      "custom_tooltip": "<b>Request quotes for LiDAR systems</b><br>Contact selected vendors to obtain pricing details and technical specifications for required drone models to compare value propositions.<br><b>Resources needed:</b><br><ul><li>Procurement Manager</li><li>Sales Representatives</li></ul>",
+      "start_date": "2026-09-12",
+      "duration": 10.0,
+      "progress": 0,
+      "open": true,
+      "meta": "4a7bd3e4-c113-4de8-a4a8-ffb4124ad38a FS",
+      "parent": "baa32992-ea13-4079-99c8-5dc52211c50b"
+    },
+    {
+      "id": "483e0fec-b4ba-4a03-a151-544c42d89aef",
+      "text": "Negotiate binding purchase orders",
+      "custom_tooltip": "<b>Negotiate binding purchase orders</b><br>Finalize contract terms including pricing, warranties, and expedited delivery clauses with preferred vendor to secure inventory supply.<br><b>Resources needed:</b><br><ul><li>Legal Counsel</li><li>CFO</li><li>Vendor Account Managers</li></ul>",
+      "start_date": "2026-09-22",
+      "duration": 10.0,
+      "progress": 0,
+      "open": true,
+      "meta": "396419ec-d5c1-4698-8d68-e0d8b98a7072 FS",
+      "parent": "baa32992-ea13-4079-99c8-5dc52211c50b"
+    },
+    {
+      "id": "165743a8-3314-40f1-b414-874b3bc357e8",
+      "text": "Arrange expedited shipping logistics",
+      "custom_tooltip": "<b>Arrange expedited shipping logistics</b><br>Coordinate transportation logistics to ensure hardware arrives within the required timeline avoiding supply chain delays or bottlenecks.<br><b>Resources needed:</b><br><ul><li>Logistics Coordinator</li><li>Shipping Carrier</li></ul>",
+      "start_date": "2026-10-02",
+      "duration": 10.0,
+      "progress": 0,
+      "open": true,
+      "meta": "baa32992-ea13-4079-99c8-5dc52211c50b FF, 483e0fec-b4ba-4a03-a151-544c42d89aef FS",
+      "parent": "baa32992-ea13-4079-99c8-5dc52211c50b"
+    },
+    {
+      "id": "1a64d547-336a-4f7e-bc04-621e11575fd3",
+      "text": "Integrate custom collision sensors into drone hardware",
+      "custom_tooltip": "<b>Integrate custom collision sensors into drone hardware</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "baa32992-ea13-4079-99c8-5dc52211c50b FS",
+      "parent": "cb67b184-e7bc-4829-b21f-687efbb110b5",
+      "type": "project"
+    },
+    {
+      "id": "33a3ef33-e9e5-45bc-b2b3-b1194d741fa9",
+      "text": "Procure custom collision sensor hardware batches",
+      "custom_tooltip": "<b>Procure custom collision sensor hardware batches</b><br>Acquire necessary LiDAR or radar sensor units from approved suppliers ensuring compatibility with existing quadcopter models.<br><b>Resources needed:</b><br><ul><li>Procurement Manager</li><li>Hardware Supplier Contracts</li><li>Quality Assurance Team</li></ul>",
+      "start_date": "2026-10-12",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "1a64d547-336a-4f7e-bc04-621e11575fd3 SS",
+      "parent": "1a64d547-336a-4f7e-bc04-621e11575fd3"
+    },
+    {
+      "id": "dfdd6aa4-8709-45cb-a545-775b21ba79ca",
+      "text": "Mount sensors and wire connections on frames",
+      "custom_tooltip": "<b>Mount sensors and wire connections on frames</b><br>Physically attach collision avoidance hardware to drone chassis and secure wiring harnesses for power and data transmission.<br><b>Resources needed:</b><br><ul><li>Assembly Technicians</li><li>Mounting Brackets</li><li>Wiring Tools</li></ul>",
+      "start_date": "2026-10-20",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "33a3ef33-e9e5-45bc-b2b3-b1194d741fa9 FS",
+      "parent": "1a64d547-336a-4f7e-bc04-621e11575fd3"
+    },
+    {
+      "id": "c6f6de8c-439d-4f4e-a726-fc86697ec3c6",
+      "text": "Develop software drivers for sensor data integration",
+      "custom_tooltip": "<b>Develop software drivers for sensor data integration</b><br>Create firmware interfaces allowing flight controllers to process real-time obstacle detection data from new sensors.<br><b>Resources needed:</b><br><ul><li>Firmware Engineers</li><li>Flight Controller API Docs</li><li>Development Kits</li></ul>",
+      "start_date": "2026-10-28",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "dfdd6aa4-8709-45cb-a545-775b21ba79ca FS",
+      "parent": "1a64d547-336a-4f7e-bc04-621e11575fd3"
+    },
+    {
+      "id": "7a8a374d-0280-446a-a289-230ed0e89595",
+      "text": "Calibrate systems and test latency performance",
+      "custom_tooltip": "<b>Calibrate systems and test latency performance</b><br>Run calibration routines and stress tests to verify low latency and accurate obstacle detection before deployment.<br><b>Resources needed:</b><br><ul><li>Test Engineers</li><li>Simulation Environment</li><li>Data Logging Tools</li></ul>",
+      "start_date": "2026-11-05",
+      "duration": 8.0,
+      "progress": 0,
+      "open": true,
+      "meta": "1a64d547-336a-4f7e-bc04-621e11575fd3 FF, c6f6de8c-439d-4f4e-a726-fc86697ec3c6 FS",
+      "parent": "1a64d547-336a-4f7e-bc04-621e11575fd3"
+    },
+    {
+      "id": "1eec6375-9274-4036-bc12-2c6c08fc74bf",
+      "text": "Implement AES-256 encryption for telemetry data streams",
+      "custom_tooltip": "<b>Implement AES-256 encryption for telemetry data streams</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "cb67b184-e7bc-4829-b21f-687efbb110b5 FF, 1a64d547-336a-4f7e-bc04-621e11575fd3 FS",
+      "parent": "cb67b184-e7bc-4829-b21f-687efbb110b5",
+      "type": "project"
+    },
+    {
+      "id": "5745316f-9efa-460e-9e08-140d6253a178",
+      "text": "Source custom collision sensor hardware components",
+      "custom_tooltip": "<b>Source custom collision sensor hardware components</b><br>Procure specific LiDAR and ultrasonic sensors required for obstacle avoidance integration into existing quadcopter models ensuring compatibility with flight controllers.<br><b>Resources needed:</b><br><ul><li>Hardware procurement specialist</li><li>Sensor suppliers</li><li>Budget allocation</li></ul>",
+      "start_date": "2026-11-13",
+      "duration": 4.0,
+      "progress": 0,
+      "open": true,
+      "meta": "1eec6375-9274-4036-bc12-2c6c08fc74bf SS",
+      "parent": "1eec6375-9274-4036-bc12-2c6c08fc74bf"
+    },
+    {
+      "id": "22cd4519-4765-429a-8973-cdb067a4f7dd",
+      "text": "Physically mount sensors onto quadcopter frames",
+      "custom_tooltip": "<b>Physically mount sensors onto quadcopter frames</b><br>Securely attach collision detection hardware to drone chassis ensuring balance is maintained and wiring is protected from vibration damage.<br><b>Resources needed:</b><br><ul><li>Drone assembly technicians</li><li>Mounting tools</li><li>Sensors</li></ul>",
+      "start_date": "2026-11-17",
+      "duration": 4.0,
+      "progress": 0,
+      "open": true,
+      "meta": "5745316f-9efa-460e-9e08-140d6253a178 FS",
+      "parent": "1eec6375-9274-4036-bc12-2c6c08fc74bf"
+    },
+    {
+      "id": "dd8d67ad-abfa-439f-8a64-997d8b78a938",
+      "text": "Calibrate sensor data feeds for low latency",
+      "custom_tooltip": "<b>Calibrate sensor data feeds for low latency</b><br>Adjust sensitivity thresholds and synchronize data streams to minimize processing delays during flight operations ensuring real-time response.<br><b>Resources needed:</b><br><ul><li>Embedded systems engineer</li><li>Calibration software</li><li>Flight controllers</li></ul>",
+      "start_date": "2026-11-21",
+      "duration": 4.0,
+      "progress": 0,
+      "open": true,
+      "meta": "22cd4519-4765-429a-8973-cdb067a4f7dd FS",
+      "parent": "1eec6375-9274-4036-bc12-2c6c08fc74bf"
+    },
+    {
+      "id": "66949e63-afe6-4a23-9365-7c6dda9f55b7",
+      "text": "Execute redundant safety system stress tests",
+      "custom_tooltip": "<b>Execute redundant safety system stress tests</b><br>Run repeated high-intensity collision simulations to verify sensor reliability and fail-safe mechanisms under operational pressure conditions.<br><b>Resources needed:</b><br><ul><li>Safety testers</li><li>Test drones</li><li>Simulation environment</li></ul>",
+      "start_date": "2026-11-25",
+      "duration": 4.0,
+      "progress": 0,
+      "open": true,
+      "meta": "dd8d67ad-abfa-439f-8a64-997d8b78a938 FS",
+      "parent": "1eec6375-9274-4036-bc12-2c6c08fc74bf"
+    },
+    {
+      "id": "ca6557eb-c90c-4298-8f9e-b5d7e5c662e5",
+      "text": "Finalize integration validation prior to deployment",
+      "custom_tooltip": "<b>Finalize integration validation prior to deployment</b><br>Complete final certification of integrated systems confirming all safety protocols meet operational standards before launch to public users.<br><b>Resources needed:</b><br><ul><li>Quality assurance lead</li><li>Compliance officer</li><li>Integration logs</li></ul>",
+      "start_date": "2026-11-29",
+      "duration": 4.0,
+      "progress": 0,
+      "open": true,
+      "meta": "1eec6375-9274-4036-bc12-2c6c08fc74bf FF, 66949e63-afe6-4a23-9365-7c6dda9f55b7 FS",
+      "parent": "1eec6375-9274-4036-bc12-2c6c08fc74bf"
+    },
+    {
+      "id": "6485ae11-8fc2-45f9-9bc3-557e9f4e6e32",
+      "text": "Branding, Narrative & Market Validation",
+      "custom_tooltip": "<b>Branding, Narrative &amp; Market Validation</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "cb67b184-e7bc-4829-b21f-687efbb110b5 FS",
+      "parent": "863bd09b-0dba-4172-88c6-f687d080b6dc",
+      "type": "project"
+    },
+    {
+      "id": "a7c86427-a3c0-42ed-b36f-d1c650be4eb4",
+      "text": "Establish partnership agreements with veterans groups",
+      "custom_tooltip": "<b>Establish partnership agreements with veterans groups</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "6485ae11-8fc2-45f9-9bc3-557e9f4e6e32 SS",
+      "parent": "6485ae11-8fc2-45f9-9bc3-557e9f4e6e32",
+      "type": "project"
+    },
+    {
+      "id": "3a3a4c54-a39e-4ddf-aefb-fed55c91847f",
+      "text": "Identify potential veterans group partners",
+      "custom_tooltip": "<b>Identify potential veterans group partners</b><br>Research and compile a list of local or national veterans organizations that align with the venue&#x27;s narrative goals while avoiding active conflict endorsement sensitivities.<br><b>Resources needed:</b><br><ul><li>Market Analyst</li><li>Legal Counsel</li><li>Veterans Liaison</li></ul>",
+      "start_date": "2026-12-03",
+      "duration": 7.0,
+      "progress": 0,
+      "open": true,
+      "meta": "a7c86427-a3c0-42ed-b36f-d1c650be4eb4 SS",
+      "parent": "a7c86427-a3c0-42ed-b36f-d1c650be4eb4"
+    },
+    {
+      "id": "d9680188-dac9-4aa6-996f-fb89afdcbef4",
+      "text": "Consult on narrative boundaries and legal limits",
+      "custom_tooltip": "<b>Consult on narrative boundaries and legal limits</b><br>Schedule meetings with selected groups to discuss acceptable themes, ensuring clear legal boundaries regarding military conflict endorsement to prevent community backlash.<br><b>Resources needed:</b><br><ul><li>Narrative Branding Strategist</li><li>Veterans Group Representatives</li><li>Community Liaison</li></ul>",
+      "start_date": "2026-12-10",
+      "duration": 7.0,
+      "progress": 0,
+      "open": true,
+      "meta": "3a3a4c54-a39e-4ddf-aefb-fed55c91847f FS",
+      "parent": "a7c86427-a3c0-42ed-b36f-d1c650be4eb4"
+    },
+    {
+      "id": "d9dfb5cd-7b69-4545-b3f1-dd73038070c7",
+      "text": "Draft non-binding MOUs for legal review",
+      "custom_tooltip": "<b>Draft non-binding MOUs for legal review</b><br>Create draft MOUs outlining partnership terms, role definitions, and safety compliance commitments requiring legal review before any binding commitments are made.<br><b>Resources needed:</b><br><ul><li>Legal Counsel</li><li>Contract Administrator</li><li>Compliance Officer</li></ul>",
+      "start_date": "2026-12-17",
+      "duration": 7.0,
+      "progress": 0,
+      "open": true,
+      "meta": "d9680188-dac9-4aa6-996f-fb89afdcbef4 FS",
+      "parent": "a7c86427-a3c0-42ed-b36f-d1c650be4eb4"
+    },
+    {
+      "id": "dc9fc9b6-132b-4c77-b263-44f79607fd26",
+      "text": "Finalize agreements with legal counsel oversight",
+      "custom_tooltip": "<b>Finalize agreements with legal counsel oversight</b><br>Review final drafts with stakeholders and legal team, obtain necessary approvals, and execute signed partnership agreements to establish formal collaboration status.<br><b>Resources needed:</b><br><ul><li>Legal Counsel</li><li>Executive Sponsor</li><li>Partnership Manager</li></ul>",
+      "start_date": "2026-12-24",
+      "duration": 7.0,
+      "progress": 0,
+      "open": true,
+      "meta": "a7c86427-a3c0-42ed-b36f-d1c650be4eb4 FF, d9dfb5cd-7b69-4545-b3f1-dd73038070c7 FS",
+      "parent": "a7c86427-a3c0-42ed-b36f-d1c650be4eb4"
+    },
+    {
+      "id": "be1cd5ea-1a4b-4353-ba5f-e15351731e5e",
+      "text": "Validate pricing elasticity for corporate team-building packages",
+      "custom_tooltip": "<b>Validate pricing elasticity for corporate team-building packages</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "a7c86427-a3c0-42ed-b36f-d1c650be4eb4 FS",
+      "parent": "6485ae11-8fc2-45f9-9bc3-557e9f4e6e32",
+      "type": "project"
+    },
+    {
+      "id": "4f4a103b-30ad-445d-9702-b439780535e0",
+      "text": "Define corporate package tiers and offerings",
+      "custom_tooltip": "<b>Define corporate package tiers and offerings</b><br>Objective: Establish distinct service levels for team-building events including duration, drone count, and instructor ratios to create a baseline for pricing analysis. Scope: Product definition phase. Steps: Draft tier options and feature sets. Deliverables: Documented package specifications.<br><b>Resources needed:</b><br><ul><li>Revenue Director</li><li>Product Manager</li></ul>",
+      "start_date": "2026-12-31",
+      "duration": 4.0,
+      "progress": 0,
+      "open": true,
+      "meta": "be1cd5ea-1a4b-4353-ba5f-e15351731e5e SS",
+      "parent": "be1cd5ea-1a4b-4353-ba5f-e15351731e5e"
+    },
+    {
+      "id": "5203884e-5960-405e-9494-bf6b99a8201e",
+      "text": "Analyze competitor pricing models for context",
+      "custom_tooltip": "<b>Analyze competitor pricing models for context</b><br>Objective: Research similar entertainment venues and corporate event providers to benchmark price points. Scope: Market analysis phase. Steps: Identify competitors, collect public pricing data, compare features. Deliverables: Competitor pricing report.<br><b>Resources needed:</b><br><ul><li>Market Analyst</li><li>Competitor Intelligence Tools</li></ul>",
+      "start_date": "2027-01-04",
+      "duration": 4.0,
+      "progress": 0,
+      "open": true,
+      "meta": "4f4a103b-30ad-445d-9702-b439780535e0 FS",
+      "parent": "be1cd5ea-1a4b-4353-ba5f-e15351731e5e"
+    },
+    {
+      "id": "b8811e98-0e10-452d-8eaa-2a64243ef03d",
+      "text": "Conduct market research with potential clients",
+      "custom_tooltip": "<b>Conduct market research with potential clients</b><br>Objective: Engage target corporate buyers through interviews to understand budget constraints and perceived value. Scope: Customer discovery phase. Steps: Schedule interviews, conduct sessions, record feedback. Deliverables: Client interview transcripts.<br><b>Resources needed:</b><br><ul><li>Sales Team</li><li>CRM Software</li><li>Interview Participants</li></ul>",
+      "start_date": "2027-01-08",
+      "duration": 4.0,
+      "progress": 0,
+      "open": true,
+      "meta": "5203884e-5960-405e-9494-bf6b99a8201e FS",
+      "parent": "be1cd5ea-1a4b-4353-ba5f-e15351731e5e"
+    },
+    {
+      "id": "1ce48fdb-e026-4c3b-aade-e211fadcbf43",
+      "text": "Conduct price sensitivity testing sessions",
+      "custom_tooltip": "<b>Conduct price sensitivity testing sessions</b><br>Objective: Execute A/B pricing tests or surveys to measure demand fluctuation across different price points. Scope: Validation phase. Steps: Design survey, distribute samples, analyze response rates. Deliverables: Sensitivity analysis report.<br><b>Resources needed:</b><br><ul><li>Data Analyst</li><li>Survey Platform</li><li>Focus Group Lead</li></ul>",
+      "start_date": "2027-01-12",
+      "duration": 4.0,
+      "progress": 0,
+      "open": true,
+      "meta": "b8811e98-0e10-452d-8eaa-2a64243ef03d FS",
+      "parent": "be1cd5ea-1a4b-4353-ba5f-e15351731e5e"
+    },
+    {
+      "id": "eb94ea5a-4ce5-4a07-9c22-07b408b31417",
+      "text": "Finalize pricing strategy based on collected data",
+      "custom_tooltip": "<b>Finalize pricing strategy based on collected data</b><br>Objective: Synthesize research findings to set optimal prices that meet margin targets while ensuring competitive uptake. Scope: Decision making phase. Steps: Review all reports, adjust margins, approve final rates. Deliverables: Approved price list.<br><b>Resources needed:</b><br><ul><li>CFO</li><li>Revenue Director</li><li>Finance Team</li></ul>",
+      "start_date": "2027-01-16",
+      "duration": 4.0,
+      "progress": 0,
+      "open": true,
+      "meta": "be1cd5ea-1a4b-4353-ba5f-e15351731e5e FF, 1ce48fdb-e026-4c3b-aade-e211fadcbf43 FS",
+      "parent": "be1cd5ea-1a4b-4353-ba5f-e15351731e5e"
+    },
+    {
+      "id": "10b68b59-adc1-408e-8250-e8d7befb12a1",
+      "text": "Secure non-binding franchise LOIs from regional partners",
+      "custom_tooltip": "<b>Secure non-binding franchise LOIs from regional partners</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "6485ae11-8fc2-45f9-9bc3-557e9f4e6e32 FF, be1cd5ea-1a4b-4353-ba5f-e15351731e5e FS",
+      "parent": "6485ae11-8fc2-45f9-9bc3-557e9f4e6e32",
+      "type": "project"
+    },
+    {
+      "id": "69380bd3-38e8-4eb3-aa3e-fc7b4d0e7dff",
+      "text": "Identify and vet potential regional franchise partners",
+      "custom_tooltip": "<b>Identify and vet potential regional franchise partners</b><br>Research and screen prospective regional operators based on market reach and operational capability criteria to ensure alignment with brand standards before formal engagement.<br><b>Resources needed:</b><br><ul><li>Market Analyst</li><li>Business Development Manager</li><li>Legal Counsel</li></ul>",
+      "start_date": "2027-01-20",
+      "duration": 9.0,
+      "progress": 0,
+      "open": true,
+      "meta": "10b68b59-adc1-408e-8250-e8d7befb12a1 SS",
+      "parent": "10b68b59-adc1-408e-8250-e8d7befb12a1"
+    },
+    {
+      "id": "40ffea50-b049-4170-ae34-f2e202aac48a",
+      "text": "Develop financial viability and safety compliance documentation",
+      "custom_tooltip": "<b>Develop financial viability and safety compliance documentation</b><br>Compile detailed business case reports including CAPEX breakdowns, ROI projections, and FAA Part 107 certification proof to address partner risk concerns regarding sustainability.<br><b>Resources needed:</b><br><ul><li>CFO</li><li>Regulatory &amp; Compliance Director</li><li>Financial Analyst</li></ul>",
+      "start_date": "2027-01-29",
+      "duration": 9.0,
+      "progress": 0,
+      "open": true,
+      "meta": "69380bd3-38e8-4eb3-aa3e-fc7b4d0e7dff FS",
+      "parent": "10b68b59-adc1-408e-8250-e8d7befb12a1"
+    },
+    {
+      "id": "2bbbee89-5a2c-49ed-980b-bdba0ef5521c",
+      "text": "Present business viability evidence to potential partners",
+      "custom_tooltip": "<b>Present business viability evidence to potential partners</b><br>Schedule and conduct pitch meetings where financial models and safety protocols are reviewed with stakeholders to build trust and demonstrate operational readiness for expansion.<br><b>Resources needed:</b><br><ul><li>Revenue &amp; Franchise Director</li><li>Marketing Strategist</li><li>Operations Lead</li></ul>",
+      "start_date": "2027-02-07",
+      "duration": 9.0,
+      "progress": 0,
+      "open": true,
+      "meta": "40ffea50-b049-4170-ae34-f2e202aac48a FS",
+      "parent": "10b68b59-adc1-408e-8250-e8d7befb12a1"
+    },
+    {
+      "id": "878df2c5-ecbf-48c8-b449-2b75a40ec0b3",
+      "text": "Finalize agreements and collect signed non-binding LOIs",
+      "custom_tooltip": "<b>Finalize agreements and collect signed non-binding LOIs</b><br>Review terms of engagement drafts with interested parties and obtain formal letters of intent confirming commitment to regional development without binding financial obligations yet.<br><b>Resources needed:</b><br><ul><li>Legal Counsel</li><li>Revenue &amp; Franchise Director</li><li>Partner Relations Manager</li></ul>",
+      "start_date": "2027-02-16",
+      "duration": 9.0,
+      "progress": 0,
+      "open": true,
+      "meta": "10b68b59-adc1-408e-8250-e8d7befb12a1 FF, 2bbbee89-5a2c-49ed-980b-bdba0ef5521c FS",
+      "parent": "10b68b59-adc1-408e-8250-e8d7befb12a1"
+    },
+    {
+      "id": "1fa30365-74e6-46c7-ac4a-d14d9d2f1d52",
+      "text": "Operations Setup & Launch Preparation",
+      "custom_tooltip": "<b>Operations Setup &amp; Launch Preparation</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "863bd09b-0dba-4172-88c6-f687d080b6dc FF, 6485ae11-8fc2-45f9-9bc3-557e9f4e6e32 FS",
+      "parent": "863bd09b-0dba-4172-88c6-f687d080b6dc",
+      "type": "project"
+    },
+    {
+      "id": "b3801889-e477-4c01-a004-f010c629f267",
+      "text": "Complete staff certification training programs for instructors",
+      "custom_tooltip": "<b>Complete staff certification training programs for instructors</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "1fa30365-74e6-46c7-ac4a-d14d9d2f1d52 SS",
+      "parent": "1fa30365-74e6-46c7-ac4a-d14d9d2f1d52",
+      "type": "project"
+    },
+    {
+      "id": "3952cf3c-edb1-4b0b-91e1-dc5b799442d8",
+      "text": "Enroll instructors in accelerated training cohorts",
+      "custom_tooltip": "<b>Enroll instructors in accelerated training cohorts</b><br>Identify eligible staff members and register them for immediate FAA Part 107 preparation courses to meet opening deadlines.<br><b>Resources needed:</b><br><ul><li>Training Coordinator</li><li>HR Manager</li><li>FAA Course Provider</li></ul>",
+      "start_date": "2027-02-25",
+      "duration": 5.0,
+      "progress": 0,
+      "open": true,
+      "meta": "b3801889-e477-4c01-a004-f010c629f267 SS",
+      "parent": "b3801889-e477-4c01-a004-f010c629f267"
+    },
+    {
+      "id": "ed687329-7160-424f-afcf-9a41261ce3c6",
+      "text": "Schedule FAA certification exams with buffer time",
+      "custom_tooltip": "<b>Schedule FAA certification exams with buffer time</b><br>Coordinate exam dates with testing centers ensuring sufficient lead time before the venue launch date to avoid delays.<br><b>Resources needed:</b><br><ul><li>Operations Manager</li><li>Testing Center Administrator</li><li>Certification Tracking Software</li></ul>",
+      "start_date": "2027-03-02",
+      "duration": 5.0,
+      "progress": 0,
+      "open": true,
+      "meta": "3952cf3c-edb1-4b0b-91e1-dc5b799442d8 FS",
+      "parent": "b3801889-e477-4c01-a004-f010c629f267"
+    },
+    {
+      "id": "2e9be244-9283-46f1-840c-4fc9f048e269",
+      "text": "Verify operational readiness via practical assessments",
+      "custom_tooltip": "<b>Verify operational readiness via practical assessments</b><br>Conduct flight proficiency checks and safety protocol evaluations to confirm all instructors meet competency standards prior to public opening.<br><b>Resources needed:</b><br><ul><li>Senior Flight Instructor</li><li>Safety Officer</li><li>Assessment Checklist</li></ul>",
+      "start_date": "2027-03-07",
+      "duration": 5.0,
+      "progress": 0,
+      "open": true,
+      "meta": "b3801889-e477-4c01-a004-f010c629f267 FF, ed687329-7160-424f-afcf-9a41261ce3c6 FS",
+      "parent": "b3801889-e477-4c01-a004-f010c629f267"
+    },
+    {
+      "id": "d260ec68-9ab8-4407-9c49-89805361683e",
+      "text": "Conduct final safety audits and compliance inspections",
+      "custom_tooltip": "<b>Conduct final safety audits and compliance inspections</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "b3801889-e477-4c01-a004-f010c629f267 FS",
+      "parent": "1fa30365-74e6-46c7-ac4a-d14d9d2f1d52",
+      "type": "project"
+    },
+    {
+      "id": "a0bb09c6-ab2c-4645-8ca2-14f56260080e",
+      "text": "Prepare internal compliance documentation package",
+      "custom_tooltip": "<b>Prepare internal compliance documentation package</b><br>Compile all safety logs, HVAC test results, and network security audit reports required by regulatory bodies prior to official review.<br><b>Resources needed:</b><br><ul><li>Safety Operations Lead</li><li>Compliance Director</li><li>Document Management System</li></ul>",
+      "start_date": "2027-03-12",
+      "duration": 3.0,
+      "progress": 0,
+      "open": true,
+      "meta": "d260ec68-9ab8-4407-9c49-89805361683e SS",
+      "parent": "d260ec68-9ab8-4407-9c49-89805361683e"
+    },
+    {
+      "id": "8e147ad0-e30e-4fbe-a110-d702b8dd6dee",
+      "text": "Schedule regulatory body inspections and audits",
+      "custom_tooltip": "<b>Schedule regulatory body inspections and audits</b><br>Contact FAA inspectors, Fire Department officials, and local zoning authorities to secure dates for final venue clearance inspections within the timeline.<br><b>Resources needed:</b><br><ul><li>Regulatory &amp; Compliance Director</li><li>Venue Manager</li><li>External Auditors</li></ul>",
+      "start_date": "2027-03-15",
+      "duration": 3.0,
+      "progress": 0,
+      "open": true,
+      "meta": "a0bb09c6-ab2c-4645-8ca2-14f56260080e FS",
+      "parent": "d260ec68-9ab8-4407-9c49-89805361683e"
+    },
+    {
+      "id": "4c712fa1-c555-4c32-a7ae-baa6406747b1",
+      "text": "Execute physical safety walkthroughs and checks",
+      "custom_tooltip": "<b>Execute physical safety walkthroughs and checks</b><br>Perform on-site verification of ballistic netting, emergency stop zones, and ventilation systems against established safety standards during scheduled inspection windows.<br><b>Resources needed:</b><br><ul><li>Safety Operations Lead</li><li>Facility Engineers</li><li>Fire Safety Officer</li></ul>",
+      "start_date": "2027-03-18",
+      "duration": 3.0,
+      "progress": 0,
+      "open": true,
+      "meta": "8e147ad0-e30e-4fbe-a110-d702b8dd6dee FS",
+      "parent": "d260ec68-9ab8-4407-9c49-89805361683e"
+    },
+    {
+      "id": "6eee7fd0-b024-4bde-b523-66027ee91b2f",
+      "text": "Remediate identified non-compliance findings",
+      "custom_tooltip": "<b>Remediate identified non-compliance findings</b><br>Address any deficiencies flagged during inspections immediately through repairs or procedural changes to ensure full regulatory compliance before launch approval.<br><b>Resources needed:</b><br><ul><li>Maintenance Crew</li><li>Safety Operations Lead</li><li>Procurement Team</li></ul>",
+      "start_date": "2027-03-21",
+      "duration": 3.0,
+      "progress": 0,
+      "open": true,
+      "meta": "4c712fa1-c555-4c32-a7ae-baa6406747b1 FS",
+      "parent": "d260ec68-9ab8-4407-9c49-89805361683e"
+    },
+    {
+      "id": "9ed9e473-c0c4-4772-a9e5-a250ed45c045",
+      "text": "Secure final operational sign-off certificates",
+      "custom_tooltip": "<b>Secure final operational sign-off certificates</b><br>Obtain official clearance documents and occupancy permits from all relevant authorities confirming the venue is safe for public operation.<br><b>Resources needed:</b><br><ul><li>Regulatory &amp; Compliance Director</li><li>Legal Counsel</li><li>Operations Manager</li></ul>",
+      "start_date": "2027-03-24",
+      "duration": 3.0,
+      "progress": 0,
+      "open": true,
+      "meta": "d260ec68-9ab8-4407-9c49-89805361683e FF, 6eee7fd0-b024-4bde-b523-66027ee91b2f FS",
+      "parent": "d260ec68-9ab8-4407-9c49-89805361683e"
+    },
+    {
+      "id": "5ef34f05-ce5f-4d20-ae98-2866368345a0",
+      "text": "Execute public launch marketing campaign for venue opening",
+      "custom_tooltip": "<b>Execute public launch marketing campaign for venue opening</b>",
+      "progress": 0,
+      "open": true,
+      "meta": "1fa30365-74e6-46c7-ac4a-d14d9d2f1d52 FF, d260ec68-9ab8-4407-9c49-89805361683e FS",
+      "parent": "1fa30365-74e6-46c7-ac4a-d14d9d2f1d52",
+      "type": "project"
+    },
+    {
+      "id": "88c36790-8d61-4695-a665-7159b1b81c46",
+      "text": "Finalize creative assets and branding materials",
+      "custom_tooltip": "<b>Finalize creative assets and branding materials</b><br>Design promotional visuals, draft press releases, and secure brand guidelines approval for the tactical sport theme.<br><b>Resources needed:</b><br><ul><li>Creative Director</li><li>Graphic Designer</li><li>Copywriter</li><li>Brand Manager</li></ul>",
+      "start_date": "2027-03-27",
+      "duration": 7.0,
+      "progress": 0,
+      "open": true,
+      "meta": "5ef34f05-ce5f-4d20-ae98-2866368345a0 SS",
+      "parent": "5ef34f05-ce5f-4d20-ae98-2866368345a0"
+    },
+    {
+      "id": "a27592f3-9fe8-4f09-8204-8fc21007e9de",
+      "text": "Secure media channels and schedule ad placements",
+      "custom_tooltip": "<b>Secure media channels and schedule ad placements</b><br>Negotiate contracts with local digital platforms and traditional outlets to maximize reach before opening day launch.<br><b>Resources needed:</b><br><ul><li>Marketing Manager</li><li>Media Buyer</li><li>Legal Reviewer</li><li>Procurement Specialist</li></ul>",
+      "start_date": "2027-04-03",
+      "duration": 7.0,
+      "progress": 0,
+      "open": true,
+      "meta": "88c36790-8d61-4695-a665-7159b1b81c46 FS",
+      "parent": "5ef34f05-ce5f-4d20-ae98-2866368345a0"
+    },
+    {
+      "id": "1fc21fda-7a80-4668-82bb-d62fd89913cd",
+      "text": "Monitor engagement metrics and adjust spend dynamically",
+      "custom_tooltip": "<b>Monitor engagement metrics and adjust spend dynamically</b><br>Track click-through rates daily to optimize budget allocation for maximum customer acquisition during the launch window.<br><b>Resources needed:</b><br><ul><li>Data Analyst</li><li>Social Media Coordinator</li><li>Campaign Manager</li><li>Analytics Tool</li></ul>",
+      "start_date": "2027-04-10",
+      "duration": 7.0,
+      "progress": 0,
+      "open": true,
+      "meta": "5ef34f05-ce5f-4d20-ae98-2866368345a0 FF, a27592f3-9fe8-4f09-8204-8fc21007e9de FS",
+      "parent": "5ef34f05-ce5f-4d20-ae98-2866368345a0"
+    }
+  ],
+  "links": [
+    {
+      "id": "link_1",
+      "source": "863bd09b-0dba-4172-88c6-f687d080b6dc",
+      "target": "6f004f4a-9caa-40af-916c-b6372850e8e1",
+      "type": "1",
+      "lag": 0.0
+    },
+    {
+      "id": "link_2",
+      "source": "6f004f4a-9caa-40af-916c-b6372850e8e1",
+      "target": "03692554-ab01-48b5-8e11-6d25033c3956",
+      "type": "1",
+      "lag": 0.0
+    },
+    {
+      "id": "link_3",
+      "source": "d1b24981-5ae8-43af-88df-4ba48919540b",
+      "target": "cbe642a7-5287-4bf0-89a9-ee6d2cde1d66",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_4",
+      "source": "cbe642a7-5287-4bf0-89a9-ee6d2cde1d66",
+      "target": "4ac326b3-81ea-4490-ba1f-3dd9ce7bbc4c",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_5",
+      "source": "4ac326b3-81ea-4490-ba1f-3dd9ce7bbc4c",
+      "target": "6547d274-5a6f-457e-bbb7-ee7b00939f58",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_6",
+      "source": "03692554-ab01-48b5-8e11-6d25033c3956",
+      "target": "06bc7a3b-578d-41e9-a902-ec27142371ad",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_7",
+      "source": "7b18dfb2-45fc-4d77-aae3-ba801b59f27d",
+      "target": "0139ba68-ee9b-4019-bed9-f6fc899296d6",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_8",
+      "source": "0139ba68-ee9b-4019-bed9-f6fc899296d6",
+      "target": "4b1a40dd-f7be-4781-b12d-d2fe82549190",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_9",
+      "source": "4b1a40dd-f7be-4781-b12d-d2fe82549190",
+      "target": "1411654c-2e81-44f5-a0c0-03d7ead54e8d",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_10",
+      "source": "6f004f4a-9caa-40af-916c-b6372850e8e1",
+      "target": "65aa6107-f2f6-4c60-80b2-a117e0bd9573",
+      "type": "2",
+      "lag": 0.0
+    },
+    {
+      "id": "link_11",
+      "source": "06bc7a3b-578d-41e9-a902-ec27142371ad",
+      "target": "65aa6107-f2f6-4c60-80b2-a117e0bd9573",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_12",
+      "source": "39424d0a-0e7f-4288-bf53-805209f0e3af",
+      "target": "f256c4f3-1a35-44c7-b6e1-890ae851bd64",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_13",
+      "source": "f256c4f3-1a35-44c7-b6e1-890ae851bd64",
+      "target": "2551aa64-a421-440c-9578-b260543ea4d3",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_14",
+      "source": "2551aa64-a421-440c-9578-b260543ea4d3",
+      "target": "a4f32940-9bb1-44a1-a146-4749e157b21c",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_15",
+      "source": "a4f32940-9bb1-44a1-a146-4749e157b21c",
+      "target": "a6effd79-0411-45c1-bfa7-1ff8a745b34f",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_16",
+      "source": "6f004f4a-9caa-40af-916c-b6372850e8e1",
+      "target": "95814c22-80a4-46e1-a20d-b3bbbfd0a30f",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_17",
+      "source": "95814c22-80a4-46e1-a20d-b3bbbfd0a30f",
+      "target": "125bd836-1a42-48c3-a11e-fa6b4a7184fe",
+      "type": "1",
+      "lag": 0.0
+    },
+    {
+      "id": "link_18",
+      "source": "bf907c25-9f65-4335-b56c-d43ec4f7beb6",
+      "target": "ad96ebf6-4e20-40af-a3eb-80b3cb8de6d0",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_19",
+      "source": "ad96ebf6-4e20-40af-a3eb-80b3cb8de6d0",
+      "target": "93c1cada-7080-469d-ba33-a58304dc6b80",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_20",
+      "source": "93c1cada-7080-469d-ba33-a58304dc6b80",
+      "target": "c8e13cb3-0581-41a9-af9d-02be8b6ebfbc",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_21",
+      "source": "125bd836-1a42-48c3-a11e-fa6b4a7184fe",
+      "target": "1eeec10e-aba9-48be-afbf-e73be7dd1370",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_22",
+      "source": "f8fc9544-407e-445e-b124-4fc0cb73a88f",
+      "target": "c902df29-c872-41c6-9a80-2a116299a6b7",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_23",
+      "source": "c902df29-c872-41c6-9a80-2a116299a6b7",
+      "target": "508a234f-d768-4d14-a37d-cf54c65184d5",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_24",
+      "source": "508a234f-d768-4d14-a37d-cf54c65184d5",
+      "target": "2a7beb5c-4778-40bf-a0cd-0d8f8b9ec096",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_25",
+      "source": "95814c22-80a4-46e1-a20d-b3bbbfd0a30f",
+      "target": "ba88213b-60ad-416f-9f47-2bb4e3266733",
+      "type": "2",
+      "lag": 0.0
+    },
+    {
+      "id": "link_26",
+      "source": "1eeec10e-aba9-48be-afbf-e73be7dd1370",
+      "target": "ba88213b-60ad-416f-9f47-2bb4e3266733",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_27",
+      "source": "e2f9430b-af65-4f97-99ed-7f4558f2fe79",
+      "target": "d2218f47-dbd0-4247-a55e-f0c4fe0a5d48",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_28",
+      "source": "d2218f47-dbd0-4247-a55e-f0c4fe0a5d48",
+      "target": "ea133437-5ab3-4552-b440-054f7a48f304",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_29",
+      "source": "ea133437-5ab3-4552-b440-054f7a48f304",
+      "target": "7d92fd37-98ad-4262-a40f-7b3b2aa16c45",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_30",
+      "source": "95814c22-80a4-46e1-a20d-b3bbbfd0a30f",
+      "target": "cb67b184-e7bc-4829-b21f-687efbb110b5",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_31",
+      "source": "cb67b184-e7bc-4829-b21f-687efbb110b5",
+      "target": "baa32992-ea13-4079-99c8-5dc52211c50b",
+      "type": "1",
+      "lag": 0.0
+    },
+    {
+      "id": "link_32",
+      "source": "4a7bd3e4-c113-4de8-a4a8-ffb4124ad38a",
+      "target": "396419ec-d5c1-4698-8d68-e0d8b98a7072",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_33",
+      "source": "396419ec-d5c1-4698-8d68-e0d8b98a7072",
+      "target": "483e0fec-b4ba-4a03-a151-544c42d89aef",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_34",
+      "source": "483e0fec-b4ba-4a03-a151-544c42d89aef",
+      "target": "165743a8-3314-40f1-b414-874b3bc357e8",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_35",
+      "source": "baa32992-ea13-4079-99c8-5dc52211c50b",
+      "target": "1a64d547-336a-4f7e-bc04-621e11575fd3",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_36",
+      "source": "33a3ef33-e9e5-45bc-b2b3-b1194d741fa9",
+      "target": "dfdd6aa4-8709-45cb-a545-775b21ba79ca",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_37",
+      "source": "dfdd6aa4-8709-45cb-a545-775b21ba79ca",
+      "target": "c6f6de8c-439d-4f4e-a726-fc86697ec3c6",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_38",
+      "source": "c6f6de8c-439d-4f4e-a726-fc86697ec3c6",
+      "target": "7a8a374d-0280-446a-a289-230ed0e89595",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_39",
+      "source": "cb67b184-e7bc-4829-b21f-687efbb110b5",
+      "target": "1eec6375-9274-4036-bc12-2c6c08fc74bf",
+      "type": "2",
+      "lag": 0.0
+    },
+    {
+      "id": "link_40",
+      "source": "1a64d547-336a-4f7e-bc04-621e11575fd3",
+      "target": "1eec6375-9274-4036-bc12-2c6c08fc74bf",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_41",
+      "source": "5745316f-9efa-460e-9e08-140d6253a178",
+      "target": "22cd4519-4765-429a-8973-cdb067a4f7dd",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_42",
+      "source": "22cd4519-4765-429a-8973-cdb067a4f7dd",
+      "target": "dd8d67ad-abfa-439f-8a64-997d8b78a938",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_43",
+      "source": "dd8d67ad-abfa-439f-8a64-997d8b78a938",
+      "target": "66949e63-afe6-4a23-9365-7c6dda9f55b7",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_44",
+      "source": "66949e63-afe6-4a23-9365-7c6dda9f55b7",
+      "target": "ca6557eb-c90c-4298-8f9e-b5d7e5c662e5",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_45",
+      "source": "cb67b184-e7bc-4829-b21f-687efbb110b5",
+      "target": "6485ae11-8fc2-45f9-9bc3-557e9f4e6e32",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_46",
+      "source": "6485ae11-8fc2-45f9-9bc3-557e9f4e6e32",
+      "target": "a7c86427-a3c0-42ed-b36f-d1c650be4eb4",
+      "type": "1",
+      "lag": 0.0
+    },
+    {
+      "id": "link_47",
+      "source": "3a3a4c54-a39e-4ddf-aefb-fed55c91847f",
+      "target": "d9680188-dac9-4aa6-996f-fb89afdcbef4",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_48",
+      "source": "d9680188-dac9-4aa6-996f-fb89afdcbef4",
+      "target": "d9dfb5cd-7b69-4545-b3f1-dd73038070c7",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_49",
+      "source": "d9dfb5cd-7b69-4545-b3f1-dd73038070c7",
+      "target": "dc9fc9b6-132b-4c77-b263-44f79607fd26",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_50",
+      "source": "a7c86427-a3c0-42ed-b36f-d1c650be4eb4",
+      "target": "be1cd5ea-1a4b-4353-ba5f-e15351731e5e",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_51",
+      "source": "4f4a103b-30ad-445d-9702-b439780535e0",
+      "target": "5203884e-5960-405e-9494-bf6b99a8201e",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_52",
+      "source": "5203884e-5960-405e-9494-bf6b99a8201e",
+      "target": "b8811e98-0e10-452d-8eaa-2a64243ef03d",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_53",
+      "source": "b8811e98-0e10-452d-8eaa-2a64243ef03d",
+      "target": "1ce48fdb-e026-4c3b-aade-e211fadcbf43",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_54",
+      "source": "1ce48fdb-e026-4c3b-aade-e211fadcbf43",
+      "target": "eb94ea5a-4ce5-4a07-9c22-07b408b31417",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_55",
+      "source": "6485ae11-8fc2-45f9-9bc3-557e9f4e6e32",
+      "target": "10b68b59-adc1-408e-8250-e8d7befb12a1",
+      "type": "2",
+      "lag": 0.0
+    },
+    {
+      "id": "link_56",
+      "source": "be1cd5ea-1a4b-4353-ba5f-e15351731e5e",
+      "target": "10b68b59-adc1-408e-8250-e8d7befb12a1",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_57",
+      "source": "69380bd3-38e8-4eb3-aa3e-fc7b4d0e7dff",
+      "target": "40ffea50-b049-4170-ae34-f2e202aac48a",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_58",
+      "source": "40ffea50-b049-4170-ae34-f2e202aac48a",
+      "target": "2bbbee89-5a2c-49ed-980b-bdba0ef5521c",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_59",
+      "source": "2bbbee89-5a2c-49ed-980b-bdba0ef5521c",
+      "target": "878df2c5-ecbf-48c8-b449-2b75a40ec0b3",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_60",
+      "source": "863bd09b-0dba-4172-88c6-f687d080b6dc",
+      "target": "1fa30365-74e6-46c7-ac4a-d14d9d2f1d52",
+      "type": "2",
+      "lag": 0.0
+    },
+    {
+      "id": "link_61",
+      "source": "6485ae11-8fc2-45f9-9bc3-557e9f4e6e32",
+      "target": "1fa30365-74e6-46c7-ac4a-d14d9d2f1d52",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_62",
+      "source": "1fa30365-74e6-46c7-ac4a-d14d9d2f1d52",
+      "target": "b3801889-e477-4c01-a004-f010c629f267",
+      "type": "1",
+      "lag": 0.0
+    },
+    {
+      "id": "link_63",
+      "source": "3952cf3c-edb1-4b0b-91e1-dc5b799442d8",
+      "target": "ed687329-7160-424f-afcf-9a41261ce3c6",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_64",
+      "source": "ed687329-7160-424f-afcf-9a41261ce3c6",
+      "target": "2e9be244-9283-46f1-840c-4fc9f048e269",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_65",
+      "source": "b3801889-e477-4c01-a004-f010c629f267",
+      "target": "d260ec68-9ab8-4407-9c49-89805361683e",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_66",
+      "source": "a0bb09c6-ab2c-4645-8ca2-14f56260080e",
+      "target": "8e147ad0-e30e-4fbe-a110-d702b8dd6dee",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_67",
+      "source": "8e147ad0-e30e-4fbe-a110-d702b8dd6dee",
+      "target": "4c712fa1-c555-4c32-a7ae-baa6406747b1",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_68",
+      "source": "4c712fa1-c555-4c32-a7ae-baa6406747b1",
+      "target": "6eee7fd0-b024-4bde-b523-66027ee91b2f",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_69",
+      "source": "6eee7fd0-b024-4bde-b523-66027ee91b2f",
+      "target": "9ed9e473-c0c4-4772-a9e5-a250ed45c045",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_70",
+      "source": "1fa30365-74e6-46c7-ac4a-d14d9d2f1d52",
+      "target": "5ef34f05-ce5f-4d20-ae98-2866368345a0",
+      "type": "2",
+      "lag": 0.0
+    },
+    {
+      "id": "link_71",
+      "source": "d260ec68-9ab8-4407-9c49-89805361683e",
+      "target": "5ef34f05-ce5f-4d20-ae98-2866368345a0",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_72",
+      "source": "88c36790-8d61-4695-a665-7159b1b81c46",
+      "target": "a27592f3-9fe8-4f09-8204-8fc21007e9de",
+      "type": "0",
+      "lag": 0.0
+    },
+    {
+      "id": "link_73",
+      "source": "a27592f3-9fe8-4f09-8204-8fc21007e9de",
+      "target": "1fc21fda-7a80-4668-82bb-d62fd89913cd",
+      "type": "0",
+      "lag": 0.0
+    }
+  ]
+};
+
+    function zoomFit() {
+        const tasks = gantt.getTaskByTime();
+        if (tasks.length > 0) {
+            const firstTask = tasks[0];
+            const lastTask = tasks[tasks.length - 1];
+            gantt.showDate(firstTask.start_date);
+            
+            // Calculate total duration in days
+            const startDate = new Date(firstTask.start_date);
+            const endDate = new Date(lastTask.end_date);
+            const durationDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
+            
+            // Choose appropriate scale based on duration
+            if (durationDays > 3650) { // More than 10 years
+                gantt.config.scale_unit = "year";
+                gantt.config.step = 10;
+                gantt.config.subscales = [
+                    {unit: "year", step: 1, date: "%Y"}
+                ];
+            } else if (durationDays > 365) { // More than 1 year
+                gantt.config.scale_unit = "year";
+                gantt.config.step = 1;
+                gantt.config.subscales = [
+                    {unit: "month", step: 1, date: "%M"}
+                ];
+            } else if (durationDays > 30) { // More than 1 month
+                gantt.config.scale_unit = "month";
+                gantt.config.step = 1;
+                gantt.config.subscales = [
+                    {unit: "day", step: 1, date: "%d"}
+                ];
+            } else if (durationDays > 7) { // More than 1 week
+                gantt.config.scale_unit = "week";
+                gantt.config.step = 1;
+                gantt.config.subscales = [
+                    {unit: "day", step: 1, date: "%d"}
+                ];
+            } else {
+                gantt.config.scale_unit = "day";
+                gantt.config.step = 1;
+                gantt.config.subscales = [];
+            }
+            gantt.render();
+        }
+    }
+
+    function zoomIn() {
+        const currentUnit = gantt.config.scale_unit;
+        const currentStep = gantt.config.step;
+        
+        if (currentUnit === "year" && currentStep === 10) {
+            gantt.config.scale_unit = "year";
+            gantt.config.step = 1;
+            gantt.config.subscales = [
+                {unit: "month", step: 1, date: "%M"}
+            ];
+        } else if (currentUnit === "year") {
+            gantt.config.scale_unit = "month";
+            gantt.config.step = 1;
+            gantt.config.subscales = [
+                {unit: "day", step: 1, date: "%d"}
+            ];
+        } else if (currentUnit === "month") {
+            gantt.config.scale_unit = "week";
+            gantt.config.step = 1;
+            gantt.config.subscales = [
+                {unit: "day", step: 1, date: "%d"}
+            ];
+        } else if (currentUnit === "week") {
+            gantt.config.scale_unit = "day";
+            gantt.config.step = 1;
+            gantt.config.subscales = [];
+        }
+        gantt.render();
+    }
+
+    function zoomOut() {
+        const currentUnit = gantt.config.scale_unit;
+        const currentStep = gantt.config.step;
+        
+        if (currentUnit === "day") {
+            gantt.config.scale_unit = "week";
+            gantt.config.step = 1;
+            gantt.config.subscales = [
+                {unit: "day", step: 1, date: "%d"}
+            ];
+        } else if (currentUnit === "week") {
+            gantt.config.scale_unit = "month";
+            gantt.config.step = 1;
+            gantt.config.subscales = [
+                {unit: "day", step: 1, date: "%d"}
+            ];
+        } else if (currentUnit === "month") {
+            gantt.config.scale_unit = "year";
+            gantt.config.step = 1;
+            gantt.config.subscales = [
+                {unit: "month", step: 1, date: "%M"}
+            ];
+        } else if (currentUnit === "year") {
+            gantt.config.scale_unit = "year";
+            gantt.config.step = 10;
+            gantt.config.subscales = [
+                {unit: "year", step: 1, date: "%Y"}
+            ];
+        }
+        gantt.render();
+    }
+
+    function downloadCSV() {
+        if (GANTT_DATA_CSV === null) {
+            return;
+        }
+        const blob = new Blob([GANTT_DATA_CSV], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', GANTT_FILENAME_CSV);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Gantt Initialization
+    gantt.config.readonly = true;
+    gantt.config.date_format = "%Y-%m-%d";
+    gantt.config.scale_unit = "month";
+    gantt.config.step = 1;
+    gantt.config.subscales = [
+        {unit: "day", step: 1, date: "%d"}
+    ];
+
+    gantt.config.columns = [
+        {name:"text", label:"Task name", width:"*", tree:true},
+        // {name:"start_date", label:"Start time", align: "center"},
+        // {name:"duration", label:"Duration", align: "center"}
+    ];
+
+    gantt.templates.task_class = function(start, end, task) {
+        if (task.type === "project") {
+            return "project-task";
+        }
+        return "";
+    };
+
+    gantt.templates.tooltip_text = function(start, end, task) {
+        return task.custom_tooltip || "No tooltip";
+    };
+    
+	gantt.plugins({
+		tooltip: true
+	});
+	gantt.attachEvent("onGanttReady", function(){
+		var tooltips = gantt.ext.tooltips;
+		tooltips.tooltip.setViewport(gantt.$task_data);
+	});
+    gantt.init("gantt_container");
+    gantt.parse(GANTT_DATA_DHTMLX);
+
+    // Hide the export to CSV button if there is no CSV data
+    if (GANTT_DATA_CSV === null) {
+        document.getElementById('exportToCSVButton').style.display = 'none';
+    }
+
+    document.getElementById('zoomFitButton').addEventListener('click', zoomFit);
+    document.getElementById('zoomInButton').addEventListener('click', zoomIn);
+    document.getElementById('zoomOutButton').addEventListener('click', zoomOut);
+    document.getElementById('exportToCSVButton').addEventListener('click', downloadCSV);
+</script>
+<!--HTML_BODY_SCRIPT_END-->
+</body>
+</html>

@@ -1,0 +1,8 @@
+- Initial CAPEX for warehouse fit-out and hardware is estimated at $500,000 per location.
+- Regulatory approval requires a 3-6 month lead time, potentially delaying launch by this period.
+- A hybrid model employing 40% certified instructors and 60% retail staff optimizes safety and costs.
+- Industrial zones permit commercial use but require variances for high-density drone activity near airports.
+- Electronic collision avoidance systems must be backed by physical safety netting or emergency stop zones.
+- Industrial warehouses require HVAC upgrades to meet safety ventilation standards for enclosed drone operations.
+- Partnerships with veterans groups require legal boundaries to avoid endorsing active military conflict unnecessarily.
+- End-to-end encryption and GDPR-like protocols are necessary for data protection in tracking systems.

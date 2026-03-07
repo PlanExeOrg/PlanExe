@@ -1,0 +1,269 @@
+*Roles Needed & Example People*
+
+# Roles
+
+## 1. Regulatory & Compliance Director
+
+**Contract Type**: `full_time_employee`
+
+**Contract Type Justification**: Critical liability role requiring long-term alignment and direct control over FAA compliance and regulatory risk management; ensures availability for audits/investigations during high-stakes launch phase.
+
+**Explanation**:
+Manages FAA Part 107 licensing, airspace waivers, legal compliance across all three locations (Atlanta, Dallas-Fort Worth, Pittsburgh), and maintains relationships with aviation authorities to ensure operational continuity without regulatory shutdowns.
+
+**Consequences**:
+Without this role, the venture faces 3-6 month launch delays from FAA approval issues, potential fines up to $10,000 per violation, and risk of complete operational shutdown due to airspace violations near airports like DFW.
+
+**People Count**:
+1-2 depending on location complexity
+
+**Typical Activities**:
+Liaising with FAA districts for Part 107 license approvals, managing airspace waiver applications for all three locations, conducting compliance audits on flight envelopes, negotiating liability insurance terms, and maintaining legal documentation for regulatory bodies.
+
+**Background Story**:
+Sarah Jenkins, based in Atlanta, Georgia, holds a Juris Doctor degree with a specialization in Aviation Law and ten years of experience as a liaison for regional FAA districts, making her intimately familiar with the complexities of Part 107 licensing and airspace waivers near major airports like DFW. Her expertise ensures that HVT navigates the critical regulatory compliance strategy without triggering shutdowns or fines, directly mitigating the high-severity risk of legal non-compliance in controlled zones, and she is relevant because without her direct control over FAA relations, the venture faces potential launch delays of up to six months and prohibitive insurance costs due to unapproved flight envelopes.
+
+**Equipment Needs**:
+Secure laptop, access to FAA UAS Data Bank, and encrypted legal document repository for license tracking.
+
+**Facility Needs**:
+Central office space near HQ for regulatory liaison meetings; secure server room for compliance documentation storage.
+
+## 2. Venue Infrastructure Manager
+
+**Contract Type**: `independent_contractor`
+
+**Contract Type Justification**: Project-based role focused on warehouse acquisition and CAPEX modifications; specialized expertise needed for construction/leasing without long-term overhead commitment during pre-launch build-out.
+
+**Explanation**:
+Oversees industrial warehouse acquisition, HVAC safety modifications, ballistic netting installation, and physical arena setup across multiple locations while managing CAPEX budgets of $500,000 per site.
+
+**Consequences**:
+Without proper venue management, seasonal weather reduces operating days by 35%, facility utilization drops below break-even thresholds, and safety modifications may fail to meet ventilation or structural standards.
+
+**People Count**:
+min 1, max 3 depending on concurrent location count
+
+**Typical Activities**:
+Overseeing industrial warehouse lease negotiations, managing contractors for HVAC system upgrades, supervising ballistic netting installation around player corridors, monitoring CAPEX budgets per site, and verifying zoning permits for commercial drone operations.
+
+**Background Story**:
+Marcus Thorne operates out of Dallas-Fort Worth, Texas, where he leverages his background in industrial construction management and facility acquisition to oversee warehouse modifications and safety infrastructure. He is familiar with the specific CAPEX requirements for HVAC upgrades and ballistic netting installation, ensuring that physical locations meet ventilation standards while maintaining budget control against the $500,000 per site constraint. His role is relevant because improper venue management risks seasonal weather reducing operating days by 35% and facility utilization dropping below break-even thresholds due to inadequate safety buffer zones.
+
+**Equipment Needs**:
+Construction management software (e.g., Procore), site inspection PPE (hard hats/vests), and laser measurement tools.
+
+**Facility Needs**:
+On-site command center at warehouse locations; direct access to industrial lease sites during fit-out and HVAC modification phases.
+
+## 3. Safety Operations Lead
+
+**Contract Type**: `full_time_employee`
+
+**Contract Type Justification**: Safety-critical operational role requiring daily oversight of incident response and liability protocols; direct employment ensures accountability for player safety and insurance compliance.
+
+**Explanation**:
+Designs collision prevention protocols, oversees kill-switch systems, manages incident response procedures, coordinates with insurance underwriters on liability coverage for high-speed drone operations.
+
+**Consequences**:
+Injury lawsuits and class actions could occur from sensor failures or collisions, insurance premiums rise 40-60%, and operational shutdowns lasting 2-8 weeks may result from liability incidents.
+
+**People Count**:
+min 1, max 2 depending on operational hours and locations
+
+**Typical Activities**:
+Designing collision prevention protocols, managing emergency stop-zone kill-switch systems, coordinating with insurance underwriters on liability coverage, conducting weekly hardware stress tests, and leading incident response drills for staff.
+
+**Background Story**:
+Elena Rodriguez leads from Pittsburgh, Pennsylvania, bringing a unique background as a former military EOD specialist now focused on civilian drone liability risk assessment and incident response planning. She is familiar with designing collision prevention protocols and managing emergency stop-zone kill-switches, which are essential for preventing injury lawsuits that could arise from sensor failures or high-speed collisions. She is relevant because her oversight directly impacts the venture's ability to secure commercial liability insurance and maintain operational continuity without costly shutdowns lasting weeks following an incident.
+
+**Equipment Needs**:
+Two-way radios for arena communications, telemetry monitoring tablet, and fully stocked first aid kits.
+
+**Facility Needs**:
+Centralized Safety Control Room overlooking the arena floor; secure storage area for incident logs and safety equipment.
+
+## 4. Technology Integration Specialist
+
+**Contract Type**: `independent_contractor`
+
+**Contract Type Justification**: Specialized technical expertise required for custom sensor procurement and telemetry integration; flexibility allows access to niche hardware supply chain knowledge without long-term payroll obligation.
+
+**Explanation**:
+Coordinates custom collision sensor procurement, drone hardware deployment, telemetry system integration, and maintains relationships with suppliers to ensure delivery within 90-day timelines.
+
+**Consequences**:
+Hardware lead times extend beyond 90 days due to supply chain volatility, sensor latency spikes cause 15% player disengagement rates, and maintenance costs erode margins by 20% year-over-year.
+
+**People Count**:
+1-2 depending on hardware complexity and supplier coordination needs
+
+**Typical Activities**:
+Procuring quadcopters with LiDAR obstacle avoidance systems, integrating custom collision sensors into flight controllers, managing relationships with hardware suppliers for delivery timelines, testing telemetry latency rates, and coordinating cybersecurity integration for tracking data.
+
+**Background Story**:
+David Chen works remotely but coordinates with all three hubs, utilizing his expertise in robotics engineering and supply chain logistics to manage custom sensor procurement and drone hardware deployment. He is familiar with the volatility of global chip markets and the technical requirements for LiDAR obstacle avoidance systems needed to achieve low latency rates below critical thresholds. His contribution is relevant because he ensures that hardware lead times do not extend beyond 90 days, preventing launch delays and ensuring system uptime percentages meet operational expectations without eroding margins through excessive maintenance costs.
+
+**Equipment Needs**:
+Engineering laptops with CAD software, drone diagnostic tools, sensor integration kits, and cloud server access.
+
+**Facility Needs**:
+Dedicated hardware lab/workshop within warehouse for pre-flight testing; telemetry backend server room.
+
+## 5. Cybersecurity Officer
+
+**Contract Type**: `independent_contractor`
+
+**Contract Type Justification**: Highly specialized cybersecurity function often outsourced initially due to cost; consultants provide penetration testing and encryption setup without requiring full-time executive salary in startup phase.
+
+**Explanation**:
+Implements AES-256 encryption for telemetry data, conducts penetration testing prior to launch, manages GDPR-like privacy compliance, and establishes incident response protocols for player tracking systems.
+
+**Consequences**:
+Data breaches expose customer information leading to $50k+ regulatory fines, reputational damage causes 30% booking drop, and loss of corporate contracts from data privacy concerns.
+
+**People Count**:
+1 fixed level due to specialized security requirements
+
+**Typical Activities**:
+Implementing end-to-end AES-256 encryption for telemetry data streams, conducting penetration testing prior to launch, drafting privacy policies with explicit consent forms, managing incident response plans for data breaches, and ensuring GDPR-like compliance protocols.
+
+**Background Story**:
+Priya Patel is a cybersecurity specialist based in the United States who brings extensive experience implementing AES-256 encryption for consumer data and conducting penetration testing for high-profile entertainment platforms. She is familiar with GDPR-like compliance protocols required to protect real-time player tracking telemetry from cyberattacks that could compromise privacy or lead to regulatory fines exceeding $50,000. Her role is critical because a single data breach exposing customer information could cause reputational damage resulting in a 30% booking drop and the loss of valuable corporate contracts dependent on trust.
+
+**Equipment Needs**:
+Secure security workstation with penetration testing tools (e.g., Nmap) and encrypted storage drives.
+
+**Facility Needs**:
+Isolated IT network segment/server room; private office for handling sensitive customer data and compliance audits.
+
+## 6. Narrative Branding Strategist
+
+**Contract Type**: `independent_contractor`
+
+**Contract Type Justification**: Strategic branding role allowing flexibility for market pivots (e.g., tactical sport vs combat simulation); specialized marketing expertise avoids long-term overhead before product-market validation.
+
+**Explanation**:
+Develops dual-branding approach (tactical sport vs combat simulation), manages veteran group partnerships for legitimacy, balances military themes with community acceptance to avoid zoning complaints.
+
+**Consequences**:
+Military branding scrutiny reduces youth participation by 30%, community backlash triggers regulatory scrutiny, and marketing pivot costs of $40k become necessary mid-launch.
+
+**People Count**:
+1 fixed level due to strategic brand positioning role
+
+**Typical Activities**:
+Developing dual-branding campaigns for tactical sport vs combat simulation, managing partnerships with veterans groups for legitimacy, conducting community town halls to gauge sentiment, overseeing media relations, and adjusting marketing materials to align with zoning regulations.
+
+**Background Story**:
+James O'Connor is based in Atlanta, Georgia, where he applies his marketing background combined with personal connections to veterans groups to develop a dual-branding approach for HVT's public image. He is familiar with balancing military themes with commercial safety perceptions to avoid community backlash that could reduce youth participation by 30% or trigger zoning complaints regarding combat simulation narratives. He is relevant because strong brand identity enables premium corporate packages and licensing opportunities while mitigating the regulatory friction that aggressive marketing around combat themes might otherwise attract from aviation authorities.
+
+**Equipment Needs**:
+Marketing suite software (Adobe Creative Cloud), presentation hardware, and secure communication channels.
+
+**Facility Needs**:
+Office space with meeting rooms for stakeholder presentations; access to community centers for hosting town halls.
+
+## 7. Revenue & Franchise Director
+
+**Contract Type**: `full_time_employee`
+
+**Contract Type Justification**: Core business model definition requires deep alignment with safety and operations for franchise scalability; full-time commitment ensures consistent execution of revenue and licensing strategy.
+
+**Explanation**:
+Develops corporate team-building packages with premium branding rights, establishes franchise licensing framework for regional expansion, manages pricing tiers to achieve 15% monthly retention before scaling.
+
+**Consequences**:
+Per-session pricing caps yield at $50/player limiting revenue growth, high operational overhead reduces net margin below 10% annually, and venture remains local venue rather than scalable national brand.
+
+**People Count**:
+min 1, max 2 depending on revenue complexity and growth stage
+
+**Typical Activities**:
+Structuring franchise licensing frameworks for regional expansion, negotiating corporate team-building packages with premium branding rights, analyzing pricing tiers to achieve retention targets, and developing long-term revenue growth strategies beyond per-session fees.
+
+**Background Story**:
+Alicia Vance operates primarily out of Dallas-Fort Worth, Texas, focusing on business development strategies to scale revenue beyond single-location ticket sales through franchise models and team-building partnerships. She is familiar with structuring tiered pricing models and negotiating corporate contracts that yield higher lifetime value per customer without relying solely on foot traffic volume which fluctuates seasonally. Her work is relevant because it defines the long-term business model viability, ensuring HVT evolves from a local venue into a replicable national brand rather than remaining stuck at low net margins below 10% annually.
+
+**Equipment Needs**:
+CRM software (Salesforce/HubSpot), financial modeling tools, and client presentation tablets.
+
+**Facility Needs**:
+Executive office space with conference rooms; private negotiation spaces for franchise partners and corporate clients.
+
+## 8. Human Capital & Training Coordinator
+
+**Contract Type**: `full_time_employee`
+
+**Contract Type Justification**: Ongoing operational need to manage hybrid staff model, training costs, and retention programs; requires daily oversight of certifications and turnover mitigation across multiple locations.
+
+**Explanation**:
+Manages hybrid staff model (40% certified flight instructors, 60% retail), oversees $3k specialized training per employee, implements retention programs to reduce 25% first-year turnover rates.
+
+**Consequences**:
+Staff turnover challenges operational consistency standards, liability insurance premiums escalate due to training gaps, and customer satisfaction scores decline from untrained retail staff.
+
+**People Count**:
+min 1, max 3 depending on total workforce across all locations
+
+**Typical Activities**:
+Managing hiring of hybrid staff models, overseeing specialized training certification for flight instructors and safety officers, implementing retention programs to reduce turnover, budgeting $3,000 per employee for training costs, and tracking labor cost efficiency ratios.
+
+**Background Story**:
+Kevin O'Connell manages human capital resources across all locations with a focus on optimizing the hybrid staff model of certified flight instructors and general retail employees. He is familiar with the $3,000 per employee training costs required for specialized safety certification and strategies to mitigate the high turnover rates typical in novelty-based entertainment sectors. His role is relevant because operational consistency standards rely heavily on trained staff to ensure liability insurance premiums do not escalate due to gaps in safety oversight or untrained retail personnel handling customer interactions.
+
+**Equipment Needs**:
+Learning Management System (LMS) for certifications, scheduling software, and onboarding tablets.
+
+**Facility Needs**:
+Training classroom within venue for safety certification sessions; HR administrative office for employee records management.
+
+---
+
+# Omissions
+
+## 1. General Counsel for Commercial Contracts & IP
+
+The Regulatory Director focuses on FAA compliance, but the venture requires legal expertise for venue leases, franchise agreements, and intellectual property protection which fall outside aviation law. Missing this role exposes the company to commercial liability risks not covered by regulatory oversight.
+
+**Recommendation**:
+Retain a specialized commercial law firm or hire a General Counsel to review all non-aviation contracts, including venue leases, franchise IP licensing terms, and general liability waivers to ensure comprehensive legal coverage.
+
+## 2. Financial Controller/CFO Role
+
+The Revenue Director focuses on growth strategy while the project plan highlights significant CAPEX risks ($500k per location) and insurance contingencies. Without a dedicated financial steward, cash flow management and budget adherence may be compromised against investor expectations.
+
+**Recommendation**:
+Appoint a CFO or Financial Controller to manage the $3M+ initial CAPEX, monitor burn rate against the 6-month runway requirement, and oversee the $50k/year insurance premium contingency fund separately from revenue strategy.
+
+## 3. On-Site Operations Manager (Daily)
+
+The Stakeholder Analysis lists a Venue Operations Manager, but the Team Members document merges build-out responsibilities with daily operations. This creates ambiguity in who manages customer flow and ticketing post-construction.
+
+**Recommendation**:
+Formalize a Site Operations Lead responsible for daily customer flow, ticketing, and on-ground service quality after construction phases conclude, distinct from the Infrastructure Manager who focuses on physical modifications.
+
+---
+
+# Potential Improvements
+
+## 1. Clarify Contractor Transition for Venue Management
+
+The Venue Infrastructure Manager is an independent contractor focused on build-out. Critical safety infrastructure requires long-term accountability during the operational phase which contractors may not provide post-project.
+
+**Recommendation**:
+Convert the Venue Infrastructure Manager to a fixed-term Full-Time Site Lead post-build-out or require binding Service Level Agreements (SLAs) guaranteeing 24-month infrastructure maintenance continuity.
+
+## 2. Strengthen Cybersecurity Continuity
+
+The Cybersecurity Officer is an individual contractor focused on penetration testing. Continuous telemetry protection requires ongoing monitoring beyond initial launch security audits.
+
+**Recommendation**:
+Engage a cybersecurity firm for managed security services to ensure continuous real-time threat monitoring of player tracking systems, rather than relying solely on pre-launch penetration testing by an individual consultant.
+
+## 3. Consolidate Insurance Liaison Ownership
+
+Insurance liability is split between Regulatory Compliance (FAA compliance) and Financial Risk (premium costs). Current roles may create gaps where financial implications of coverage are not aligned with regulatory requirements.
+
+**Recommendation**:
+Jointly assign insurance negotiation responsibilities to the Regulatory Director and Financial Controller to ensure broker negotiations satisfy both legal flight envelope requirements and financial margin protection targets.

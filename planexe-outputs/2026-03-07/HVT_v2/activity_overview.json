@@ -1,0 +1,18 @@
+{
+  "last_updated": "2026-03-07T14:11:05.120632",
+  "models": {
+    "qwen/qwen3.5-35b-a3b": {
+      "calls": 119,
+      "input_tokens": 1305995,
+      "output_tokens": 399059,
+      "thinking_tokens": 0,
+      "total_cost": 0.0,
+      "total_tokens": 1705054
+    }
+  },
+  "total_cost": 0.0,
+  "total_input_tokens": 1305995,
+  "total_output_tokens": 399059,
+  "total_thinking_tokens": 0,
+  "total_tokens": 1705054
+}

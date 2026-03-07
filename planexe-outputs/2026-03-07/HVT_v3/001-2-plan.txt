@@ -1,0 +1,1 @@
+HVT — a paintball-like combat simulation game where players experience being a High Value Target for the US military, using drones instead of paintball guns. Players evade drone pursuit in a real outdoor arena.

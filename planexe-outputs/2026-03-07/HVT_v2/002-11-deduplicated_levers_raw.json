@@ -1,0 +1,189 @@
+{
+  "response": {
+    "decisions": [
+      {
+        "lever_id": "0afd4006-54c4-4e14-8bce-64049e950c3e",
+        "classification": "keep",
+        "justification": "This lever represents the broad Regulatory Compliance Strategy. It encompasses FAA approvals, insurance costs, and airspace restrictions comprehensively. Other regulatory levers focus on narrower aspects of this same domain. By keeping this general category, we maintain a high-level view of legal constraints without fragmenting the strategic analysis across multiple redundant compliance categories."
+      },
+      {
+        "lever_id": "851b3708-3625-42ef-ab49-cec8f185dc04",
+        "classification": "keep",
+        "justification": "This lever covers the physical Venue Infrastructure Strategy, including weather impacts and facility types. It is distinct from site selection as it focuses on operational continuity and capital expenditure for structures. This general classification retains essential details about seasonal utilization and indoor diversification requirements without needing a separate venue-specific lever."
+      },
+      {
+        "lever_id": "e710191a-4395-40a1-917f-ec637d94b5b5",
+        "classification": "keep",
+        "justification": "This lever defines the Technology Integration Strategy, covering latency, maintenance costs, and supply chains. It is broader than specific hardware or engagement stacks. Keeping this lever ensures we address system-wide technical dependencies and proprietary versus off-the-shelf decisions holistically rather than fragmenting technology risks across multiple narrow operational levers."
+      },
+      {
+        "lever_id": "bcdd00c0-0f81-4d65-84e0-99b14406b7d0",
+        "classification": "keep",
+        "justification": "This lever addresses Narrative Branding Strategy, focusing on external perception and legal risks regarding military terminology. It is distinct from internal narrative design or product immersion mechanics. Keeping this ensures marketing risks are analyzed separately from content development costs, preserving the distinction between public-facing brand equity and player experience retention."
+      },
+      {
+        "lever_id": "17966e84-5e16-4903-853c-4f53158e00ff",
+        "classification": "keep",
+        "justification": "This lever outlines the Revenue Scalability Strategy, including franchising and data monetization. It encompasses broader financial growth models beyond simple pricing. Keeping this lever allows us to analyze long-term profitability and expansion potential without duplicating analysis on basic transactional revenue or subscription structures found in other redundant financial levers."
+      },
+      {
+        "lever_id": "e4967109-98ee-461d-8300-aa403299b704",
+        "classification": "keep",
+        "justification": "This lever focuses on Human Capital Deployment, specifically training costs and staff turnover. It is unique among the levers as it addresses labor management rather than product or regulation. Keeping this lever ensures personnel risks are evaluated independently, preventing the conflation of staffing liabilities with operational safety or financial scalability concerns."
+      },
+      {
+        "lever_id": "d6079c1a-3cf6-4d29-af97-1b67cd00bfda",
+        "classification": "absorb",
+        "justification": "Absorb into Regulatory Compliance Strategy (ID: 0afd4006-54c4-4e14-8bce-64049e950c3e). This lever overlaps significantly by addressing FAA delays and compliance friction. The specific focus on operational windows is a subset of regulatory constraints already covered in the broader compliance strategy, making consolidation efficient without losing critical legal risk details."
+      },
+      {
+        "lever_id": "6b525e77-d1e4-4f0b-b327-976136db6912",
+        "classification": "absorb",
+        "justification": "Absorb into Regulatory Compliance Strategy (ID: 0afd4006-54c4-4e14-8bce-64049e950c3e). This lever duplicates the regulatory focus regarding Part 107 waivers and legal counsel. Merging it ensures all airspace restrictions and insurance eligibility criteria are managed under a single compliance umbrella, eliminating redundant analysis of identical legal frameworks and operational flexibility constraints."
+      },
+      {
+        "lever_id": "3f6ab33c-472c-44e7-94d5-0f074c692a26",
+        "classification": "absorb",
+        "justification": "Absorb into Venue Infrastructure Strategy (ID: 851b3708-3625-42ef-ab49-cec8f185dc04). This lever focuses on site selection and zoning, which is a precursor to infrastructure planning. Merging it retains the critical data regarding land leases and approval timelines within the broader physical venue strategy, streamlining the location decision-making process into one cohesive operational plan."
+      },
+      {
+        "lever_id": "6112f776-ba5a-40e0-be05-73bf267976d5",
+        "classification": "absorb",
+        "justification": "Absorb into Technology Integration Strategy (ID: e710191a-4395-40a1-917f-ec637d94b5b5). This lever details specific kinetic engagement sensors and calibration costs. These hardware specifics are subsets of the overall technology integration decisions regarding latency and maintenance. Consolidating them ensures all technical performance risks are evaluated together rather than fragmented across separate tech stacks."
+      },
+      {
+        "lever_id": "4f0b9c8b-5fbf-4eed-a228-f302d184ee71",
+        "classification": "absorb",
+        "justification": "Absorb into Technology Integration Strategy (ID: e710191a-4395-40a1-917f-ec637d94b5b5). This lever focuses on hardware safety architecture and collision mitigation costs. These are specific implementation details of the broader technology integration strategy. Merging them retains critical safety data while ensuring that hardware choices for risk mitigation remain aligned with overall system maintenance and cost analyses."
+      },
+      {
+        "lever_id": "3bdc2d30-8ccd-4c12-8f42-47cedb40db15",
+        "classification": "keep",
+        "justification": "This lever covers Immersive Narrative Architecture and content costs. It focuses on internal product design cycles and retention mechanics. Keeping it separate from branding allows for distinct analysis of content investment versus external market perception, ensuring that narrative refresh budgets are evaluated independently of public relations risks."
+      },
+      {
+        "lever_id": "6005999d-469d-4820-92d4-8a4c3b4ef36f",
+        "classification": "absorb",
+        "justification": "Absorb into Immersive Narrative Architecture (ID: 3bdc2d30-8ccd-4c12-8f42-47cedb40db15). This lever discusses technical implementation of immersion like AR and biometrics. These are tools used to execute the broader narrative architecture strategy. Merging them ensures content design costs include necessary technology R&D investments, providing a unified view of experience development expenses."
+      },
+      {
+        "lever_id": "53e5bbdd-cd7e-4173-9d50-a3d849e6ba91",
+        "classification": "absorb",
+        "justification": "Absorb into Revenue Scalability Strategy (ID: 17966e84-5e16-4903-853c-4f53158e00ff). This lever focuses on customer acquisition costs and subscription models. These are specific revenue drivers that fall under the broader scalability umbrella. Consolidating them prevents redundant analysis of pricing structures while preserving critical data on cash flow stability and market penetration strategies."
+      },
+      {
+        "lever_id": "d739d0bb-f540-44c5-8cf9-c3dec9ab07",
+        "classification": "absorb",
+        "justification": "Absorb into Revenue Scalability Strategy (ID: 17966e84-5e16-4903-853c-4f53158e00ff). This lever duplicates the focus on pricing models and franchise licensing. The consequences regarding AOV and retention are already covered in the broader revenue scalability analysis. Merging eliminates redundancy while retaining essential details on long-term financial sustainability and operational cash flow requirements."
+      }
+    ]
+  },
+  "deduplicated_levers": [
+    {
+      "lever_id": "0afd4006-54c4-4e14-8bce-64049e950c3e",
+      "name": "Regulatory Compliance Strategy",
+      "consequences": "Immediate: FAA approval delays extend launch by 6 months \u2192 Systemic: Insurance costs rise 40% due to public liability risk \u2192 Strategic: Restricts expansion to non-federal controlled airspace zones.",
+      "options": [
+        "Operate under existing recreational drone waivers with manual spotters",
+        "Secure commercial Part 107 licenses for expanded flight envelopes",
+        "Establish private airfield status to bypass public airspace restrictions"
+      ],
+      "review": "Controls Regulatory Compliance vs. Operational Flexibility. Weakness: The options fail to consider the impact of sudden airspace lockdowns during national events.",
+      "deduplication_justification": "This lever represents the broad Regulatory Compliance Strategy. It encompasses FAA approvals, insurance costs, and airspace restrictions comprehensively. Other regulatory levers focus on narrower aspects of this same domain. By keeping this general category, we maintain a high-level view of legal constraints without fragmenting the strategic analysis across multiple redundant compliance categories."
+    },
+    {
+      "lever_id": "851b3708-3625-42ef-ab49-cec8f185dc04",
+      "name": "Venue Infrastructure Strategy",
+      "consequences": "Immediate: Seasonal weather reduces operating days by 35% annually \u2192 Systemic: Fixed asset utilization drops below break-even thresholds \u2192 Strategic: Forces diversification into indoor simulation products.",
+      "options": [
+        "Rent seasonal outdoor fields during summer months only",
+        "Lease year-round industrial warehouse space with safety modifications",
+        "Utilize modular inflatable structures for rapid deployment and zero-permit flexibility"
+      ],
+      "review": "Controls Capital Expenditure vs. Operational Continuity. Weakness: The options fail to consider the logistical complexity of transporting heavy infrastructure between temporary sites.",
+      "deduplication_justification": "This lever covers the physical Venue Infrastructure Strategy, including weather impacts and facility types. It is distinct from site selection as it focuses on operational continuity and capital expenditure for structures. This general classification retains essential details about seasonal utilization and indoor diversification requirements without needing a separate venue-specific lever."
+    },
+    {
+      "lever_id": "e710191a-4395-40a1-917f-ec637d94b5b5",
+      "name": "Technology Integration Strategy",
+      "consequences": "Immediate: Sensor latency spikes cause player disengagement rates of 15% \u2192 Systemic: Hardware maintenance costs erode margins by 20% year-over-year \u2192 Strategic: Dictates reliance on proprietary vs. off-the-shelf supply chains.",
+      "options": [
+        "Use off-the-shelf quadcopters with standard obstacle avoidance",
+        "Integrate custom collision sensors and real-time player tracking telemetry",
+        "Deploy autonomous AI swarm drones for adaptive pursuit algorithms"
+      ],
+      "review": "Controls User Experience Quality vs. Hardware Maintenance Costs. Weakness: The options fail to account for the cybersecurity risks associated with connected player tracking systems.",
+      "deduplication_justification": "This lever defines the Technology Integration Strategy, covering latency, maintenance costs, and supply chains. It is broader than specific hardware or engagement stacks. Keeping this lever ensures we address system-wide technical dependencies and proprietary versus off-the-shelf decisions holistically rather than fragmenting technology risks across multiple narrow operational levers."
+    },
+    {
+      "lever_id": "bcdd00c0-0f81-4d65-84e0-99b14406b7d0",
+      "name": "Narrative Branding Strategy",
+      "consequences": "Immediate: Military branding scrutiny reduces youth participation by 30% \u2192 Systemic: Public perception shifts alter brand equity significantly over time \u2192 Strategic: Forces pivot toward tactical sport rather than combat simulation.",
+      "options": [
+        "Market as generic tactical sport avoiding military references",
+        "Partner with veterans groups to legitimize combat simulation narrative",
+        "Develop fictional sci-fi universe to decouple from real-world politics"
+      ],
+      "review": "Controls Authenticity Appeal vs. Public Perception Risk. Weakness: The options fail to consider the legal implications of using 'US Military' terminology in marketing materials.",
+      "deduplication_justification": "This lever addresses Narrative Branding Strategy, focusing on external perception and legal risks regarding military terminology. It is distinct from internal narrative design or product immersion mechanics. Keeping this ensures marketing risks are analyzed separately from content development costs, preserving the distinction between public-facing brand equity and player experience retention."
+    },
+    {
+      "lever_id": "17966e84-5e16-4903-853c-4f53158e00ff",
+      "name": "Revenue Scalability Strategy",
+      "consequences": "Immediate: Per-session pricing caps yield at $50/player revenue \u2192 Systemic: High operational overhead reduces net margin below 10% annually \u2192 Strategic: Requires ancillary data monetization for profitability.",
+      "options": [
+        "Charge per-session ticket fees for individual players",
+        "Launch corporate team-building packages with premium branding rights",
+        "Implement franchise model licensing the HVT IP to regional operators"
+      ],
+      "review": "Controls Short-Term Cash Flow vs. Long-Term Brand Control. Weakness: The options fail to consider the capital requirements needed for franchising support infrastructure.",
+      "deduplication_justification": "This lever outlines the Revenue Scalability Strategy, including franchising and data monetization. It encompasses broader financial growth models beyond simple pricing. Keeping this lever allows us to analyze long-term profitability and expansion potential without duplicating analysis on basic transactional revenue or subscription structures found in other redundant financial levers."
+    },
+    {
+      "lever_id": "3bdc2d30-8ccd-4c12-8f42-47cedb40db15",
+      "name": "Immersive Narrative Architecture",
+      "consequences": "Immediate: $120k initial narrative design investment costs incurred upfront \u2192 Systemic: 6-month content refresh cycle required to maintain high engagement levels \u2192 Strategic: diminishing marginal return on engagement as player interest wanes significantly over time.",
+      "options": [
+        "Executing static scenario playbooks with manual adjudication and referees",
+        "Activating dynamic AI-driven missions based on real-time player behavior",
+        "Establishing persistent universe storytelling with cross-venue continuity for retention"
+      ],
+      "review": "Controls Content Cost vs. Retention Rates. Weakness: The options fail to consider seasonal event integration.",
+      "deduplication_justification": "This lever covers Immersive Narrative Architecture and content costs. It focuses on internal product design cycles and retention mechanics. Keeping it separate from branding allows for distinct analysis of content investment versus external market perception, ensuring that narrative refresh budgets are evaluated independently of public relations risks."
+    },
+    {
+      "lever_id": "e4967109-98ee-461d-8300-aa403299b704",
+      "name": "Human Capital Deployment Model",
+      "consequences": "Immediate: $3k specialized safety certification training costs required for every employee \u2192 Systemic: 25% staff turnover in first year challenges overall operational consistency standards \u2192 Strategic: liability insurance premium escalation increases overhead burden on already thin operating margins.",
+      "options": [
+        "Training general retail staff with basic safety protocols and oversight",
+        "Hiring certified flight instructors exclusively for all drone operations management",
+        "Deploying hybrid human-AI monitoring control centers for operational oversight"
+      ],
+      "review": "Controls Training Cost vs. Operational Consistency. Weakness: The options fail to consider psychological stress management.",
+      "deduplication_justification": "This lever focuses on Human Capital Deployment, specifically training costs and staff turnover. It is unique among the levers as it addresses labor management rather than product or regulation. Keeping this lever ensures personnel risks are evaluated independently, preventing the conflation of staffing liabilities with operational safety or financial scalability concerns."
+    },
+    {
+      "lever_id": "d739d0bb-f540-44c5-8cf9-c3dec9c9ab07",
+      "name": "Revenue & Pricing Model",
+      "consequences": "Immediate: Shift from transactional pricing reduces average order value by 10% \u2192 Systemic: 15% increase in customer retention rates over twelve months \u2192 Strategic: Predictable cash flow reducing reliance on volatile venture capital.",
+      "options": [
+        "Charge standard pay-per-session fees with optional equipment rental add-ons.",
+        "Introduce tiered membership subscriptions offering unlimited weekly access and gear discounts.",
+        "Launch a franchise licensing model allowing third parties to operate regional HVT venues."
+      ],
+      "review": "Controls Volume vs. Premium Experience. Weakness: The options fail to consider the high churn rate typical of novelty-based entertainment sectors.",
+      "deduplication_justification": "Missing deduplication justification. Keeping this lever."
+    }
+  ],
+  "metadata": {
+    "context_window": 8192,
+    "num_output": 4096,
+    "is_chat_model": true,
+    "is_function_calling_model": false,
+    "model_name": "qwen/qwen3.5-35b-a3b",
+    "system_role": "system"
+  },
+  "system_prompt": "Evaluate each of the provided strategic levers individually. Classify every lever explicitly into one of:\n\n- keep: Lever is distinct, unique, and essential.\n- absorb: Lever overlaps significantly with another lever. Explicitly state the lever ID it should be merged into.\n- remove: Lever is fully redundant. Removing it loses no meaningful detail. Use this sparingly.\n\nProvide concise, explicit justifications mentioning lever IDs clearly. Always prefer \"absorb\" over \"remove\" to retain important details.\n\nAlways provide a justification for the classification. Explain why the lever is distinct from others. Don't use the same uninformative boilerplate.\n\nRespect Hierarchy: When absorbing, merge the more specific lever into the more general one.\nDon't take the more general lever and absorb it into a narrower one.\nAlso compare a lever against the group of already-merged levers.\n\nUse \"keep\" if you lack understanding of what the lever is doing. This way a potential important lever is not getting removed.\nDescribe what the issue is in the justification.\n\nDon't play it too safe, so you fail to perform the core task: consolidate the levers and get rid of the duplicates.\n\nYou must classify and justify **every lever** provided in the input.",
+  "user_prompt": "**Project Context:**\nFile 'plan.txt':\nHVT \u2014 a paintball-like combat simulation game where players experience being a High Value Target for the US military, using drones instead of paintball guns. Players evade drone pursuit in a real outdoor arena.\n\n\nFile 'purpose.md':\n**Purpose:** business\n\n**Purpose Detailed:** Development and operation of a commercial entertainment venue featuring live-action military-themed simulation using drones in an outdoor arena.\n\n**Topic:** HVT Drone Combat Simulation Game Venture\n\nFile 'plan_type.md':\nThis plan requires one or more physical locations. It cannot be executed digitally.\n\n**Explanation:** The plan describes the development and operation of a commercial entertainment venue featuring live-action military-themed simulation using drones in an outdoor arena. This inherently requires securing physical land or property, constructing safety zones and infrastructure, acquiring physical hardware (drones, sensors, protective gear), and employing staff for operations and safety management. Furthermore, the core activity involves players physically traveling to the real outdoor arena to evade drone pursuit; this experience cannot be executed entirely online or remotely as it relies on physical movement and presence within a specific geographic location. Consequently, there is no doubt this requires physical elements.\n\nHere is the full list of strategic levers. Please analyze them for duplicates.\n\n[\n  {\n    \"lever_id\": \"0afd4006-54c4-4e14-8bce-64049e950c3e\",\n    \"name\": \"Regulatory Compliance Strategy\",\n    \"consequences\": \"Immediate: FAA approval delays extend launch by 6 months \\u2192 Systemic: Insurance costs rise 40% due to public liability risk \\u2192 Strategic: Restricts expansion to non-federal controlled airspace zones.\",\n    \"options\": [\n      \"Operate under existing recreational drone waivers with manual spotters\",\n      \"Secure commercial Part 107 licenses for expanded flight envelopes\",\n      \"Establish private airfield status to bypass public airspace restrictions\"\n    ],\n    \"review\": \"Controls Regulatory Compliance vs. Operational Flexibility. Weakness: The options fail to consider the impact of sudden airspace lockdowns during national events.\"\n  },\n  {\n    \"lever_id\": \"851b3708-3625-42ef-ab49-cec8f185dc04\",\n    \"name\": \"Venue Infrastructure Strategy\",\n    \"consequences\": \"Immediate: Seasonal weather reduces operating days by 35% annually \\u2192 Systemic: Fixed asset utilization drops below break-even thresholds \\u2192 Strategic: Forces diversification into indoor simulation products.\",\n    \"options\": [\n      \"Rent seasonal outdoor fields during summer months only\",\n      \"Lease year-round industrial warehouse space with safety modifications\",\n      \"Utilize modular inflatable structures for rapid deployment and zero-permit flexibility\"\n    ],\n    \"review\": \"Controls Capital Expenditure vs. Operational Continuity. Weakness: The options fail to consider the logistical complexity of transporting heavy infrastructure between temporary sites.\"\n  },\n  {\n    \"lever_id\": \"e710191a-4395-40a1-917f-ec637d94b5b5\",\n    \"name\": \"Technology Integration Strategy\",\n    \"consequences\": \"Immediate: Sensor latency spikes cause player disengagement rates of 15% \\u2192 Systemic: Hardware maintenance costs erode margins by 20% year-over-year \\u2192 Strategic: Dictates reliance on proprietary vs. off-the-shelf supply chains.\",\n    \"options\": [\n      \"Use off-the-shelf quadcopters with standard obstacle avoidance\",\n      \"Integrate custom collision sensors and real-time player tracking telemetry\",\n      \"Deploy autonomous AI swarm drones for adaptive pursuit algorithms\"\n    ],\n    \"review\": \"Controls User Experience Quality vs. Hardware Maintenance Costs. Weakness: The options fail to account for the cybersecurity risks associated with connected player tracking systems.\"\n  },\n  {\n    \"lever_id\": \"bcdd00c0-0f81-4d65-84e0-99b14406b7d0\",\n    \"name\": \"Narrative Branding Strategy\",\n    \"consequences\": \"Immediate: Military branding scrutiny reduces youth participation by 30% \\u2192 Systemic: Public perception shifts alter brand equity significantly over time \\u2192 Strategic: Forces pivot toward tactical sport rather than combat simulation.\",\n    \"options\": [\n      \"Market as generic tactical sport avoiding military references\",\n      \"Partner with veterans groups to legitimize combat simulation narrative\",\n      \"Develop fictional sci-fi universe to decouple from real-world politics\"\n    ],\n    \"review\": \"Controls Authenticity Appeal vs. Public Perception Risk. Weakness: The options fail to consider the legal implications of using 'US Military' terminology in marketing materials.\"\n  },\n  {\n    \"lever_id\": \"17966e84-5e16-4903-853c-4f53158e00ff\",\n    \"name\": \"Revenue Scalability Strategy\",\n    \"consequences\": \"Immediate: Per-session pricing caps yield at $50/player revenue \\u2192 Systemic: High operational overhead reduces net margin below 10% annually \\u2192 Strategic: Requires ancillary data monetization for profitability.\",\n    \"options\": [\n      \"Charge per-session ticket fees for individual players\",\n      \"Launch corporate team-building packages with premium branding rights\",\n      \"Implement franchise model licensing the HVT IP to regional operators\"\n    ],\n    \"review\": \"Controls Short-Term Cash Flow vs. Long-Term Brand Control. Weakness: The options fail to consider the capital requirements needed for franchising support infrastructure.\"\n  },\n  {\n    \"lever_id\": \"d6079c1a-3cf6-4d29-af97-1b67cd00bfda\",\n    \"name\": \"Operational Safety & Regulatory Framework\",\n    \"consequences\": \"Immediate: 6-month FAA waiver processing delays \\u2192 Systemic: 40% reduced daily operating windows \\u2192 Strategic: delayed break-even by 18 months due to significant regulatory friction costs.\",\n    \"options\": [\n      \"Adhering strictly to current FAA Part 107 regulations for all flight operations\",\n      \"Negotiating hybrid private airspace agreements with local authorities and municipalities\",\n      \"Deploying autonomous geofenced micro-regions with automated compliance systems for expansion\"\n    ],\n    \"review\": \"Controls Speed vs. Safety Compliance. Weakness: The options fail to consider insurance liability caps.\"\n  },\n  {\n    \"lever_id\": \"6112f776-ba5a-40e0-be05-73bf267976d5\",\n    \"name\": \"Kinetic Engagement Technology Stack\",\n    \"consequences\": \"Immediate: $5k per drone sensor calibration overhead requirements \\u2192 Systemic: 15% session downtime frequency increase during peak hours \\u2192 Strategic: 20% higher operational expenditure ratio impacting net margins negatively.\",\n    \"options\": [\n      \"Utilizing passive RFID tagging for collision detection and tracking\",\n      \"Integrating active laser detection arrays for precision player interaction\",\n      \"Implementing haptic feedback drone collision nets for immersive safety\"\n    ],\n    \"review\": \"Controls Technology Cost vs. Player Immersion. Weakness: The options fail to consider hardware maintenance scalability.\"\n  },\n  {\n    \"lever_id\": \"3bdc2d30-8ccd-4c12-8f42-47cedb40db15\",\n    \"name\": \"Immersive Narrative Architecture\",\n    \"consequences\": \"Immediate: $120k initial narrative design investment costs incurred upfront \\u2192 Systemic: 6-month content refresh cycle required to maintain high engagement levels \\u2192 Strategic: diminishing marginal return on engagement as player interest wanes significantly over time.\",\n    \"options\": [\n      \"Executing static scenario playbooks with manual adjudication and referees\",\n      \"Activating dynamic AI-driven missions based on real-time player behavior\",\n      \"Establishing persistent universe storytelling with cross-venue continuity for retention\"\n    ],\n    \"review\": \"Controls Content Cost vs. Retention Rates. Weakness: The options fail to consider seasonal event integration.\"\n  },\n  {\n    \"lever_id\": \"53e5bbdd-cd7e-4173-9d50-a3d849e6ba91\",\n    \"name\": \"Commercial Revenue Architecture\",\n    \"consequences\": \"Immediate: $85 customer acquisition cost per new registered user \\u2192 Systemic: 12% weekday utilization rate variance creates significant revenue gaps \\u2192 Strategic: seasonal cash flow instability risk threatens long-term financial sustainability planning efforts.\",\n    \"options\": [\n      \"Launching drop-in pay-per-play pricing structures for casual participants\",\n      \"Rolling out seasonal subscription memberships for dedicated enthusiasts and retention\",\n      \"Securing corporate team-building enterprise contracts for B2B revenue stability\"\n    ],\n    \"review\": \"Controls Revenue Volatility vs. Market Penetration. Weakness: The options fail to consider secondary merchandise sales.\"\n  },\n  {\n    \"lever_id\": \"e4967109-98ee-461d-8300-aa403299b704\",\n    \"name\": \"Human Capital Deployment Model\",\n    \"consequences\": \"Immediate: $3k specialized safety certification training costs required for every employee \\u2192 Systemic: 25% staff turnover in first year challenges overall operational consistency standards \\u2192 Strategic: liability insurance premium escalation increases overhead burden on already thin operating margins.\",\n    \"options\": [\n      \"Training general retail staff with basic safety protocols and oversight\",\n      \"Hiring certified flight instructors exclusively for all drone operations management\",\n      \"Deploying hybrid human-AI monitoring control centers for operational oversight\"\n    ],\n    \"review\": \"Controls Training Cost vs. Operational Consistency. Weakness: The options fail to consider psychological stress management.\"\n  },\n  {\n    \"lever_id\": \"3f6ab33c-472c-44e7-94d5-0f074c692a26\",\n    \"name\": \"Site Selection & Zoning Strategy\",\n    \"consequences\": \"Immediate: Extended municipal zoning approval timelines typically add six weeks \\u2192 Systemic: $200k capital tied up in idle land leases during delays \\u2192 Strategic: Loss of first-mover advantage allows urban competitors to capture market share.\",\n    \"options\": [\n      \"Acquire remote industrial property with minimal noise restrictions and ample safety buffer zones.\",\n      \"Lease shared time slots at suburban sports complexes during off-peak hours to reduce overhead.\",\n      \"Negotiate temporary exclusive airspace waivers on decommissioned military training grounds for maximum immersion.\"\n    ],\n    \"review\": \"Controls Market Speed vs. Regulatory Risk. Weakness: The options fail to consider seasonal weather impact on outdoor operations affecting venue uptime.\"\n  },\n  {\n    \"lever_id\": \"4f0b9c8b-5fbf-4eed-a228-f302d184ee71\",\n    \"name\": \"Hardware & Safety Architecture\",\n    \"consequences\": \"Immediate: Installation of redundant sensor arrays increases unit cost by 15% \\u2192 Systemic: 40% reduction in collision incidents per season \\u2192 Strategic: Lower insurance premiums and enhanced brand trust among parents.\",\n    \"options\": [\n      \"Implement standard propeller guards with fixed geofencing perimeters for all units.\",\n      \"Deploy LiDAR-based obstacle avoidance systems integrated into player vests.\",\n      \"Utilize AI swarm logic allowing drones to autonomously abort pursuit upon human proximity detection.\"\n    ],\n    \"review\": \"Controls Realism vs. Safety Mitigation. Weakness: The options fail to consider hardware maintenance costs associated with high-frequency collision events.\"\n  },\n  {\n    \"lever_id\": \"d739d0bb-f540-44c5-8cf9-c3dec9c9ab07\",\n    \"name\": \"Revenue & Pricing Model\",\n    \"consequences\": \"Immediate: Shift from transactional pricing reduces average order value by 10% \\u2192 Systemic: 15% increase in customer retention rates over twelve months \\u2192 Strategic: Predictable cash flow reducing reliance on volatile venture capital.\",\n    \"options\": [\n      \"Charge standard pay-per-session fees with optional equipment rental add-ons.\",\n      \"Introduce tiered membership subscriptions offering unlimited weekly access and gear discounts.\",\n      \"Launch a franchise licensing model allowing third parties to operate regional HVT venues.\"\n    ],\n    \"review\": \"Controls Volume vs. Premium Experience. Weakness: The options fail to consider the high churn rate typical of novelty-based entertainment sectors.\"\n  },\n  {\n    \"lever_id\": \"6b525e77-d1e4-4f0b-b327-976136db6912\",\n    \"name\": \"Regulatory & Insurance Framework\",\n    \"consequences\": \"Immediate: Acquisition of Part 107 waivers requires specialized legal counsel \\u2192 Systemic: Compliance with dynamic no-fly zone API integrations ensures safety data logging \\u2192 Strategic: Eligibility for government defense training contracts expands total addressable market.\",\n    \"options\": [\n      \"Adhere strictly to fixed altitude caps and manual pilot control requirements.\",\n      \"Integrate real-time airspace data feeds to enforce automated geofencing during flight.\",\n      \"Secure private airspace designation through specialized regulatory partnerships for unrestricted operational freedom.\"\n    ],\n    \"review\": \"Controls Operational Flexibility vs. Legal Compliance. Weakness: The options fail to account for fluctuating local drone regulations across different jurisdictions.\"\n  },\n  {\n    \"lever_id\": \"6005999d-469d-4820-92d4-8a4c3b4ef36f\",\n    \"name\": \"Immersion & Narrative Design\",\n    \"consequences\": \"Immediate: Development of biometric feedback systems requires R&D partnership \\u2192 Systemic: Enhanced player physiological engagement metrics provide unique data assets \\u2192 Strategic: Differentiation from standard paintball competitors via proprietary analytics.\",\n    \"options\": [\n      \"Provide scripted mission briefings with static environmental props for realism.\",\n      \"Overlay AR tactical data onto helmets using lightweight smart-glasses technology.\",\n      \"Integrate holographic environment mapping that dynamically changes terrain based on player performance.\"\n    ],\n    \"review\": \"Controls Tactical Realism vs. Playability. Weakness: The options fail to consider the technical latency issues inherent in real-time environmental rendering.\"\n  }\n]"
+}

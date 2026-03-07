@@ -1,0 +1,74 @@
+[
+  {
+    "id": "8e04f9ff-05b2-4c65-9298-7fc7aa69fb9e",
+    "title": "Aviation Regulatory Specialist",
+    "knowledge": "FAA Part 107, airspace waivers, commercial drone law",
+    "why": "Addresses Regulatory Compliance Strategy and DFW airspace risk threats in SWOT Analysis",
+    "what": "Validate flight envelope constraints for proposed Atlanta and Pittsburgh venues",
+    "skills": "Airspace mapping, federal compliance, waiver negotiation",
+    "search_query": "FAA Part 107 consultant, commercial drone airspace lawyer, aviation regulatory specialist"
+  },
+  {
+    "id": "0f9731cc-3dfa-4310-8a99-a7b2de29eeb0",
+    "title": "Cybersecurity Privacy Architect",
+    "knowledge": "Telemetry encryption, data privacy, AES-256 standards, GDPR compliance",
+    "why": "Mitigates cybersecurity vulnerabilities in player tracking systems mentioned in project plan",
+    "what": "Audit telemetry data streams for breach risks prior to public launch acceptance",
+    "skills": "Penetration testing, network security, privacy law compliance",
+    "search_query": "drone telemetry security expert IoT encryption specialist cybersecurity firm penetration testing"
+  },
+  {
+    "id": "b16194a8-0748-426e-bc10-8ae6a82af5fc",
+    "title": "High-Risk Insurance Underwriter Specialist",
+    "knowledge": "Drone liability coverage, casualty underwriting, premium contingency budgeting",
+    "why": "Addresses insurance viability as primary blocker for business continuity in pre-project assessment",
+    "what": "Validate coverage terms specifically for high-speed human-drone interaction scenarios",
+    "skills": "Risk assessment, policy negotiation, catastrophic loss modeling",
+    "search_query": "drone liability insurance broker high risk aviation underwriter casualty insurance specialist"
+  },
+  {
+    "id": "ab378069-8696-480f-9c56-cd06be4aaa2b",
+    "title": "Experiential IP Licensing Strategist",
+    "knowledge": "Franchise development, entertainment branding, viral engagement metrics",
+    "why": "Evaluates Revenue Scalability Strategy and Killer App narrative viability in SWOT Opportunities",
+    "what": "Assess franchise framework viability for scaling beyond single-location ticket sales",
+    "skills": "Business model design, brand licensing, customer retention analysis",
+    "search_query": "experiential entertainment franchisor IP licensing consultant venue scalability expert"
+  },
+  {
+    "id": "35f4de1e-2370-4916-a611-ba6e1b4dd9bf",
+    "title": "Industrial Sports Facility Safety Engineer",
+    "knowledge": "Structural safety, ballistic netting standards, HVAC ventilation codes",
+    "why": "Addresses Venue Infrastructure Strategy and physical safety risks including ballistic containment not covered by aviation rules",
+    "what": "Review warehouse modifications for drone collision containment and air quality compliance",
+    "skills": "Structural analysis, safety code compliance, risk mitigation engineering",
+    "search_query": "sports facility engineer, ballistic netting standards, industrial HVAC safety consultant"
+  },
+  {
+    "id": "907cbf2d-6d8d-4f3e-bcdf-fe885808ba09",
+    "title": "Simulated Combat Operations Trainer",
+    "knowledge": "Staff turnover reduction, psychological stress management, flight instruction certification",
+    "why": "Addresses Human Capital Deployment Model weaknesses regarding retention and training costs in strategic decisions",
+    "what": "Design retention strategies for safety staff and optimize training cost efficiency ratios",
+    "skills": "Organizational psychology, curriculum development, liability reduction coaching",
+    "search_query": "simulation training consultant, staff retention expert, flight instructor certification program"
+  },
+  {
+    "id": "8c2cc74b-b531-4c68-a038-767435c74858",
+    "title": "Experiential Entertainment Market Analyst",
+    "knowledge": "Laser tag pricing models, drone racing demographics, viral engagement metrics",
+    "why": "Addresses SWOT Missing Information regarding competitive pricing and Killer App differentiation for market fit",
+    "what": "Conduct comparative pricing analysis against existing venues to validate revenue scalability assumptions",
+    "skills": "Consumer behavior analysis, pricing strategy, market segmentation research",
+    "search_query": "experiential entertainment analyst, laser tag pricing study, drone racing demographics"
+  },
+  {
+    "id": "4325db22-91bc-4f3e-8ad3-fca7255fc7d0",
+    "title": "Aerospace Procurement & Logistics Manager",
+    "knowledge": "Custom sensor integration timelines, hardware delivery delays, vendor negotiation",
+    "why": "Addresses Risk Assessment regarding supply chain delays for custom sensors and drones extending procurement",
+    "what": "Establish contingency procurement plans to mitigate custom hardware delivery risks beyond 90 days",
+    "skills": "Vendor management, logistics planning, inventory risk assessment",
+    "search_query": "drone supply chain manager, custom sensor procurement, aerospace vendor negotiation"
+  }
+]

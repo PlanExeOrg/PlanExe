@@ -1,0 +1,26 @@
+{
+  "last_updated": "2026-03-07T14:59:31.520010",
+  "models": {
+    "qwen/qwen3.5-35b-a3b": {
+      "calls": 120,
+      "input_tokens": 1337987,
+      "output_tokens": 399835,
+      "thinking_tokens": 0,
+      "total_cost": 0.0,
+      "total_tokens": 1737822
+    },
+    "zai-org/glm-4.7-flash": {
+      "calls": 1,
+      "input_tokens": 29565,
+      "output_tokens": 1427,
+      "thinking_tokens": 0,
+      "total_cost": 0.0,
+      "total_tokens": 30992
+    }
+  },
+  "total_cost": 0.0,
+  "total_input_tokens": 1367552,
+  "total_output_tokens": 401262,
+  "total_thinking_tokens": 0,
+  "total_tokens": 1768814
+}

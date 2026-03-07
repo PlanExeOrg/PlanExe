@@ -1,0 +1,42 @@
+[
+  {
+    "question": "What is the specific breakdown of CAPEX required for warehouse modifications and drone procurement?",
+    "assumptions": "Assumption: Initial CAPEX for warehouse fit-out and hardware acquisition is estimated at $500,000 per location based on industrial standards and custom sensor integration.",
+    "assessments": "Title: Financial Feasibility Assessment\nDescription: Evaluation of initial capital requirements versus projected revenue streams.\nDetails: High CAPEX risks cash flow deficits if break-even extends beyond Year 1; mitigate by phasing modifications to allow partial revenue generation during fit-out and securing fixed-price contracts with contractors."
+  },
+  {
+    "question": "How does the FAA Part 107 licensing timeline impact the projected launch date and seasonal revenue windows?",
+    "assumptions": "Assumption: Regulatory approval for commercial drone operations typically requires a 3-6 month lead time, potentially delaying launch by this period.",
+    "assessments": "Title: Launch Schedule Assessment\nDescription: Analysis of regulatory delays on operational continuity.\nDetails: FAA delays can push launch to Year 2, eroding investor confidence; mitigate by selecting Atlanta or Pittsburgh over DFW initially to avoid airport proximity waivers and apply for licenses immediately upon site lease signing."
+  },
+  {
+    "question": "What is the optimal ratio between certified safety staff and general retail employees to balance liability and labor costs?",
+    "assumptions": "Assumption: A hybrid model employing 40% certified flight instructors/safety officers and 60% general retail staff optimizes both safety compliance and operational cost efficiency.",
+    "assessments": "Title: Human Capital Assessment\nDescription: Balancing expertise with cost constraints in staffing deployment.\nDetails: High turnover challenges consistency; mitigate by investing $3k specialized training per employee, implementing hybrid human-AI monitoring control centers to reduce liability premiums while maintaining service quality."
+  },
+  {
+    "question": "Which specific zoning ordinances in Atlanta, Dallas, or Pittsburgh most restrict commercial drone flight operations within industrial zones?",
+    "assumptions": "Assumption: Industrial zones generally permit commercial use but require specific variance for high-density drone activity near airports (DFW) compared to tech parks (Pittsburgh).",
+    "assessments": "Title: Regulatory Compliance Assessment\nDescription: Mapping legal constraints against site selection criteria.\nDetails: DFW proximity triggers airspace waiver risks; mitigate by conducting detailed airspace analysis with an aviation consultant prior to lease signing and prioritizing Atlanta or Pittsburgh for lower regulatory friction."
+  },
+  {
+    "question": "What redundancy protocols are required for sensor latency to prevent player injury during high-speed evasion maneuvers?",
+    "assumptions": "Assumption: Electronic collision avoidance systems must be backed by physical safety netting or emergency stop zones to ensure zero contact injuries.",
+    "assessments": "Title: Physical Safety Assessment\nDescription: Mitigation of hardware failure leading to participant harm.\nDetails: Sensor latency causes disengagement but failures cause injury; mitigate by implementing redundant safety systems (netting), enforcing strict player health screening, and securing commercial liability insurance with specific drone coverage clauses before opening."
+  },
+  {
+    "question": "How will indoor warehouse modifications mitigate seasonal weather risks without compromising ventilation and air quality standards?",
+    "assumptions": "Assumption: Industrial warehouses require HVAC upgrades to meet safety ventilation standards for enclosed drone operations to prevent heat buildup and fume accumulation.",
+    "assessments": "Title: Environmental Control Assessment\nDescription: Ensuring safe physical conditions within the venue environment.\nDetails: Seasonal weather reduces operating days by 35% outdoors; indoor solutions mitigate this but increase energy costs; mitigate through targeted HVAC improvements that maintain air quality standards during high-intensity gameplay sessions."
+  },
+  {
+    "question": "To what extent should veterans groups be involved in the narrative branding to maximize legitimacy without alienating younger demographics?",
+    "assumptions": "Assumption: Partnerships with veterans groups require clear legal boundaries to avoid endorsing active military conflict unnecessarily while leveraging community trust.",
+    "assessments": "Title: Brand Perception Assessment\nDescription: Managing public sentiment regarding military themes in commercial entertainment.\nDetails: Military branding scrutiny reduces youth participation by 30%; mitigate through dual-branding (tactical sport vs combat simulation) and conducting community town halls prior to opening to gauge sentiment before full launch."
+  },
+  {
+    "question": "What specific cybersecurity measures are required to protect player telemetry data collected during real-time tracking simulations?",
+    "assumptions": "Assumption: End-to-end encryption and GDPR-like compliance protocols are necessary for data protection given the connected nature of player tracking systems.",
+    "assessments": "Title: Cybersecurity Assessment\nDescription: Protecting user privacy against digital threats in connected environments.\nDetails: Data breach risks reputational damage (30% drop in bookings); mitigate by engaging cybersecurity firms for penetration testing, implementing end-to-end encryption for all telemetry data, and establishing an incident response plan prior to launch."
+  }
+]

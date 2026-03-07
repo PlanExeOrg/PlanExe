@@ -1,0 +1,182 @@
+[
+  {
+    "id": "a7f5886b-405e-4396-9966-5fa20b8d0da0",
+    "document_name": "Existing FAA Part 107 Regulations & Airspace Rules",
+    "description": "Raw text of current Federal Aviation Administration regulations regarding commercial drone operations. Essential for validating flight envelopes and compliance requirements.",
+    "recency_requirement": "Current regulations in effect (must verify latest amendments)",
+    "responsible_role_type": "Regulatory & Compliance Director",
+    "steps_to_find": [
+      "Access FAA.gov UAS (Unmanned Aircraft Systems) section",
+      "Download Part 107 Subpart E documentation for operations over people",
+      "Review LAANC authorization guidelines and Class B airspace restrictions"
+    ],
+    "access_difficulty": "Easy",
+    "essential_information": [
+      "What are the exact flight envelope restrictions under Part 107 for commercial drone operations over people and near airports?",
+      "List all Class B airspace restrictions applicable to Atlanta, Dallas-Fort Worth, and Pittsburgh locations",
+      "Detail the specific application requirements and timeline for FAA Part 107 commercial licensing",
+      "Identify LAANC authorization procedures and approval thresholds for each proposed venue location",
+      "Quantify maximum allowable altitude, speed limits, and line-of-sight requirements for public airspace operations",
+      "Compare regulatory differences between recreational waivers versus commercial Part 107 certification for this use case",
+      "List mandatory safety protocols required by FAA for high-density drone activity in industrial zones"
+    ],
+    "risks_of_poor_quality": [
+      "Incorrect interpretation of flight envelope restrictions leads to airspace violations and $10,000+ fines per violation",
+      "Outdated regulations cause application rejections, resulting in 3-6 month launch delays beyond Year 2 break-even targets",
+      "Incomplete understanding of Class B airspace rules near DFW International Airport triggers no-fly zone conflicts during national events",
+      "Missing safety protocol requirements results in insurance denial or premium escalation of 40-60%",
+      "Misunderstanding Part 107 versus recreational waiver limitations forces operational shutdown after customer acquisition begins"
+    ],
+    "worst_case_scenario": "Complete regulatory non-compliance leading to FAA enforcement action, permanent revocation of flight privileges, class-action liability lawsuits from airspace violations, and total business model collapse due to inability to legally operate drones in public or controlled airspace",
+    "best_case_scenario": "Comprehensive regulatory clarity enabling streamlined Part 107 approval within 3 months, optimized venue selection avoiding all high-risk airspace conflicts, reduced insurance premiums through demonstrated compliance protocols, and accelerated market entry with defensible operational framework for franchise expansion",
+    "fallback_alternative_approaches": [
+      "Engage specialized aviation legal counsel to interpret ambiguous regulatory language for specific use cases",
+      "Conduct direct FAA liaison meetings in Atlanta or Pittsburgh before committing to Dallas-Fort Worth location",
+      "Initiate small-scale test flights under temporary waivers to validate compliance assumptions prior to full launch",
+      "Purchase industry-standard drone operations compliance guide from aviation consulting firms",
+      "Establish relationship with specialized drone liability insurance broker to validate regulatory requirements against coverage terms"
+    ]
+  },
+  {
+    "id": "7c503544-f941-4d82-be31-9a71d7c54256",
+    "document_name": "Atlanta/Dallas/Pittsburgh Zoning Ordinances for Industrial Entertainment Use",
+    "description": "Local government zoning laws and codes specific to the target cities. Required to verify if commercial drone operations and entertainment venues are permitted in industrial zones.",
+    "recency_requirement": "Current local ordinances (published within last 12 months)",
+    "responsible_role_type": "Venue Infrastructure Manager",
+    "steps_to_find": [
+      "Search municipal planning department websites for each city",
+      "Review industrial zone classification codes in zoning maps",
+      "Contact local zoning boards to confirm variance requirements"
+    ],
+    "access_difficulty": "Medium",
+    "essential_information": [
+      "Identify specific municipal code sections permitting commercial drone operations within Industrial zones for Atlanta, Dallas-Fort Worth, and Pittsburgh.",
+      "Quantify variance processing timelines required for high-density public entertainment activities in designated industrial districts per city.",
+      "List minimum distance restrictions from DFW International Airport airspace boundaries applicable to each proposed venue location.",
+      "Detail fee structures for Commercial Entertainment Venue Zoning Permits and Industrial Property Use Variances per municipality.",
+      "Confirm if 'high-density drone activity' requires a specific use variance beyond standard industrial classification in target zones."
+    ],
+    "risks_of_poor_quality": [
+      "Signing a lease on a property that prohibits drone operations leads to immediate construction halt and sunk costs ($500k CAPEX).",
+      "Unexpected variance requirements delay launch beyond the 3-6 month FAA window, eroding investor confidence and extending break-even.",
+      "Selecting DFW site without verifying airspace proximity triggers automatic denial of Part 107 operational waivers due to local zoning conflicts.",
+      "Insurance invalidation if zoning does not explicitly permit commercial drone liability exposure for entertainment venues."
+    ],
+    "worst_case_scenario": "Facility seized or permanently closed by local authorities after full construction investment ($500k per location) due to non-compliant use classification, resulting in total capital loss and business viability collapse.",
+    "best_case_scenario": "Clear path identified for all three locations with pre-approved variance processes, enabling parallel lease negotiations and a streamlined 3-month permitting timeline without regulatory friction.",
+    "fallback_alternative_approaches": [
+      "Engage land use attorneys to petition for zoning variances or challenge restrictive codes immediately upon discovery of barriers.",
+      "Pivot location selection to non-industrial zones designated as 'entertainment districts' where drone operations are explicitly permitted.",
+      "Modify business model to operate as a private members-only club to bypass public commercial zoning restrictions and permit requirements."
+    ]
+  },
+  {
+    "id": "8b5a7540-3d5a-4ab9-b744-ace0c2bdeca9",
+    "document_name": "Commercial Drone Liability Insurance Policy Standards & Terms",
+    "description": "Existing policy templates and coverage terms from major drone liability insurers. Needed to understand risk classification criteria for high-speed human-drone interaction.",
+    "recency_requirement": "Current policy year (2025-2026)",
+    "responsible_role_type": "CFO / Insurance Broker",
+    "steps_to_find": [
+      "Contact specialized aviation insurance brokers",
+      "Request sample commercial liability policies for UAV operations",
+      "Review underwriting guidelines for 'over people' drone flight"
+    ],
+    "access_difficulty": "Medium",
+    "essential_information": [
+      "What specific premium ranges exist for commercial Part 107 drone liability policies covering high-speed human-drone interaction?",
+      "Which underwriting criteria classify this venture as 'extreme hazard' versus standard commercial risk?",
+      "What safety protocols and documentation must be submitted to secure coverage approval (e.g., risk assessments, safety manuals, staff certifications)?",
+      "Are there specific exclusions that apply to combat-style drone operations or military-themed branding?",
+      "What minimum liability limits ($1M, $2M, $5M) are required for venue operation under commercial entertainment zoning?",
+      "Do insurers require binding quotes before lease signing, and what is the typical approval timeline (weeks vs. months)?",
+      "What specific hardware safety features (ballistic netting, kill-switches, collision sensors) must be installed to qualify for coverage?",
+      "Are there geographic restrictions on where drones can fly within an insured venue or airspace proximity requirements?",
+      "What incident reporting and claims history thresholds impact premium rates or renewal eligibility?"
+    ],
+    "risks_of_poor_quality": [
+      "Coverage denial after lease signing forces cancellation of property commitments ($50k+ per location in lost deposits)",
+      "Premiums exceeding budget contingency ($50k/year) erodes net margins below break-even thresholds",
+      "Exclusions that don't cover high-speed collision incidents create uninsured liability exposure to injury lawsuits",
+      "Delayed insurance approval extends launch timeline beyond 3-6 month FAA window, pushing ROI to Year 2+",
+      "Insufficient coverage limits invalidate investor due diligence requirements and prevent franchise expansion financing",
+      "Misunderstanding safety requirement documentation leads to rejected applications after months of review time"
+    ],
+    "worst_case_scenario": "Insurance coverage denial for high-speed combat drone operations renders the business model uninsurable, forcing complete cancellation or massive restructuring with $150k-$300k in sunk costs and investor capital loss",
+    "best_case_scenario": "Securing comprehensive commercial liability at acceptable premium rates ($25k-$45k/year) with clear safety requirements enables confident lease signing, validates business model for investors, and provides risk transfer clarity for board decisions",
+    "fallback_alternative_approaches": [
+      "Initiate binding quote requests from three specialized aviation insurance brokers before any lease commitments",
+      "Engage a drone liability specialist broker with commercial entertainment client experience rather than general carriers",
+      "Conduct pilot operations under recreational waivers with manual spotters to build claims history for future coverage",
+      "Implement self-insurance reserve accumulation strategy ($100k) if market coverage unavailable while developing alternative revenue streams",
+      "Restructure operations to reduce human-drone proximity during initial launch phase (no-fly zones over players) to meet standard commercial underwriting criteria"
+    ]
+  },
+  {
+    "id": "2381ccfb-6c4d-4ae8-83cc-5a13d209dad8",
+    "document_name": "Local Building Codes & HVAC Safety Regulations for Warehouses",
+    "description": "State and municipal building codes regarding ventilation standards and fire safety for enclosed industrial spaces used for public entertainment.",
+    "recency_requirement": "Current state/municipal building code (2024-2025)",
+    "responsible_role_type": "Venue Infrastructure Manager",
+    "steps_to_find": [
+      "Access International Building Code (IBC) or local equivalent online",
+      "Search for specific HVAC requirements in industrial warehouses",
+      "Verify fire suppression standards for high-density occupancy areas"
+    ],
+    "access_difficulty": "Medium",
+    "essential_information": [
+      "Identify specific CFM (cubic feet per minute) air exchange rates mandated for industrial spaces converted to high-density public entertainment venues in Atlanta, Dallas-Fort Worth, and Pittsburgh.",
+      "List fire suppression system requirements (e.g., sprinkler vs. gas-based) specifically for areas storing or charging lithium-ion drone batteries within enclosed public occupancy zones.",
+      "Quantify mandatory safety buffer distances between ventilation intakes/exhausts and player movement corridors to prevent fume inhalation risks during high-intensity gameplay.",
+      "Verify local zoning ordinances that define variances required for 'industrial' properties hosting 'public assembly' or 'entertainment' activities.",
+      "Detail specific HVAC capacity calculations needed to mitigate heat buildup from drones, motors, and lighting without exceeding energy cost thresholds.",
+      "Identify required inspection frequencies and certification documents (e.g., Fire Department Safety Inspection Certificate) needed for Building Occupancy Permits."
+    ],
+    "risks_of_poor_quality": [
+      "Failed safety inspections resulting in immediate inability to obtain occupancy permits, delaying launch by months beyond the projected Year 2 break-even target.",
+      "Inadequate ventilation leading to heat-related equipment failures or health complaints (heat exhaustion/fume exposure), triggering liability claims and reputational damage.",
+      "Non-compliant fire suppression systems for battery storage areas causing catastrophic fire risk, resulting in insurance denial or massive fines up to $10,000 per violation.",
+      "Costly retrofits required after initial construction due to misinterpretation of local code variances, eroding the already thin 10% net margin.",
+      "Regulatory shutdowns during operations if ongoing HVAC maintenance does not meet continuous compliance standards."
+    ],
+    "worst_case_scenario": "A catastrophic fire or structural failure caused by non-compliant ventilation or battery storage arrangements leads to severe player/staff injuries, resulting in permanent regulatory closure of the venue, massive liability lawsuits, and total business insolvency.",
+    "best_case_scenario": "Precise code alignment allows for a streamlined permitting process with zero rework, ensuring optimal air quality for player safety while maintaining energy efficiency, securing insurance approval without premium surcharges, and enabling rapid launch within the Q2 2027 timeline.",
+    "fallback_alternative_approaches": [
+      "Engage a licensed fire marshal or building code consultant directly to obtain written interpretations of ambiguous local statutes regarding hybrid industrial/entertainment use cases.",
+      "Default to stricter national standards (e.g., NFPA 850 for lithium battery storage) as the baseline design criteria to exceed minimum local requirements and ensure cross-jurisdictional compliance.",
+      "Prioritize Atlanta or Pittsburgh locations over Dallas initially, as their technology park zoning may offer more flexible interpretations of industrial ventilation codes compared to airport-proximity zones."
+    ]
+  },
+  {
+    "id": "ab48c26e-2e47-456b-bd92-afaa0f428a68",
+    "document_name": "Existing Commercial Drone Insurance Policy Standards & Terms",
+    "description": "Raw text of terms and conditions from major drone liability insurers. Needed to understand risk classification criteria for high-speed human-drone interaction.",
+    "recency_requirement": "Current policy year (2025-2026)",
+    "responsible_role_type": "CFO / Insurance Broker",
+    "steps_to_find": [
+      "Contact specialized aviation insurance brokers",
+      "Request sample commercial liability policies for UAV operations",
+      "Review underwriting guidelines for 'over people' drone flight"
+    ],
+    "access_difficulty": "Medium",
+    "essential_information": [
+      "Identify specific policy exclusions regarding 'over people' flight envelopes for high-speed combat drone operations.",
+      "Quantify premium thresholds required to secure coverage for 'extreme hazard' classification (target < $45,000/year to protect margins).",
+      "List mandatory safety mitigations (e.g., ballistic netting, sensor redundancy) that insurers recognize as premium reduction levers.",
+      "Determine aggregate liability caps and per-incident limits required by investors or lenders for project financing approval.",
+      "Extract underwriting criteria regarding prior insurance claims history or track record requirements for new commercial drone venues."
+    ],
+    "risks_of_poor_quality": [
+      "Underestimating premiums leads to cash flow deficits exceeding the $50,000 contingency fund, eroding net margins below 10%.",
+      "Coverage gaps result in personal liability exposure for founders if injury lawsuits occur, jeopardizing personal assets.",
+      "Securing insurance after lease signing creates dependency risk where a single denial forces immediate operational shutdown (ROI impact: -100%).",
+      "Lack of binding quotes by March 10th delays launch timeline beyond Year 2 break-even targets due to regulatory approval dependencies."
+    ],
+    "worst_case_scenario": "Total denial of commercial liability coverage for high-speed human-drone interaction renders the business model uninsurable, forcing immediate bankruptcy or permanent cancellation before opening.",
+    "best_case_scenario": "Securing binding insurance quotes with acceptable terms and premium levels validates financial viability, securing investor confidence and enabling launch on schedule without budget overruns.",
+    "fallback_alternative_approaches": [
+      "Operational redesign to strictly prohibit 'over people' flight (e.g., barriers only) to qualify for standard recreational drone policies.",
+      "Establish a captive insurance pool or join an industry consortium to share liability risk among multiple venue operators.",
+      "Partner with an existing insured commercial venue operator to sublease space under their current policy coverage."
+    ]
+  }
+]

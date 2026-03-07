@@ -1,0 +1,355 @@
+2026-03-07 14:56:07 - __main__ - INFO - pipeline_environment: PipelineEnvironment(run_id_dir='/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal', llm_model='lmstudio-glm4.7-flash', speed_vs_detail='FAST_BUT_SKIP_DETAILS', model_profile='custom') (log_level=INFO)
+2026-03-07 14:56:07 - __main__ - INFO - Setting Speed vs Detail: SpeedVsDetailEnum.FAST_BUT_SKIP_DETAILS
+2026-03-07 14:56:07 - __main__ - INFO - Speed vs Detail: SpeedVsDetailEnum.FAST_BUT_SKIP_DETAILS
+2026-03-07 14:56:07 - __main__ - INFO - Model profile: custom
+2026-03-07 14:56:07 - __main__ - INFO - Using the specified LLM model: 'lmstudio-glm4.7-flash'
+2026-03-07 14:56:07 - __main__ - INFO - These are the LLM models that will be used in the pipeline:
+2026-03-07 14:56:07 - __main__ - INFO - 0. 'lmstudio-glm4.7-flash'
+2026-03-07 14:56:07 - __main__ - INFO - execute_pipeline: ExecutePipeline(run_id_dir=PosixPath('/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal'), speedvsdetail=<SpeedVsDetailEnum.FAST_BUT_SKIP_DETAILS: 'fast_but_skip_details'>, llm_models=['lmstudio-glm4.7-flash'], model_profile=<ModelProfileEnum.CUSTOM: 'custom'>, full_plan_pipeline_task=FullPlanPipeline(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]), all_expected_filenames=['001-1-start_time.json', '001-2-plan.txt', '002-1-redline_gate.json', '002-10-potential_levers.json', '002-11-deduplicated_levers_raw.json', '002-12-enriched_levers_raw.json', '002-13-vital_few_levers_raw.json', '002-14-strategic_decisions.md', '002-15-candidate_scenarios_raw.json', '002-16-candidate_scenarios.json', '002-17-selected_scenario_raw.json', '002-18-selected_scenario.json', '002-19-scenarios.md', '002-2-redline_gate.md', '002-20-physical_locations_raw.json', '002-21-physical_locations.md', '002-22-currency_strategy_raw.json', '002-23-currency_strategy.md', '002-3-premise_attack.json', '002-4-premise_attack.md', '002-5-identify_purpose_raw.json', '002-6-identify_purpose.md', '002-7-plan_type_raw.json', '002-8-plan_type.md', '002-9-potential_levers_raw.json', '003-1-identify_risks_raw.json', '003-10-consolidate_assumptions_full.md', '003-11-consolidate_assumptions_short.md', '003-2-identify_risks.md', '003-3-make_assumptions_raw.json', '003-4-make_assumptions.json', '003-5-make_assumptions.md', '003-6-distill_assumptions_raw.json', '003-7-distill_assumptions.md', '003-8-review_assumptions_raw.json', '003-9-review_assumptions.md', '004-1-pre_project_assessment_raw.json', '004-2-pre_project_assessment.json', '005-1-project_plan_raw.json', '005-2-project_plan.md', '006-1-governance_phase1_audit_raw.json', '006-10-governance_phase5_monitoring_progress.md', '006-11-governance_phase6_extra_raw.json', '006-12-governance_phase6_extra.md', '006-13-consolidate_governance.md', '006-2-governance_phase1_audit.md', '006-3-governance_phase2_bodies_raw.json', '006-4-governance_phase2_bodies.md', '006-5-governance_phase3_impl_plan_raw.json', '006-6-governance_phase3_impl_plan.md', '006-7-governance_phase4_decision_escalation_matrix_raw.json', '006-8-governance_phase4_decision_escalation_matrix.md', '006-9-governance_phase5_monitoring_progress_raw.json', '007-1-related_resources_raw.json', '007-8-related_resources.md', '008-1-find_team_members_raw.json', '008-2-find_team_members.json', '009-1-enrich_team_members_contract_type_raw.json', '009-2-enrich_team_members_contract_type.json', '010-1-enrich_team_members_background_story_raw.json', '010-2-enrich_team_members_background_story.json', '011-1-enrich_team_members_environment_info_raw.json', '011-2-enrich_team_members_environment_info.json', '012-review_team_raw.json', '013-team.md', '014-1-swot_analysis_raw.json', '014-2-swot_analysis.md', '016-2-expert_criticism.md', '017-1-data_collection_raw.json', '017-10-filter_documents_to_create_clean.json', '017-12-draft_documents_to_find.json', '017-14-draft_documents_to_create.json', '017-15-documents_to_create_and_find.md', '017-2-data_collection.md', '017-3-identified_documents_raw.json', '017-4-identified_documents.md', '017-5-identified_documents_to_find.json', '017-6-identified_documents_to_create.json', '017-7-filter_documents_to_find_raw.json', '017-8-filter_documents_to_find_clean.json', '017-9-filter_documents_to_create_raw.json', '018-1-wbs_level1_raw.json', '018-2-wbs_level1.json', '018-3-wbs_level1_project_title.json', '018-4-wbs_level2_raw.json', '018-5-wbs_level2.json', '019-wbs_project_level1_and_level2.json', '020-1-pitch_raw.json', '020-2-pitch_to_markdown_raw.json', '020-3-pitch.md', '021-task_dependencies_raw.json', '022-2-task_durations.json', '023-2-wbs_level3.json', '023-3-wbs_project_level1_and_level2_and_level3.json', '023-4-wbs_project_level1_and_level2_and_level3.csv', '024-1-review_plan_raw.json', '024-2-review_plan.md', '025-1-executive_summary_raw.json', '025-2-executive_summary.md', '026-2-schedule_gantt_dhtmlx.html', '026-3-schedule_gantt_machai.csv', '027-1-questions_and_answers_raw.json', '027-2-questions_and_answers.md', '027-3-questions_and_answers.html', '028-1-premortem_raw.json', '028-2-premortem.md', '029-1-self_audit_raw.json', '029-2-self_audit.md', '030-report.html', '999-pipeline_complete.txt'], luigi_build_return_value=None)
+2026-03-07 14:56:07 - __main__ - INFO - Saved 110 expected filenames to /Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal/expected_filenames1.json
+2026-03-07 14:56:07 - __main__ - INFO - Luigi workers: 1
+2026-03-07 14:56:07 - luigi - INFO - logging configured by default settings
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if FullPlanPipeline(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if StartTimeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if SetupTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if RedlineGateTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if PremiseAttackTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if IdentifyPurposeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if PlanTypeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if PotentialLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if DeduplicateLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if EnrichLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if FocusOnVitalFewLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if StrategicDecisionsMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if CandidateScenariosTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if SelectScenarioTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if ScenariosMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if PhysicalLocationsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if CurrencyStrategyTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if IdentifyRisksTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if MakeAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if DistillAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if ReviewAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if ConsolidateAssumptionsMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if PreProjectAssessmentTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if ProjectPlanTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if GovernancePhase1AuditTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if GovernancePhase2BodiesTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if GovernancePhase3ImplPlanTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if GovernancePhase4DecisionEscalationMatrixTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if GovernancePhase5MonitoringProgressTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if GovernancePhase6ExtraTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if ConsolidateGovernanceTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if RelatedResourcesTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if FindTeamMembersTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if EnrichTeamMembersWithContractTypeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if EnrichTeamMembersWithBackgroundStoryTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if EnrichTeamMembersWithEnvironmentInfoTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if ReviewTeamTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if TeamMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if SWOTAnalysisTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if ExpertReviewTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if DataCollectionTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if IdentifyDocumentsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if FilterDocumentsToFindTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if FilterDocumentsToCreateTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if DraftDocumentsToFindTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if DraftDocumentsToCreateTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if MarkdownWithDocumentsToCreateAndFindTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if CreateWBSLevel1Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if CreateWBSLevel2Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if WBSProjectLevel1AndLevel2Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if CreatePitchTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if ConvertPitchToMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if IdentifyTaskDependenciesTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if EstimateTaskDurationsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if CreateWBSLevel3Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if WBSProjectLevel1AndLevel2AndLevel3Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if ReviewPlanTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if ExecutiveSummaryTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if CreateScheduleTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if QuestionsAndAnswersTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if PremortemTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if SelfAuditTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Checking if ReportTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   FullPlanPipeline___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   PENDING
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   ReportTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   PENDING
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   SelfAuditTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   PENDING
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   PremortemTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   PENDING
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   QuestionsAndAnswersTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   CreateScheduleTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   ExecutiveSummaryTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   ReviewPlanTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   WBSProjectLevel1AndLevel2AndLevel3Task___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   CreateWBSLevel3Task___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   EstimateTaskDurationsTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   IdentifyTaskDependenciesTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   ConvertPitchToMarkdownTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   CreatePitchTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   WBSProjectLevel1AndLevel2Task___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   CreateWBSLevel2Task___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   CreateWBSLevel1Task___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   MarkdownWithDocumentsToCreateAndFindTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   DraftDocumentsToCreateTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   DraftDocumentsToFindTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   FilterDocumentsToCreateTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   FilterDocumentsToFindTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   IdentifyDocumentsTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   DataCollectionTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   ExpertReviewTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   SWOTAnalysisTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   TeamMarkdownTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   ReviewTeamTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   EnrichTeamMembersWithEnvironmentInfoTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   EnrichTeamMembersWithBackgroundStoryTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   EnrichTeamMembersWithContractTypeTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   FindTeamMembersTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   RelatedResourcesTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   ConsolidateGovernanceTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase6ExtraTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase5MonitoringProgressTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase4DecisionEscalationMatrixTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase3ImplPlanTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase2BodiesTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase1AuditTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   ProjectPlanTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   PreProjectAssessmentTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   ConsolidateAssumptionsMarkdownTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   ReviewAssumptionsTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   DistillAssumptionsTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   MakeAssumptionsTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   IdentifyRisksTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   CurrencyStrategyTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   PhysicalLocationsTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   ScenariosMarkdownTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   SelectScenarioTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   CandidateScenariosTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   StrategicDecisionsMarkdownTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   FocusOnVitalFewLeversTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   EnrichLeversTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   DeduplicateLeversTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   PotentialLeversTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   PlanTypeTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   IdentifyPurposeTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   PremiseAttackTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   RedlineGateTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   SetupTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   StartTimeTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - INFO - Done scheduling tasks
+2026-03-07 14:56:07 - luigi-interface - INFO - Running Worker with 1 processes
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Pending tasks: 4
+2026-03-07 14:56:07 - luigi-interface - INFO - [pid 59944] Worker Worker(salt=6793422728, workers=1, host=mini.local, username=macmini, pid=59944) running   PremortemTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"])
+2026-03-07 14:56:07 - worker_plan_internal.diagnostics.premortem - INFO - Running in FAST_BUT_SKIP_DETAILS mode. Only first archetype.
+2026-03-07 14:56:07 - worker_plan_internal.diagnostics.premortem - INFO - Processing archetype 1/1: Process/Financial
+2026-03-07 14:56:07 - worker_plan_internal.diagnostics.premortem - WARNING - Archetype Process/Financial attempt 1/5 failed: validate_execute_function2: must be a function that takes a single parameter
+2026-03-07 14:56:07 - worker_plan_internal.diagnostics.premortem - WARNING - Archetype Process/Financial attempt 2/5 failed: validate_execute_function2: must be a function that takes a single parameter
+2026-03-07 14:56:07 - worker_plan_internal.diagnostics.premortem - WARNING - Archetype Process/Financial attempt 3/5 failed: validate_execute_function2: must be a function that takes a single parameter
+2026-03-07 14:56:07 - worker_plan_internal.diagnostics.premortem - WARNING - Archetype Process/Financial attempt 4/5 failed: validate_execute_function2: must be a function that takes a single parameter
+2026-03-07 14:56:07 - worker_plan_internal.diagnostics.premortem - WARNING - Archetype Process/Financial attempt 5/5 failed: validate_execute_function2: must be a function that takes a single parameter
+2026-03-07 14:56:07 - worker_plan_internal.diagnostics.premortem - WARNING - Archetype Process/Financial exhausted 5 attempts. Skipping — premortem will be partial.
+2026-03-07 14:56:07 - worker_plan_internal.diagnostics.premortem - INFO - LLM chat interaction completed. Response byte count: 48
+2026-03-07 14:56:07 - luigi-interface - INFO - [pid 59944] Worker Worker(salt=6793422728, workers=1, host=mini.local, username=macmini, pid=59944) done      PremortemTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"])
+2026-03-07 14:56:07 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-07 14:56:07 - luigi-interface - INFO - Informed scheduler that task   PremortemTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   DONE
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-07 14:56:07 - luigi-interface - DEBUG - Pending tasks: 3
+2026-03-07 14:56:07 - luigi-interface - INFO - [pid 59944] Worker Worker(salt=6793422728, workers=1, host=mini.local, username=macmini, pid=59944) running   SelfAuditTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"])
+2026-03-07 14:56:07 - __main__ - INFO - SelfAuditTask.speedvsdetail: SpeedVsDetailEnum.FAST_BUT_SKIP_DETAILS
+2026-03-07 14:56:07 - __main__ - INFO - FAST_BUT_SKIP_DETAILS mode, truncating to 2 items for testing a subset of the SelfAudit items.
+2026-03-07 14:56:07 - worker_plan_internal.self_audit.self_audit - INFO - Processing item 1 of 2
+2026-03-07 14:59:31 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-07 14:59:31 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm4.7-flash'). llm_executor_uuid: 'd8a35d6f-a7d8-4e4a-9ab9-d48a8c92fce7'. Duration: 203.93 seconds
+2026-03-07 14:59:31 - worker_plan_internal.self_audit.self_audit - INFO - Processing item 2 of 2
+2026-03-07 15:04:31 - worker_plan_internal.llm_util.llm_executor - ERROR - LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='lmstudio-glm4.7-flash') and llm_executor_uuid: '10c85b39-0597-4c30-a351-760325425aec': ReadTimeout('timed out') traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 103, in handle_request
+    return self._connection.handle_request(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 136, in handle_request
+    raise exc
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 106, in handle_request
+    ) = self._receive_response_headers(**kwargs)
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 177, in _receive_response_headers
+    event = self._receive_event(timeout=timeout)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 217, in _receive_event
+    data = self._network_stream.read(
+        self.READ_NUM_BYTES, timeout=timeout
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_backends/sync.py", line 126, in read
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.12_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ReadTimeout: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/self_audit/self_audit.py", line 367, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 360, in structured_predict
+    result = program(llm_kwargs=llm_kwargs, **prompt_args)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/llm_program.py", line 92, in __call__
+    chat_response = self._llm.chat(messages, **llm_kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/lmstudio/base.py", line 171, in chat
+    response = client.post(
+        url=f"{self.base_url}/chat/completions",
+        json=payload,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_client.py", line 1144, in post
+    return self.request(
+           ~~~~~~~~~~~~^
+        "POST",
+        ^^^^^^^
+    ...<11 lines>...
+        extensions=extensions,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.12_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ReadTimeout: timed out
+
+2026-03-07 15:04:31 - worker_plan_internal.self_audit.self_audit - ERROR - LLM chat interaction failed.
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/self_audit/self_audit.py", line 377, in execute
+    result = llm_executor.run(execute_function)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 156, in run
+    self._raise_final_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 299, in _raise_final_exception
+    raise Exception(f"Failed to run. Exhausted all LLMs. Failure summary:\n{error_summary}")
+Exception: Failed to run. Exhausted all LLMs. Failure summary:
+ - Attempt 0 with LLMModelFromName(name='lmstudio-glm4.7-flash') failed during 'execute' stage: ReadTimeout('timed out')
+2026-03-07 15:04:31 - luigi-interface - ERROR - [pid 59944] Worker Worker(salt=6793422728, workers=1, host=mini.local, username=macmini, pid=59944) failed    SelfAuditTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"])
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/self_audit/self_audit.py", line 377, in execute
+    result = llm_executor.run(execute_function)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 156, in run
+    self._raise_final_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 299, in _raise_final_exception
+    raise Exception(f"Failed to run. Exhausted all LLMs. Failure summary:\n{error_summary}")
+Exception: Failed to run. Exhausted all LLMs. Failure summary:
+ - Attempt 0 with LLMModelFromName(name='lmstudio-glm4.7-flash') failed during 'execute' stage: ReadTimeout('timed out')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 154, in run
+    self.run_inner()
+    ~~~~~~~~~~~~~~^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 3657, in run_inner
+    self_audit = SelfAudit.execute(
+        llm_executor=llm_executor,
+        user_prompt=user_prompt,
+        max_number_of_items=max_number_of_items,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/self_audit/self_audit.py", line 384, in execute
+    raise ValueError("LLM chat interaction failed.") from e
+ValueError: LLM chat interaction failed.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/worker.py", line 210, in run
+    new_deps = self._run_get_new_deps()
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/worker.py", line 138, in _run_get_new_deps
+    task_gen = self.task.run()
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 166, in run
+    raise Exception(f"Failed to run {self.__class__.__name__} with any of the LLMs in the list: {self.llm_models!r} for run_id_dir: {self.run_id_dir!r}") from e
+Exception: Failed to run SelfAuditTask with any of the LLMs in the list: ('lmstudio-glm4.7-flash',) for run_id_dir: PosixPath('/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal')
+2026-03-07 15:04:31 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-07 15:04:31 - luigi-interface - INFO - Informed scheduler that task   SelfAuditTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_15743053d4   has status   FAILED
+2026-03-07 15:04:31 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-07 15:04:31 - luigi-interface - DEBUG - Done
+2026-03-07 15:04:31 - luigi-interface - DEBUG - There are no more tasks to run at this time
+2026-03-07 15:04:31 - luigi-interface - DEBUG - There are 3 pending tasks possibly being run by other workers
+2026-03-07 15:04:31 - luigi-interface - DEBUG - There are 3 pending tasks unique to this worker
+2026-03-07 15:04:31 - luigi-interface - DEBUG - There are 3 pending tasks last scheduled by this worker
+2026-03-07 15:04:31 - luigi-interface - INFO - Worker Worker(salt=6793422728, workers=1, host=mini.local, username=macmini, pid=59944) was stopped. Shutting down Keep-Alive thread
+2026-03-07 15:04:31 - luigi-interface - INFO - 
+===== Luigi Execution Summary =====
+
+Scheduled 63 tasks of which:
+* 59 complete ones were encountered:
+    - 1 CandidateScenariosTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"])
+    - 1 ConsolidateAssumptionsMarkdownTask(...)
+    - 1 ConsolidateGovernanceTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"])
+    - 1 ConvertPitchToMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"])
+    - 1 CreatePitchTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"])
+    ...
+* 1 ran successfully:
+    - 1 PremortemTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"])
+* 1 failed:
+    - 1 SelfAuditTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"])
+* 2 were left pending, among these:
+    * 2 had failed dependencies:
+        - 1 FullPlanPipeline(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"])
+        - 1 ReportTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_minimal, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"])
+
+This progress looks :( because there were failed tasks
+
+===== Luigi Execution Summary =====
+
+2026-03-07 15:04:31 - __main__ - INFO - luigi_build_return_value: False
+2026-03-07 15:04:31 - __main__ - INFO - has_pipeline_complete_file: False
+2026-03-07 15:04:31 - __main__ - INFO - has_report_file: False
+2026-03-07 15:04:31 - __main__ - INFO - has_stop_flag_file: False

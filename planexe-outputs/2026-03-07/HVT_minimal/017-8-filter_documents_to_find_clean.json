@@ -1,0 +1,67 @@
+[
+  {
+    "id": "a7f5886b-405e-4396-9966-5fa20b8d0da0",
+    "document_name": "Existing FAA Part 107 Regulations & Airspace Rules",
+    "description": "Raw text of current Federal Aviation Administration regulations regarding commercial drone operations. Essential for validating flight envelopes and compliance requirements.",
+    "recency_requirement": "Current regulations in effect (must verify latest amendments)",
+    "responsible_role_type": "Regulatory & Compliance Director",
+    "steps_to_find": [
+      "Access FAA.gov UAS (Unmanned Aircraft Systems) section",
+      "Download Part 107 Subpart E documentation for operations over people",
+      "Review LAANC authorization guidelines and Class B airspace restrictions"
+    ],
+    "access_difficulty": "Easy"
+  },
+  {
+    "id": "7c503544-f941-4d82-be31-9a71d7c54256",
+    "document_name": "Atlanta/Dallas/Pittsburgh Zoning Ordinances for Industrial Entertainment Use",
+    "description": "Local government zoning laws and codes specific to the target cities. Required to verify if commercial drone operations and entertainment venues are permitted in industrial zones.",
+    "recency_requirement": "Current local ordinances (published within last 12 months)",
+    "responsible_role_type": "Venue Infrastructure Manager",
+    "steps_to_find": [
+      "Search municipal planning department websites for each city",
+      "Review industrial zone classification codes in zoning maps",
+      "Contact local zoning boards to confirm variance requirements"
+    ],
+    "access_difficulty": "Medium"
+  },
+  {
+    "id": "8b5a7540-3d5a-4ab9-b744-ace0c2bdeca9",
+    "document_name": "Commercial Drone Liability Insurance Policy Standards & Terms",
+    "description": "Existing policy templates and coverage terms from major drone liability insurers. Needed to understand risk classification criteria for high-speed human-drone interaction.",
+    "recency_requirement": "Current policy year (2025-2026)",
+    "responsible_role_type": "CFO / Insurance Broker",
+    "steps_to_find": [
+      "Contact specialized aviation insurance brokers",
+      "Request sample commercial liability policies for UAV operations",
+      "Review underwriting guidelines for 'over people' drone flight"
+    ],
+    "access_difficulty": "Medium"
+  },
+  {
+    "id": "2381ccfb-6c4d-4ae8-83cc-5a13d209dad8",
+    "document_name": "Local Building Codes & HVAC Safety Regulations for Warehouses",
+    "description": "State and municipal building codes regarding ventilation standards and fire safety for enclosed industrial spaces used for public entertainment.",
+    "recency_requirement": "Current state/municipal building code (2024-2025)",
+    "responsible_role_type": "Venue Infrastructure Manager",
+    "steps_to_find": [
+      "Access International Building Code (IBC) or local equivalent online",
+      "Search for specific HVAC requirements in industrial warehouses",
+      "Verify fire suppression standards for high-density occupancy areas"
+    ],
+    "access_difficulty": "Medium"
+  },
+  {
+    "id": "ab48c26e-2e47-456b-bd92-afaa0f428a68",
+    "document_name": "Existing Commercial Drone Insurance Policy Standards & Terms",
+    "description": "Raw text of terms and conditions from major drone liability insurers. Needed to understand risk classification criteria for high-speed human-drone interaction.",
+    "recency_requirement": "Current policy year (2025-2026)",
+    "responsible_role_type": "CFO / Insurance Broker",
+    "steps_to_find": [
+      "Contact specialized aviation insurance brokers",
+      "Request sample commercial liability policies for UAV operations",
+      "Review underwriting guidelines for 'over people' drone flight"
+    ],
+    "access_difficulty": "Medium"
+  }
+]

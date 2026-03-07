@@ -1,0 +1,101 @@
+{
+  "wbs_project": {
+    "id": "863bd09b-0dba-4172-88c6-f687d080b6dc",
+    "description": "Drone Combat Arena",
+    "extra_fields": {
+      "final_deliverable": "Compliant Operational Venue"
+    },
+    "task_children": [
+      {
+        "id": "6f004f4a-9caa-40af-916c-b6372850e8e1",
+        "description": "Regulatory & Compliance Authorization",
+        "task_children": [
+          {
+            "id": "03692554-ab01-48b5-8e11-6d25033c3956",
+            "description": "Submit FAA Part 107 license applications for all locations"
+          },
+          {
+            "id": "06bc7a3b-578d-41e9-a902-ec27142371ad",
+            "description": "Secure binding insurance quotes from specialized UAV carriers"
+          },
+          {
+            "id": "65aa6107-f2f6-4c60-80b2-a117e0bd9573",
+            "description": "Conduct airspace risk analysis near proposed venue coordinates"
+          }
+        ]
+      },
+      {
+        "id": "95814c22-80a4-46e1-a20d-b3bbbfd0a30f",
+        "description": "Venue Infrastructure & Safety Fit-out",
+        "task_children": [
+          {
+            "id": "125bd836-1a42-48c3-a11e-fa6b4a7184fe",
+            "description": "Negotiate and sign industrial warehouse lease agreements"
+          },
+          {
+            "id": "1eeec10e-aba9-48be-afbf-e73be7dd1370",
+            "description": "Install HVAC systems meeting ventilation safety standards"
+          },
+          {
+            "id": "ba88213b-60ad-416f-9f47-2bb4e3266733",
+            "description": "Deploy ballistic netting around player corridors and zones"
+          }
+        ]
+      },
+      {
+        "id": "cb67b184-e7bc-4829-b21f-687efbb110b5",
+        "description": "Technology Integration & Cybersecurity",
+        "task_children": [
+          {
+            "id": "baa32992-ea13-4079-99c8-5dc52211c50b",
+            "description": "Procure quadcopters with LiDAR obstacle avoidance systems"
+          },
+          {
+            "id": "1a64d547-336a-4f7e-bc04-621e11575fd3",
+            "description": "Integrate custom collision sensors into drone hardware"
+          },
+          {
+            "id": "1eec6375-9274-4036-bc12-2c6c08fc74bf",
+            "description": "Implement AES-256 encryption for telemetry data streams"
+          }
+        ]
+      },
+      {
+        "id": "6485ae11-8fc2-45f9-9bc3-557e9f4e6e32",
+        "description": "Branding, Narrative & Market Validation",
+        "task_children": [
+          {
+            "id": "a7c86427-a3c0-42ed-b36f-d1c650be4eb4",
+            "description": "Establish partnership agreements with veterans groups"
+          },
+          {
+            "id": "be1cd5ea-1a4b-4353-ba5f-e15351731e5e",
+            "description": "Validate pricing elasticity for corporate team-building packages"
+          },
+          {
+            "id": "10b68b59-adc1-408e-8250-e8d7befb12a1",
+            "description": "Secure non-binding franchise LOIs from regional partners"
+          }
+        ]
+      },
+      {
+        "id": "1fa30365-74e6-46c7-ac4a-d14d9d2f1d52",
+        "description": "Operations Setup & Launch Preparation",
+        "task_children": [
+          {
+            "id": "b3801889-e477-4c01-a004-f010c629f267",
+            "description": "Complete staff certification training programs for instructors"
+          },
+          {
+            "id": "d260ec68-9ab8-4407-9c49-89805361683e",
+            "description": "Conduct final safety audits and compliance inspections"
+          },
+          {
+            "id": "5ef34f05-ce5f-4d20-ae98-2866368345a0",
+            "description": "Execute public launch marketing campaign for venue opening"
+          }
+        ]
+      }
+    ]
+  }
+}

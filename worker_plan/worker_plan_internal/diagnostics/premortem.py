@@ -63,6 +63,14 @@ class FailureModeItem(BaseModel):
     playbook: Optional[List[str]] = Field(None, description="Exactly 3 imperative actions: Contain, Assess, Respond.")
     stop_rule: Optional[str] = Field(None, description="Hard stop condition that would trigger project cancellation or major pivot.")
 
+class ArchetypeNarrative(BaseModel):
+    """Minimal schema: just the narrative content. IDs and bookkeeping are assigned by the program."""
+    assumption: str = Field(description="One critical assumption the project is making that, if false, would cause this failure.")
+    test_now: str = Field(description="One concrete action to immediately test if this assumption holds.")
+    failure_title: str = Field(description="A short, compelling title for this failure scenario.")
+    failure_story: str = Field(description="A detailed narrative of how this failure unfolds. Explain causes, chain of events, and impact.")
+    warning_signs: List[str] = Field(description="2-4 observable signals that this failure is beginning to occur.")
+
 class ArchetypeAnalysis(BaseModel):
     """Single-archetype premortem: one assumption + one failure mode. Used per-call to reduce schema complexity."""
     assumption: AssumptionItem = Field(description="One critical assumption underlying this failure archetype.")
@@ -77,6 +85,21 @@ ARCHETYPES = [
     ("Technical/Logistical", "A2", 2),
     ("Market/Human", "A3", 3),
 ]
+
+PREMORTEM_SYSTEM_PROMPT_NARRATIVE = """
+You are a senior project analyst. The project has failed completely.
+
+Analyse this single failure archetype: {archetype}
+
+Return a JSON object with these fields:
+- assumption: (string) The key belief the project was relying on that turned out to be wrong
+- test_now: (string) One immediate action that could have tested this assumption early
+- failure_title: (string) A short, memorable title for this failure story
+- failure_story: (string) A detailed paragraph explaining how this failure happened — causes, chain of events, consequences
+- warning_signs: (array of strings) 2-4 observable early signals that this failure was beginning
+
+Output only the JSON object. No extra text.
+"""
 
 PREMORTEM_SYSTEM_PROMPT_TEMPLATE = """
 You are a senior project analyst. Imagine the project has failed completely.
@@ -130,11 +153,7 @@ class Premortem:
 
         for archetype, assumption_id, index in archetypes_to_run:
             logger.info(f"Processing archetype {index}/{len(archetypes_to_run)}: {archetype}")
-            system_prompt = PREMORTEM_SYSTEM_PROMPT_TEMPLATE.format(
-                archetype=archetype,
-                assumption_id=assumption_id,
-                index=index,
-            ).strip()
+            system_prompt = PREMORTEM_SYSTEM_PROMPT_NARRATIVE.format(archetype=archetype).strip()
 
             chat_message_list = [
                 ChatMessage(role=MessageRole.SYSTEM, content=system_prompt),
@@ -142,7 +161,7 @@ class Premortem:
             ]
 
             def execute_function(llm: LLM, _chat=chat_message_list) -> dict:
-                sllm = llm.as_structured_llm(ArchetypeAnalysis)
+                sllm = llm.as_structured_llm(ArchetypeNarrative)
                 start_time = time.perf_counter()
                 chat_response = sllm.chat(_chat)
                 pydantic_response = chat_response.raw
@@ -158,11 +177,11 @@ class Premortem:
                 }
 
             MAX_RETRIES = 5
-            archetype_result = None
+            narrative: ArchetypeNarrative | None = None
             for attempt in range(1, MAX_RETRIES + 1):
                 try:
                     result = llm_executor.run(execute_function)
-                    archetype_result = result["pydantic_response"]
+                    narrative = result["pydantic_response"]
                     metadata_list.append(result["metadata"])
                     logger.info(f"Archetype {archetype} succeeded on attempt {attempt}.")
                     break
@@ -173,11 +192,26 @@ class Premortem:
                     if attempt == MAX_RETRIES:
                         logger.warning(f"Archetype {archetype} exhausted {MAX_RETRIES} attempts. Skipping — premortem will be partial.")
 
-            if archetype_result is None:
+            if narrative is None:
                 continue
 
-            assumptions_to_kill.append(archetype_result.assumption)
-            failure_modes.append(archetype_result.failure_mode)
+            # Program assigns IDs and bookkeeping — LLM only provides narrative content
+            assumption_item = AssumptionItem(
+                assumption_id=assumption_id,
+                statement=narrative.assumption,
+                test_now=narrative.test_now,
+                falsifier=f"The test reveals the assumption is false.",
+            )
+            failure_mode_item = FailureModeItem(
+                failure_mode_index=index,
+                root_cause_assumption_id=assumption_id,
+                failure_mode_archetype=archetype,
+                failure_mode_title=narrative.failure_title,
+                risk_analysis=narrative.failure_story,
+                early_warning_signs=narrative.warning_signs,
+            )
+            assumptions_to_kill.append(assumption_item)
+            failure_modes.append(failure_mode_item)
 
         final_response = PremortemAnalysis(
             assumptions_to_kill=assumptions_to_kill,

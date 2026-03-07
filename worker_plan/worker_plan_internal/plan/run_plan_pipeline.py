@@ -3188,7 +3188,7 @@ class CreateScheduleTask(PlanTask):
             start_time_dict = json.load(f)
 
         # The start_time.server_iso_utc is in format "YYYY-MM-DDTHH:MM:SSZ"
-        utc_timestamp = start_time_dict['server_iso_utc']
+        utc_timestamp = start_time_dict.get('server_iso_utc') or start_time_dict.get('utc_timestamp', '')
         # The 'Z' suffix for UTC is not supported by fromisoformat() in Python < 3.11. Replace, ensures compatibility.
         project_start_dt: datetime = datetime.fromisoformat(utc_timestamp.replace('Z', '+00:00'))
         project_start: date = project_start_dt.date()

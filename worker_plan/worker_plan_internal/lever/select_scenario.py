@@ -31,6 +31,7 @@ class PlanCharacteristics(BaseModel):
         description="The plan's subject matter and overall tone (e.g., corporate, scientific, personal, creative)."
     )
     holistic_profile_of_the_plan: str = Field(
+        default="",
         description="A concise, holistic summary synthesizing the above characteristics into a single profile of the plan's strategic intent."
     )
 

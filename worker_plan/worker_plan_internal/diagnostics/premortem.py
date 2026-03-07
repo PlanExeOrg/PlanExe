@@ -162,13 +162,8 @@ class Premortem:
             except PipelineStopRequested:
                 raise
             except Exception as e:
-                logger.debug(f"LLM chat interaction failed for archetype {archetype}: {e}")
-                logger.error(f"LLM chat interaction failed for archetype {archetype}.", exc_info=True)
-                if index == 1:
-                    raise ValueError(f"LLM chat interaction failed for first archetype ({archetype}).") from e
-                else:
-                    logger.warning(f"Skipping archetype {archetype} after failure.")
-                    continue
+                logger.warning(f"LLM chat interaction failed for archetype {archetype}: {e}. Skipping — premortem will be partial.")
+                continue
 
             archetype_result: ArchetypeAnalysis = result["pydantic_response"]
             assumptions_to_kill.append(archetype_result.assumption)

@@ -145,7 +145,7 @@ TOOL_DEFINITIONS = [
             "The adversarial sections (premortem, self-audit, premise attacks) surface risks and questions the prompter may not have considered. "
             "Returns plan_id (UUID) and sse_url; use plan_id for plan_status, plan_stop, plan_retry, and plan_file_info. "
             "sse_url is a GET endpoint (text/event-stream) for real-time progress — "
-            "e.g. `curl -N -H 'X-API-Key: <key>' <sse_url>` in a background shell. "
+            "e.g. `curl -N <sse_url>` in a background shell. "
             "The stream emits status/complete events and auto-closes on terminal state. Polling plan_status also works. "
             "If you lose a plan_id, call plan_list to recover it. "
             "Each plan_create call creates a new plan_id (no server-side dedup). "

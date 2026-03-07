@@ -174,6 +174,35 @@ if request.method != "OPTIONS" and (
 
 Keyless requests still pass through to public methods as before.
 
+#### 3. `enforce_api_key` middleware — JSON-RPC error wrapping
+
+When the middleware returns a plain HTTP 401/403 on the `/mcp/` Streamable
+HTTP endpoint, the MCP SDK interprets it as an OAuth challenge and tries
+`/.well-known/oauth-authorization-server` discovery, which fails with 404
+and produces a confusing "Invalid OAuth error response" message.
+
+A new helper `_make_jsonrpc_auth_error()` wraps auth errors as JSON-RPC
+error envelopes with HTTP 200:
+
+```python
+async def _make_jsonrpc_auth_error(request, detail):
+    # Extract JSON-RPC request id from body
+    request_id = ...
+    return JSONResponse(
+        status_code=200,
+        content={
+            "jsonrpc": "2.0",
+            "error": {"code": -32001, "message": detail},
+            "id": request_id,
+        },
+    )
+```
+
+The middleware uses an inner `_check_auth()` helper that calls
+`_validate_api_key()` and, for Streamable HTTP paths (`/mcp`, `/mcp/`),
+wraps any error response via `_make_jsonrpc_auth_error()`.  REST endpoints
+(`/mcp/tools/call`, `/download`) keep plain HTTP status codes.
+
 ### Interaction with `PLANEXE_MCP_API_KEY` (shared secret)
 
 The shared-secret check (`REQUIRED_API_KEY`) only runs when `AUTH_REQUIRED=true`.
@@ -188,6 +217,9 @@ is needed there.
   accepted, now rejected with 403. This is intentional and desirable. The fix
   is to either remove the key or replace it with a valid one.
 - **Production (`REQUIRE_AUTH=true`)**: no change at all.
+- **MCP SDK users without a key**: keyless connections now succeed for
+  discovery. Paid tools return a clear JSON-RPC error instead of a confusing
+  OAuth/404 message.
 
 ## Verification
 
@@ -195,9 +227,12 @@ is needed there.
 2. Connect via MCP Inspector **without** `X-API-Key` → should work (anonymous).
 3. Connect with a **valid** `pex_...` key → should work (authenticated, stats tracked).
 4. Connect with `X-API-Key: junk` → connection should **fail immediately**
-   during the `initialize` handshake with 403 and a clear error message.
+   during the `initialize` handshake with a clear JSON-RPC error message.
    The client should never see the tool list.
 5. Start MCP server with `PLANEXE_MCP_REQUIRE_AUTH=true`.
-6. Connect without key → 401 at connection time.
-7. Connect with junk key → 403 at connection time.
-8. Connect with valid key → works.
+6. Connect without key → succeeds (initialize is public).
+7. Call a discovery tool (`example_plans`) without key → works.
+8. Call a paid tool (`plan_create`) without key → JSON-RPC error:
+   "Missing API key. Create an API key at https://home.planexe.org/"
+9. Connect with junk key → JSON-RPC error at connection time.
+10. Connect with valid key → everything works.

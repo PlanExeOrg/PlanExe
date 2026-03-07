@@ -138,7 +138,8 @@ class PlanCreateOutput(BaseModel):
         default=None,
         description=(
             "GET endpoint returning text/event-stream with real-time plan progress. "
-            "Usage: `curl -N -H 'X-API-Key: <same key>' <sse_url>`. "
+            "No API key required — the plan_id UUID serves as the access token. "
+            "Usage: `curl -N <sse_url>`. "
             "Emits 'status' events on progress changes, 'heartbeat' every ~20 s, "
             "and a final 'complete' event (state completed/failed) then auto-closes. "
             "Alternative to polling plan_status."
@@ -255,6 +256,17 @@ class PlanRetryOutput(BaseModel):
     retried_at: str | None = Field(
         default=None,
         description="UTC timestamp when the retry request was accepted.",
+    )
+    sse_url: str | None = Field(
+        default=None,
+        description=(
+            "GET endpoint returning text/event-stream with real-time plan progress. "
+            "No API key required — the plan_id UUID serves as the access token. "
+            "Usage: `curl -N <sse_url>`. "
+            "Emits 'status' events on progress changes, 'heartbeat' every ~20 s, "
+            "and a final 'complete' event (state completed/failed) then auto-closes. "
+            "Alternative to polling plan_status."
+        ),
     )
     error: ErrorDetail | None = None
 

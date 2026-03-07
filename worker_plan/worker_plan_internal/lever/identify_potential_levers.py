@@ -13,7 +13,7 @@ from typing import Optional
 from dataclasses import dataclass
 import uuid
 from llama_index.core.llms.llm import LLM
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from llama_index.core.llms import ChatMessage, MessageRole
 from worker_plan_internal.llm_util.llm_executor import LLMExecutor, PipelineStopRequested
 
@@ -35,6 +35,19 @@ class Lever(BaseModel):
     review_lever: str = Field(
         description="Critique this lever. State the core trade-off it controls (e.g., 'Controls Speed vs. Quality'). Then, identify one specific weakness in how its options address that trade-off."
     )
+
+    @field_validator('options', mode='before')
+    @classmethod
+    def parse_options(cls, v):
+        """Handle cases where LLMs return options as a stringified JSON array."""
+        if isinstance(v, str):
+            try:
+                parsed = json.loads(v)
+                if isinstance(parsed, list):
+                    return parsed
+            except (json.JSONDecodeError, TypeError):
+                pass
+        return v
 
 class DocumentDetails(BaseModel):
     strategic_rationale: str = Field(

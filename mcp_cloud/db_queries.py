@@ -156,9 +156,10 @@ def _request_plan_stop_sync(plan_id: str) -> Optional[dict[str, Any]]:
         if plan.state in (PlanState.pending, PlanState.processing):
             plan.stop_requested = True
             plan.stop_requested_timestamp = datetime.now(UTC)
+            plan.state = PlanState.failed
             plan.progress_message = "Stop requested by user."
             db.session.commit()
-            logger.info("Stop requested for plan %s; stop flag set on plan %s.", plan_id, plan.id)
+            logger.info("Stop requested for plan %s; state set to failed.", plan_id)
             stop_requested = True
         return {
             "state": get_plan_state_mapping(plan.state),

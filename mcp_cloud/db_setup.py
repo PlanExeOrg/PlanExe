@@ -116,7 +116,7 @@ PLANEXE_SERVER_INSTRUCTIONS = (
     "Then poll plan_status (about every 5 minutes); use plan_file_info when complete. "
     "plan_create and plan_status responses include an sse_url field (a plain GET endpoint returning text/event-stream). "
     "Instead of polling plan_status, you can monitor progress in real time by opening sse_url — "
-    "for example, run `curl -N -H 'X-API-Key: <key>' <sse_url>` in a background shell. "
+    "for example, run `curl -N <sse_url>` in a background shell. "
     "The stream emits 'status' events when progress changes, 'heartbeat' every ~20 s, and a final "
     "'complete' event (state completed or failed) then closes automatically. "
     "Polling plan_status and SSE are both supported — use whichever fits your runtime. "

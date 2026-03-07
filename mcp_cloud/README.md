@@ -206,10 +206,10 @@ Plans take 10-20 minutes to generate. Instead of polling `plan_status` every few
 }
 ```
 
-Connect using the same API key header used for MCP calls:
+No API key is required — the plan_id UUID is unguessable and serves as the access token:
 
 ```bash
-curl -N -H "X-API-Key: pex_..." https://mcp.planexe.org/sse/plan/abc-123
+curl -N https://mcp.planexe.org/sse/plan/abc-123
 ```
 
 ### Event types

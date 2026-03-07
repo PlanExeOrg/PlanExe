@@ -326,6 +326,36 @@ async def _is_public_mcp_request_without_auth(request: Request) -> bool:
     return False
 
 
+async def _make_jsonrpc_auth_error(request: Request, detail: str) -> JSONResponse:
+    """Build a JSON-RPC error response for auth failures on /mcp/.
+
+    Returning a plain HTTP 401/403 from the middleware causes the MCP SDK to
+    interpret it as an OAuth challenge, triggering a confusing
+    ``/.well-known/oauth-authorization-server`` discovery that fails with 404.
+    By wrapping the error in a JSON-RPC envelope with HTTP 200, the SDK shows
+    the message directly to the user.
+    """
+    request_id = None
+    try:
+        body = await request.body()
+        if body:
+            payload = json.loads(body)
+            if isinstance(payload, dict):
+                request_id = payload.get("id")
+            elif isinstance(payload, list) and payload:
+                request_id = payload[0].get("id") if isinstance(payload[0], dict) else None
+    except Exception:
+        pass
+    return JSONResponse(
+        status_code=200,
+        content={
+            "jsonrpc": "2.0",
+            "error": {"code": -32001, "message": detail},
+            "id": request_id,
+        },
+    )
+
+
 async def _log_auth_rejection(request: Request, reason: str) -> None:
     methods = await _extract_jsonrpc_methods_from_request(request)
     logger.info(
@@ -441,7 +471,7 @@ async def _validate_api_key(request: Request) -> Optional[JSONResponse]:
         return JSONResponse(
             status_code=401,
             content={
-                "detail": "Missing API key. Use X-API-Key. Create an account at https://home.planexe.org/"
+                "detail": "Missing API key. Create an API key at https://home.planexe.org/"
             },
         )
 
@@ -910,13 +940,29 @@ async def enforce_api_key(
     ):
         is_public = await _is_public_mcp_request_without_auth(request)
 
+        is_mcp_streamable = request.url.path in ("/mcp", "/mcp/")
+
+        async def _check_auth() -> Optional[Response]:
+            """Validate API key; wrap errors as JSON-RPC for Streamable HTTP."""
+            err = await _validate_api_key(request)
+            if not err:
+                return None
+            if is_mcp_streamable:
+                detail = (err.body or b"").decode(errors="replace")
+                try:
+                    detail = json.loads(detail).get("detail", detail)
+                except Exception:
+                    pass
+                err = await _make_jsonrpc_auth_error(request, detail)
+            return _append_cors_headers(request, err)
+
         # Even for public/discovery methods (initialize, tools/list, etc.),
         # validate the API key if one was provided.  This lets callers discover
         # a bad key at connection time instead of on the first paid tool call.
         if is_public and _extract_api_key(request):
-            error_response = await _validate_api_key(request)
-            if error_response:
-                return _append_cors_headers(request, error_response)
+            blocked = await _check_auth()
+            if blocked:
+                return blocked
 
         if not is_public:
             # /download with a valid signed token is self-authenticating — no API key needed.
@@ -925,9 +971,9 @@ async def enforce_api_key(
                 and _has_valid_download_token(request)
             )
             if not is_tokenized_download:
-                error_response = await _validate_api_key(request)
-                if error_response:
-                    return _append_cors_headers(request, error_response)
+                blocked = await _check_auth()
+                if blocked:
+                    return blocked
 
     error_response = await _enforce_body_size(request)
     if error_response:
@@ -1136,8 +1182,8 @@ async def download_report(
 # streams this keeps the middleware's task-group alive indefinitely, which
 # can starve concurrent requests going through the same middleware.
 #
-# We therefore handle auth inline here (reusing _validate_api_key) and
-# excluded /sse/ from the enforce_api_key middleware path check.
+# The SSE endpoint is intentionally unauthenticated — the plan_id UUID
+# is unguessable and serves as the access token.
 # ---------------------------------------------------------------------------
 
 @app.get("/sse/plan/{plan_id}")
@@ -1148,11 +1194,6 @@ async def sse_plan_progress(plan_id: str, request: Request) -> Response:
         _track_sse_connection,
         plan_progress_stream,
     )
-
-    # Inline auth — bypasses BaseHTTPMiddleware to avoid blocking other requests.
-    auth_error = await _validate_api_key(request)
-    if auth_error:
-        return _append_cors_headers(request, auth_error)
 
     client_ip = request.client.host if request.client else "unknown"
 

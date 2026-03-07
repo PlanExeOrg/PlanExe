@@ -105,7 +105,7 @@ async def fetch_artifact_from_worker_plan(run_id: str, file_path: str) -> Option
 async def fetch_file_list_from_worker_plan(run_id: str) -> Optional[list[str]]:
     """Fetch the list of files from worker_plan via HTTP."""
     try:
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        async with httpx.AsyncClient(timeout=httpx.Timeout(10.0, connect=3.0)) as client:
             response = await client.get(f"{WORKER_PLAN_URL}/runs/{run_id}/files")
             if response.status_code == 200:
                 data = response.json()

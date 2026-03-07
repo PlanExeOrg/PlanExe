@@ -73,8 +73,13 @@ http_server.py (top-level entry point)
   - Downloadable zip artifacts must never include `track_activity.jsonl`.
   - Serve new layout snapshots directly; sanitize only legacy/fallback zips.
 - `plan_stop` contract:
-  - `plan_stop` does not create a separate lifecycle state.
-  - Return current public `state` plus `stop_requested` to acknowledge stop-flag request.
+  - `plan_stop` sets `plan.state = PlanState.failed` immediately so the MCP-facing
+    state transitions right away. The worker is typically still busy with LLM
+    calls; it checks `stop_requested` after each step and removes itself from the queue.
+  - Also sets `stop_requested = True` and `stop_requested_timestamp` for audit.
+  - `progress_message` stays "Stop requested by user." (not "Stopped") because the
+    worker is typically still busy processing and will stop after its current LLM call.
+  - Return current public `state` (now `"failed"`) plus `stop_requested: true`.
 - Forbidden imports: `worker_plan.app`, `worker_plan_internal`, `frontend_*`,
   `open_dir_server`.
 
@@ -151,10 +156,11 @@ The middleware in `http_server.py` processes requests in this order:
 3. **`enforce_api_key`** (HTTP middleware via `BaseHTTPMiddleware`): Auth, body size,
    rate limiting, context var setup
    - Paths requiring auth: `/mcp`, `/download`
-   - **`/sse/` is intentionally excluded** — `BaseHTTPMiddleware` pipes the response
+   - **`/sse/` is intentionally excluded** — the plan_id UUID is unguessable and
+     serves as the access token. Additionally, `BaseHTTPMiddleware` pipes the response
      body through an internal `anyio.MemoryObjectStream`; for long-lived SSE streams
      this keeps the middleware's task-group alive indefinitely and starves concurrent
-     requests. The SSE endpoint handles auth inline instead.
+     requests.
    - Download tokens are self-authenticating (signed HMAC, no API key needed)
    - Sets `_download_base_url_ctx` for `/mcp` paths
    - Strips redundant `content` from `/mcp` JSON responses on the way out
@@ -184,6 +190,13 @@ The middleware in `http_server.py` processes requests in this order:
     - `model_profiles`
   - All other tool invocations (for example `plan_create`) must remain API-key protected.
 - Keep auth-denial logging explicit (`Auth rejected: ...`) with method/path/user-agent and parsed JSON-RPC methods to make Railway debugging easier.
+- Auth errors on Streamable HTTP (`/mcp/`) must be returned as JSON-RPC
+  error envelopes (`{"jsonrpc":"2.0","error":{"code":-32001,"message":"..."},"id":...}`)
+  with HTTP 200.  A plain HTTP 401/403 causes the MCP SDK to trigger OAuth
+  discovery (`/.well-known/oauth-authorization-server`), which fails with 404
+  and shows a confusing "Invalid OAuth error response" to the user.  The
+  helper `_make_jsonrpc_auth_error()` handles this wrapping.  REST endpoints
+  (`/mcp/tools/call`, `/download`) keep plain HTTP status codes.
 
 ## SSE endpoint
 
@@ -200,8 +213,9 @@ Implementation in `sse.py`:
 - Connection tracking via `_track_sse_connection(client_id)` async context manager:
   per-client limit (5) and server-wide limit (200). Raises `SSEConnectionLimitError` (HTTP 429).
 
-Auth: `/sse/` paths require API key (handled inline in the endpoint, NOT via the
-`enforce_api_key` middleware — see HTTP middleware stack section for rationale).
+Auth: The SSE endpoint is intentionally unauthenticated — the plan_id UUID is
+unguessable and serves as the access token. `/sse/` paths are excluded from the
+`enforce_api_key` middleware (see HTTP middleware stack section for rationale).
 URL building: `handlers.py` adds `sse_url` to `plan_create` and `plan_status` responses
 using `_get_download_base_url()` from `download_tokens.py`.
 
@@ -283,8 +297,11 @@ The same `_get_download_base_url()` function is used to build both `download_url
   1. DB zip snapshot (`list_files_from_zip_snapshot` / `fetch_file_from_zip_snapshot`)
   2. Local run directory (`list_files_from_local_run_dir`)
   3. Worker HTTP (`fetch_file_list_from_worker_plan` / `fetch_artifact_from_worker_plan`)
-- The worker HTTP call has a 30-second timeout. If it runs first, every poll blocks
-  for 30 seconds when the worker is unreachable — even when the data is already in the DB.
+- `fetch_file_list_from_worker_plan` uses `httpx.Timeout(10.0, connect=3.0)` — short
+  connect timeout so unreachable workers fail fast instead of blocking for 30 seconds.
+- `handle_plan_status` wraps the worker fetch in `asyncio.wait_for(..., timeout=5.0)`
+  as an additional safeguard; file lists are optional supplementary data — the core
+  status (state, progress, timing) comes from the DB and is always returned.
 
 ## Testing
 - Automated tests exist under `mcp_cloud/tests/`.

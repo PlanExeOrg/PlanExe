@@ -5,6 +5,7 @@ PROMPT> python -m worker_plan_internal.lever.focus_on_vital_few_levers
 """
 import json
 import logging
+import math
 import os
 from dataclasses import dataclass
 from enum import Enum
@@ -117,41 +118,34 @@ class FocusOnVitalFewLevers:
 
         logger.info(f"Assessing {len(enriched_levers)} characterized levers to find the vital few.")
 
-        # Convert Pydantic models to dictionaries for JSON serialization
-        levers_dict = [lever.model_dump() for lever in enriched_levers]
-        levers_json = json.dumps(levers_dict, indent=2)        
-        focus_prompt = (
-            f"**Project Context:**\n{project_context}\n\n"
-            f"**Candidate Levers List:**\n"
-            f"Please assess the strategic importance of the following {len(enriched_levers)} levers based on the project plan and their detailed characterizations:\n\n"
-            f"{levers_json}"
-        )
-
         system_prompt = FOCUS_LEVERS_SYSTEM_PROMPT.strip()
-        chat_message_list = [
-            ChatMessage(role=MessageRole.SYSTEM, content=system_prompt),
-            ChatMessage(role=MessageRole.USER, content=focus_prompt)
-        ]
 
-        # Step 2: Run the LLM to get the assessment
-        def execute_function(llm: LLM) -> dict:
-            sllm = llm.as_structured_llm(VitalLeversAssessmentResult)
-            chat_response = sllm.chat(chat_message_list)
-            metadata = dict(llm.metadata)
-            metadata["llm_classname"] = llm.class_name()
-            return { "chat_response": chat_response, "metadata": metadata }
-        
+        # Try sending all enriched levers (with all fields) in a single call.
+        # This gives the LLM the richest context for assessment — including
+        # review, consequences, and options — which produces better results.
         try:
-            result = llm_executor.run(execute_function)
-            response = result["chat_response"].raw
-            metadata = result["metadata"]
+            response, metadata, focus_prompt = cls._assess_levers_full(
+                llm_executor, system_prompt, project_context, enriched_levers
+            )
+            logger.info("Full lever assessment succeeded.")
         except PipelineStopRequested:
             raise
         except Exception as e:
-            logger.error("LLM chat interaction for focusing levers failed.", exc_info=True)
-            raise ValueError("LLM chat interaction failed.") from e
-            
-        # Step 3: Select the "vital few" levers based on the assessment
+            # The full payload can exceed the context window of smaller local
+            # models (e.g. 8K context). When that happens, we compress each
+            # lever to its 5 essential fields (lever_id, name, description,
+            # synergy_text, conflict_text) and split into evenly-sized batches.
+            # This trades assessment quality for compatibility.
+            logger.warning(
+                f"Full lever assessment failed ({type(e).__name__}: {e}). "
+                f"Falling back to batched processing with compressed levers."
+            )
+            response, metadata, focus_prompt = cls._assess_levers_batched(
+                llm_executor, system_prompt, project_context, enriched_levers
+            )
+            logger.info("Batched lever assessment completed successfully.")
+
+        # Select the "vital few" levers based on the assessment
         vital_levers = cls.select_top_levers(
             all_levers=enriched_levers,
             assessment=response,
@@ -167,6 +161,189 @@ class FocusOnVitalFewLevers:
             vital_levers=vital_levers,
             metadata=metadata
         )
+
+    @classmethod
+    def _assess_levers_full(
+        cls,
+        llm_executor: LLMExecutor,
+        system_prompt: str,
+        project_context: str,
+        enriched_levers: list[EnrichedLever],
+    ) -> tuple[VitalLeversAssessmentResult, dict, str]:
+        """Attempt assessment with full enriched levers in a single LLM call."""
+
+        levers_dict = [lever.model_dump() for lever in enriched_levers]
+        levers_json = json.dumps(levers_dict, indent=2)
+        focus_prompt = (
+            f"**Project Context:**\n{project_context}\n\n"
+            f"**Candidate Levers List:**\n"
+            f"Please assess the strategic importance of the following "
+            f"{len(enriched_levers)} levers based on the project plan and "
+            f"their detailed characterizations:\n\n"
+            f"{levers_json}"
+        )
+
+        chat_message_list = [
+            ChatMessage(role=MessageRole.SYSTEM, content=system_prompt),
+            ChatMessage(role=MessageRole.USER, content=focus_prompt),
+        ]
+
+        def execute_function(llm: LLM) -> dict:
+            sllm = llm.as_structured_llm(VitalLeversAssessmentResult)
+            chat_response = sllm.chat(chat_message_list)
+            metadata = dict(llm.metadata)
+            metadata["llm_classname"] = llm.class_name()
+            return {"chat_response": chat_response, "metadata": metadata}
+
+        result = llm_executor.run(execute_function)
+        return result["chat_response"].raw, result["metadata"], focus_prompt
+
+    @classmethod
+    def _compress_lever(cls, lever: EnrichedLever) -> dict:
+        """Compress an enriched lever to only the fields needed for assessment.
+        
+        Keeps: lever_id, name, description, synergy_text, conflict_text
+        Removes: consequences, options, review (to reduce token count)
+        """
+        return {
+            "lever_id": lever.lever_id,
+            "name": lever.name,
+            "description": lever.description,
+            "synergy_text": lever.synergy_text,
+            "conflict_text": lever.conflict_text,
+        }
+
+    @staticmethod
+    def _compute_batch_size(total: int, max_batch: int = 4) -> int:
+        """Compute an even batch size.
+
+        Examples:
+          9 items, max 4 → batch_size 3 → 3+3+3
+          5 items, max 4 → batch_size 3 → 3+2
+          6 items, max 4 → batch_size 3 → 3+3
+          13 items, max 4 → batch_size 4 → 4+4+5 (singleton 4+4+4+1 merged)
+        """
+        if total <= max_batch:
+            return total
+        num_batches = math.ceil(total / max_batch)
+        return math.ceil(total / num_batches)
+
+    @staticmethod
+    def _make_batches(items: list, batch_size: int) -> list[list]:
+        """Split items into batches, merging a singleton tail into the previous batch.
+
+        A batch with only 1 lever forces the LLM to rate it as "vital" with
+        no alternatives, producing a biased assessment. When the last slice
+        would contain just 1 item, it is merged into the preceding batch.
+
+        Examples (batch_size=4):
+          13 items → [4, 4, 5]  instead of [4, 4, 4, 1]
+          9 items  → [4, 5]     instead of [4, 4, 1]  (if batch_size were 4)
+        """
+        batches = [items[i:i + batch_size] for i in range(0, len(items), batch_size)]
+        # If the last batch has only 1 item, merge it into the previous batch.
+        last_batch_is_singleton = len(batches) >= 2 and len(batches[-1]) == 1
+        if last_batch_is_singleton:
+            singleton = batches.pop()
+            batches[-1].extend(singleton)
+        return batches
+
+    @classmethod
+    def _assess_levers_batched(
+        cls,
+        llm_executor: LLMExecutor,
+        system_prompt: str,
+        project_context: str,
+        enriched_levers: list[EnrichedLever],
+        max_batch_size: int = 4,
+    ) -> tuple[VitalLeversAssessmentResult, dict, str]:
+        """Fall back to batched assessment with compressed levers.
+        
+        Used when the full assessment fails due to context window limits.
+        Compresses levers to essential fields and processes in evenly-sized
+        batches. Batch sizes are computed so no batch contains just 1 item:
+        a singleton batch forces the LLM to rate that lever as "vital" with
+        no alternatives to compare against, producing a biased assessment.
+        """
+        compressed_levers: list[dict] = [cls._compress_lever(lever) for lever in enriched_levers]
+        batch_size = cls._compute_batch_size(len(compressed_levers), max_batch_size)
+        batches = cls._make_batches(compressed_levers, batch_size)
+
+        all_assessments: list = []
+        all_summaries: list[str] = []
+        all_metadata: list[dict] = []
+        last_prompt = ""
+
+        logger.info(
+            f"Batching {len(compressed_levers)} levers into {len(batches)} groups "
+            f"(target size ~{batch_size}, max {max_batch_size})."
+        )
+
+        for batch_num, batch in enumerate(batches, start=1):
+            batch_json = json.dumps(batch, indent=2)
+
+            focus_prompt = (
+                f"**Project Context:**\n{project_context}\n\n"
+                f"**Candidate Levers List:**\n"
+                f"Please assess the strategic importance of the following "
+                f"{len(batch)} levers based on the project plan and "
+                f"their detailed characterizations:\n\n"
+                f"{batch_json}"
+            )
+            last_prompt = focus_prompt
+
+            chat_message_list = [
+                ChatMessage(role=MessageRole.SYSTEM, content=system_prompt),
+                ChatMessage(role=MessageRole.USER, content=focus_prompt),
+            ]
+
+            def execute_function(llm: LLM) -> dict:
+                sllm = llm.as_structured_llm(VitalLeversAssessmentResult)
+                chat_response = sllm.chat(chat_message_list)
+                metadata = dict(llm.metadata)
+                metadata["llm_classname"] = llm.class_name()
+                return {"chat_response": chat_response, "metadata": metadata}
+
+            try:
+                result = llm_executor.run(execute_function)
+                batch_response = result["chat_response"].raw
+                all_assessments.extend(batch_response.lever_assessments)
+                all_summaries.append(batch_response.summary)
+                batch_metadata = result["metadata"]
+                batch_metadata["lever_count"] = len(batch)
+                all_metadata.append(batch_metadata)
+                logger.info(
+                    f"Batch {batch_num}: assessed "
+                    f"{len(batch_response.lever_assessments)} levers."
+                )
+            except PipelineStopRequested:
+                raise
+            except Exception as e:
+                logger.error(
+                    f"Batch {batch_num} failed: {e}",
+                    exc_info=True,
+                )
+                # Skip failed batch but continue with remaining
+                continue
+
+        if not all_assessments:
+            raise ValueError(
+                "All batched lever assessments failed. "
+                "No levers could be assessed."
+            )
+
+        # Merge batch results into a single response
+        merged_response = VitalLeversAssessmentResult(
+            lever_assessments=all_assessments,
+            summary="\n\n".join(all_summaries),
+        )
+
+        # Combine metadata from all batches
+        combined_metadata = {"batched": True, "batch_count": len(all_metadata)}
+        for idx, md in enumerate(all_metadata):
+            combined_metadata[f"batch_{idx + 1}"] = md
+
+        return merged_response, combined_metadata, last_prompt
 
     @staticmethod
     def select_top_levers(all_levers: list[EnrichedLever], assessment: VitalLeversAssessmentResult, target_count: int) -> list[EnrichedLever]:

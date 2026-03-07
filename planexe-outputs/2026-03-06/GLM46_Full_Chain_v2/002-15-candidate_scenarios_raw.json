@@ -1,0 +1,52 @@
+{
+  "response": {
+    "analysis_title": "Strategic Scenarios for Rural Connecticut Coffee Roasting",
+    "core_tension": "The central tension is between maximizing immediate market penetration and revenue stability through localized partnerships versus investing in long-term brand equity and direct customer relationships through scalable technology and unique product experiences.",
+    "scenarios": [
+      {
+        "scenario_name": "The Pioneer's Gambit",
+        "strategic_logic": "This scenario prioritizes speed, technological differentiation, and broad market reach to capture the rural Connecticut niche before competitors. It accepts higher initial capital expenditure and operational complexity to build a scalable brand that transcends local foot traffic limitations.",
+        "lever_settings": {
+          "Market Access Strategy": "Create mobile roasting unit to tour regional farmers markets",
+          "Production Scalability Model": "Acquire commercial-grade roaster with full automation capabilities",
+          "Product Portfolio Strategy": "Focus exclusively on single-origin seasonal blends with storytelling",
+          "Customer Acquisition Approach": "Partner with regional coffee shops for wholesale distribution channels",
+          "Operational Cost Structure": "Develop subscription service with bundled brewing equipment for recurring revenue"
+        }
+      },
+      {
+        "scenario_name": "The Pragmatic Foundation",
+        "strategic_logic": "This approach balances growth and risk by focusing on steady, organic expansion while maintaining flexibility in production. It leverages community partnerships to reduce customer acquisition costs without the heavy upfront capital investment required for full automation.",
+        "lever_settings": {
+          "Market Access Strategy": "Establish exclusive local caf\u00e9 partnership with shared revenue model",
+          "Production Scalability Model": "Implement modular roasting system allowing incremental capacity upgrades",
+          "Product Portfolio Strategy": "Develop core line of 3 signature roasts plus rotating specials",
+          "Customer Acquisition Approach": "Launch hyper-local social media campaigns targeting Connecticut residents",
+          "Operational Cost Structure": "Establish local pickup points at partner businesses to reduce delivery overhead"
+        }
+      },
+      {
+        "scenario_name": "The Consolidator's Shield",
+        "strategic_logic": "This strategy prioritizes capital preservation and risk mitigation above all else. It relies on proven methods, minimal upfront investment, and low-cost customer acquisition through existing networks to ensure viability in a volatile rural market.",
+        "lever_settings": {
+          "Market Access Strategy": "Establish exclusive local caf\u00e9 partnership with shared revenue model",
+          "Production Scalability Model": "Utilize contract roasting for initial phases before capital expenditure",
+          "Product Portfolio Strategy": "Develop core line of 3 signature roasts plus rotating specials",
+          "Customer Acquisition Approach": "Implement referral program offering free beans for customer acquisitions",
+          "Operational Cost Structure": "Establish local pickup points at partner businesses to reduce delivery overhead"
+        }
+      }
+    ]
+  },
+  "metadata": {
+    "context_window": 8192,
+    "num_output": 4096,
+    "is_chat_model": true,
+    "is_function_calling_model": false,
+    "model_name": "qwen/qwen3.5-35b-a3b",
+    "system_role": "system",
+    "llm_classname": "custom_llm"
+  },
+  "system_prompt": "You are a Chief Strategy Officer presenting the final, synthesized strategic options to the project's board of directors. You have already identified the project's 'vital few' levers. Your task is to weave these levers into 3 distinct, coherent, and actionable strategic scenarios.\n\n**Goal:** Transform a list of levers and options into a clear choice between competing strategic pathways.\n\n**Input:** You will receive the original project plan and the list of vital levers, including their names, descriptions, and options.\n\n**Task:**\nGenerate exactly 3 strategic scenarios based on the provided levers. Each scenario must be a complete, internally-consistent combination of choices. Adhere to the `ScenarioAnalysisResult` JSON schema.\n\n**Scenario Archetypes to Generate:**\n\n1.  **The High-Risk / High-Reward Path (\"The Pioneer\"):** This scenario prioritizes innovation, speed, and technological leadership, accepting higher risks and costs. Select the most aggressive, forward-looking option for each lever to create this path.\n2.  **The Balanced / Pragmatic Path (\"The Builder\"):** This scenario seeks a balance between innovation and stability. It aims for solid progress while managing risk. Select the moderate, most likely-to-succeed options for each lever.\n3.  **The Low-Risk / Low-Cost Path (\"The Consolidator\"):** This scenario prioritizes stability, cost-control, and risk-aversion above all. It chooses the safest, most proven, and often most conservative options across the board.\n\nFor each scenario, ensure the `lever_settings` are logically consistent with its `strategic_logic`. For instance, a \"Pioneer\" scenario should not choose a \"Compliance-Based Governance\" option.",
+  "user_prompt": "**Project Context:**\nFile 'plan.txt':\nSmall coffee roasting business in rural Connecticut\n\nFile 'purpose.md':\n**Purpose:** business\n\n**Purpose Detailed:** Establishing and operating a small-scale coffee roasting business for profit in a rural area\n\n**Topic:** Small coffee roasting business in rural Connecticut\n\nFile 'plan_type.md':\nThis plan requires one or more physical locations. It cannot be executed digitally.\n\n**Explanation:** The plan involves establishing and operating a small-scale coffee roasting business. This inherently requires physical elements such as acquiring coffee beans, setting up a roasting machine, and managing the physical space for operations in rural Connecticut.\n\n\n\n---\n\n**Vital Levers & Options:**\n**Lever: Market Access Strategy**\n  - Description: Controls Local Foot Traffic vs. Regional Distribution Reach. Weakness: The options fail to consider seasonal tourism patterns in rural Connecticut affecting foot traffic consistency.\n  - Options: ['Establish exclusive local caf\u00e9 partnership with shared revenue model', 'Develop direct-to-consumer subscription service with rural delivery logistics', 'Create mobile roasting unit to tour regional farmers markets']\n\n**Lever: Production Scalability Model**\n  - Description: Controls Capital Expenditure vs. Production Control. Weakness: The options fail to consider potential supply chain disruptions affecting raw bean availability during early operations.\n  - Options: ['Acquire commercial-grade roaster with full automation capabilities', 'Utilize contract roasting for initial phases before capital expenditure', 'Implement modular roasting system allowing incremental capacity upgrades']\n\n**Lever: Product Portfolio Strategy**\n  - Description: Controls Product Complexity vs. Market Differentiation. Weakness: The options fail to address potential flavor profile fatigue among repeat customers without clear innovation cadence.\n  - Options: ['Focus exclusively on single-origin seasonal blends with storytelling', 'Develop core line of 3 signature roasts plus rotating specials', 'Create coffee-based merchandise bundle combining beans with brewing equipment']\n\n**Lever: Customer Acquisition Approach**\n  - Description: Controls Marketing Spend vs. Organic Growth Potential. Weakness: The options fail to account for demographic limitations of rural Connecticut population density affecting reach efficiency.\n  - Options: ['Launch hyper-local social media campaigns targeting Connecticut residents', 'Partner with regional coffee shops for wholesale distribution channels', 'Implement referral program offering free beans for customer acquisitions']\n\n**Lever: Operational Cost Structure**\n  - Description: Controls Logistics Costs vs. Customer Convenience. Weakness: The options fail to consider potential fuel price volatility impacting rural delivery economics.\n  - Options: ['Implement tiered pricing model with free shipping thresholds above $75', 'Develop subscription service with bundled brewing equipment for recurring revenue', 'Establish local pickup points at partner businesses to reduce delivery overhead']\n\nPlease synthesize these levers into 3 distinct strategic scenarios as requested."
+}

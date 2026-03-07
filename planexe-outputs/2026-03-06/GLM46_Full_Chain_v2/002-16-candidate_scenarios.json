@@ -1,0 +1,39 @@
+{
+  "analysis_title": "Strategic Scenarios for Rural Connecticut Coffee Roasting",
+  "core_tension": "The central tension is between maximizing immediate market penetration and revenue stability through localized partnerships versus investing in long-term brand equity and direct customer relationships through scalable technology and unique product experiences.",
+  "scenarios": [
+    {
+      "scenario_name": "The Pioneer's Gambit",
+      "strategic_logic": "This scenario prioritizes speed, technological differentiation, and broad market reach to capture the rural Connecticut niche before competitors. It accepts higher initial capital expenditure and operational complexity to build a scalable brand that transcends local foot traffic limitations.",
+      "lever_settings": {
+        "Market Access Strategy": "Create mobile roasting unit to tour regional farmers markets",
+        "Production Scalability Model": "Acquire commercial-grade roaster with full automation capabilities",
+        "Product Portfolio Strategy": "Focus exclusively on single-origin seasonal blends with storytelling",
+        "Customer Acquisition Approach": "Partner with regional coffee shops for wholesale distribution channels",
+        "Operational Cost Structure": "Develop subscription service with bundled brewing equipment for recurring revenue"
+      }
+    },
+    {
+      "scenario_name": "The Pragmatic Foundation",
+      "strategic_logic": "This approach balances growth and risk by focusing on steady, organic expansion while maintaining flexibility in production. It leverages community partnerships to reduce customer acquisition costs without the heavy upfront capital investment required for full automation.",
+      "lever_settings": {
+        "Market Access Strategy": "Establish exclusive local caf\u00e9 partnership with shared revenue model",
+        "Production Scalability Model": "Implement modular roasting system allowing incremental capacity upgrades",
+        "Product Portfolio Strategy": "Develop core line of 3 signature roasts plus rotating specials",
+        "Customer Acquisition Approach": "Launch hyper-local social media campaigns targeting Connecticut residents",
+        "Operational Cost Structure": "Establish local pickup points at partner businesses to reduce delivery overhead"
+      }
+    },
+    {
+      "scenario_name": "The Consolidator's Shield",
+      "strategic_logic": "This strategy prioritizes capital preservation and risk mitigation above all else. It relies on proven methods, minimal upfront investment, and low-cost customer acquisition through existing networks to ensure viability in a volatile rural market.",
+      "lever_settings": {
+        "Market Access Strategy": "Establish exclusive local caf\u00e9 partnership with shared revenue model",
+        "Production Scalability Model": "Utilize contract roasting for initial phases before capital expenditure",
+        "Product Portfolio Strategy": "Develop core line of 3 signature roasts plus rotating specials",
+        "Customer Acquisition Approach": "Implement referral program offering free beans for customer acquisitions",
+        "Operational Cost Structure": "Establish local pickup points at partner businesses to reduce delivery overhead"
+      }
+    }
+  ]
+}

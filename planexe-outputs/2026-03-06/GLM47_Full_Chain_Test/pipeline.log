@@ -1,0 +1,289 @@
+None of PyTorch, TensorFlow >= 2.0, or Flax have been found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+PLANEXE_TASK_ID not set. Token metrics will not be recorded.
+2026-03-06 18:37:37 - __main__ - INFO - pipeline_environment: PipelineEnvironment(run_id_dir='/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test', llm_model=None, speed_vs_detail=None, model_profile='custom') (log_level=INFO)
+2026-03-06 18:37:37 - __main__ - INFO - Speed vs Detail: SpeedVsDetailEnum.ALL_DETAILS_BUT_SLOW
+2026-03-06 18:37:37 - __main__ - INFO - Model profile: custom
+2026-03-06 18:37:37 - __main__ - INFO - These are the LLM models that will be used in the pipeline:
+2026-03-06 18:37:37 - __main__ - INFO - 0. 'lmstudio-glm-4.7-flash'
+2026-03-06 18:37:37 - __main__ - INFO - 1. 'lmstudio-qwen3.5-35b-a3b'
+2026-03-06 18:37:37 - __main__ - INFO - 2. 'lmstudio-nemotron-nano'
+2026-03-06 18:37:37 - __main__ - INFO - 3. 'lmstudio-lfm2-24b'
+/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/parameter.py:296: UserWarning: Parameter "run_id_dir" with value "/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test" is not of type string.
+  warnings.warn('Parameter "{}" with value "{}" is not of type string.'.format(param_name, param_value))
+/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/parameter.py:296: UserWarning: Parameter "_pipeline_executor_callback" with value "<bound method ExecutePipeline.callback_run_task of ExecutePipeline(run_id_dir=PosixPath('/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test'), speedvsdetail=<SpeedVsDetailEnum.ALL_DETAILS_BUT_SLOW: 'all_details_but_slow'>, llm_models=['lmstudio-glm-4.7-flash', 'lmstudio-qwen3.5-35b-a3b', 'lmstudio-nemotron-nano', 'lmstudio-lfm2-24b'], model_profile=<ModelProfileEnum.CUSTOM: 'custom'>, full_plan_pipeline_task=None, all_expected_filenames=[], luigi_build_return_value=None)>" is not of type string.
+  warnings.warn('Parameter "{}" with value "{}" is not of type string.'.format(param_name, param_value))
+/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/parameter.py:296: UserWarning: Parameter "_pipeline_executor_callback" with value "<bound method ExecutePipeline.callback_run_task of ExecutePipeline(run_id_dir=PosixPath('/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test'), speedvsdetail=<SpeedVsDetailEnum.ALL_DETAILS_BUT_SLOW: 'all_details_but_slow'>, llm_models=['lmstudio-glm-4.7-flash', 'lmstudio-qwen3.5-35b-a3b', 'lmstudio-nemotron-nano', 'lmstudio-lfm2-24b'], model_profile=<ModelProfileEnum.CUSTOM: 'custom'>, full_plan_pipeline_task=FullPlanPipeline(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]), all_expected_filenames=[], luigi_build_return_value=None)>" is not of type string.
+  warnings.warn('Parameter "{}" with value "{}" is not of type string.'.format(param_name, param_value))
+2026-03-06 18:37:37 - __main__ - INFO - execute_pipeline: ExecutePipeline(run_id_dir=PosixPath('/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test'), speedvsdetail=<SpeedVsDetailEnum.ALL_DETAILS_BUT_SLOW: 'all_details_but_slow'>, llm_models=['lmstudio-glm-4.7-flash', 'lmstudio-qwen3.5-35b-a3b', 'lmstudio-nemotron-nano', 'lmstudio-lfm2-24b'], model_profile=<ModelProfileEnum.CUSTOM: 'custom'>, full_plan_pipeline_task=FullPlanPipeline(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]), all_expected_filenames=['001-1-start_time.json', '001-2-plan.txt', '002-1-redline_gate.json', '002-10-potential_levers.json', '002-11-deduplicated_levers_raw.json', '002-12-enriched_levers_raw.json', '002-13-vital_few_levers_raw.json', '002-14-strategic_decisions.md', '002-15-candidate_scenarios_raw.json', '002-16-candidate_scenarios.json', '002-17-selected_scenario_raw.json', '002-18-selected_scenario.json', '002-19-scenarios.md', '002-2-redline_gate.md', '002-20-physical_locations_raw.json', '002-21-physical_locations.md', '002-22-currency_strategy_raw.json', '002-23-currency_strategy.md', '002-3-premise_attack.json', '002-4-premise_attack.md', '002-5-identify_purpose_raw.json', '002-6-identify_purpose.md', '002-7-plan_type_raw.json', '002-8-plan_type.md', '002-9-potential_levers_raw.json', '003-1-identify_risks_raw.json', '003-10-consolidate_assumptions_full.md', '003-11-consolidate_assumptions_short.md', '003-2-identify_risks.md', '003-3-make_assumptions_raw.json', '003-4-make_assumptions.json', '003-5-make_assumptions.md', '003-6-distill_assumptions_raw.json', '003-7-distill_assumptions.md', '003-8-review_assumptions_raw.json', '003-9-review_assumptions.md', '004-1-pre_project_assessment_raw.json', '004-2-pre_project_assessment.json', '005-1-project_plan_raw.json', '005-2-project_plan.md', '006-1-governance_phase1_audit_raw.json', '006-10-governance_phase5_monitoring_progress.md', '006-11-governance_phase6_extra_raw.json', '006-12-governance_phase6_extra.md', '006-13-consolidate_governance.md', '006-2-governance_phase1_audit.md', '006-3-governance_phase2_bodies_raw.json', '006-4-governance_phase2_bodies.md', '006-5-governance_phase3_impl_plan_raw.json', '006-6-governance_phase3_impl_plan.md', '006-7-governance_phase4_decision_escalation_matrix_raw.json', '006-8-governance_phase4_decision_escalation_matrix.md', '006-9-governance_phase5_monitoring_progress_raw.json', '007-1-related_resources_raw.json', '007-8-related_resources.md', '008-1-find_team_members_raw.json', '008-2-find_team_members.json', '009-1-enrich_team_members_contract_type_raw.json', '009-2-enrich_team_members_contract_type.json', '010-1-enrich_team_members_background_story_raw.json', '010-2-enrich_team_members_background_story.json', '011-1-enrich_team_members_environment_info_raw.json', '011-2-enrich_team_members_environment_info.json', '012-review_team_raw.json', '013-team.md', '014-1-swot_analysis_raw.json', '014-2-swot_analysis.md', '016-2-expert_criticism.md', '017-1-data_collection_raw.json', '017-10-filter_documents_to_create_clean.json', '017-12-draft_documents_to_find.json', '017-14-draft_documents_to_create.json', '017-15-documents_to_create_and_find.md', '017-2-data_collection.md', '017-3-identified_documents_raw.json', '017-4-identified_documents.md', '017-5-identified_documents_to_find.json', '017-6-identified_documents_to_create.json', '017-7-filter_documents_to_find_raw.json', '017-8-filter_documents_to_find_clean.json', '017-9-filter_documents_to_create_raw.json', '018-1-wbs_level1_raw.json', '018-2-wbs_level1.json', '018-3-wbs_level1_project_title.json', '018-4-wbs_level2_raw.json', '018-5-wbs_level2.json', '019-wbs_project_level1_and_level2.json', '020-1-pitch_raw.json', '020-2-pitch_to_markdown_raw.json', '020-3-pitch.md', '021-task_dependencies_raw.json', '022-2-task_durations.json', '023-2-wbs_level3.json', '023-3-wbs_project_level1_and_level2_and_level3.json', '023-4-wbs_project_level1_and_level2_and_level3.csv', '024-1-review_plan_raw.json', '024-2-review_plan.md', '025-1-executive_summary_raw.json', '025-2-executive_summary.md', '026-2-schedule_gantt_dhtmlx.html', '026-3-schedule_gantt_machai.csv', '027-1-questions_and_answers_raw.json', '027-2-questions_and_answers.md', '027-3-questions_and_answers.html', '028-1-premortem_raw.json', '028-2-premortem.md', '029-1-self_audit_raw.json', '029-2-self_audit.md', '030-report.html', '999-pipeline_complete.txt'], luigi_build_return_value=None)
+2026-03-06 18:37:37 - __main__ - INFO - Saved 110 expected filenames to /Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test/expected_filenames1.json
+2026-03-06 18:37:37 - __main__ - INFO - Luigi workers: 1
+2026-03-06 18:37:37 - luigi - INFO - logging configured by default settings
+DEBUG: Checking if FullPlanPipeline(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if StartTimeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if SetupTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if RedlineGateTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if PremiseAttackTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if IdentifyPurposeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if PlanTypeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if PotentialLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if DeduplicateLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if EnrichLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if FocusOnVitalFewLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if StrategicDecisionsMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if CandidateScenariosTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if SelectScenarioTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if ScenariosMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if PhysicalLocationsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if CurrencyStrategyTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if IdentifyRisksTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if MakeAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if DistillAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if ReviewAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if ConsolidateAssumptionsMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if PreProjectAssessmentTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if ProjectPlanTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if GovernancePhase1AuditTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if GovernancePhase2BodiesTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if GovernancePhase3ImplPlanTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if GovernancePhase4DecisionEscalationMatrixTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if GovernancePhase5MonitoringProgressTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if GovernancePhase6ExtraTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if ConsolidateGovernanceTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if RelatedResourcesTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if FindTeamMembersTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if EnrichTeamMembersWithContractTypeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if EnrichTeamMembersWithBackgroundStoryTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if EnrichTeamMembersWithEnvironmentInfoTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if ReviewTeamTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if TeamMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if SWOTAnalysisTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if ExpertReviewTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if DataCollectionTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if IdentifyDocumentsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if FilterDocumentsToFindTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if FilterDocumentsToCreateTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if DraftDocumentsToFindTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if DraftDocumentsToCreateTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if MarkdownWithDocumentsToCreateAndFindTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if CreateWBSLevel1Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if CreateWBSLevel2Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if WBSProjectLevel1AndLevel2Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if CreatePitchTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if ConvertPitchToMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if IdentifyTaskDependenciesTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if EstimateTaskDurationsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if CreateWBSLevel3Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if WBSProjectLevel1AndLevel2AndLevel3Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if ReviewPlanTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if ExecutiveSummaryTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if CreateScheduleTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if QuestionsAndAnswersTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if PremortemTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if SelfAuditTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+DEBUG: Checking if ReportTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+INFO: Informed scheduler that task   FullPlanPipeline___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   FullPlanPipeline___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   ReportTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   ReportTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   SelfAuditTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   SelfAuditTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   PremortemTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   PremortemTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   QuestionsAndAnswersTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   QuestionsAndAnswersTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   CreateScheduleTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   CreateScheduleTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   ExecutiveSummaryTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   ExecutiveSummaryTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   ReviewPlanTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   ReviewPlanTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   WBSProjectLevel1AndLevel2AndLevel3Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   WBSProjectLevel1AndLevel2AndLevel3Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   CreateWBSLevel3Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   CreateWBSLevel3Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   EstimateTaskDurationsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   EstimateTaskDurationsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   IdentifyTaskDependenciesTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   IdentifyTaskDependenciesTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   ConvertPitchToMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   ConvertPitchToMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   CreatePitchTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   CreatePitchTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   WBSProjectLevel1AndLevel2Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   WBSProjectLevel1AndLevel2Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   CreateWBSLevel2Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   CreateWBSLevel2Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   CreateWBSLevel1Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   CreateWBSLevel1Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   MarkdownWithDocumentsToCreateAndFindTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   MarkdownWithDocumentsToCreateAndFindTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   DraftDocumentsToCreateTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   DraftDocumentsToCreateTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   DraftDocumentsToFindTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   DraftDocumentsToFindTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   FilterDocumentsToCreateTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   FilterDocumentsToCreateTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   FilterDocumentsToFindTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   FilterDocumentsToFindTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   IdentifyDocumentsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   IdentifyDocumentsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   DataCollectionTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   DataCollectionTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   ExpertReviewTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   ExpertReviewTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   SWOTAnalysisTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   SWOTAnalysisTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   TeamMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   TeamMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   ReviewTeamTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   ReviewTeamTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   EnrichTeamMembersWithEnvironmentInfoTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   EnrichTeamMembersWithEnvironmentInfoTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   EnrichTeamMembersWithBackgroundStoryTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   EnrichTeamMembersWithBackgroundStoryTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   EnrichTeamMembersWithContractTypeTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   EnrichTeamMembersWithContractTypeTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   FindTeamMembersTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   FindTeamMembersTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   RelatedResourcesTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   RelatedResourcesTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   ConsolidateGovernanceTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   ConsolidateGovernanceTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   GovernancePhase6ExtraTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase6ExtraTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   GovernancePhase5MonitoringProgressTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase5MonitoringProgressTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   GovernancePhase4DecisionEscalationMatrixTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase4DecisionEscalationMatrixTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   GovernancePhase3ImplPlanTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase3ImplPlanTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   GovernancePhase2BodiesTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase2BodiesTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   GovernancePhase1AuditTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase1AuditTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   ProjectPlanTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   ProjectPlanTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   PreProjectAssessmentTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   PreProjectAssessmentTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   ConsolidateAssumptionsMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   ConsolidateAssumptionsMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   ReviewAssumptionsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   ReviewAssumptionsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   DistillAssumptionsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   DistillAssumptionsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   MakeAssumptionsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   MakeAssumptionsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   IdentifyRisksTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   IdentifyRisksTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   CurrencyStrategyTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   CurrencyStrategyTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   PhysicalLocationsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   PhysicalLocationsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   ScenariosMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   ScenariosMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   SelectScenarioTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   SelectScenarioTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   CandidateScenariosTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   CandidateScenariosTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   StrategicDecisionsMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   StrategicDecisionsMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   FocusOnVitalFewLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   FocusOnVitalFewLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   EnrichLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   EnrichLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   DeduplicateLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   DeduplicateLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   PotentialLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   PotentialLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   PlanTypeTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   PlanTypeTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   IdentifyPurposeTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   IdentifyPurposeTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   PremiseAttackTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   PremiseAttackTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   RedlineGateTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   RedlineGateTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   PENDING
+INFO: Informed scheduler that task   SetupTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   DONE
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   SetupTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   DONE
+INFO: Informed scheduler that task   StartTimeTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   DONE
+2026-03-06 18:37:37 - luigi-interface - INFO - Informed scheduler that task   StartTimeTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__6ead5b503a   has status   DONE
+INFO: Done scheduling tasks
+2026-03-06 18:37:37 - luigi-interface - INFO - Done scheduling tasks
+INFO: Running Worker with 1 processes
+2026-03-06 18:37:37 - luigi-interface - INFO - Running Worker with 1 processes
+DEBUG: Asking scheduler for work...
+DEBUG: Pending tasks: 61
+INFO: [pid 85836] Worker Worker(salt=6811896847, workers=1, host=mini.local, username=macmini, pid=85836) running   PremiseAttackTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 18:37:37 - luigi-interface - INFO - [pid 85836] Worker Worker(salt=6811896847, workers=1, host=mini.local, username=macmini, pid=85836) running   PremiseAttackTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM47_Full_Chain_Test, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.7-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 18:37:37 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 400 Bad Request"
+2026-03-06 18:37:37 - worker_plan_internal.llm_util.llm_executor - ERROR - LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.7-flash') and llm_executor_uuid: '8a632f0a-0d2d-44be-98be-e5a908c5b2fb': HTTPStatusError("Client error '400 Bad Request' for url 'http://127.0.0.1:1234/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400") traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 291, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 360, in structured_predict
+    result = program(llm_kwargs=llm_kwargs, **prompt_args)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/llm_program.py", line 92, in __call__
+    chat_response = self._llm.chat(messages, **llm_kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/lmstudio/base.py", line 175, in chat
+    response.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '400 Bad Request' for url 'http://127.0.0.1:1234/v1/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+
+2026-03-06 18:37:48 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:37:48 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-qwen3.5-35b-a3b'). llm_executor_uuid: 'a527f7af-09a1-412b-b488-d55ed056dd64'. Duration: 10.63 seconds
+2026-03-06 18:37:48 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 400 Bad Request"
+2026-03-06 18:37:48 - worker_plan_internal.llm_util.llm_executor - ERROR - LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.7-flash') and llm_executor_uuid: '7337fffe-810b-4c7c-86fa-3241e364dbd5': HTTPStatusError("Client error '400 Bad Request' for url 'http://127.0.0.1:1234/v1/chat/completions'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400") traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 291, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 360, in structured_predict
+    result = program(llm_kwargs=llm_kwargs, **prompt_args)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/llm_program.py", line 92, in __call__
+    chat_response = self._llm.chat(messages, **llm_kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/lmstudio/base.py", line 175, in chat
+    response.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '400 Bad Request' for url 'http://127.0.0.1:1234/v1/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+
+/opt/homebrew/Cellar/python@3.13/3.13.12_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/multiprocessing/resource_tracker.py:400: UserWarning: resource_tracker: There appear to be 3 leaked semaphore objects to clean up at shutdown: {'/mp-7e7h4vcm', '/mp-u4v6chlj', '/mp-j5lsxthe'}
+  warnings.warn(

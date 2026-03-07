@@ -1,0 +1,1046 @@
+2026-03-06 18:42:59 - __main__ - INFO - pipeline_environment: PipelineEnvironment(run_id_dir='/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2', llm_model=None, speed_vs_detail=None, model_profile='custom') (log_level=INFO)
+2026-03-06 18:42:59 - __main__ - INFO - Speed vs Detail: SpeedVsDetailEnum.ALL_DETAILS_BUT_SLOW
+2026-03-06 18:42:59 - __main__ - INFO - Model profile: custom
+2026-03-06 18:42:59 - __main__ - INFO - These are the LLM models that will be used in the pipeline:
+2026-03-06 18:42:59 - __main__ - INFO - 0. 'lmstudio-glm-4.6v-flash'
+2026-03-06 18:42:59 - __main__ - INFO - 1. 'lmstudio-qwen3.5-35b-a3b'
+2026-03-06 18:42:59 - __main__ - INFO - 2. 'lmstudio-qwen3-coder-next'
+2026-03-06 18:42:59 - __main__ - INFO - 3. 'lmstudio-nemotron-nano'
+2026-03-06 18:42:59 - __main__ - INFO - 4. 'lmstudio-lfm2-24b'
+2026-03-06 18:42:59 - __main__ - INFO - execute_pipeline: ExecutePipeline(run_id_dir=PosixPath('/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2'), speedvsdetail=<SpeedVsDetailEnum.ALL_DETAILS_BUT_SLOW: 'all_details_but_slow'>, llm_models=['lmstudio-glm-4.6v-flash', 'lmstudio-qwen3.5-35b-a3b', 'lmstudio-qwen3-coder-next', 'lmstudio-nemotron-nano', 'lmstudio-lfm2-24b'], model_profile=<ModelProfileEnum.CUSTOM: 'custom'>, full_plan_pipeline_task=FullPlanPipeline(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]), all_expected_filenames=['001-1-start_time.json', '001-2-plan.txt', '002-1-redline_gate.json', '002-10-potential_levers.json', '002-11-deduplicated_levers_raw.json', '002-12-enriched_levers_raw.json', '002-13-vital_few_levers_raw.json', '002-14-strategic_decisions.md', '002-15-candidate_scenarios_raw.json', '002-16-candidate_scenarios.json', '002-17-selected_scenario_raw.json', '002-18-selected_scenario.json', '002-19-scenarios.md', '002-2-redline_gate.md', '002-20-physical_locations_raw.json', '002-21-physical_locations.md', '002-22-currency_strategy_raw.json', '002-23-currency_strategy.md', '002-3-premise_attack.json', '002-4-premise_attack.md', '002-5-identify_purpose_raw.json', '002-6-identify_purpose.md', '002-7-plan_type_raw.json', '002-8-plan_type.md', '002-9-potential_levers_raw.json', '003-1-identify_risks_raw.json', '003-10-consolidate_assumptions_full.md', '003-11-consolidate_assumptions_short.md', '003-2-identify_risks.md', '003-3-make_assumptions_raw.json', '003-4-make_assumptions.json', '003-5-make_assumptions.md', '003-6-distill_assumptions_raw.json', '003-7-distill_assumptions.md', '003-8-review_assumptions_raw.json', '003-9-review_assumptions.md', '004-1-pre_project_assessment_raw.json', '004-2-pre_project_assessment.json', '005-1-project_plan_raw.json', '005-2-project_plan.md', '006-1-governance_phase1_audit_raw.json', '006-10-governance_phase5_monitoring_progress.md', '006-11-governance_phase6_extra_raw.json', '006-12-governance_phase6_extra.md', '006-13-consolidate_governance.md', '006-2-governance_phase1_audit.md', '006-3-governance_phase2_bodies_raw.json', '006-4-governance_phase2_bodies.md', '006-5-governance_phase3_impl_plan_raw.json', '006-6-governance_phase3_impl_plan.md', '006-7-governance_phase4_decision_escalation_matrix_raw.json', '006-8-governance_phase4_decision_escalation_matrix.md', '006-9-governance_phase5_monitoring_progress_raw.json', '007-1-related_resources_raw.json', '007-8-related_resources.md', '008-1-find_team_members_raw.json', '008-2-find_team_members.json', '009-1-enrich_team_members_contract_type_raw.json', '009-2-enrich_team_members_contract_type.json', '010-1-enrich_team_members_background_story_raw.json', '010-2-enrich_team_members_background_story.json', '011-1-enrich_team_members_environment_info_raw.json', '011-2-enrich_team_members_environment_info.json', '012-review_team_raw.json', '013-team.md', '014-1-swot_analysis_raw.json', '014-2-swot_analysis.md', '016-2-expert_criticism.md', '017-1-data_collection_raw.json', '017-10-filter_documents_to_create_clean.json', '017-12-draft_documents_to_find.json', '017-14-draft_documents_to_create.json', '017-15-documents_to_create_and_find.md', '017-2-data_collection.md', '017-3-identified_documents_raw.json', '017-4-identified_documents.md', '017-5-identified_documents_to_find.json', '017-6-identified_documents_to_create.json', '017-7-filter_documents_to_find_raw.json', '017-8-filter_documents_to_find_clean.json', '017-9-filter_documents_to_create_raw.json', '018-1-wbs_level1_raw.json', '018-2-wbs_level1.json', '018-3-wbs_level1_project_title.json', '018-4-wbs_level2_raw.json', '018-5-wbs_level2.json', '019-wbs_project_level1_and_level2.json', '020-1-pitch_raw.json', '020-2-pitch_to_markdown_raw.json', '020-3-pitch.md', '021-task_dependencies_raw.json', '022-2-task_durations.json', '023-2-wbs_level3.json', '023-3-wbs_project_level1_and_level2_and_level3.json', '023-4-wbs_project_level1_and_level2_and_level3.csv', '024-1-review_plan_raw.json', '024-2-review_plan.md', '025-1-executive_summary_raw.json', '025-2-executive_summary.md', '026-2-schedule_gantt_dhtmlx.html', '026-3-schedule_gantt_machai.csv', '027-1-questions_and_answers_raw.json', '027-2-questions_and_answers.md', '027-3-questions_and_answers.html', '028-1-premortem_raw.json', '028-2-premortem.md', '029-1-self_audit_raw.json', '029-2-self_audit.md', '030-report.html', '999-pipeline_complete.txt'], luigi_build_return_value=None)
+2026-03-06 18:42:59 - __main__ - INFO - Saved 110 expected filenames to /Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2/expected_filenames1.json
+2026-03-06 18:42:59 - __main__ - INFO - Luigi workers: 1
+2026-03-06 18:42:59 - luigi - INFO - logging configured by default settings
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if FullPlanPipeline(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if StartTimeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if SetupTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if RedlineGateTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if PremiseAttackTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if IdentifyPurposeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if PlanTypeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if PotentialLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if DeduplicateLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if EnrichLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if FocusOnVitalFewLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if StrategicDecisionsMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if CandidateScenariosTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if SelectScenarioTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if ScenariosMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if PhysicalLocationsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if CurrencyStrategyTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if IdentifyRisksTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if MakeAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if DistillAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if ReviewAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if ConsolidateAssumptionsMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if PreProjectAssessmentTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if ProjectPlanTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if GovernancePhase1AuditTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if GovernancePhase2BodiesTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if GovernancePhase3ImplPlanTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if GovernancePhase4DecisionEscalationMatrixTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if GovernancePhase5MonitoringProgressTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if GovernancePhase6ExtraTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if ConsolidateGovernanceTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if RelatedResourcesTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if FindTeamMembersTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if EnrichTeamMembersWithContractTypeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if EnrichTeamMembersWithBackgroundStoryTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if EnrichTeamMembersWithEnvironmentInfoTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if ReviewTeamTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if TeamMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if SWOTAnalysisTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if ExpertReviewTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if DataCollectionTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if IdentifyDocumentsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if FilterDocumentsToFindTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if FilterDocumentsToCreateTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if DraftDocumentsToFindTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if DraftDocumentsToCreateTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if MarkdownWithDocumentsToCreateAndFindTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if CreateWBSLevel1Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if CreateWBSLevel2Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if WBSProjectLevel1AndLevel2Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if CreatePitchTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if ConvertPitchToMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if IdentifyTaskDependenciesTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if EstimateTaskDurationsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if CreateWBSLevel3Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if WBSProjectLevel1AndLevel2AndLevel3Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if ReviewPlanTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if ExecutiveSummaryTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if CreateScheduleTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if QuestionsAndAnswersTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if PremortemTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if SelfAuditTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Checking if ReportTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"]) is complete
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   FullPlanPipeline___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   ReportTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   SelfAuditTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   PremortemTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   QuestionsAndAnswersTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   CreateScheduleTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   ExecutiveSummaryTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   ReviewPlanTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   WBSProjectLevel1AndLevel2AndLevel3Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   CreateWBSLevel3Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   EstimateTaskDurationsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   IdentifyTaskDependenciesTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   ConvertPitchToMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   CreatePitchTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   WBSProjectLevel1AndLevel2Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   CreateWBSLevel2Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   CreateWBSLevel1Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   MarkdownWithDocumentsToCreateAndFindTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   DraftDocumentsToCreateTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   DraftDocumentsToFindTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   FilterDocumentsToCreateTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   FilterDocumentsToFindTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   IdentifyDocumentsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   DataCollectionTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   ExpertReviewTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   SWOTAnalysisTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   TeamMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   ReviewTeamTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   EnrichTeamMembersWithEnvironmentInfoTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   EnrichTeamMembersWithBackgroundStoryTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   EnrichTeamMembersWithContractTypeTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   FindTeamMembersTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   RelatedResourcesTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   ConsolidateGovernanceTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase6ExtraTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase5MonitoringProgressTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase4DecisionEscalationMatrixTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase3ImplPlanTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase2BodiesTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase1AuditTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   ProjectPlanTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   PreProjectAssessmentTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   ConsolidateAssumptionsMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   ReviewAssumptionsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   DistillAssumptionsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   MakeAssumptionsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   IdentifyRisksTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   CurrencyStrategyTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   PhysicalLocationsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   ScenariosMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   SelectScenarioTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   CandidateScenariosTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   StrategicDecisionsMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   FocusOnVitalFewLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   EnrichLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   DeduplicateLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   PotentialLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   PlanTypeTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   IdentifyPurposeTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   PremiseAttackTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   RedlineGateTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   PENDING
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   SetupTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 18:42:59 - luigi-interface - INFO - Informed scheduler that task   StartTimeTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 18:42:59 - luigi-interface - INFO - Done scheduling tasks
+2026-03-06 18:42:59 - luigi-interface - INFO - Running Worker with 1 processes
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 18:42:59 - luigi-interface - DEBUG - Pending tasks: 61
+2026-03-06 18:42:59 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   RedlineGateTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 18:43:11 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:43:11 - worker_plan_internal.diagnostics.redline_gate - INFO - LLM chat interaction completed in 13 seconds. Response byte count: 239
+2026-03-06 18:43:11 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '6a669dfd-cb00-4333-8989-3a3fd5ec20f6'. Duration: 12.01 seconds
+2026-03-06 18:43:11 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      RedlineGateTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 18:43:11 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 18:43:11 - luigi-interface - INFO - Informed scheduler that task   RedlineGateTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 18:43:11 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 18:43:11 - luigi-interface - DEBUG - Pending tasks: 60
+2026-03-06 18:43:11 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   PremiseAttackTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 18:43:29 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:43:29 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '5876ef8b-e8b4-4569-9dc6-76e706dbbd2c'. Duration: 18.31 seconds
+2026-03-06 18:43:56 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:43:56 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: 'da32844e-bcd9-4e0b-aa8b-98af7018a693'. Duration: 26.34 seconds
+2026-03-06 18:44:17 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:44:17 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '6ba754c8-25db-45f9-9f0e-e81ea782c263'. Duration: 21.14 seconds
+2026-03-06 18:44:30 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:44:30 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: 'fe0be94a-5038-4200-b585-c05704a928d5'. Duration: 12.91 seconds
+2026-03-06 18:45:14 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:45:14 - worker_plan_internal.llm_util.llm_executor - ERROR - LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash') and llm_executor_uuid: '5d43d45f-8abd-443e-9a86-a9193ba1a2ad': 1 validation error for DocumentDetails
+evidence.3
+  Input should be a valid string [type=string_type, input_value=True, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.12/v/string_type traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 291, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 360, in structured_predict
+    result = program(llm_kwargs=llm_kwargs, **prompt_args)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/llm_program.py", line 102, in __call__
+    output = self._output_parser.parse(raw_output)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/output_parsers/pydantic.py", line 63, in parse
+    return self._output_cls.model_validate_json(json_str)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for DocumentDetails
+evidence.3
+  Input should be a valid string [type=string_type, input_value=True, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.12/v/string_type
+
+2026-03-06 18:45:32 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:45:32 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-qwen3.5-35b-a3b'). llm_executor_uuid: 'eecd7ccb-059c-4adf-a357-18d386ccc912'. Duration: 18.72 seconds
+2026-03-06 18:45:32 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      PremiseAttackTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 18:45:32 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 18:45:32 - luigi-interface - INFO - Informed scheduler that task   PremiseAttackTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 18:45:32 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 18:45:32 - luigi-interface - DEBUG - Pending tasks: 59
+2026-03-06 18:45:32 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   IdentifyPurposeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 18:45:37 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:45:37 - worker_plan_internal.assume.identify_purpose - INFO - LLM chat interaction completed in 5 seconds. Response byte count: 198
+2026-03-06 18:45:37 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '8e2e8001-6afd-4928-b8e8-26930bc35e28'. Duration: 4.99 seconds
+2026-03-06 18:45:37 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      IdentifyPurposeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 18:45:37 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 18:45:37 - luigi-interface - INFO - Informed scheduler that task   IdentifyPurposeTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 18:45:37 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 18:45:37 - luigi-interface - DEBUG - Pending tasks: 58
+2026-03-06 18:45:37 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   PlanTypeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 18:45:46 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:45:46 - worker_plan_internal.assume.identify_plan_type - INFO - LLM chat interaction completed in 9 seconds. Response byte count: 300
+2026-03-06 18:45:46 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: 'fbbe16cf-1bd0-4149-bd1b-1de4abc01884'. Duration: 8.10 seconds
+2026-03-06 18:45:46 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      PlanTypeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 18:45:46 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 18:45:46 - luigi-interface - INFO - Informed scheduler that task   PlanTypeTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 18:45:46 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 18:45:46 - luigi-interface - DEBUG - Pending tasks: 57
+2026-03-06 18:45:46 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   PotentialLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 18:45:46 - worker_plan_internal.lever.identify_potential_levers - INFO - Processing user_prompt_index: 1 of 3
+2026-03-06 18:46:07 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:46:07 - worker_plan_internal.llm_util.llm_executor - ERROR - LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash') and llm_executor_uuid: '733c0d4e-3ff3-44a8-93e6-bdf88f6bced7': 10 validation errors for DocumentDetails
+levers.0.options
+  Input should be a valid array [type=list_type, input_value=':[', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/list_type
+levers.0.review_lever
+  Field required [type=missing, input_value={'lever_index': 1, 'name'...cing.', 'options': ':['}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+levers.1.options
+  Input should be a valid array [type=list_type, input_value='[', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/list_type
+levers.1.review_lever
+  Field required [type=missing, input_value={'lever_index': 2, 'name'...iness.', 'options': '['}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+levers.2.options
+  Input should be a valid array [type=list_type, input_value='[', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/list_type
+levers.2.review_lever
+  Field required [type=missing, input_value={'lever_index': 3, 'name'...emand.', 'options': '['}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+levers.3.options
+  Input should be a valid array [type=list_type, input_value='[', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/list_type
+levers.3.review_lever
+  Field required [type=missing, input_value={'lever_index': 4, 'name'...ology.', 'options': '['}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+levers.4.options
+  Input should be a valid array [type=list_type, input_value='[', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/list_type
+levers.4.review_lever
+  Field required [type=missing, input_value={'lever_index': 5, 'name'...pment.', 'options': '['}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/lever/identify_potential_levers.py", line 177, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 360, in structured_predict
+    result = program(llm_kwargs=llm_kwargs, **prompt_args)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/llm_program.py", line 102, in __call__
+    output = self._output_parser.parse(raw_output)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/output_parsers/pydantic.py", line 63, in parse
+    return self._output_cls.model_validate_json(json_str)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 10 validation errors for DocumentDetails
+levers.0.options
+  Input should be a valid array [type=list_type, input_value=':[', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/list_type
+levers.0.review_lever
+  Field required [type=missing, input_value={'lever_index': 1, 'name'...cing.', 'options': ':['}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+levers.1.options
+  Input should be a valid array [type=list_type, input_value='[', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/list_type
+levers.1.review_lever
+  Field required [type=missing, input_value={'lever_index': 2, 'name'...iness.', 'options': '['}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+levers.2.options
+  Input should be a valid array [type=list_type, input_value='[', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/list_type
+levers.2.review_lever
+  Field required [type=missing, input_value={'lever_index': 3, 'name'...emand.', 'options': '['}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+levers.3.options
+  Input should be a valid array [type=list_type, input_value='[', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/list_type
+levers.3.review_lever
+  Field required [type=missing, input_value={'lever_index': 4, 'name'...ology.', 'options': '['}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+levers.4.options
+  Input should be a valid array [type=list_type, input_value='[', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/list_type
+levers.4.review_lever
+  Field required [type=missing, input_value={'lever_index': 5, 'name'...pment.', 'options': '['}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+
+2026-03-06 18:46:32 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:46:32 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-qwen3.5-35b-a3b'). llm_executor_uuid: 'ec415638-8b59-4bba-bc5c-6a7cb39c5800'. Duration: 24.67 seconds
+2026-03-06 18:46:32 - worker_plan_internal.lever.identify_potential_levers - INFO - Processing user_prompt_index: 2 of 3
+2026-03-06 18:46:48 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:46:48 - worker_plan_internal.llm_util.llm_executor - ERROR - LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash') and llm_executor_uuid: '5a762802-4e80-40b6-b9e1-808381f8741f': 2 validation errors for DocumentDetails
+levers.0.options
+  Input should be a valid array [type=list_type, input_value='{"options":["Adopt modul...quipment performance."}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/list_type
+levers.0.review_lever
+  Field required [type=missing, input_value={'lever_index': 1, 'name'...uipment performance."}'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/lever/identify_potential_levers.py", line 177, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 360, in structured_predict
+    result = program(llm_kwargs=llm_kwargs, **prompt_args)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/llm_program.py", line 102, in __call__
+    output = self._output_parser.parse(raw_output)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/output_parsers/pydantic.py", line 63, in parse
+    return self._output_cls.model_validate_json(json_str)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 2 validation errors for DocumentDetails
+levers.0.options
+  Input should be a valid array [type=list_type, input_value='{"options":["Adopt modul...quipment performance."}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/list_type
+levers.0.review_lever
+  Field required [type=missing, input_value={'lever_index': 1, 'name'...uipment performance."}'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+
+2026-03-06 18:47:14 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:47:14 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-qwen3.5-35b-a3b'). llm_executor_uuid: '9090f5b9-e073-43b0-8e23-c2f00de0da61'. Duration: 26.47 seconds
+2026-03-06 18:47:14 - worker_plan_internal.lever.identify_potential_levers - INFO - Processing user_prompt_index: 3 of 3
+2026-03-06 18:57:14 - worker_plan_internal.llm_util.llm_executor - ERROR - LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash') and llm_executor_uuid: '31ac6cc7-df03-43bb-843e-bf8d7d77c0eb': ReadTimeout('timed out') traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_sync/connection.py", line 103, in handle_request
+    return self._connection.handle_request(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 136, in handle_request
+    raise exc
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 106, in handle_request
+    ) = self._receive_response_headers(**kwargs)
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 177, in _receive_response_headers
+    event = self._receive_event(timeout=timeout)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_sync/http11.py", line 217, in _receive_event
+    data = self._network_stream.read(
+        self.READ_NUM_BYTES, timeout=timeout
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_backends/sync.py", line 126, in read
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.12_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ReadTimeout: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/lever/identify_potential_levers.py", line 177, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 360, in structured_predict
+    result = program(llm_kwargs=llm_kwargs, **prompt_args)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/llm_program.py", line 92, in __call__
+    chat_response = self._llm.chat(messages, **llm_kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/lmstudio/base.py", line 171, in chat
+    response = client.post(
+        url=f"{self.base_url}/chat/completions",
+        json=payload,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_client.py", line 1144, in post
+    return self.request(
+           ~~~~~~~~~~~~^
+        "POST",
+        ^^^^^^^
+    ...<11 lines>...
+        extensions=extensions,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.12_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ReadTimeout: timed out
+
+2026-03-06 18:58:18 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:58:18 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-qwen3.5-35b-a3b'). llm_executor_uuid: '4ff5cfa6-9a29-4ba7-9dab-1a209a8a7e55'. Duration: 63.56 seconds
+2026-03-06 18:58:18 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      PotentialLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 18:58:18 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 18:58:18 - luigi-interface - INFO - Informed scheduler that task   PotentialLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 18:58:18 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 18:58:18 - luigi-interface - DEBUG - Pending tasks: 56
+2026-03-06 18:58:18 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   DeduplicateLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 18:58:18 - worker_plan_internal.lever.deduplicate_levers - INFO - Starting deduplication for 15 levers.
+2026-03-06 18:59:51 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 18:59:51 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '88c53bfd-fdf6-4f72-8545-0f038730b4f8'. Duration: 93.68 seconds
+2026-03-06 18:59:51 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      DeduplicateLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 18:59:51 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 18:59:51 - luigi-interface - INFO - Informed scheduler that task   DeduplicateLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 18:59:51 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 18:59:51 - luigi-interface - DEBUG - Pending tasks: 55
+2026-03-06 18:59:51 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   EnrichLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 18:59:51 - worker_plan_internal.lever.enrich_potential_levers - INFO - Characterizing 15 levers in batches of 5.
+2026-03-06 18:59:51 - worker_plan_internal.lever.enrich_potential_levers - INFO - Processing batch 1 with 5 levers...
+2026-03-06 19:01:04 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:01:04 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '364ad8df-5211-4b46-a718-9b9201486ffb'. Duration: 72.24 seconds
+2026-03-06 19:01:04 - worker_plan_internal.lever.enrich_potential_levers - INFO - Processing batch 2 with 5 levers...
+2026-03-06 19:02:16 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:02:16 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '9696c36b-9ffa-4619-96a3-3e6ffa528fd0'. Duration: 72.12 seconds
+2026-03-06 19:02:16 - worker_plan_internal.lever.enrich_potential_levers - INFO - Processing batch 3 with 5 levers...
+2026-03-06 19:03:38 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:03:38 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: 'cd5ed5f2-e686-4d61-baac-6a2a21ec7765'. Duration: 81.90 seconds
+2026-03-06 19:03:38 - worker_plan_internal.lever.enrich_potential_levers - ERROR - Characterization incomplete for lever 'e1fd362b-4b3a-4cc3-9ce7-497c16e18c5b'. Skipping this lever.
+2026-03-06 19:03:38 - worker_plan_internal.lever.enrich_potential_levers - ERROR - Characterization incomplete for lever '4eb5b0d8-021b-4477-af2e-78075bc44751'. Skipping this lever.
+2026-03-06 19:03:38 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      EnrichLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:03:38 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:03:38 - luigi-interface - INFO - Informed scheduler that task   EnrichLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:03:38 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:03:38 - luigi-interface - DEBUG - Pending tasks: 54
+2026-03-06 19:03:38 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   FocusOnVitalFewLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:03:38 - worker_plan_internal.lever.focus_on_vital_few_levers - INFO - Assessing 13 characterized levers to find the vital few.
+2026-03-06 19:05:07 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:05:07 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '71895076-4883-4bdc-b2c4-e94cdebb48e8'. Duration: 89.54 seconds
+2026-03-06 19:05:07 - worker_plan_internal.lever.focus_on_vital_few_levers - INFO - Full lever assessment succeeded.
+2026-03-06 19:05:07 - worker_plan_internal.lever.focus_on_vital_few_levers - INFO - Selected 5 vital levers.
+2026-03-06 19:05:07 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      FocusOnVitalFewLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:05:07 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:05:07 - luigi-interface - INFO - Informed scheduler that task   FocusOnVitalFewLeversTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:05:07 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:05:07 - luigi-interface - DEBUG - Pending tasks: 53
+2026-03-06 19:05:07 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   CandidateScenariosTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:05:07 - worker_plan_internal.lever.candidate_scenarios - INFO - Generating strategic scenarios from 5 vital levers.
+2026-03-06 19:05:23 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:05:23 - worker_plan_internal.llm_util.llm_executor - ERROR - LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash') and llm_executor_uuid: '83de3ea9-adc5-49b5-ae84-7da283d76141': 1 validation error for ScenarioAnalysisResult
+scenarios.0.lever_settings
+  Input should be an object [type=dict_type, input_value='{"Market Access Strategy...uce delivery overhead"}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/dict_type traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/lever/candidate_scenarios.py", line 119, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 360, in structured_predict
+    result = program(llm_kwargs=llm_kwargs, **prompt_args)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/llm_program.py", line 102, in __call__
+    output = self._output_parser.parse(raw_output)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/output_parsers/pydantic.py", line 63, in parse
+    return self._output_cls.model_validate_json(json_str)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for ScenarioAnalysisResult
+scenarios.0.lever_settings
+  Input should be an object [type=dict_type, input_value='{"Market Access Strategy...uce delivery overhead"}', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/dict_type
+
+2026-03-06 19:05:57 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:05:57 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-qwen3.5-35b-a3b'). llm_executor_uuid: '4b8fae6d-6082-4257-ac79-c2a3d4eda361'. Duration: 34.27 seconds
+2026-03-06 19:05:57 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      CandidateScenariosTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:05:57 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:05:57 - luigi-interface - INFO - Informed scheduler that task   CandidateScenariosTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:05:57 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:05:57 - luigi-interface - DEBUG - Pending tasks: 52
+2026-03-06 19:05:57 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   StrategicDecisionsMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:05:57 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      StrategicDecisionsMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:05:57 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:05:57 - luigi-interface - INFO - Informed scheduler that task   StrategicDecisionsMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:05:57 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:05:57 - luigi-interface - DEBUG - Pending tasks: 51
+2026-03-06 19:05:57 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   SelectScenarioTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:05:57 - worker_plan_internal.lever.select_scenario - INFO - Analyzing plan and evaluating 3 scenarios.
+2026-03-06 19:06:54 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:06:54 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '928db878-4e2d-46b3-b78c-f79239bb2ccc'. Duration: 57.27 seconds
+2026-03-06 19:06:54 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      SelectScenarioTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:06:54 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:06:54 - luigi-interface - INFO - Informed scheduler that task   SelectScenarioTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:06:54 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:06:54 - luigi-interface - DEBUG - Pending tasks: 50
+2026-03-06 19:06:55 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   ScenariosMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:06:55 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      ScenariosMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:06:55 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:06:55 - luigi-interface - INFO - Informed scheduler that task   ScenariosMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:06:55 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:06:55 - luigi-interface - DEBUG - Pending tasks: 49
+2026-03-06 19:06:55 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   PhysicalLocationsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:06:55 - __main__ - INFO - Identify/suggest physical locations for the plan...
+2026-03-06 19:07:28 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:07:28 - worker_plan_internal.assume.physical_locations - ERROR - LLM chat interaction failed.
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/assume/physical_locations.py", line 179, in execute
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 360, in structured_predict
+    result = program(llm_kwargs=llm_kwargs, **prompt_args)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/llm_program.py", line 102, in __call__
+    output = self._output_parser.parse(raw_output)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/output_parsers/pydantic.py", line 63, in parse
+    return self._output_cls.model_validate_json(json_str)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 4 validation errors for DocumentDetails
+has_location_in_plan
+  Field required [type=missing, input_value={'DocumentDetails': {'has...'location_summary': ''}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+requirements_for_the_physical_locations
+  Field required [type=missing, input_value={'DocumentDetails': {'has...'location_summary': ''}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+physical_locations
+  Field required [type=missing, input_value={'DocumentDetails': {'has...'location_summary': ''}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+location_summary
+  Field required [type=missing, input_value={'DocumentDetails': {'has...'location_summary': ''}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-06 19:07:28 - worker_plan_internal.llm_util.llm_executor - ERROR - LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash') and llm_executor_uuid: 'd223bab8-d3c1-4917-b76b-5177e1f0051b': ValueError('LLM chat interaction failed.') traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/assume/physical_locations.py", line 179, in execute
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 360, in structured_predict
+    result = program(llm_kwargs=llm_kwargs, **prompt_args)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/llm_program.py", line 102, in __call__
+    output = self._output_parser.parse(raw_output)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/output_parsers/pydantic.py", line 63, in parse
+    return self._output_cls.model_validate_json(json_str)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 4 validation errors for DocumentDetails
+has_location_in_plan
+  Field required [type=missing, input_value={'DocumentDetails': {'has...'location_summary': ''}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+requirements_for_the_physical_locations
+  Field required [type=missing, input_value={'DocumentDetails': {'has...'location_summary': ''}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+physical_locations
+  Field required [type=missing, input_value={'DocumentDetails': {'has...'location_summary': ''}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+location_summary
+  Field required [type=missing, input_value={'DocumentDetails': {'has...'location_summary': ''}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 176, in execute_function
+    self.run_with_llm(llm)
+    ~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 719, in run_with_llm
+    physical_locations = PhysicalLocations.execute(llm, query)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/assume/physical_locations.py", line 183, in execute
+    raise ValueError("LLM chat interaction failed.") from e
+ValueError: LLM chat interaction failed.
+
+2026-03-06 19:07:28 - __main__ - INFO - Identify/suggest physical locations for the plan...
+2026-03-06 19:08:12 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:08:12 - worker_plan_internal.assume.physical_locations - INFO - LLM chat interaction completed in 45 seconds. Response byte count: 1947
+2026-03-06 19:08:12 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-qwen3.5-35b-a3b'). llm_executor_uuid: '48cef705-cfa5-44c2-b70d-b9a3d69f951b'. Duration: 44.15 seconds
+2026-03-06 19:08:12 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      PhysicalLocationsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:08:12 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:08:12 - luigi-interface - INFO - Informed scheduler that task   PhysicalLocationsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:08:12 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:08:12 - luigi-interface - DEBUG - Pending tasks: 48
+2026-03-06 19:08:12 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   CurrencyStrategyTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:08:50 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:08:50 - worker_plan_internal.assume.currency_strategy - INFO - LLM chat interaction completed in 38 seconds. Response byte count: 881
+2026-03-06 19:08:50 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: 'f253a672-1b85-4879-9c10-21cc5b4a7fc7'. Duration: 37.94 seconds
+2026-03-06 19:08:50 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      CurrencyStrategyTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:08:50 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:08:50 - luigi-interface - INFO - Informed scheduler that task   CurrencyStrategyTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:08:50 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:08:50 - luigi-interface - DEBUG - Pending tasks: 47
+2026-03-06 19:08:50 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   IdentifyRisksTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:10:19 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:10:19 - worker_plan_internal.assume.identify_risks - INFO - LLM chat interaction completed in 90 seconds. Response byte count: 4672
+2026-03-06 19:10:19 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '51758fba-0fb0-4208-a0b3-3c3cab0c19b5'. Duration: 89.11 seconds
+2026-03-06 19:10:19 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      IdentifyRisksTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:10:19 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:10:19 - luigi-interface - INFO - Informed scheduler that task   IdentifyRisksTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:10:19 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:10:19 - luigi-interface - DEBUG - Pending tasks: 46
+2026-03-06 19:10:19 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   MakeAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:11:58 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:11:58 - worker_plan_internal.assume.make_assumptions - INFO - LLM chat interaction completed in 100 seconds. Response byte count: 5462
+2026-03-06 19:11:58 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '404ea794-d653-4ac6-ae69-ff8c33e99691'. Duration: 99.59 seconds
+2026-03-06 19:11:58 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      MakeAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:11:58 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:11:58 - luigi-interface - INFO - Informed scheduler that task   MakeAssumptionsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:11:58 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:11:58 - luigi-interface - DEBUG - Pending tasks: 45
+2026-03-06 19:11:58 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   DistillAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:12:33 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:12:33 - worker_plan_internal.assume.distill_assumptions - INFO - LLM chat interaction completed in 36 seconds. Response byte count: 87
+2026-03-06 19:12:33 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '3a168693-067b-411c-bb8d-3d2497c1ee5c'. Duration: 35.11 seconds
+2026-03-06 19:12:33 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      DistillAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:12:33 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:12:33 - luigi-interface - INFO - Informed scheduler that task   DistillAssumptionsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:12:33 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:12:33 - luigi-interface - DEBUG - Pending tasks: 44
+2026-03-06 19:12:33 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   ReviewAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:13:30 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:13:30 - worker_plan_internal.assume.review_assumptions - INFO - LLM chat interaction completed in 57 seconds. Response byte count: 1690
+2026-03-06 19:13:30 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: 'ea905870-aaa5-463c-ac61-5cd16ec169ce'. Duration: 56.09 seconds
+2026-03-06 19:13:30 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      ReviewAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:13:30 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:13:30 - luigi-interface - INFO - Informed scheduler that task   ReviewAssumptionsTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:13:30 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:13:30 - luigi-interface - DEBUG - Pending tasks: 43
+2026-03-06 19:13:30 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   ConsolidateAssumptionsMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:13:34 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:13:34 - worker_plan_internal.assume.shorten_markdown - INFO - LLM chat interaction completed in 5 seconds. Response byte count: 178
+2026-03-06 19:13:34 - worker_plan_internal.assume.shorten_markdown - WARNING - Output delimiters not found in LLM response.
+2026-03-06 19:13:34 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '4d1f4a49-f906-4623-97fd-34e1293cc117'. Duration: 4.38 seconds
+2026-03-06 19:13:40 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:13:40 - worker_plan_internal.assume.shorten_markdown - INFO - LLM chat interaction completed in 6 seconds. Response byte count: 371
+2026-03-06 19:13:40 - worker_plan_internal.assume.shorten_markdown - WARNING - Output delimiters not found in LLM response.
+2026-03-06 19:13:40 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: 'b2e0c34c-b1e7-4af6-8a88-08fa41aad51c'. Duration: 5.61 seconds
+2026-03-06 19:13:47 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:13:47 - worker_plan_internal.assume.shorten_markdown - INFO - LLM chat interaction completed in 8 seconds. Response byte count: 435
+2026-03-06 19:13:47 - worker_plan_internal.assume.shorten_markdown - WARNING - Output delimiters not found in LLM response.
+2026-03-06 19:13:47 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: 'ff4d01ff-b17e-4efb-9a62-9101af84b643'. Duration: 7.12 seconds
+2026-03-06 19:13:56 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:13:56 - worker_plan_internal.assume.shorten_markdown - INFO - LLM chat interaction completed in 10 seconds. Response byte count: 836
+2026-03-06 19:13:56 - worker_plan_internal.assume.shorten_markdown - WARNING - Output delimiters not found in LLM response.
+2026-03-06 19:13:56 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '325cbd42-56be-4490-adbc-1c82cee89efe'. Duration: 9.15 seconds
+2026-03-06 19:14:44 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:14:44 - worker_plan_internal.assume.shorten_markdown - INFO - LLM chat interaction completed in 48 seconds. Response byte count: 4535
+2026-03-06 19:14:44 - worker_plan_internal.assume.shorten_markdown - WARNING - Output delimiters not found in LLM response.
+2026-03-06 19:14:44 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '6ed82202-646a-4051-a079-429251a5275b'. Duration: 47.82 seconds
+2026-03-06 19:15:43 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:15:43 - worker_plan_internal.assume.shorten_markdown - INFO - LLM chat interaction completed in 60 seconds. Response byte count: 5330
+2026-03-06 19:15:43 - worker_plan_internal.assume.shorten_markdown - WARNING - Output delimiters not found in LLM response.
+2026-03-06 19:15:43 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '39f49ff4-bea4-41cb-9145-c6a137414079'. Duration: 59.53 seconds
+2026-03-06 19:15:47 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:15:47 - worker_plan_internal.assume.shorten_markdown - INFO - LLM chat interaction completed in 5 seconds. Response byte count: 82
+2026-03-06 19:15:47 - worker_plan_internal.assume.shorten_markdown - WARNING - Output delimiters not found in LLM response.
+2026-03-06 19:15:47 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '228315f7-cf16-4c5b-97c6-4d3ea11f2f53'. Duration: 4.03 seconds
+2026-03-06 19:16:03 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:16:03 - worker_plan_internal.assume.shorten_markdown - INFO - LLM chat interaction completed in 16 seconds. Response byte count: 1726
+2026-03-06 19:16:03 - worker_plan_internal.assume.shorten_markdown - WARNING - Output delimiters not found in LLM response.
+2026-03-06 19:16:03 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '0a145f7c-021b-44b8-9f2d-6b35b7d1799d'. Duration: 15.95 seconds
+2026-03-06 19:16:03 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      ConsolidateAssumptionsMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:16:03 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:16:03 - luigi-interface - INFO - Informed scheduler that task   ConsolidateAssumptionsMarkdownTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:16:03 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:16:03 - luigi-interface - DEBUG - Pending tasks: 42
+2026-03-06 19:16:03 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   PreProjectAssessmentTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:16:03 - __main__ - INFO - Conducting pre-project assessment...
+2026-03-06 19:16:49 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:16:49 - worker_plan_internal.llm_util.llm_executor - ERROR - LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash') and llm_executor_uuid: '16bd8668-be67-4dbc-8f54-f28e19a82fa1': 4 validation errors for ExpertDetails
+expert1
+  Field required [type=missing, input_value={'input': 'Small coffee r...s in rural Connecticut'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+expert2
+  Field required [type=missing, input_value={'input': 'Small coffee r...s in rural Connecticut'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+combined_summary
+  Field required [type=missing, input_value={'input': 'Small coffee r...s in rural Connecticut'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+go_no_go_recommendation
+  Field required [type=missing, input_value={'input': 'Small coffee r...s in rural Connecticut'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 176, in execute_function
+    self.run_with_llm(llm)
+    ~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 1146, in run_with_llm
+    pre_project_assessment = PreProjectAssessment.execute(llm, query)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/expert/pre_project_assessment.py", line 305, in execute
+    chat_response1 = sllm.chat(chat_message_list1)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 360, in structured_predict
+    result = program(llm_kwargs=llm_kwargs, **prompt_args)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/llm_program.py", line 102, in __call__
+    output = self._output_parser.parse(raw_output)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/output_parsers/pydantic.py", line 63, in parse
+    return self._output_cls.model_validate_json(json_str)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 4 validation errors for ExpertDetails
+expert1
+  Field required [type=missing, input_value={'input': 'Small coffee r...s in rural Connecticut'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+expert2
+  Field required [type=missing, input_value={'input': 'Small coffee r...s in rural Connecticut'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+combined_summary
+  Field required [type=missing, input_value={'input': 'Small coffee r...s in rural Connecticut'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+go_no_go_recommendation
+  Field required [type=missing, input_value={'input': 'Small coffee r...s in rural Connecticut'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+
+2026-03-06 19:16:49 - __main__ - INFO - Conducting pre-project assessment...
+2026-03-06 19:19:12 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:19:12 - worker_plan_internal.expert.pre_project_assessment - INFO - LLM chat interaction completed in 144 seconds. Response byte count: 6206
+2026-03-06 19:19:12 - worker_plan_internal.expert.pre_project_assessment - INFO - Extracted 8 feedback items.
+2026-03-06 19:19:12 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-qwen3.5-35b-a3b'). llm_executor_uuid: 'bf504a86-7107-4a25-8aea-a2aacd0390f9'. Duration: 143.73 seconds
+2026-03-06 19:19:12 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      PreProjectAssessmentTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:19:12 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:19:12 - luigi-interface - INFO - Informed scheduler that task   PreProjectAssessmentTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:19:12 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:19:12 - luigi-interface - DEBUG - Pending tasks: 41
+2026-03-06 19:19:12 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   ProjectPlanTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:19:12 - __main__ - INFO - Creating plan...
+2026-03-06 19:20:18 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:20:18 - worker_plan_internal.plan.project_plan - ERROR - LLM chat interaction failed.
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/project_plan.py", line 248, in execute
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 360, in structured_predict
+    result = program(llm_kwargs=llm_kwargs, **prompt_args)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/llm_program.py", line 102, in __call__
+    output = self._output_parser.parse(raw_output)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/output_parsers/pydantic.py", line 63, in parse
+    return self._output_cls.model_validate_json(json_str)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 9 validation errors for GoalDefinition
+goal_statement
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+smart_criteria
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+dependencies
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+resources_required
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+related_goals
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+tags
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+risk_assessment_and_mitigation_strategies
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+stakeholder_analysis
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+regulatory_and_compliance_requirements
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+2026-03-06 19:20:18 - worker_plan_internal.llm_util.llm_executor - ERROR - LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash') and llm_executor_uuid: 'cc495eca-50a0-4165-a561-bae4b6195f49': ValueError('LLM chat interaction failed.') traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/project_plan.py", line 248, in execute
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 360, in structured_predict
+    result = program(llm_kwargs=llm_kwargs, **prompt_args)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/llm_program.py", line 102, in __call__
+    output = self._output_parser.parse(raw_output)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/output_parsers/pydantic.py", line 63, in parse
+    return self._output_cls.model_validate_json(json_str)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/pydantic/main.py", line 766, in model_validate_json
+    return cls.__pydantic_validator__.validate_json(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        json_data, strict=strict, extra=extra, context=context, by_alias=by_alias, by_name=by_name
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+pydantic_core._pydantic_core.ValidationError: 9 validation errors for GoalDefinition
+goal_statement
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+smart_criteria
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+dependencies
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+resources_required
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+related_goals
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+tags
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+risk_assessment_and_mitigation_strategies
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+stakeholder_analysis
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+regulatory_and_compliance_requirements
+  Field required [type=missing, input_value={'go_no_go_recommendation...ption_for_field_value']}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.12/v/missing
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 176, in execute_function
+    self.run_with_llm(llm)
+    ~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 1205, in run_with_llm
+    project_plan = ProjectPlan.execute(llm, query)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/project_plan.py", line 252, in execute
+    raise ValueError("LLM chat interaction failed.") from e
+ValueError: LLM chat interaction failed.
+
+2026-03-06 19:20:18 - __main__ - INFO - Creating plan...
+2026-03-06 19:22:32 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:22:32 - worker_plan_internal.plan.project_plan - INFO - LLM chat interaction completed in 135 seconds. Response byte count: 7111
+2026-03-06 19:22:32 - __main__ - INFO - Project plan created and saved
+2026-03-06 19:22:32 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-qwen3.5-35b-a3b'). llm_executor_uuid: '7ec0be3c-14e0-4f57-8208-f5a3af77d34a'. Duration: 134.03 seconds
+2026-03-06 19:22:32 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      ProjectPlanTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:22:32 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:22:32 - luigi-interface - INFO - Informed scheduler that task   ProjectPlanTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:22:32 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:22:32 - luigi-interface - DEBUG - Pending tasks: 40
+2026-03-06 19:22:32 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   GovernancePhase1AuditTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:23:26 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:23:26 - worker_plan_internal.governance.governance_phase1_audit - INFO - LLM chat interaction completed in 55 seconds. Response byte count: 1978
+2026-03-06 19:23:26 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: 'dea0388c-22ba-4db4-8888-47782cee9de9'. Duration: 54.61 seconds
+2026-03-06 19:23:26 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      GovernancePhase1AuditTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:23:26 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:23:26 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase1AuditTask___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:23:26 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:23:26 - luigi-interface - DEBUG - Pending tasks: 39
+2026-03-06 19:23:26 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   CreateWBSLevel1Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:23:26 - __main__ - INFO - Creating Work Breakdown Structure (WBS) Level 1...
+2026-03-06 19:23:33 - httpx - INFO - HTTP Request: POST http://127.0.0.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2026-03-06 19:23:33 - __main__ - INFO - WBS Level 1 created successfully.
+2026-03-06 19:23:33 - worker_plan_internal.llm_util.llm_executor - INFO - LLMExecutor did invoke execute_function. LLM LLMModelFromName(name='lmstudio-glm-4.6v-flash'). llm_executor_uuid: '432e057b-2c9e-4018-966a-14508602e383'. Duration: 6.36 seconds
+2026-03-06 19:23:33 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) done      CreateWBSLevel1Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])
+2026-03-06 19:23:33 - luigi-interface - DEBUG - 1 running tasks, waiting for next task to finish
+2026-03-06 19:23:33 - luigi-interface - INFO - Informed scheduler that task   CreateWBSLevel1Task___lmstudio_glm_4__Users_macmini_D_ALL_DETAILS_BUT__4429613ad7   has status   DONE
+2026-03-06 19:23:33 - luigi-interface - DEBUG - Asking scheduler for work...
+2026-03-06 19:23:33 - luigi-interface - DEBUG - Pending tasks: 38
+2026-03-06 19:23:33 - luigi-interface - INFO - [pid 89185] Worker Worker(salt=4733308799, workers=1, host=mini.local, username=macmini, pid=89185) running   GovernancePhase2BodiesTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/GLM46_Full_Chain_v2, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["lmstudio-glm-4.6v-flash", "lmstudio-qwen3.5-35b-a3b", "lmstudio-qwen3-coder-next", "lmstudio-nemotron-nano", "lmstudio-lfm2-24b"])

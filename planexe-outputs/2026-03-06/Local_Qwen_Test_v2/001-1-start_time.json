@@ -1,0 +1,9 @@
+{
+  "start_time_utc": "2026-03-06T22:03:00Z",
+  "run_label": "Local_Qwen_Test_v2",
+  "primary_model": "qwen/qwen3.5-35b-a3b",
+  "fallback_model": "zai-org/glm-4.7-flash",
+  "model_source": "LM Studio (localhost:1234)",
+  "test_type": "local_models_only",
+  "notes": "Fixed: Using OpenAILike class instead of OpenAI for local model compatibility"
+}

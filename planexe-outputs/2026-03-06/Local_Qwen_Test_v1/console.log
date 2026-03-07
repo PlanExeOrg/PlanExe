@@ -1,0 +1,1227 @@
+None of PyTorch, TensorFlow >= 2.0, or Flax have been found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+PLANEXE_TASK_ID not set. Token metrics will not be recorded.
+2026-03-06 16:59:56 - __main__ - INFO - pipeline_environment: PipelineEnvironment(run_id_dir='/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1', llm_model=None, speed_vs_detail=None, model_profile='custom') (log_level=INFO)
+2026-03-06 16:59:56 - __main__ - INFO - Speed vs Detail: SpeedVsDetailEnum.ALL_DETAILS_BUT_SLOW
+2026-03-06 16:59:56 - __main__ - INFO - Model profile: custom
+2026-03-06 16:59:56 - __main__ - INFO - These are the LLM models that will be used in the pipeline:
+2026-03-06 16:59:56 - __main__ - INFO - 0. 'local-qwen-3.5-35b-primary'
+2026-03-06 16:59:56 - __main__ - INFO - 1. 'local-glm-4.7-fallback'
+/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/parameter.py:296: UserWarning: Parameter "run_id_dir" with value "/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1" is not of type string.
+  warnings.warn('Parameter "{}" with value "{}" is not of type string.'.format(param_name, param_value))
+/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/parameter.py:296: UserWarning: Parameter "_pipeline_executor_callback" with value "<bound method ExecutePipeline.callback_run_task of ExecutePipeline(run_id_dir=PosixPath('/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1'), speedvsdetail=<SpeedVsDetailEnum.ALL_DETAILS_BUT_SLOW: 'all_details_but_slow'>, llm_models=['local-qwen-3.5-35b-primary', 'local-glm-4.7-fallback'], model_profile=<ModelProfileEnum.CUSTOM: 'custom'>, full_plan_pipeline_task=None, all_expected_filenames=[], luigi_build_return_value=None)>" is not of type string.
+  warnings.warn('Parameter "{}" with value "{}" is not of type string.'.format(param_name, param_value))
+/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/parameter.py:296: UserWarning: Parameter "_pipeline_executor_callback" with value "<bound method ExecutePipeline.callback_run_task of ExecutePipeline(run_id_dir=PosixPath('/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1'), speedvsdetail=<SpeedVsDetailEnum.ALL_DETAILS_BUT_SLOW: 'all_details_but_slow'>, llm_models=['local-qwen-3.5-35b-primary', 'local-glm-4.7-fallback'], model_profile=<ModelProfileEnum.CUSTOM: 'custom'>, full_plan_pipeline_task=FullPlanPipeline(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]), all_expected_filenames=[], luigi_build_return_value=None)>" is not of type string.
+  warnings.warn('Parameter "{}" with value "{}" is not of type string.'.format(param_name, param_value))
+2026-03-06 16:59:56 - __main__ - INFO - execute_pipeline: ExecutePipeline(run_id_dir=PosixPath('/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1'), speedvsdetail=<SpeedVsDetailEnum.ALL_DETAILS_BUT_SLOW: 'all_details_but_slow'>, llm_models=['local-qwen-3.5-35b-primary', 'local-glm-4.7-fallback'], model_profile=<ModelProfileEnum.CUSTOM: 'custom'>, full_plan_pipeline_task=FullPlanPipeline(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]), all_expected_filenames=['001-1-start_time.json', '001-2-plan.txt', '002-1-redline_gate.json', '002-10-potential_levers.json', '002-11-deduplicated_levers_raw.json', '002-12-enriched_levers_raw.json', '002-13-vital_few_levers_raw.json', '002-14-strategic_decisions.md', '002-15-candidate_scenarios_raw.json', '002-16-candidate_scenarios.json', '002-17-selected_scenario_raw.json', '002-18-selected_scenario.json', '002-19-scenarios.md', '002-2-redline_gate.md', '002-20-physical_locations_raw.json', '002-21-physical_locations.md', '002-22-currency_strategy_raw.json', '002-23-currency_strategy.md', '002-3-premise_attack.json', '002-4-premise_attack.md', '002-5-identify_purpose_raw.json', '002-6-identify_purpose.md', '002-7-plan_type_raw.json', '002-8-plan_type.md', '002-9-potential_levers_raw.json', '003-1-identify_risks_raw.json', '003-10-consolidate_assumptions_full.md', '003-11-consolidate_assumptions_short.md', '003-2-identify_risks.md', '003-3-make_assumptions_raw.json', '003-4-make_assumptions.json', '003-5-make_assumptions.md', '003-6-distill_assumptions_raw.json', '003-7-distill_assumptions.md', '003-8-review_assumptions_raw.json', '003-9-review_assumptions.md', '004-1-pre_project_assessment_raw.json', '004-2-pre_project_assessment.json', '005-1-project_plan_raw.json', '005-2-project_plan.md', '006-1-governance_phase1_audit_raw.json', '006-10-governance_phase5_monitoring_progress.md', '006-11-governance_phase6_extra_raw.json', '006-12-governance_phase6_extra.md', '006-13-consolidate_governance.md', '006-2-governance_phase1_audit.md', '006-3-governance_phase2_bodies_raw.json', '006-4-governance_phase2_bodies.md', '006-5-governance_phase3_impl_plan_raw.json', '006-6-governance_phase3_impl_plan.md', '006-7-governance_phase4_decision_escalation_matrix_raw.json', '006-8-governance_phase4_decision_escalation_matrix.md', '006-9-governance_phase5_monitoring_progress_raw.json', '007-1-related_resources_raw.json', '007-8-related_resources.md', '008-1-find_team_members_raw.json', '008-2-find_team_members.json', '009-1-enrich_team_members_contract_type_raw.json', '009-2-enrich_team_members_contract_type.json', '010-1-enrich_team_members_background_story_raw.json', '010-2-enrich_team_members_background_story.json', '011-1-enrich_team_members_environment_info_raw.json', '011-2-enrich_team_members_environment_info.json', '012-review_team_raw.json', '013-team.md', '014-1-swot_analysis_raw.json', '014-2-swot_analysis.md', '016-2-expert_criticism.md', '017-1-data_collection_raw.json', '017-10-filter_documents_to_create_clean.json', '017-12-draft_documents_to_find.json', '017-14-draft_documents_to_create.json', '017-15-documents_to_create_and_find.md', '017-2-data_collection.md', '017-3-identified_documents_raw.json', '017-4-identified_documents.md', '017-5-identified_documents_to_find.json', '017-6-identified_documents_to_create.json', '017-7-filter_documents_to_find_raw.json', '017-8-filter_documents_to_find_clean.json', '017-9-filter_documents_to_create_raw.json', '018-1-wbs_level1_raw.json', '018-2-wbs_level1.json', '018-3-wbs_level1_project_title.json', '018-4-wbs_level2_raw.json', '018-5-wbs_level2.json', '019-wbs_project_level1_and_level2.json', '020-1-pitch_raw.json', '020-2-pitch_to_markdown_raw.json', '020-3-pitch.md', '021-task_dependencies_raw.json', '022-2-task_durations.json', '023-2-wbs_level3.json', '023-3-wbs_project_level1_and_level2_and_level3.json', '023-4-wbs_project_level1_and_level2_and_level3.csv', '024-1-review_plan_raw.json', '024-2-review_plan.md', '025-1-executive_summary_raw.json', '025-2-executive_summary.md', '026-2-schedule_gantt_dhtmlx.html', '026-3-schedule_gantt_machai.csv', '027-1-questions_and_answers_raw.json', '027-2-questions_and_answers.md', '027-3-questions_and_answers.html', '028-1-premortem_raw.json', '028-2-premortem.md', '029-1-self_audit_raw.json', '029-2-self_audit.md', '030-report.html', '999-pipeline_complete.txt'], luigi_build_return_value=None)
+2026-03-06 16:59:56 - __main__ - INFO - Saved 110 expected filenames to /Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1/expected_filenames1.json
+2026-03-06 16:59:56 - __main__ - INFO - Luigi workers: 2
+2026-03-06 16:59:56 - luigi - INFO - logging configured by default settings
+DEBUG: Checking if FullPlanPipeline(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if StartTimeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if SetupTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if RedlineGateTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if PremiseAttackTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if IdentifyPurposeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if PlanTypeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if PotentialLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if DeduplicateLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if EnrichLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if FocusOnVitalFewLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if StrategicDecisionsMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if CandidateScenariosTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if SelectScenarioTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if ScenariosMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if PhysicalLocationsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if CurrencyStrategyTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if IdentifyRisksTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if MakeAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if DistillAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if ReviewAssumptionsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if ConsolidateAssumptionsMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if PreProjectAssessmentTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if ProjectPlanTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if GovernancePhase1AuditTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if GovernancePhase2BodiesTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if GovernancePhase3ImplPlanTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if GovernancePhase4DecisionEscalationMatrixTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if GovernancePhase5MonitoringProgressTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if GovernancePhase6ExtraTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if ConsolidateGovernanceTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if RelatedResourcesTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if FindTeamMembersTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if EnrichTeamMembersWithContractTypeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if EnrichTeamMembersWithBackgroundStoryTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if EnrichTeamMembersWithEnvironmentInfoTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if ReviewTeamTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if TeamMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if SWOTAnalysisTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if ExpertReviewTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if DataCollectionTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if IdentifyDocumentsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if FilterDocumentsToFindTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if FilterDocumentsToCreateTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if DraftDocumentsToFindTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if DraftDocumentsToCreateTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if MarkdownWithDocumentsToCreateAndFindTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if CreateWBSLevel1Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if CreateWBSLevel2Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if WBSProjectLevel1AndLevel2Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if CreatePitchTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if ConvertPitchToMarkdownTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if IdentifyTaskDependenciesTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if EstimateTaskDurationsTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if CreateWBSLevel3Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if WBSProjectLevel1AndLevel2AndLevel3Task(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if ReviewPlanTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if ExecutiveSummaryTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if CreateScheduleTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if QuestionsAndAnswersTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if PremortemTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if SelfAuditTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+DEBUG: Checking if ReportTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]) is complete
+INFO: Informed scheduler that task   FullPlanPipeline___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   FullPlanPipeline___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   ReportTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   ReportTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   SelfAuditTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   SelfAuditTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   PremortemTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   PremortemTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   QuestionsAndAnswersTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   QuestionsAndAnswersTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   CreateScheduleTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   CreateScheduleTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   ExecutiveSummaryTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   ExecutiveSummaryTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   ReviewPlanTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   ReviewPlanTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   WBSProjectLevel1AndLevel2AndLevel3Task___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   WBSProjectLevel1AndLevel2AndLevel3Task___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   CreateWBSLevel3Task___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   CreateWBSLevel3Task___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   EstimateTaskDurationsTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   EstimateTaskDurationsTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   IdentifyTaskDependenciesTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   IdentifyTaskDependenciesTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   ConvertPitchToMarkdownTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   ConvertPitchToMarkdownTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   CreatePitchTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   CreatePitchTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   WBSProjectLevel1AndLevel2Task___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   WBSProjectLevel1AndLevel2Task___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   CreateWBSLevel2Task___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   CreateWBSLevel2Task___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   CreateWBSLevel1Task___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   CreateWBSLevel1Task___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   MarkdownWithDocumentsToCreateAndFindTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   MarkdownWithDocumentsToCreateAndFindTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   DraftDocumentsToCreateTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   DraftDocumentsToCreateTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   DraftDocumentsToFindTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   DraftDocumentsToFindTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   FilterDocumentsToCreateTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   FilterDocumentsToCreateTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   FilterDocumentsToFindTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   FilterDocumentsToFindTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   IdentifyDocumentsTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   IdentifyDocumentsTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   DataCollectionTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   DataCollectionTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   ExpertReviewTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   ExpertReviewTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   SWOTAnalysisTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   SWOTAnalysisTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   TeamMarkdownTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   TeamMarkdownTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   ReviewTeamTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   ReviewTeamTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   EnrichTeamMembersWithEnvironmentInfoTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   EnrichTeamMembersWithEnvironmentInfoTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   EnrichTeamMembersWithBackgroundStoryTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   EnrichTeamMembersWithBackgroundStoryTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   EnrichTeamMembersWithContractTypeTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   EnrichTeamMembersWithContractTypeTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   FindTeamMembersTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   FindTeamMembersTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   RelatedResourcesTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   RelatedResourcesTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   ConsolidateGovernanceTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   ConsolidateGovernanceTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   GovernancePhase6ExtraTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase6ExtraTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   GovernancePhase5MonitoringProgressTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase5MonitoringProgressTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   GovernancePhase4DecisionEscalationMatrixTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase4DecisionEscalationMatrixTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   GovernancePhase3ImplPlanTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase3ImplPlanTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   GovernancePhase2BodiesTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase2BodiesTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   GovernancePhase1AuditTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   GovernancePhase1AuditTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   ProjectPlanTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   ProjectPlanTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   PreProjectAssessmentTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   PreProjectAssessmentTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   ConsolidateAssumptionsMarkdownTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   ConsolidateAssumptionsMarkdownTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   ReviewAssumptionsTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   ReviewAssumptionsTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   DistillAssumptionsTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   DistillAssumptionsTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   MakeAssumptionsTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   MakeAssumptionsTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   IdentifyRisksTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   IdentifyRisksTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   CurrencyStrategyTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   CurrencyStrategyTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   PhysicalLocationsTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   PhysicalLocationsTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   ScenariosMarkdownTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   ScenariosMarkdownTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   SelectScenarioTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   SelectScenarioTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   CandidateScenariosTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   CandidateScenariosTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   StrategicDecisionsMarkdownTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   StrategicDecisionsMarkdownTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   FocusOnVitalFewLeversTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   FocusOnVitalFewLeversTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   EnrichLeversTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   EnrichLeversTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   DeduplicateLeversTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   DeduplicateLeversTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   PotentialLeversTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   PotentialLeversTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   PlanTypeTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   PlanTypeTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   IdentifyPurposeTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   IdentifyPurposeTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   PremiseAttackTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   PremiseAttackTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   RedlineGateTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   RedlineGateTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   PENDING
+INFO: Informed scheduler that task   SetupTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   DONE
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   SetupTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   DONE
+INFO: Informed scheduler that task   StartTimeTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   DONE
+2026-03-06 16:59:56 - luigi-interface - INFO - Informed scheduler that task   StartTimeTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   DONE
+INFO: Done scheduling tasks
+2026-03-06 16:59:56 - luigi-interface - INFO - Done scheduling tasks
+INFO: Running Worker with 2 processes
+2026-03-06 16:59:56 - luigi-interface - INFO - Running Worker with 2 processes
+DEBUG: Asking scheduler for work...
+DEBUG: Pending tasks: 61
+DEBUG: Asking scheduler for work...
+DEBUG: Pending tasks: 60
+DEBUG: 2 running tasks, waiting for next task to finish
+None of PyTorch, TensorFlow >= 2.0, or Flax have been found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+None of PyTorch, TensorFlow >= 2.0, or Flax have been found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+DEBUG: 2 running tasks, waiting for next task to finish
+/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/parameter.py:296: UserWarning: Parameter "run_id_dir" with value "/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1" is not of type string.
+  warnings.warn('Parameter "{}" with value "{}" is not of type string.'.format(param_name, param_value))
+/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/parameter.py:296: UserWarning: Parameter "run_id_dir" with value "/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1" is not of type string.
+  warnings.warn('Parameter "{}" with value "{}" is not of type string.'.format(param_name, param_value))
+/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/parameter.py:296: UserWarning: Parameter "_pipeline_executor_callback" with value "<bound method ExecutePipeline.callback_run_task of ExecutePipeline(run_id_dir=PosixPath('/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1'), speedvsdetail=<SpeedVsDetailEnum.ALL_DETAILS_BUT_SLOW: 'all_details_but_slow'>, llm_models=['local-qwen-3.5-35b-primary', 'local-glm-4.7-fallback'], model_profile=<ModelProfileEnum.CUSTOM: 'custom'>, full_plan_pipeline_task=FullPlanPipeline(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]), all_expected_filenames=['001-1-start_time.json', '001-2-plan.txt', '002-1-redline_gate.json', '002-10-potential_levers.json', '002-11-deduplicated_levers_raw.json', '002-12-enriched_levers_raw.json', '002-13-vital_few_levers_raw.json', '002-14-strategic_decisions.md', '002-15-candidate_scenarios_raw.json', '002-16-candidate_scenarios.json', '002-17-selected_scenario_raw.json', '002-18-selected_scenario.json', '002-19-scenarios.md', '002-2-redline_gate.md', '002-20-physical_locations_raw.json', '002-21-physical_locations.md', '002-22-currency_strategy_raw.json', '002-23-currency_strategy.md', '002-3-premise_attack.json', '002-4-premise_attack.md', '002-5-identify_purpose_raw.json', '002-6-identify_purpose.md', '002-7-plan_type_raw.json', '002-8-plan_type.md', '002-9-potential_levers_raw.json', '003-1-identify_risks_raw.json', '003-10-consolidate_assumptions_full.md', '003-11-consolidate_assumptions_short.md', '003-2-identify_risks.md', '003-3-make_assumptions_raw.json', '003-4-make_assumptions.json', '003-5-make_assumptions.md', '003-6-distill_assumptions_raw.json', '003-7-distill_assumptions.md', '003-8-review_assumptions_raw.json', '003-9-review_assumptions.md', '004-1-pre_project_assessment_raw.json', '004-2-pre_project_assessment.json', '005-1-project_plan_raw.json', '005-2-project_plan.md', '006-1-governance_phase1_audit_raw.json', '006-10-governance_phase5_monitoring_progress.md', '006-11-governance_phase6_extra_raw.json', '006-12-governance_phase6_extra.md', '006-13-consolidate_governance.md', '006-2-governance_phase1_audit.md', '006-3-governance_phase2_bodies_raw.json', '006-4-governance_phase2_bodies.md', '006-5-governance_phase3_impl_plan_raw.json', '006-6-governance_phase3_impl_plan.md', '006-7-governance_phase4_decision_escalation_matrix_raw.json', '006-8-governance_phase4_decision_escalation_matrix.md', '006-9-governance_phase5_monitoring_progress_raw.json', '007-1-related_resources_raw.json', '007-8-related_resources.md', '008-1-find_team_members_raw.json', '008-2-find_team_members.json', '009-1-enrich_team_members_contract_type_raw.json', '009-2-enrich_team_members_contract_type.json', '010-1-enrich_team_members_background_story_raw.json', '010-2-enrich_team_members_background_story.json', '011-1-enrich_team_members_environment_info_raw.json', '011-2-enrich_team_members_environment_info.json', '012-review_team_raw.json', '013-team.md', '014-1-swot_analysis_raw.json', '014-2-swot_analysis.md', '016-2-expert_criticism.md', '017-1-data_collection_raw.json', '017-10-filter_documents_to_create_clean.json', '017-12-draft_documents_to_find.json', '017-14-draft_documents_to_create.json', '017-15-documents_to_create_and_find.md', '017-2-data_collection.md', '017-3-identified_documents_raw.json', '017-4-identified_documents.md', '017-5-identified_documents_to_find.json', '017-6-identified_documents_to_create.json', '017-7-filter_documents_to_find_raw.json', '017-8-filter_documents_to_find_clean.json', '017-9-filter_documents_to_create_raw.json', '018-1-wbs_level1_raw.json', '018-2-wbs_level1.json', '018-3-wbs_level1_project_title.json', '018-4-wbs_level2_raw.json', '018-5-wbs_level2.json', '019-wbs_project_level1_and_level2.json', '020-1-pitch_raw.json', '020-2-pitch_to_markdown_raw.json', '020-3-pitch.md', '021-task_dependencies_raw.json', '022-2-task_durations.json', '023-2-wbs_level3.json', '023-3-wbs_project_level1_and_level2_and_level3.json', '023-4-wbs_project_level1_and_level2_and_level3.csv', '024-1-review_plan_raw.json', '024-2-review_plan.md', '025-1-executive_summary_raw.json', '025-2-executive_summary.md', '026-2-schedule_gantt_dhtmlx.html', '026-3-schedule_gantt_machai.csv', '027-1-questions_and_answers_raw.json', '027-2-questions_and_answers.md', '027-3-questions_and_answers.html', '028-1-premortem_raw.json', '028-2-premortem.md', '029-1-self_audit_raw.json', '029-2-self_audit.md', '030-report.html', '999-pipeline_complete.txt'], luigi_build_return_value=None)>" is not of type string.
+  warnings.warn('Parameter "{}" with value "{}" is not of type string.'.format(param_name, param_value))
+/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/parameter.py:296: UserWarning: Parameter "_pipeline_executor_callback" with value "<bound method ExecutePipeline.callback_run_task of ExecutePipeline(run_id_dir=PosixPath('/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1'), speedvsdetail=<SpeedVsDetailEnum.ALL_DETAILS_BUT_SLOW: 'all_details_but_slow'>, llm_models=['local-qwen-3.5-35b-primary', 'local-glm-4.7-fallback'], model_profile=<ModelProfileEnum.CUSTOM: 'custom'>, full_plan_pipeline_task=FullPlanPipeline(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]), all_expected_filenames=['001-1-start_time.json', '001-2-plan.txt', '002-1-redline_gate.json', '002-10-potential_levers.json', '002-11-deduplicated_levers_raw.json', '002-12-enriched_levers_raw.json', '002-13-vital_few_levers_raw.json', '002-14-strategic_decisions.md', '002-15-candidate_scenarios_raw.json', '002-16-candidate_scenarios.json', '002-17-selected_scenario_raw.json', '002-18-selected_scenario.json', '002-19-scenarios.md', '002-2-redline_gate.md', '002-20-physical_locations_raw.json', '002-21-physical_locations.md', '002-22-currency_strategy_raw.json', '002-23-currency_strategy.md', '002-3-premise_attack.json', '002-4-premise_attack.md', '002-5-identify_purpose_raw.json', '002-6-identify_purpose.md', '002-7-plan_type_raw.json', '002-8-plan_type.md', '002-9-potential_levers_raw.json', '003-1-identify_risks_raw.json', '003-10-consolidate_assumptions_full.md', '003-11-consolidate_assumptions_short.md', '003-2-identify_risks.md', '003-3-make_assumptions_raw.json', '003-4-make_assumptions.json', '003-5-make_assumptions.md', '003-6-distill_assumptions_raw.json', '003-7-distill_assumptions.md', '003-8-review_assumptions_raw.json', '003-9-review_assumptions.md', '004-1-pre_project_assessment_raw.json', '004-2-pre_project_assessment.json', '005-1-project_plan_raw.json', '005-2-project_plan.md', '006-1-governance_phase1_audit_raw.json', '006-10-governance_phase5_monitoring_progress.md', '006-11-governance_phase6_extra_raw.json', '006-12-governance_phase6_extra.md', '006-13-consolidate_governance.md', '006-2-governance_phase1_audit.md', '006-3-governance_phase2_bodies_raw.json', '006-4-governance_phase2_bodies.md', '006-5-governance_phase3_impl_plan_raw.json', '006-6-governance_phase3_impl_plan.md', '006-7-governance_phase4_decision_escalation_matrix_raw.json', '006-8-governance_phase4_decision_escalation_matrix.md', '006-9-governance_phase5_monitoring_progress_raw.json', '007-1-related_resources_raw.json', '007-8-related_resources.md', '008-1-find_team_members_raw.json', '008-2-find_team_members.json', '009-1-enrich_team_members_contract_type_raw.json', '009-2-enrich_team_members_contract_type.json', '010-1-enrich_team_members_background_story_raw.json', '010-2-enrich_team_members_background_story.json', '011-1-enrich_team_members_environment_info_raw.json', '011-2-enrich_team_members_environment_info.json', '012-review_team_raw.json', '013-team.md', '014-1-swot_analysis_raw.json', '014-2-swot_analysis.md', '016-2-expert_criticism.md', '017-1-data_collection_raw.json', '017-10-filter_documents_to_create_clean.json', '017-12-draft_documents_to_find.json', '017-14-draft_documents_to_create.json', '017-15-documents_to_create_and_find.md', '017-2-data_collection.md', '017-3-identified_documents_raw.json', '017-4-identified_documents.md', '017-5-identified_documents_to_find.json', '017-6-identified_documents_to_create.json', '017-7-filter_documents_to_find_raw.json', '017-8-filter_documents_to_find_clean.json', '017-9-filter_documents_to_create_raw.json', '018-1-wbs_level1_raw.json', '018-2-wbs_level1.json', '018-3-wbs_level1_project_title.json', '018-4-wbs_level2_raw.json', '018-5-wbs_level2.json', '019-wbs_project_level1_and_level2.json', '020-1-pitch_raw.json', '020-2-pitch_to_markdown_raw.json', '020-3-pitch.md', '021-task_dependencies_raw.json', '022-2-task_durations.json', '023-2-wbs_level3.json', '023-3-wbs_project_level1_and_level2_and_level3.json', '023-4-wbs_project_level1_and_level2_and_level3.csv', '024-1-review_plan_raw.json', '024-2-review_plan.md', '025-1-executive_summary_raw.json', '025-2-executive_summary.md', '026-2-schedule_gantt_dhtmlx.html', '026-3-schedule_gantt_machai.csv', '027-1-questions_and_answers_raw.json', '027-2-questions_and_answers.md', '027-3-questions_and_answers.html', '028-1-premortem_raw.json', '028-2-premortem.md', '029-1-self_audit_raw.json', '029-2-self_audit.md', '030-report.html', '999-pipeline_complete.txt'], luigi_build_return_value=None)>" is not of type string.
+  warnings.warn('Parameter "{}" with value "{}" is not of type string.'.format(param_name, param_value))
+LLM chat interaction failed.
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/assume/identify_purpose.py", line 94, in execute
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+LLM chat interaction failed.
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/redline_gate.py", line 600, in execute_with_system_prompt
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='local-qwen-3.5-35b-primary') and llm_executor_uuid: 'ba10f915-b603-40b7-8987-0adf3c5be3dd': ValueError('LLM chat interaction failed.') traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/assume/identify_purpose.py", line 94, in execute
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 176, in execute_function
+    self.run_with_llm(llm)
+    ~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 279, in run_with_llm
+    identify_purpose = IdentifyPurpose.execute(llm, plan_prompt)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/assume/identify_purpose.py", line 98, in execute
+    raise ValueError("LLM chat interaction failed.") from e
+ValueError: LLM chat interaction failed.
+
+LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='local-qwen-3.5-35b-primary') and llm_executor_uuid: '7d8e7074-cf98-4fb0-b77c-cf2192b398d4': ValueError('LLM chat interaction failed.') traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/redline_gate.py", line 600, in execute_with_system_prompt
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 176, in execute_function
+    self.run_with_llm(llm)
+    ~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 226, in run_with_llm
+    redline_gate = RedlineGate.execute(llm, plan_prompt)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/redline_gate.py", line 579, in execute
+    return cls.execute_with_system_prompt(llm, user_prompt, SYSTEM_PROMPT_DEFAULT.strip())
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/redline_gate.py", line 604, in execute_with_system_prompt
+    raise ValueError("LLM chat interaction failed.") from e
+ValueError: LLM chat interaction failed.
+
+LLM chat interaction failed.
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/redline_gate.py", line 600, in execute_with_system_prompt
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+LLM chat interaction failed.
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/assume/identify_purpose.py", line 94, in execute
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='local-glm-4.7-fallback') and llm_executor_uuid: 'ae56d752-7491-4775-abd1-9065fc669d75': ValueError('LLM chat interaction failed.') traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/assume/identify_purpose.py", line 94, in execute
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 176, in execute_function
+    self.run_with_llm(llm)
+    ~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 279, in run_with_llm
+    identify_purpose = IdentifyPurpose.execute(llm, plan_prompt)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/assume/identify_purpose.py", line 98, in execute
+    raise ValueError("LLM chat interaction failed.") from e
+ValueError: LLM chat interaction failed.
+
+LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='local-glm-4.7-fallback') and llm_executor_uuid: 'dc8f6841-4e28-461e-a672-9c1f085b4863': ValueError('LLM chat interaction failed.') traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/redline_gate.py", line 600, in execute_with_system_prompt
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 176, in execute_function
+    self.run_with_llm(llm)
+    ~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 226, in run_with_llm
+    redline_gate = RedlineGate.execute(llm, plan_prompt)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/redline_gate.py", line 579, in execute
+    return cls.execute_with_system_prompt(llm, user_prompt, SYSTEM_PROMPT_DEFAULT.strip())
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/redline_gate.py", line 604, in execute_with_system_prompt
+    raise ValueError("LLM chat interaction failed.") from e
+ValueError: LLM chat interaction failed.
+
+[pid 60052] Worker Worker(salt=5683677654, workers=2, host=mini.local, username=macmini, pid=60039) failed    IdentifyPurposeTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"])
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 154, in run
+    self.run_inner()
+    ~~~~~~~~~~~~~~^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 180, in run_inner
+    llm_executor.run(execute_function)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 156, in run
+    self._raise_final_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 299, in _raise_final_exception
+    raise Exception(f"Failed to run. Exhausted all LLMs. Failure summary:\n{error_summary}")
+Exception: Failed to run. Exhausted all LLMs. Failure summary:
+ - Attempt 0 with LLMModelFromName(name='local-qwen-3.5-35b-primary') failed during 'execute' stage: ValueError('LLM chat interaction failed.')
+ - Attempt 1 with LLMModelFromName(name='local-glm-4.7-fallback') failed during 'execute' stage: ValueError('LLM chat interaction failed.')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/worker.py", line 210, in run
+    new_deps = self._run_get_new_deps()
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/worker.py", line 138, in _run_get_new_deps
+    task_gen = self.task.run()
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 166, in run
+    raise Exception(f"Failed to run {self.__class__.__name__} with any of the LLMs in the list: {self.llm_models!r} for run_id_dir: {self.run_id_dir!r}") from e
+Exception: Failed to run IdentifyPurposeTask with any of the LLMs in the list: ('local-qwen-3.5-35b-primary', 'local-glm-4.7-fallback') for run_id_dir: PosixPath('/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1')
+[pid 60051] Worker Worker(salt=5683677654, workers=2, host=mini.local, username=macmini, pid=60039) failed    RedlineGateTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"])
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 154, in run
+    self.run_inner()
+    ~~~~~~~~~~~~~~^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 180, in run_inner
+    llm_executor.run(execute_function)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 156, in run
+    self._raise_final_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 299, in _raise_final_exception
+    raise Exception(f"Failed to run. Exhausted all LLMs. Failure summary:\n{error_summary}")
+Exception: Failed to run. Exhausted all LLMs. Failure summary:
+ - Attempt 0 with LLMModelFromName(name='local-qwen-3.5-35b-primary') failed during 'execute' stage: ValueError('LLM chat interaction failed.')
+ - Attempt 1 with LLMModelFromName(name='local-glm-4.7-fallback') failed during 'execute' stage: ValueError('LLM chat interaction failed.')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/worker.py", line 210, in run
+    new_deps = self._run_get_new_deps()
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/worker.py", line 138, in _run_get_new_deps
+    task_gen = self.task.run()
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/plan/run_plan_pipeline.py", line 166, in run
+    raise Exception(f"Failed to run {self.__class__.__name__} with any of the LLMs in the list: {self.llm_models!r} for run_id_dir: {self.run_id_dir!r}") from e
+Exception: Failed to run RedlineGateTask with any of the LLMs in the list: ('local-qwen-3.5-35b-primary', 'local-glm-4.7-fallback') for run_id_dir: PosixPath('/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1')
+INFO: Informed scheduler that task   RedlineGateTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   FAILED
+2026-03-06 16:59:57 - luigi-interface - INFO - Informed scheduler that task   RedlineGateTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   FAILED
+DEBUG: Asking scheduler for work...
+DEBUG: Pending tasks: 60
+DEBUG: 2 running tasks, waiting for next task to finish
+INFO: Informed scheduler that task   IdentifyPurposeTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   FAILED
+2026-03-06 16:59:57 - luigi-interface - INFO - Informed scheduler that task   IdentifyPurposeTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   FAILED
+DEBUG: Asking scheduler for work...
+DEBUG: Done
+DEBUG: There are no more tasks to run at this time
+DEBUG: PremiseAttackTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8 is currently run by worker Worker(salt=5683677654, workers=2, host=mini.local, username=macmini, pid=60039)
+None of PyTorch, TensorFlow >= 2.0, or Flax have been found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+DEBUG: Asking scheduler for work...
+DEBUG: Done
+DEBUG: There are no more tasks to run at this time
+DEBUG: PremiseAttackTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8 is currently run by worker Worker(salt=5683677654, workers=2, host=mini.local, username=macmini, pid=60039)
+/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/parameter.py:296: UserWarning: Parameter "run_id_dir" with value "/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1" is not of type string.
+  warnings.warn('Parameter "{}" with value "{}" is not of type string.'.format(param_name, param_value))
+/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/luigi/parameter.py:296: UserWarning: Parameter "_pipeline_executor_callback" with value "<bound method ExecutePipeline.callback_run_task of ExecutePipeline(run_id_dir=PosixPath('/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1'), speedvsdetail=<SpeedVsDetailEnum.ALL_DETAILS_BUT_SLOW: 'all_details_but_slow'>, llm_models=['local-qwen-3.5-35b-primary', 'local-glm-4.7-fallback'], model_profile=<ModelProfileEnum.CUSTOM: 'custom'>, full_plan_pipeline_task=FullPlanPipeline(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-06/Local_Qwen_Test_v1, speedvsdetail=ALL_DETAILS_BUT_SLOW, llm_models=["local-qwen-3.5-35b-primary", "local-glm-4.7-fallback"]), all_expected_filenames=['001-1-start_time.json', '001-2-plan.txt', '002-1-redline_gate.json', '002-10-potential_levers.json', '002-11-deduplicated_levers_raw.json', '002-12-enriched_levers_raw.json', '002-13-vital_few_levers_raw.json', '002-14-strategic_decisions.md', '002-15-candidate_scenarios_raw.json', '002-16-candidate_scenarios.json', '002-17-selected_scenario_raw.json', '002-18-selected_scenario.json', '002-19-scenarios.md', '002-2-redline_gate.md', '002-20-physical_locations_raw.json', '002-21-physical_locations.md', '002-22-currency_strategy_raw.json', '002-23-currency_strategy.md', '002-3-premise_attack.json', '002-4-premise_attack.md', '002-5-identify_purpose_raw.json', '002-6-identify_purpose.md', '002-7-plan_type_raw.json', '002-8-plan_type.md', '002-9-potential_levers_raw.json', '003-1-identify_risks_raw.json', '003-10-consolidate_assumptions_full.md', '003-11-consolidate_assumptions_short.md', '003-2-identify_risks.md', '003-3-make_assumptions_raw.json', '003-4-make_assumptions.json', '003-5-make_assumptions.md', '003-6-distill_assumptions_raw.json', '003-7-distill_assumptions.md', '003-8-review_assumptions_raw.json', '003-9-review_assumptions.md', '004-1-pre_project_assessment_raw.json', '004-2-pre_project_assessment.json', '005-1-project_plan_raw.json', '005-2-project_plan.md', '006-1-governance_phase1_audit_raw.json', '006-10-governance_phase5_monitoring_progress.md', '006-11-governance_phase6_extra_raw.json', '006-12-governance_phase6_extra.md', '006-13-consolidate_governance.md', '006-2-governance_phase1_audit.md', '006-3-governance_phase2_bodies_raw.json', '006-4-governance_phase2_bodies.md', '006-5-governance_phase3_impl_plan_raw.json', '006-6-governance_phase3_impl_plan.md', '006-7-governance_phase4_decision_escalation_matrix_raw.json', '006-8-governance_phase4_decision_escalation_matrix.md', '006-9-governance_phase5_monitoring_progress_raw.json', '007-1-related_resources_raw.json', '007-8-related_resources.md', '008-1-find_team_members_raw.json', '008-2-find_team_members.json', '009-1-enrich_team_members_contract_type_raw.json', '009-2-enrich_team_members_contract_type.json', '010-1-enrich_team_members_background_story_raw.json', '010-2-enrich_team_members_background_story.json', '011-1-enrich_team_members_environment_info_raw.json', '011-2-enrich_team_members_environment_info.json', '012-review_team_raw.json', '013-team.md', '014-1-swot_analysis_raw.json', '014-2-swot_analysis.md', '016-2-expert_criticism.md', '017-1-data_collection_raw.json', '017-10-filter_documents_to_create_clean.json', '017-12-draft_documents_to_find.json', '017-14-draft_documents_to_create.json', '017-15-documents_to_create_and_find.md', '017-2-data_collection.md', '017-3-identified_documents_raw.json', '017-4-identified_documents.md', '017-5-identified_documents_to_find.json', '017-6-identified_documents_to_create.json', '017-7-filter_documents_to_find_raw.json', '017-8-filter_documents_to_find_clean.json', '017-9-filter_documents_to_create_raw.json', '018-1-wbs_level1_raw.json', '018-2-wbs_level1.json', '018-3-wbs_level1_project_title.json', '018-4-wbs_level2_raw.json', '018-5-wbs_level2.json', '019-wbs_project_level1_and_level2.json', '020-1-pitch_raw.json', '020-2-pitch_to_markdown_raw.json', '020-3-pitch.md', '021-task_dependencies_raw.json', '022-2-task_durations.json', '023-2-wbs_level3.json', '023-3-wbs_project_level1_and_level2_and_level3.json', '023-4-wbs_project_level1_and_level2_and_level3.csv', '024-1-review_plan_raw.json', '024-2-review_plan.md', '025-1-executive_summary_raw.json', '025-2-executive_summary.md', '026-2-schedule_gantt_dhtmlx.html', '026-3-schedule_gantt_machai.csv', '027-1-questions_and_answers_raw.json', '027-2-questions_and_answers.md', '027-3-questions_and_answers.html', '028-1-premortem_raw.json', '028-2-premortem.md', '029-1-self_audit_raw.json', '029-2-self_audit.md', '030-report.html', '999-pipeline_complete.txt'], luigi_build_return_value=None)>" is not of type string.
+  warnings.warn('Parameter "{}" with value "{}" is not of type string.'.format(param_name, param_value))
+LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='local-qwen-3.5-35b-primary') and llm_executor_uuid: '41bbd33d-9d6d-4fbf-a4aa-fa7e04f060c6': ValueError("Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613") traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 291, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='local-glm-4.7-fallback') and llm_executor_uuid: '40f5f850-9b13-4013-88bb-c9c8705ed4d9': ValueError("Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613") traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 291, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+LLM chat interaction failed.
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 302, in execute
+    result = llm_executor.run(execute_function)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 156, in run
+    self._raise_final_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 299, in _raise_final_exception
+    raise Exception(f"Failed to run. Exhausted all LLMs. Failure summary:\n{error_summary}")
+Exception: Failed to run. Exhausted all LLMs. Failure summary:
+ - Attempt 0 with LLMModelFromName(name='local-qwen-3.5-35b-primary') failed during 'execute' stage: ValueError("Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613")
+ - Attempt 1 with LLMModelFromName(name='local-glm-4.7-fallback') failed during 'execute' stage: ValueError("Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613")
+LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='local-qwen-3.5-35b-primary') and llm_executor_uuid: '3f9adac7-00ec-47c9-b859-cdacc8959c07': ValueError("Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613") traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 291, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='local-glm-4.7-fallback') and llm_executor_uuid: '25a2f56b-5035-48c4-8feb-b26d399c3f08': ValueError("Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613") traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 291, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+LLM chat interaction failed.
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 302, in execute
+    result = llm_executor.run(execute_function)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 156, in run
+    self._raise_final_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 299, in _raise_final_exception
+    raise Exception(f"Failed to run. Exhausted all LLMs. Failure summary:\n{error_summary}")
+Exception: Failed to run. Exhausted all LLMs. Failure summary:
+ - Attempt 0 with LLMModelFromName(name='local-qwen-3.5-35b-primary') failed during 'execute' stage: ValueError("Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613")
+ - Attempt 1 with LLMModelFromName(name='local-glm-4.7-fallback') failed during 'execute' stage: ValueError("Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613")
+LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='local-qwen-3.5-35b-primary') and llm_executor_uuid: '5355a223-7739-4926-bf19-9561b6c71558': ValueError("Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613") traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 291, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='local-glm-4.7-fallback') and llm_executor_uuid: '355806be-30c5-4a48-8279-51dc0fe8866a': ValueError("Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613") traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 291, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+LLM chat interaction failed.
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 302, in execute
+    result = llm_executor.run(execute_function)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 156, in run
+    self._raise_final_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 299, in _raise_final_exception
+    raise Exception(f"Failed to run. Exhausted all LLMs. Failure summary:\n{error_summary}")
+Exception: Failed to run. Exhausted all LLMs. Failure summary:
+ - Attempt 0 with LLMModelFromName(name='local-qwen-3.5-35b-primary') failed during 'execute' stage: ValueError("Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613")
+ - Attempt 1 with LLMModelFromName(name='local-glm-4.7-fallback') failed during 'execute' stage: ValueError("Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613")
+LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='local-qwen-3.5-35b-primary') and llm_executor_uuid: 'd7d7d917-1c3a-49b9-bed1-8243b53c5442': ValueError("Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613") traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 291, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='local-glm-4.7-fallback') and llm_executor_uuid: '5f1c6b79-9d3c-4af5-b7a2-c27199a4f901': ValueError("Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613") traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 291, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+LLM chat interaction failed.
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 302, in execute
+    result = llm_executor.run(execute_function)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 156, in run
+    self._raise_final_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 299, in _raise_final_exception
+    raise Exception(f"Failed to run. Exhausted all LLMs. Failure summary:\n{error_summary}")
+Exception: Failed to run. Exhausted all LLMs. Failure summary:
+ - Attempt 0 with LLMModelFromName(name='local-qwen-3.5-35b-primary') failed during 'execute' stage: ValueError("Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613")
+ - Attempt 1 with LLMModelFromName(name='local-glm-4.7-fallback') failed during 'execute' stage: ValueError("Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613")
+LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='local-qwen-3.5-35b-primary') and llm_executor_uuid: 'f2e05fe0-934f-4745-a7d3-f1610278d368': ValueError("Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613") traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 291, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='local-glm-4.7-fallback') and llm_executor_uuid: 'a177a1e1-cc13-4df0-bd96-ea3465f8c23c': ValueError("Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613") traceback: Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 225, in _try_one_attempt
+    result = execute_function(llm)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 291, in execute_function
+    chat_response = sllm.chat(chat_message_list)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/callbacks.py", line 175, in wrapped_llm_chat
+    f_return_val = f(_self, messages, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/structured_llm.py", line 63, in chat
+    output = self.llm.structured_predict(
+        output_cls=self.output_cls, prompt=chat_prompt, llm_kwargs=kwargs
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 1106, in structured_predict
+    return super().structured_predict(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        output_cls, prompt, llm_kwargs=llm_kwargs, **prompt_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index_instrumentation/dispatcher.py", line 413, in wrapper
+    result = func(*args, **kwargs)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/llms/llm.py", line 353, in structured_predict
+    program = get_program_for_llm(
+        output_cls,
+    ...<2 lines>...
+        pydantic_program_mode=self.pydantic_program_mode,
+    )
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/core/program/utils.py", line 67, in get_program_for_llm
+    if llm.metadata.is_function_calling_model:
+       ^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/base.py", line 379, in metadata
+    context_window=openai_modelname_to_contextsize(self._get_model_name()),
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/.venv/lib/python3.13/site-packages/llama_index/llms/openai/utils.py", line 317, in openai_modelname_to_contextsize
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613
+
+LLM chat interaction failed.
+Traceback (most recent call last):
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/diagnostics/premise_attack.py", line 302, in execute
+    result = llm_executor.run(execute_function)
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 156, in run
+    self._raise_final_exception()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/macmini/Documents/GitHub/PlanExe2026/worker_plan/worker_plan_internal/llm_util/llm_executor.py", line 299, in _raise_final_exception
+    raise Exception(f"Failed to run. Exhausted all LLMs. Failure summary:\n{error_summary}")
+Exception: Failed to run. Exhausted all LLMs. Failure summary:
+ - Attempt 0 with LLMModelFromName(name='local-qwen-3.5-35b-primary') failed during 'execute' stage: ValueError("Unknown model 'qwen/qwen3.5-35b-a3b'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613")
+ - Attempt 1 with LLMModelFromName(name='local-glm-4.7-fallback') failed during 'execute' stage: ValueError("Unknown model 'zai-org/glm-4.7-flash'. Please provide a valid OpenAI model name in: o1, o1-2024-12-17, o1-pro, o1-pro-2025-03-19, o1-preview, o1-preview-2024-09-12, o1-mini, o1-mini-2024-09-12, o3-mini, o3-mini-2025-01-31, o3, o3-2025-04-16, o3-pro, o3-pro-2025-06-10, o4-mini, o4-mini-2025-04-16, gpt-5, gpt-5-2025-08-07, gpt-5-mini, gpt-5-mini-2025-08-07, gpt-5-nano, gpt-5-nano-2025-08-07, gpt-5-pro, gpt-5-pro-2025-10-06, gpt-5.1, gpt-5.1-2025-11-13, gpt-5.1-chat-latest, gpt-5.2, gpt-5.2-2025-12-11, gpt-4, gpt-4-32k, gpt-4-1106-preview, gpt-4-0125-preview, gpt-4-turbo-preview, gpt-4-vision-preview, gpt-4-1106-vision-preview, gpt-4-turbo-2024-04-09, gpt-4-turbo, gpt-4o, gpt-4o-audio-preview, gpt-4o-audio-preview-2024-12-17, gpt-4o-audio-preview-2024-10-01, gpt-4o-mini-audio-preview, gpt-4o-mini-audio-preview-2024-12-17, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4.5-preview, gpt-4.5-preview-2025-02-27, chatgpt-4o-latest, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4-0613, gpt-4-32k-0613, gpt-4-0314, gpt-4-32k-0314, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4.1-2025-04-14, gpt-4.1-mini-2025-04-14, gpt-4.1-nano-2025-04-14, gpt-5-chat-latest, gpt-3.5-turbo, gpt-3.5-turbo-16k, gpt-3.5-turbo-0125, gpt-3.5-turbo-1106, gpt-3.5-turbo-0613, gpt-3.5-turbo-16k-0613, gpt-3.5-turbo-0301, text-davinci-003, text-davinci-002, gpt-3.5-turbo-instruct, text-ada-001, text-babbage-001, text-curie-001, ada, babbage, curie, davinci, gpt-35-turbo-16k, gpt-35-turbo, gpt-35-turbo-0125, gpt-35-turbo-1106, gpt-35-turbo-0613, gpt-35-turbo-16k-0613")
+INFO: Informed scheduler that task   PremiseAttackTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   DONE
+2026-03-06 16:59:59 - luigi-interface - INFO - Informed scheduler that task   PremiseAttackTask___local_qwen_3_5__Users_macmini_D_ALL_DETAILS_BUT__4d441ebba8   has status   DONE
+DEBUG: Asking scheduler for work...
+DEBUG: Done
+DEBUG: There are no more tasks to run at this time
+DEBUG: There are 60 pending tasks possibly being run by other workers
+DEBUG: There are 60 pending tasks unique to this worker
+DEBUG: There are 60 pending tasks last scheduled by this worker
+INFO: Worker Worker(salt=5683677654, workers=2, host=mini.local, username=macmini, pid=60039) was stopped. Shutting down Keep-Alive thread
+2026-03-06 16:59:59 - luigi-interface - INFO - Worker Worker(salt=5683677654, workers=2, host=mini.local, username=macmini, pid=60039) was stopped. Shutting down Keep-Alive thread
+INFO: 
+===== Luigi Execution Summary =====
+
+Scheduled 63 tasks of which:
+* 2 complete ones were encountered:
+    - 1 SetupTask(...)
+    - 1 StartTimeTask(...)
+* 1 ran successfully:
+    - 1 PremiseAttackTask(...)
+* 2 failed:
+    - 1 IdentifyPurposeTask(...)
+    - 1 RedlineGateTask(...)
+* 58 were left pending, among these:
+    * 58 had failed dependencies:
+        - 1 CandidateScenariosTask(...)
+        - 1 ConsolidateAssumptionsMarkdownTask(...)
+        - 1 ConsolidateGovernanceTask(...)
+        - 1 ConvertPitchToMarkdownTask(...)
+        - 1 CreatePitchTask(...)
+        ...
+
+This progress looks :( because there were failed tasks
+
+===== Luigi Execution Summary =====
+
+2026-03-06 16:59:59 - luigi-interface - INFO - 
+===== Luigi Execution Summary =====
+
+Scheduled 63 tasks of which:
+* 2 complete ones were encountered:
+    - 1 SetupTask(...)
+    - 1 StartTimeTask(...)
+* 1 ran successfully:
+    - 1 PremiseAttackTask(...)
+* 2 failed:
+    - 1 IdentifyPurposeTask(...)
+    - 1 RedlineGateTask(...)
+* 58 were left pending, among these:
+    * 58 had failed dependencies:
+        - 1 CandidateScenariosTask(...)
+        - 1 ConsolidateAssumptionsMarkdownTask(...)
+        - 1 ConsolidateGovernanceTask(...)
+        - 1 ConvertPitchToMarkdownTask(...)
+        - 1 CreatePitchTask(...)
+        ...
+
+This progress looks :( because there were failed tasks
+
+===== Luigi Execution Summary =====
+
+2026-03-06 16:59:59 - __main__ - INFO - luigi_build_return_value: False
+2026-03-06 16:59:59 - __main__ - INFO - has_pipeline_complete_file: False
+2026-03-06 16:59:59 - __main__ - INFO - has_report_file: False
+2026-03-06 16:59:59 - __main__ - INFO - has_stop_flag_file: False

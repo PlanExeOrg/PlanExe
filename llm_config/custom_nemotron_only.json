@@ -1,0 +1,19 @@
+{
+  "lmstudio-nemotron-nano": {
+    "comment": "Nemotron Nano solo failure map test",
+    "priority": 0,
+    "luigi_workers": 1,
+    "class": "LMStudio",
+    "arguments": {
+      "model_name": "nvidia/nemotron-3-nano",
+      "base_url": "http://127.0.0.1:1234/v1",
+      "temperature": 0.2,
+      "request_timeout": 600.0,
+      "is_function_calling_model": false,
+      "context_window": 8192,
+      "num_output": 4096,
+      "force_json": true
+    },
+    "pricing_kind": "free"
+  }
+}

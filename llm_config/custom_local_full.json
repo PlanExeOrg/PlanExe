@@ -1,0 +1,87 @@
+{
+  "lmstudio-glm-4.6v-flash": {
+    "comment": "Local GLM 4.6v Flash (PRIMARY). 4.7 fails to load due to memory. is_function_calling_model false.",
+    "priority": 0,
+    "luigi_workers": 1,
+    "class": "LMStudio",
+    "arguments": {
+      "model_name": "zai-org/glm-4.6v-flash",
+      "base_url": "http://127.0.0.1:1234/v1",
+      "temperature": 0.2,
+      "request_timeout": 600.0,
+      "is_function_calling_model": false,
+      "context_window": 8192,
+      "num_output": 4096,
+      "force_json": true
+    },
+    "pricing_kind": "free"
+  },
+  "lmstudio-qwen3.5-35b-a3b": {
+    "comment": "Local Qwen 3.5-35B MoE (FALLBACK 1).",
+    "priority": 1,
+    "luigi_workers": 1,
+    "class": "LMStudio",
+    "arguments": {
+      "model_name": "qwen/qwen3.5-35b-a3b",
+      "base_url": "http://127.0.0.1:1234/v1",
+      "temperature": 0.2,
+      "request_timeout": 600.0,
+      "is_function_calling_model": false,
+      "context_window": 8192,
+      "num_output": 8192,
+      "force_json": true
+    },
+    "pricing_kind": "free"
+  },
+  "lmstudio-qwen3-coder-next": {
+    "comment": "Local Qwen Coder Next (FALLBACK 2). Capable of general planning tasks despite coder name.",
+    "priority": 2,
+    "luigi_workers": 1,
+    "class": "LMStudio",
+    "arguments": {
+      "model_name": "qwen/qwen3-coder-next",
+      "base_url": "http://127.0.0.1:1234/v1",
+      "temperature": 0.2,
+      "request_timeout": 600.0,
+      "is_function_calling_model": false,
+      "context_window": 8192,
+      "num_output": 4096,
+      "force_json": true
+    },
+    "pricing_kind": "free"
+  },
+  "lmstudio-nemotron-nano": {
+    "comment": "Local Nvidia Nemotron 3 Nano (FALLBACK 3).",
+    "priority": 3,
+    "luigi_workers": 1,
+    "class": "LMStudio",
+    "arguments": {
+      "model_name": "nvidia/nemotron-3-nano",
+      "base_url": "http://127.0.0.1:1234/v1",
+      "temperature": 0.2,
+      "request_timeout": 600.0,
+      "is_function_calling_model": false,
+      "context_window": 8192,
+      "num_output": 4096,
+      "force_json": true
+    },
+    "pricing_kind": "free"
+  },
+  "lmstudio-lfm2-24b": {
+    "comment": "Local Liquid LFM2 24B (FALLBACK 4).",
+    "priority": 4,
+    "luigi_workers": 1,
+    "class": "LMStudio",
+    "arguments": {
+      "model_name": "liquid/lfm2-24b-a2b",
+      "base_url": "http://127.0.0.1:1234/v1",
+      "temperature": 0.2,
+      "request_timeout": 600.0,
+      "is_function_calling_model": false,
+      "context_window": 8192,
+      "num_output": 4096,
+      "force_json": true
+    },
+    "pricing_kind": "free"
+  }
+}

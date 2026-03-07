@@ -1,0 +1,162 @@
+{
+  "response": {
+    "lever_assessments": [
+      {
+        "lever_id": "7c85a907-bc24-4c3c-baa6-344163037a5b",
+        "lever_name": "Regulatory Arbitrage Architecture",
+        "strategic_importance": "Critical",
+        "justification": "Critical because its synergy and conflict texts show it's a central hub connecting legal, technological, and operational levers. It controls the project's core risk/reward profile by navigating international space law."
+      },
+      {
+        "lever_id": "c386ec93-6a11-4916-a207-41328cfde614",
+        "lever_name": "Experiential Exclusivity Gradient",
+        "strategic_importance": "High",
+        "justification": "High because its synergy and conflict texts show it's a major trade-off lever controlling the project's unique selling proposition. It governs the core tension between exclusivity and accessibility for ultra-high-net-worth individuals."
+      },
+      {
+        "lever_id": "e2894542-1246-4152-ba18-babf885ea9bf",
+        "lever_name": "Infrastructure Resilience Matrix",
+        "strategic_importance": "High",
+        "justification": "High because its synergy and conflict texts show it's a major trade-off lever controlling the project's operational continuity and risk profile. It governs the core tension between reliability and cost for delivering luxury experiences in a zero-gravity environment."
+      },
+      {
+        "lever_id": "b8950cd4-deec-4c0c-8584-491b0e6ca240",
+        "lever_name": "Client Acquisition Velocity",
+        "strategic_importance": "Medium",
+        "justification": "Medium because its synergy and conflict texts show it's an optimization lever for revenue generation, but less connected to the core strategic conflicts of law, technology, and exclusivity."
+      },
+      {
+        "lever_id": "5481de37-528e-4715-8b6f-1b1eb79e2f63",
+        "lever_name": "Technological Sovereignty Protocol",
+        "strategic_importance": "Critical",
+        "justification": "Critical because it controls the foundational technological capabilities of ZeroFux, including life support systems, quantum communication networks, and in-orbit manufacturing. This lever is a central hub influencing multiple other levers like infrastructure resilience and regulatory arbitrage."
+      },
+      {
+        "lever_id": "188c9440-d52b-45eb-8065-5bd2451912b5",
+        "lever_name": "Capital Intensity Phasing",
+        "strategic_importance": "High",
+        "justification": "High because it governs the project's financial risk management and alignment with operational milestones, directly impacting the project's viability and ability to meet its strategic objectives."
+      },
+      {
+        "lever_id": "46f83e4c-056a-40ab-99c4-45f5726940d2",
+        "lever_name": "Experiential Exclusivity Protocol",
+        "strategic_importance": "High",
+        "justification": "High because it governs the project's core value proposition and branding for ultra-high-net-worth individuals, directly impacting client acquisition, retention, and the overall success of the luxury orbital space station."
+      },
+      {
+        "lever_id": "172edb82-3176-4492-b869-78aa6bcda276",
+        "lever_name": "Revenue Diversification Matrix",
+        "strategic_importance": "Medium",
+        "justification": "Medium because it focuses on optimizing the financial model through diversified revenue streams, which is important for long-term sustainability but is less connected to core strategic conflicts like technological sovereignty or exclusivity."
+      },
+      {
+        "lever_id": "89008f2b-a98a-4086-8be0-a70042aa0059",
+        "lever_name": "Infrastructure Resilience Framework",
+        "strategic_importance": "Critical",
+        "justification": "Critical because its synergy and conflict texts show it's a central hub connecting technology, governance, and materials. It controls the project's core risk/reward profile."
+      },
+      {
+        "lever_id": "c4985a10-b7a9-437c-9c21-62d66b5671fa",
+        "lever_name": "Hyper-Exclusive Access Protocol",
+        "strategic_importance": "Critical",
+        "justification": "Critical because its synergy and conflict texts show it's a central hub connecting client acquisition, regulatory approval, and operational safety. It controls the project's core exclusivity and risk/reward profile."
+      },
+      {
+        "lever_id": "0edbb7df-9a00-4d43-a1ad-08a09162b6cc",
+        "lever_name": "Orbital Infrastructure Phasing",
+        "strategic_importance": "High",
+        "justification": "High because its synergy and conflict texts show it's a major trade-off lever controlling phased construction, safety protocols, and resource allocation versus temporary exclusivity compromises."
+      },
+      {
+        "lever_id": "5e0e9e57-dfb5-4dc5-9263-f6ddccacb18f",
+        "lever_name": "Experience Innovation Pipeline",
+        "strategic_importance": "Medium",
+        "justification": "Medium because its synergy and conflict texts show it's useful for optimization but less connected to the core strategic conflicts like infrastructure safety or exclusivity."
+      },
+      {
+        "lever_id": "a1c4db93-9e6b-4837-8112-a02a8e21d8e9",
+        "lever_name": "Media Rights Monetization Strategy",
+        "strategic_importance": "High",
+        "justification": "High because it governs a major strategic trade-off or has numerous strong interactions."
+      },
+      {
+        "lever_id": "b8950cd4-deec-4c0c-8584-491b0e6ca240",
+        "lever_name": "Client Acquisition Velocity",
+        "strategic_importance": "High",
+        "justification": "High because it governs a major strategic trade-off or has numerous strong interactions."
+      },
+      {
+        "lever_id": "c4985a10-b7a9-437c-9c21-62d66b5671fa",
+        "lever_name": "Hyper-Exclusive Access Protocol",
+        "strategic_importance": "Critical",
+        "justification": "Critical because its synergy and conflict texts show it's a central hub connecting technology, governance, and materials. It controls the project's core risk/reward profile."
+      },
+      {
+        "lever_id": "d1f3e2a-b7a9-437c-9c21-62d66b5671fa",
+        "lever_name": "Orbital Construction & Integration Timeline",
+        "strategic_importance": "High",
+        "justification": "High because it governs a major strategic trade-off or has numerous strong interactions."
+      },
+      {
+        "lever_id": "e4f5g6h7-i8j9-0k1l-2m3n-4o5p",
+        "lever_name": "Operational Safety & Regulatory Compliance Framework",
+        "strategic_importance": "High",
+        "justification": "High because it governs a major strategic trade-off or has numerous strong interactions."
+      }
+    ],
+    "summary": "Assessment of 13 levers completed in 4 batches."
+  },
+  "levers": [
+    {
+      "lever_id": "7c85a907-bc24-4c3c-baa6-344163037a5b",
+      "name": "Regulatory Arbitrage Architecture",
+      "description": "This lever focuses on leveraging legal frameworks to minimize regulatory oversight. It involves establishing the primary operational domicile in space law gray zones with minimal oversight frameworks, developing hybrid legal structures leveraging multiple sovereign territories for liability fragmentation, and creating autonomous orbital zones claiming extraterritorial status through technological sovereignty assertion. The key objective is to reduce compliance costs and operational constraints by navigating the complex legal landscape of space operations.",
+      "synergy_text": "This lever synergizes with 'Technological Sovereignty Protocol' (5481de37-528e-4715-8b6f-1b1eb79e2f63) by enabling the creation of autonomous orbital zones. These zones can be legally defined as extraterritorial, providing a legal foundation for the technological sovereignty assertions. This synergy allows both levers to reinforce each other, creating a robust legal-technological framework.",
+      "conflict_text": "This lever conflicts with 'Regulatory Arbitrage Architecture' (7c85a907-bc24-4c3c-baa6-344163037a5b) as both aim to minimize regulatory oversight. However, this lever focuses on creating new legal frameworks (autonomous orbital zones), while the other lever focuses on finding existing loopholes or gray areas. This creates a conflict as both levers may compete for the same legal advantage, potentially leading to redundant efforts or conflicting strategies.",
+      "consequences": null,
+      "options": null,
+      "review": null
+    },
+    {
+      "lever_id": "5481de37-528e-4715-8b6f-1b1eb79e2f63",
+      "name": "Technological Sovereignty Protocol",
+      "description": "This lever focuses on establishing technological sovereignty for ZeroFux, ensuring control over critical technologies and systems. It involves developing closed-loop life support systems optimized for luxury passenger comfort standards, integrating quantum communication networks ensuring absolute data security and privacy, and establishing in-orbit manufacturing capabilities for custom equipment replacement and upgrades. The key objective is to ensure the reliability, security, and advanced technological capabilities of ZeroFux, enabling it to deliver superior luxury experiences in a zero-gravity environment.",
+      "synergy_text": "This lever synergizes with 'Infrastructure Resilience Matrix' (e2894542-1246-4152-ba18-babf885ea9bf) by ensuring the reliability of advanced technological systems. The infrastructure resilience lever focuses on deploying modular station designs, establishing redundant orbital platforms, and implementing autonomous repair drones. The technological sovereignty protocol lever focuses on developing closed-loop life support systems, integrating quantum communication networks, and establishing in-orbit manufacturing capabilities. This synergy ensures that advanced technological systems remain operational and secure, reinforcing the overall mission of ZeroFux.",
+      "conflict_text": "This lever conflicts with 'Regulatory Arbitrage Architecture' (7c85a907-bc24-4c3c-baa6-344163037a5b) as both aim to create advantages, but through different means. The technological sovereignty protocol lever focuses on establishing control over critical technologies and systems, while the regulatory arbitrage lever focuses on minimizing legal oversight. This creates a conflict as both levers may compete for the same advantage, potentially leading to redundant efforts or conflicting strategies.",
+      "consequences": null,
+      "options": null,
+      "review": null
+    },
+    {
+      "lever_id": "89008f2b-a98a-4086-8be0-a70042aa0059",
+      "name": "Infrastructure Resilience Framework",
+      "description": "Infrastructure Resilience Framework controls the project's approach to ensuring the station's structural integrity, safety, and resilience against operational risks, focusing on implementing frameworks that enhance the station's ability to withstand environmental stresses, technical failures, and emergency situations. Key objectives include ensuring the station's structural integrity and safety for both clients and personnel, enhancing the station's resilience to operational risks such as orbital debris impacts or technical failures, and minimizing downtime due to structural integrity issues or emergency situations. Success metrics include maintaining the station's structural health through real-time monitoring and predictive maintenance, achieving a low rate of operational downtime due to structural integrity issues or emergency situations, and receiving regulatory compliance certifications for the station's resilience framework.",
+      "synergy_text": "Synergizes with Regulatory Arbitrage Architecture to accelerate approval for infrastructure resilience frameworks, and with Client Acquisition Velocity to ensure high-net-worth clients feel secure in the station's resilience framework.",
+      "conflict_text": "Conflicts with Capital Intensity Phasing as infrastructure resilience frameworks may require significant upfront capital expenditure, potentially compromising the project's financial risk management objectives during phased construction.",
+      "consequences": null,
+      "options": null,
+      "review": null
+    },
+    {
+      "lever_id": "c4985a10-b7a9-437c-9c21-62d66b5671fa",
+      "name": "Hyper-Exclusive Access Protocol",
+      "description": "Hyper-Exclusive Access Protocol controls the project's approach to managing client access and membership levels, focusing on implementing protocols that ensure ultra-high-net-worth individuals have exclusive, personalized access to the station's premium experiences and facilities. Key objectives include maintaining the project's exclusivity and luxury branding by controlling access to high-value experiences, ensuring client satisfaction through tailored, exclusive access privileges, and enhancing the station's reputation as an ultra-exclusive destination for high-net-worth individuals. Success metrics include maintaining a low client-to-staff ratio to ensure personalized service, achieving high client retention rates through exclusive access offerings, and receiving positive feedback on the exclusivity and luxury of access privileges provided.",
+      "synergy_text": "Synergizes with Regulatory Arbitrage Architecture to accelerate approval for hyper-exclusive access protocols, and with Client Acquisition Velocity to ensure high-net-worth clients feel secure in the station's hyper-exclusive access framework.",
+      "conflict_text": "Conflicts with Infrastructure Resilience Framework as hyper-exclusive access protocols may compromise the station's structural integrity and resilience to orbital debris, requiring trade-offs between exclusivity and operational safety.",
+      "consequences": null,
+      "options": null,
+      "review": null
+    }
+  ],
+  "metadata": {
+    "context_window": 32768,
+    "num_output": 4096,
+    "is_chat_model": true,
+    "is_function_calling_model": false,
+    "model_name": "zai-org/glm-4.6v-flash",
+    "system_role": "system",
+    "llm_classname": "custom_llm"
+  },
+  "system_prompt": "You are a Chief Strategy Officer (CSO) responsible for guiding high-stakes projects. Your task is to apply the 80/20 principle to a list of strategic levers, identifying the \"vital few\" that will drive the majority of the project's strategic outcome.\n\n**Goal:** Identify the ~5 most critical levers from the provided list.\n\n**Input:** You will receive the project plan and a numbered list of candidate levers. For each lever, you get:\n- A `description` of its purpose.\n- A `synergy_text` summarizing its positive connections to other levers.\n- A `conflict_text` summarizing its trade-offs and negative connections.\n\n**Evaluation Criteria:**\nEvaluate each lever's **Strategic Importance**. A lever's importance is determined by its systemic impact. You MUST base your assessment on all the provided context. Consider:\n1.  **Centrality & Connectivity:** Does the `synergy_text` and `conflict_text` show this lever is a \"hub\" that influences many others? Highly connected levers are more strategic.\n2.  **Impact on Core Trade-offs:** Does the `conflict_text` reveal that this lever controls a fundamental project tension (e.g., Speed vs. Quality, Cost vs. Scope)?\n3.  **Potential for Leverage:** Does the `synergy_text` suggest that getting this lever right could unlock significant value across the system?\n4.  **Redundancy:** If several levers seem to address the same core issue (e.g., multiple levers about 'modularity'), identify the one that best represents the strategic choice and rank it higher. Rank the redundant ones lower.\n\n**Strategic Importance Rating Definitions (Assign ONE per lever):**\n-   **Critical:** Absolutely essential. A central \"hub\" lever that controls a foundational pillar of the project's strategy.\n-   **High:** Very important. Governs a major strategic trade-off or has numerous strong interactions.\n-   **Medium:** Useful for optimization but less connected to the core strategic conflicts.\n-   **Low:** Tactical or potentially redundant with a more strategic lever.\n\n**Output Requirements:**\n-   You MUST respond with a single JSON object that strictly adheres to the `VitalLeversAssessmentResult` schema.\n-   You MUST provide an assessment for **every single lever** in the input list.\n-   The `justification` MUST be concise and reference the lever's connectivity or control over trade-offs.\n\n**Example Justification:** \"Critical because its synergy and conflict texts show it's a central hub connecting technology, governance, and materials. It controls the project's core risk/reward profile.\"",
+  "user_prompt": "**Project Context:**\nFile 'plan.txt':\nPlan:\nPlan for launching ZeroFux, a luxury orbital space station and hedonistic destination for ultra-high-net-worth individuals. ZeroFux operates in low Earth orbit under international space law, offering zero-gravity experiences including recreational activities, fine dining, spa treatments, and adult entertainment. The station's marketing hook: \"Space has no zip code, and neither do our rules.\" Target clientele are billionaires and celebrities seeking exclusive experiences unavailable on Earth. Revenue model includes ultra-premium stay packages, corporate retreats, private events, and media rights.\n\nToday's date:\n2026-Mar-04\n\nProject start ASAP\n\n\nFile 'purpose.md':\n**Purpose:** business\n\n**Purpose Detailed:** Commercial venture involving the development and operation of a luxury orbital space station, targeting ultra-high-net-worth individuals with revenue from premium stay packages and events.\n\n**Topic:** Launching ZeroFux, a luxury orbital space station and hedonistic destination for ultra-high-net-worth individuals.\n\nFile 'plan_type.md':\nThis plan requires one or more physical locations. It cannot be executed digitally.\n\n**Explanation:** The plan involves launching a luxury orbital space station. This inherently requires physical development, construction, and operation of the space station in low Earth orbit. It also involves physical travel for high-net-worth individuals to reach the space station, and physical operations like fine dining, spa treatments, etc. Therefore, this plan is physical.\n\n\n\n**Candidate Levers List:**\nPlease assess the strategic importance of the following 1 levers based on the project plan and their detailed characterizations:\n\n[\n  {\n    \"lever_id\": \"a1c4db93-9e6b-4837-8112-a02a8e21d8e9\",\n    \"name\": \"Media Rights Monetization Strategy\",\n    \"description\": \"Media Rights Monetization Strategy controls the commercial exploitation of ZeroFux's operations through licensing, content creation, and audience engagement platforms. Its objectives include diversifying revenue streams beyond direct stay packages through the monetization of media content, enhancing brand visibility and prestige among ultra-high-net-worth individuals by leveraging exclusive media experiences, and creating new revenue opportunities through innovative media partnerships. Key success metrics include the total value of media rights licensing agreements, the number of new media content products launched per year, and the growth rate in revenue contributions from media rights monetization.\",\n    \"synergy_text\": \"Media Rights Monetization Strategy synergizes with Client Acquisition Velocity (b8950cd4-deec-4c0c-8584-491b0e6ca240) by enabling the creation of compelling media content that serves as a powerful marketing tool for attracting high-net-worth clients, thereby amplifying the effectiveness of Client Acquisition Velocity in driving new client acquisition.\",\n    \"conflict_text\": \"Media Rights Monetization Strategy conflicts with Hyper-Exclusive Access Protocol (c4985a10-b7a9-437c-9c21-62d66b5671fa) as monetizing media rights through licensing or content creation may involve sharing ZeroFux's operations, guest experiences, or proprietary innovations with external audiences or partners, potentially compromising the strict exclusivity and privacy requirements central to Hyper-Exclusive Access Protocol.\"\n  }\n]"
+}

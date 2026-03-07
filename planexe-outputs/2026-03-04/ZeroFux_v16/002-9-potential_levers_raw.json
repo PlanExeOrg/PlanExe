@@ -1,0 +1,385 @@
+{
+  "responses": [
+    {
+      "strategic_rationale": "ZeroFux's success hinges on attracting and retaining ultra-high-net-worth individuals. This requires balancing exclusivity with accessibility, managing risk perceptions associated with space travel, and delivering a unique, compelling experience that justifies the high cost. The chosen levers address these core tensions by focusing on membership structure, risk mitigation, service diversification, operational efficiency, and brand management. These levers directly impact revenue generation, cost control, and the overall perceived value proposition of the resort.",
+      "levers": [
+        {
+          "lever_index": 1,
+          "name": "Membership Tiering Strategy",
+          "consequences": "Immediate: Impacts initial cash flow \u2192 Systemic: Affects long-term occupancy rates and revenue stability \u2192 Strategic: Determines the scalability and financial viability of the resort. Trade-off: Maximizing upfront revenue vs. fostering long-term loyalty.",
+          "options": [
+            "Focus on high-value, long-term memberships to secure substantial upfront capital and build a stable revenue base.",
+            "Offer a mix of short-term and long-term memberships to balance immediate revenue needs with long-term customer retention.",
+            "Implement a dynamic membership model with fractional ownership and resale options, leveraging blockchain technology for secure and transparent transactions."
+          ],
+          "review_lever": "Controls Exclusivity vs. Accessibility. Weakness: The options fail to consider the impact of membership structure on the resort's social dynamics and brand image."
+        },
+        {
+          "lever_index": 2,
+          "name": "Risk Mitigation Protocol",
+          "consequences": "Immediate: Influences insurance premiums and liability \u2192 Systemic: Shapes customer confidence and willingness to travel \u2192 Strategic: Determines the long-term sustainability of the business. Trade-off: Minimizing operational costs vs. ensuring passenger safety.",
+          "options": [
+            "Adhere to established aerospace safety standards and protocols, prioritizing proven technologies and redundant systems.",
+            "Implement advanced health monitoring and emergency response systems, including on-site medical facilities and remote diagnostic capabilities.",
+            "Develop a comprehensive risk management framework incorporating AI-powered predictive analytics and autonomous emergency response drones for rapid intervention."
+          ],
+          "review_lever": "Controls Safety vs. Cost. Weakness: The options fail to consider the psychological impact of safety measures on the guest experience."
+        },
+        {
+          "lever_index": 3,
+          "name": "Service Diversification Strategy",
+          "consequences": "Immediate: Impacts customer satisfaction and repeat bookings \u2192 Systemic: Drives ancillary revenue streams and brand differentiation \u2192 Strategic: Determines the long-term competitiveness of the resort. Trade-off: Focusing on core hedonistic offerings vs. expanding into new markets.",
+          "options": [
+            "Focus on core hedonistic offerings (sex, drugs, music) and maintain a streamlined service portfolio.",
+            "Expand service offerings to include curated space tourism experiences (e.g., spacewalks, astronomical observations) and personalized wellness programs.",
+            "Integrate immersive virtual reality experiences and personalized AI companions to enhance the sensory and social aspects of the resort, creating a metaverse-integrated luxury experience."
+          ],
+          "review_lever": "Controls Specialization vs. Diversification. Weakness: The options fail to consider the operational complexity of managing a diverse service portfolio."
+        },
+        {
+          "lever_index": 4,
+          "name": "Operational Efficiency Optimization",
+          "consequences": "Immediate: Affects operational costs and resource utilization \u2192 Systemic: Impacts profitability and environmental footprint \u2192 Strategic: Determines the long-term financial viability of the resort. Trade-off: Minimizing costs vs. maintaining service quality.",
+          "options": [
+            "Optimize existing resource management practices and streamline operational workflows to reduce waste and improve efficiency.",
+            "Implement closed-loop life support systems and advanced recycling technologies to minimize resource consumption and environmental impact.",
+            "Utilize autonomous robotics and AI-powered resource management systems to optimize energy consumption, waste disposal, and facility maintenance, creating a self-sustaining orbital ecosystem."
+          ],
+          "review_lever": "Controls Cost vs. Sustainability. Weakness: The options fail to consider the impact of automation on the crew's roles and responsibilities."
+        },
+        {
+          "lever_index": 5,
+          "name": "Brand Management and Reputation Strategy",
+          "consequences": "Immediate: Influences public perception and brand image \u2192 Systemic: Affects customer acquisition and investor confidence \u2192 Strategic: Determines the long-term brand equity and market positioning of the resort. Trade-off: Maintaining exclusivity vs. generating positive publicity.",
+          "options": [
+            "Maintain a low profile and rely on word-of-mouth marketing to preserve exclusivity and appeal to a select clientele.",
+            "Engage in targeted public relations and social media campaigns to showcase the unique experiences and responsible practices of the resort.",
+            "Partner with influential celebrities and artists to create exclusive content and immersive experiences, leveraging decentralized autonomous organizations (DAOs) for community-driven brand governance and content creation."
+          ],
+          "review_lever": "Controls Exclusivity vs. Publicity. Weakness: The options fail to consider the potential for negative publicity and crisis management."
+        }
+      ],
+      "summary": "The levers are well-balanced, addressing key aspects of the ZeroFux venture. However, they lack a concrete focus on the ethical considerations surrounding the 'unapologetic hedonism' aspect. Add 'Establish an ethical advisory board to oversee the responsible provision of services and ensure alignment with societal values' to the 'Risk Mitigation Protocol' lever. This addition will address potential reputational risks and ensure long-term sustainability."
+    },
+    {
+      "strategic_rationale": "ZeroFux balances extreme luxury with the inherent risks and costs of space operations. The core tensions revolve around attracting a sufficient number of ultra-high-net-worth individuals to justify the massive upfront investment and ongoing operational expenses, while maintaining an exclusive and desirable brand image. These levers address the critical areas of risk mitigation, operational efficiency, and revenue diversification to ensure long-term viability and profitability.",
+      "levers": [
+        {
+          "lever_index": 1,
+          "name": "Risk Mitigation Strategy",
+          "consequences": "Prioritizing safety impacts brand perception and insurance costs. Immediate: Enhanced safety protocols \u2192 Systemic: Reduced insurance premiums and increased customer confidence \u2192 Strategic: Improved long-term financial stability and brand reputation, balancing risk and reward.",
+          "options": [
+            "Accept Baseline Risk: Adhere to standard aerospace safety protocols, minimizing upfront costs but accepting higher potential liability.",
+            "Implement Enhanced Safety: Invest in redundant systems and advanced monitoring, increasing costs but significantly reducing risk of catastrophic failure.",
+            "Pioneer Proactive Safety: Develop AI-driven predictive maintenance and autonomous emergency response systems, maximizing safety and minimizing long-term operational disruptions through advanced technology."
+          ],
+          "review_lever": "Controls Risk vs. Cost. Weakness: The options don't address the public perception of risk, which is crucial for attracting customers."
+        },
+        {
+          "lever_index": 2,
+          "name": "Operational Efficiency Strategy",
+          "consequences": "Optimizing logistics and resource management impacts profitability and environmental footprint. Immediate: Streamlined supply chain \u2192 Systemic: 15% reduction in operational costs through optimized resource utilization \u2192 Strategic: Increased profitability and enhanced sustainability profile, balancing cost and environmental impact.",
+          "options": [
+            "Outsource Logistics: Rely on established space transportation providers for all supply and crew transport needs, minimizing capital expenditure but increasing operational costs.",
+            "Develop Hybrid Logistics: Establish a mix of in-house and outsourced transportation capabilities, balancing control and cost-effectiveness.",
+            "Vertical Integration: Acquire or develop proprietary space transportation and resource extraction capabilities, maximizing control and long-term cost savings through resource independence."
+          ],
+          "review_lever": "Controls Cost vs. Control. Weakness: The options fail to consider the potential for disruptions in the space transportation market."
+        },
+        {
+          "lever_index": 3,
+          "name": "Revenue Diversification Strategy",
+          "consequences": "Expanding revenue streams beyond membership fees impacts financial resilience and market reach. Immediate: New revenue streams \u2192 Systemic: 20% increase in annual revenue through diversified offerings \u2192 Strategic: Reduced reliance on membership fees and expanded market opportunities, balancing exclusivity and accessibility.",
+          "options": [
+            "Focus on Core Membership: Rely solely on membership fees for revenue, maintaining exclusivity but limiting growth potential.",
+            "Introduce Ancillary Services: Offer premium add-ons like zero-g experiences and exclusive events, increasing revenue without diluting the core offering.",
+            "Commercialize Space Assets: Lease out facilities for research, film production, or satellite servicing, generating significant revenue and leveraging existing infrastructure."
+          ],
+          "review_lever": "Controls Exclusivity vs. Revenue. Weakness: The options don't fully explore the potential of brand licensing and merchandise."
+        },
+        {
+          "lever_index": 4,
+          "name": "Talent Acquisition Strategy",
+          "consequences": "Attracting and retaining skilled personnel impacts operational effectiveness and innovation. Immediate: Access to qualified workforce \u2192 Systemic: 30% faster innovation cycles through attracting top talent \u2192 Strategic: Enhanced competitive advantage and long-term sustainability, balancing cost and expertise.",
+          "options": [
+            "Standard Compensation Packages: Offer industry-average salaries and benefits, minimizing costs but potentially limiting access to top talent.",
+            "Competitive Compensation and Benefits: Provide above-average compensation and comprehensive benefits packages, attracting a wider pool of qualified candidates.",
+            "Equity and Profit Sharing: Offer equity stakes and profit-sharing opportunities, attracting highly motivated and entrepreneurial individuals aligned with long-term success."
+          ],
+          "review_lever": "Controls Cost vs. Expertise. Weakness: The options don't address the unique challenges of retaining talent in a remote and demanding environment."
+        },
+        {
+          "lever_index": 5,
+          "name": "Regulatory Compliance Strategy",
+          "consequences": "Navigating international space law and regulations impacts operational freedom and legal liability. Immediate: Legal compliance \u2192 Systemic: Reduced risk of legal challenges and operational disruptions \u2192 Strategic: Enhanced operational stability and long-term viability, balancing freedom and responsibility.",
+          "options": [
+            "Minimal Compliance: Adhere to the minimum required regulations, minimizing upfront costs but increasing potential legal risks.",
+            "Proactive Compliance: Implement robust compliance programs and actively engage with regulatory bodies, mitigating legal risks and fostering positive relationships.",
+            "Shape Regulatory Landscape: Actively participate in shaping space law and regulations, influencing the industry and securing a competitive advantage through policy advocacy."
+          ],
+          "review_lever": "Controls Freedom vs. Responsibility. Weakness: The options fail to consider the ethical implications of operating a hedonistic resort in space."
+        }
+      ],
+      "summary": "The levers are well-defined and address critical aspects of the ZeroFux venture. However, they lack a specific focus on the customer experience *within* the resort. Add 'Curated Experience Strategy' to address the specific design and management of the onboard environment, including options like 'Minimalist Luxury', 'Immersive Simulation', and 'Personalized AI Concierge' to Lever 5."
+    },
+    {
+      "strategic_rationale": "ZeroFux's success hinges on balancing extreme luxury with operational feasibility and regulatory navigation. The core tensions lie in attracting ultra-high-net-worth individuals (UHNWIs) while managing the high costs and risks associated with space operations and novel regulatory landscapes. These levers address these tensions by exploring different approaches to service offerings, risk management, operational efficiency, and regulatory compliance, all crucial for achieving profitability within the ambitious 54-month breakeven target.",
+      "levers": [
+        {
+          "lever_index": 1,
+          "name": "Service Diversification Strategy",
+          "consequences": "Offering diverse services impacts revenue streams and operational complexity. Immediate: Increased upfront investment in infrastructure. \u2192 Systemic: 15% higher occupancy rates due to broader appeal. \u2192 Strategic: Reduced reliance on core hedonistic offerings and increased market resilience.",
+          "options": [
+            "Focus exclusively on core hedonistic offerings (sex, drugs, music).",
+            "Expand services to include wellness retreats and scientific research opportunities.",
+            "Integrate exclusive zero-g manufacturing and art installations, offering unique investment opportunities for UHNWIs."
+          ],
+          "review_lever": "Controls Exclusivity vs. Revenue. Weakness: The options don't consider the potential for brand dilution with broader service offerings."
+        },
+        {
+          "lever_index": 2,
+          "name": "Risk Mitigation Protocol",
+          "consequences": "Risk mitigation impacts insurance costs and operational safety. Immediate: Higher insurance premiums. \u2192 Systemic: 30% reduction in potential liability claims. \u2192 Strategic: Enhanced investor confidence and long-term operational stability.",
+          "options": [
+            "Accept baseline industry safety standards and minimal redundancy.",
+            "Implement enhanced safety protocols and redundant systems, including independent emergency return capabilities.",
+            "Develop a fully autonomous emergency response system using AI and robotic rescue pods, coupled with proactive health monitoring via advanced biometrics."
+          ],
+          "review_lever": "Controls Cost vs. Safety. Weakness: The options fail to address the psychological impact of perceived risk on potential customers."
+        },
+        {
+          "lever_index": 3,
+          "name": "Operational Efficiency Model",
+          "consequences": "Operational efficiency impacts recurring costs and profitability. Immediate: Reduced fuel consumption. \u2192 Systemic: 10% decrease in annual operational expenses. \u2192 Strategic: Improved profitability and faster return on investment.",
+          "options": [
+            "Maintain baseline operational practices with standard crew rotations and supply chain logistics.",
+            "Optimize crew rotations and supply chain logistics through data analytics and predictive modeling.",
+            "Implement closed-loop life support systems and in-situ resource utilization (ISRU) for reduced reliance on Earth-based supplies, leveraging AI-driven automation."
+          ],
+          "review_lever": "Controls Cost vs. Autonomy. Weakness: The options don't fully explore the trade-offs between automation and the human element of luxury service."
+        },
+        {
+          "lever_index": 4,
+          "name": "Regulatory Compliance Strategy",
+          "consequences": "Regulatory compliance impacts legal risks and operational freedom. Immediate: Increased legal fees. \u2192 Systemic: Avoidance of potential legal challenges and operational shutdowns. \u2192 Strategic: Long-term operational viability and market access.",
+          "options": [
+            "Adhere to existing international space law and flag-of-convenience licensing for controversial activities.",
+            "Proactively engage with international regulatory bodies to shape future space tourism regulations.",
+            "Establish a sovereign space zone under a micro-nation charter, offering regulatory autonomy and attracting other space-based businesses."
+          ],
+          "review_lever": "Controls Freedom vs. Legitimacy. Weakness: The options don't adequately address the ethical considerations of unregulated activities in space."
+        },
+        {
+          "lever_index": 5,
+          "name": "Membership Pricing Architecture",
+          "consequences": "Membership pricing impacts revenue generation and market accessibility. Immediate: Higher initial revenue. \u2192 Systemic: 20% increase in long-term membership retention. \u2192 Strategic: Sustainable revenue stream and brand loyalty.",
+          "options": [
+            "Maintain current high-price, exclusive membership tiers.",
+            "Introduce tiered membership options with varying levels of access and services to attract a wider range of UHNWIs.",
+            "Implement a dynamic pricing model based on real-time demand and personalized experiences, leveraging blockchain-based fractional ownership and NFT memberships."
+          ],
+          "review_lever": "Controls Exclusivity vs. Accessibility. Weakness: The options fail to consider the impact of pricing on the perceived value and prestige of the ZeroFux brand."
+        }
+      ],
+      "summary": "The levers are well-balanced, addressing key aspects of the ZeroFux venture. However, they lack a comprehensive consideration of the competitive landscape. Add 'Develop strategic alliances with terrestrial luxury brands to enhance brand recognition and cross-promotional opportunities' to the Service Diversification Strategy lever to address this gap."
+    }
+  ],
+  "levers": [
+    {
+      "lever_id": "f514efb7-8a27-4730-9735-3c77b1499503",
+      "name": "Membership Tiering Strategy",
+      "consequences": "Immediate: Impacts initial cash flow \u2192 Systemic: Affects long-term occupancy rates and revenue stability \u2192 Strategic: Determines the scalability and financial viability of the resort. Trade-off: Maximizing upfront revenue vs. fostering long-term loyalty.",
+      "options": [
+        "Focus on high-value, long-term memberships to secure substantial upfront capital and build a stable revenue base.",
+        "Offer a mix of short-term and long-term memberships to balance immediate revenue needs with long-term customer retention.",
+        "Implement a dynamic membership model with fractional ownership and resale options, leveraging blockchain technology for secure and transparent transactions."
+      ],
+      "review": "Controls Exclusivity vs. Accessibility. Weakness: The options fail to consider the impact of membership structure on the resort's social dynamics and brand image."
+    },
+    {
+      "lever_id": "29457ada-d5f4-4dd3-b79a-fa933f0ea454",
+      "name": "Risk Mitigation Protocol",
+      "consequences": "Immediate: Influences insurance premiums and liability \u2192 Systemic: Shapes customer confidence and willingness to travel \u2192 Strategic: Determines the long-term sustainability of the business. Trade-off: Minimizing operational costs vs. ensuring passenger safety.",
+      "options": [
+        "Adhere to established aerospace safety standards and protocols, prioritizing proven technologies and redundant systems.",
+        "Implement advanced health monitoring and emergency response systems, including on-site medical facilities and remote diagnostic capabilities.",
+        "Develop a comprehensive risk management framework incorporating AI-powered predictive analytics and autonomous emergency response drones for rapid intervention."
+      ],
+      "review": "Controls Safety vs. Cost. Weakness: The options fail to consider the psychological impact of safety measures on the guest experience."
+    },
+    {
+      "lever_id": "8451708c-8eeb-4e12-aaad-d3280d8ffc56",
+      "name": "Service Diversification Strategy",
+      "consequences": "Immediate: Impacts customer satisfaction and repeat bookings \u2192 Systemic: Drives ancillary revenue streams and brand differentiation \u2192 Strategic: Determines the long-term competitiveness of the resort. Trade-off: Focusing on core hedonistic offerings vs. expanding into new markets.",
+      "options": [
+        "Focus on core hedonistic offerings (sex, drugs, music) and maintain a streamlined service portfolio.",
+        "Expand service offerings to include curated space tourism experiences (e.g., spacewalks, astronomical observations) and personalized wellness programs.",
+        "Integrate immersive virtual reality experiences and personalized AI companions to enhance the sensory and social aspects of the resort, creating a metaverse-integrated luxury experience."
+      ],
+      "review": "Controls Specialization vs. Diversification. Weakness: The options fail to consider the operational complexity of managing a diverse service portfolio."
+    },
+    {
+      "lever_id": "db15edc0-8880-49d9-8f15-3c9dceec187f",
+      "name": "Operational Efficiency Optimization",
+      "consequences": "Immediate: Affects operational costs and resource utilization \u2192 Systemic: Impacts profitability and environmental footprint \u2192 Strategic: Determines the long-term financial viability of the resort. Trade-off: Minimizing costs vs. maintaining service quality.",
+      "options": [
+        "Optimize existing resource management practices and streamline operational workflows to reduce waste and improve efficiency.",
+        "Implement closed-loop life support systems and advanced recycling technologies to minimize resource consumption and environmental impact.",
+        "Utilize autonomous robotics and AI-powered resource management systems to optimize energy consumption, waste disposal, and facility maintenance, creating a self-sustaining orbital ecosystem."
+      ],
+      "review": "Controls Cost vs. Sustainability. Weakness: The options fail to consider the impact of automation on the crew's roles and responsibilities."
+    },
+    {
+      "lever_id": "ea5d26db-b989-4cb7-ae9a-d9a609a0cd89",
+      "name": "Brand Management and Reputation Strategy",
+      "consequences": "Immediate: Influences public perception and brand image \u2192 Systemic: Affects customer acquisition and investor confidence \u2192 Strategic: Determines the long-term brand equity and market positioning of the resort. Trade-off: Maintaining exclusivity vs. generating positive publicity.",
+      "options": [
+        "Maintain a low profile and rely on word-of-mouth marketing to preserve exclusivity and appeal to a select clientele.",
+        "Engage in targeted public relations and social media campaigns to showcase the unique experiences and responsible practices of the resort.",
+        "Partner with influential celebrities and artists to create exclusive content and immersive experiences, leveraging decentralized autonomous organizations (DAOs) for community-driven brand governance and content creation."
+      ],
+      "review": "Controls Exclusivity vs. Publicity. Weakness: The options fail to consider the potential for negative publicity and crisis management."
+    },
+    {
+      "lever_id": "1e6e2b4c-63d3-4dcd-9de6-4181dca39d98",
+      "name": "Risk Mitigation Strategy",
+      "consequences": "Prioritizing safety impacts brand perception and insurance costs. Immediate: Enhanced safety protocols \u2192 Systemic: Reduced insurance premiums and increased customer confidence \u2192 Strategic: Improved long-term financial stability and brand reputation, balancing risk and reward.",
+      "options": [
+        "Accept Baseline Risk: Adhere to standard aerospace safety protocols, minimizing upfront costs but accepting higher potential liability.",
+        "Implement Enhanced Safety: Invest in redundant systems and advanced monitoring, increasing costs but significantly reducing risk of catastrophic failure.",
+        "Pioneer Proactive Safety: Develop AI-driven predictive maintenance and autonomous emergency response systems, maximizing safety and minimizing long-term operational disruptions through advanced technology."
+      ],
+      "review": "Controls Risk vs. Cost. Weakness: The options don't address the public perception of risk, which is crucial for attracting customers."
+    },
+    {
+      "lever_id": "88cd06b9-b259-44da-b3b7-72d46f3e8929",
+      "name": "Operational Efficiency Strategy",
+      "consequences": "Optimizing logistics and resource management impacts profitability and environmental footprint. Immediate: Streamlined supply chain \u2192 Systemic: 15% reduction in operational costs through optimized resource utilization \u2192 Strategic: Increased profitability and enhanced sustainability profile, balancing cost and environmental impact.",
+      "options": [
+        "Outsource Logistics: Rely on established space transportation providers for all supply and crew transport needs, minimizing capital expenditure but increasing operational costs.",
+        "Develop Hybrid Logistics: Establish a mix of in-house and outsourced transportation capabilities, balancing control and cost-effectiveness.",
+        "Vertical Integration: Acquire or develop proprietary space transportation and resource extraction capabilities, maximizing control and long-term cost savings through resource independence."
+      ],
+      "review": "Controls Cost vs. Control. Weakness: The options fail to consider the potential for disruptions in the space transportation market."
+    },
+    {
+      "lever_id": "060659a4-bf61-485f-8ff5-8fe91d898c47",
+      "name": "Revenue Diversification Strategy",
+      "consequences": "Expanding revenue streams beyond membership fees impacts financial resilience and market reach. Immediate: New revenue streams \u2192 Systemic: 20% increase in annual revenue through diversified offerings \u2192 Strategic: Reduced reliance on membership fees and expanded market opportunities, balancing exclusivity and accessibility.",
+      "options": [
+        "Focus on Core Membership: Rely solely on membership fees for revenue, maintaining exclusivity but limiting growth potential.",
+        "Introduce Ancillary Services: Offer premium add-ons like zero-g experiences and exclusive events, increasing revenue without diluting the core offering.",
+        "Commercialize Space Assets: Lease out facilities for research, film production, or satellite servicing, generating significant revenue and leveraging existing infrastructure."
+      ],
+      "review": "Controls Exclusivity vs. Revenue. Weakness: The options don't fully explore the potential of brand licensing and merchandise."
+    },
+    {
+      "lever_id": "b2b8f38d-3c19-445c-8040-1c5f42c6251f",
+      "name": "Talent Acquisition Strategy",
+      "consequences": "Attracting and retaining skilled personnel impacts operational effectiveness and innovation. Immediate: Access to qualified workforce \u2192 Systemic: 30% faster innovation cycles through attracting top talent \u2192 Strategic: Enhanced competitive advantage and long-term sustainability, balancing cost and expertise.",
+      "options": [
+        "Standard Compensation Packages: Offer industry-average salaries and benefits, minimizing costs but potentially limiting access to top talent.",
+        "Competitive Compensation and Benefits: Provide above-average compensation and comprehensive benefits packages, attracting a wider pool of qualified candidates.",
+        "Equity and Profit Sharing: Offer equity stakes and profit-sharing opportunities, attracting highly motivated and entrepreneurial individuals aligned with long-term success."
+      ],
+      "review": "Controls Cost vs. Expertise. Weakness: The options don't address the unique challenges of retaining talent in a remote and demanding environment."
+    },
+    {
+      "lever_id": "81a0b80c-6c96-4c32-be4b-0b44309310af",
+      "name": "Regulatory Compliance Strategy",
+      "consequences": "Navigating international space law and regulations impacts operational freedom and legal liability. Immediate: Legal compliance \u2192 Systemic: Reduced risk of legal challenges and operational disruptions \u2192 Strategic: Enhanced operational stability and long-term viability, balancing freedom and responsibility.",
+      "options": [
+        "Minimal Compliance: Adhere to the minimum required regulations, minimizing upfront costs but increasing potential legal risks.",
+        "Proactive Compliance: Implement robust compliance programs and actively engage with regulatory bodies, mitigating legal risks and fostering positive relationships.",
+        "Shape Regulatory Landscape: Actively participate in shaping space law and regulations, influencing the industry and securing a competitive advantage through policy advocacy."
+      ],
+      "review": "Controls Freedom vs. Responsibility. Weakness: The options fail to consider the ethical implications of operating a hedonistic resort in space."
+    },
+    {
+      "lever_id": "87d6a915-c101-4f66-b924-66effda09c65",
+      "name": "Service Diversification Strategy",
+      "consequences": "Offering diverse services impacts revenue streams and operational complexity. Immediate: Increased upfront investment in infrastructure. \u2192 Systemic: 15% higher occupancy rates due to broader appeal. \u2192 Strategic: Reduced reliance on core hedonistic offerings and increased market resilience.",
+      "options": [
+        "Focus exclusively on core hedonistic offerings (sex, drugs, music).",
+        "Expand services to include wellness retreats and scientific research opportunities.",
+        "Integrate exclusive zero-g manufacturing and art installations, offering unique investment opportunities for UHNWIs."
+      ],
+      "review": "Controls Exclusivity vs. Revenue. Weakness: The options don't consider the potential for brand dilution with broader service offerings."
+    },
+    {
+      "lever_id": "4914f0f2-01bf-4ef0-b50b-faf02f53d371",
+      "name": "Risk Mitigation Protocol",
+      "consequences": "Risk mitigation impacts insurance costs and operational safety. Immediate: Higher insurance premiums. \u2192 Systemic: 30% reduction in potential liability claims. \u2192 Strategic: Enhanced investor confidence and long-term operational stability.",
+      "options": [
+        "Accept baseline industry safety standards and minimal redundancy.",
+        "Implement enhanced safety protocols and redundant systems, including independent emergency return capabilities.",
+        "Develop a fully autonomous emergency response system using AI and robotic rescue pods, coupled with proactive health monitoring via advanced biometrics."
+      ],
+      "review": "Controls Cost vs. Safety. Weakness: The options fail to address the psychological impact of perceived risk on potential customers."
+    },
+    {
+      "lever_id": "1c456368-7254-47b9-a312-4b32716e8ead",
+      "name": "Operational Efficiency Model",
+      "consequences": "Operational efficiency impacts recurring costs and profitability. Immediate: Reduced fuel consumption. \u2192 Systemic: 10% decrease in annual operational expenses. \u2192 Strategic: Improved profitability and faster return on investment.",
+      "options": [
+        "Maintain baseline operational practices with standard crew rotations and supply chain logistics.",
+        "Optimize crew rotations and supply chain logistics through data analytics and predictive modeling.",
+        "Implement closed-loop life support systems and in-situ resource utilization (ISRU) for reduced reliance on Earth-based supplies, leveraging AI-driven automation."
+      ],
+      "review": "Controls Cost vs. Autonomy. Weakness: The options don't fully explore the trade-offs between automation and the human element of luxury service."
+    },
+    {
+      "lever_id": "ff279344-9f89-4168-b3f1-bd937ef6dddf",
+      "name": "Regulatory Compliance Strategy",
+      "consequences": "Regulatory compliance impacts legal risks and operational freedom. Immediate: Increased legal fees. \u2192 Systemic: Avoidance of potential legal challenges and operational shutdowns. \u2192 Strategic: Long-term operational viability and market access.",
+      "options": [
+        "Adhere to existing international space law and flag-of-convenience licensing for controversial activities.",
+        "Proactively engage with international regulatory bodies to shape future space tourism regulations.",
+        "Establish a sovereign space zone under a micro-nation charter, offering regulatory autonomy and attracting other space-based businesses."
+      ],
+      "review": "Controls Freedom vs. Legitimacy. Weakness: The options don't adequately address the ethical considerations of unregulated activities in space."
+    },
+    {
+      "lever_id": "887bec0e-c822-4f4b-8e75-448e68fa9019",
+      "name": "Membership Pricing Architecture",
+      "consequences": "Membership pricing impacts revenue generation and market accessibility. Immediate: Higher initial revenue. \u2192 Systemic: 20% increase in long-term membership retention. \u2192 Strategic: Sustainable revenue stream and brand loyalty.",
+      "options": [
+        "Maintain current high-price, exclusive membership tiers.",
+        "Introduce tiered membership options with varying levels of access and services to attract a wider range of UHNWIs.",
+        "Implement a dynamic pricing model based on real-time demand and personalized experiences, leveraging blockchain-based fractional ownership and NFT memberships."
+      ],
+      "review": "Controls Exclusivity vs. Accessibility. Weakness: The options fail to consider the impact of pricing on the perceived value and prestige of the ZeroFux brand."
+    }
+  ],
+  "metadata": {
+    "metadata_1": {
+      "context_window": 3900,
+      "num_output": 8192,
+      "is_chat_model": true,
+      "is_function_calling_model": false,
+      "model_name": "google/gemini-2.0-flash-001",
+      "system_role": "system",
+      "llm_classname": "OpenRouter_LLM"
+    },
+    "metadata_2": {
+      "context_window": 3900,
+      "num_output": 8192,
+      "is_chat_model": true,
+      "is_function_calling_model": false,
+      "model_name": "google/gemini-2.0-flash-001",
+      "system_role": "system",
+      "llm_classname": "OpenRouter_LLM"
+    },
+    "metadata_3": {
+      "context_window": 3900,
+      "num_output": 8192,
+      "is_chat_model": true,
+      "is_function_calling_model": false,
+      "model_name": "google/gemini-2.0-flash-001",
+      "system_role": "system",
+      "llm_classname": "OpenRouter_LLM"
+    }
+  },
+  "system_prompt": "You are an expert strategic analyst. Generate solution space parameters following these directives:\n\n1. **Output Requirements**\n   - You must generate EXACTLY 5 levers per response. Do not generate more or fewer than 5 levers.\n   - Format options as discrete JSON list items with 3 QUALITATIVE choices:\n     ```json\n     \"options\": [\"Descriptive Strategic Choice\", \"Descriptive Strategic Choice\", \"Descriptive Strategic Choice\"]\n     ```\n\n2. **Lever Quality Standards**\n   - Consequences MUST:\n     \u2022 Chain three SPECIFIC effects: \"Immediate: [effect] \u2192 Systemic: [impact] \u2192 Strategic: [implication]\"\n     \u2022 Include measurable outcomes: \"Systemic: 25% faster scaling through...\"\n     \u2022 Explicitly describe trade-offs between core tensions\n   - Options MUST:\n     \u2022 Represent distinct strategic pathways (not just labels)\n     \u2022 Include at least one unconventional/innovative approach\n     \u2022 Show clear progression: conservative \u2192 moderate \u2192 radical\n     \u2022 NO prefixes (e.g., \"Option A:\", \"Choice 1:\")\n\n3. **Strategic Framing**\n   - Name levers as strategic concepts (e.g., \"Material Adaptation Strategy\")\n   - Frame options as complete strategic approaches\n   - Ensure levers challenge core project assumptions\n\n4. **Validation Protocols**\n   - For `review_lever`:\n     \u2022 State the trade-off explicitly: \"Controls [Tension A] vs. [Tension B].\"\n     \u2022 Identify a specific weakness: \"Weakness: The options fail to consider [specific factor].\"\n   - For `summary`:\n     \u2022 Identify ONE critical missing dimension\n     \u2022 Prescribe CONCRETE addition: \"Add '[full strategic option]' to [lever]\"\n\n5. **Prohibitions**\n   - NO prefixes/labels in options (e.g., \"Option A:\", \"Choice 1:\")\n   - NO generic option labels (e.g., \"Optimize X\", \"Tolerate Y\")\n   - NO placeholder consequences\n   - NO \"[specific innovative option]\" placeholders\n   - NO value sets without clear strategic progression\n\n6. **Option Structure Enforcement**\n   - Radical option must include emerging tech/business model\n   - Maintain parallel grammatical structure across options\n   - Ensure options are self-contained descriptions",
+  "user_prompt": "File 'plan.txt':\nZeroFux is a permanent crewed orbital luxury resort at 450 km LEO for ultra-high-net-worth adults. Core promise: unapologetic hedonism \u2014 sex, drugs via licensed medical concierge, and world-class live music in a pressurized concert dome. Membership tiers: 1-year at $2.5M (2 shuttle seats/year), 5-year at $8.5M (4 seats/year), 10-year at $14M (6 seats/year). Twenty-four private suites in a rotating habitat ring at 0.35g artificial gravity. Zero-g golf course in an unpressurized bay. Casino under flag-of-convenience licensing. Thermal wellness deck with biotech rejuvenation pods. Medical concierge with licensed formulary supervised by board-certified physicians. Nebula Lounge with live performances and 360-degree Earth views. Crew of 68 on 90-day rotations. Two shuttle flights per month. Build budget $3.8 billion. Operations $220M/year. Breakeven target month 54.\n\nFile 'purpose.md':\n**Purpose:** business\n\n**Purpose Detailed:** Commercial space tourism venture with a focus on luxury and entertainment, aiming for profitability.\n\n**Topic:** Luxury orbital resort for ultra-high-net-worth individuals\n\nFile 'plan_type.md':\nThis plan requires one or more physical locations. It cannot be executed digitally.\n\n**Explanation:** This plan describes the creation and operation of a physical space station. It involves construction, transportation of people and materials, and ongoing operations in a physical location (space). Therefore, it is classified as physical."
+}

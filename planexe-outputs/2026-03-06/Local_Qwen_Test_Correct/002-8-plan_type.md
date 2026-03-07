@@ -1,0 +1,3 @@
+This plan requires one or more physical locations. It cannot be executed digitally.
+
+**Explanation:** The plan involves a subscription-based artisanal hot sauce company that operates from a small farm in eastern Connecticut. This business model includes growing peppers locally (agricultural activity), preparing the hot sauce (food production requiring physical ingredients and equipment), shipping products to customers (logistics), and selling at regional farmers markets (physical vendor presence). The core of this plan relies on physical locations for farming, manufacturing, distribution, and sales.

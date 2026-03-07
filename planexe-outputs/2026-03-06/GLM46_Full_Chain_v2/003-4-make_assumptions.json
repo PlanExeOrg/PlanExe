@@ -1,0 +1,42 @@
+[
+  {
+    "question": "What is the size of the square and the yellow ball?",
+    "assumptions": "Assumption: The square has a side length of 500 pixels. The yellow ball has a diameter of 50 pixels.",
+    "assessments": "Title: Collision Detection Assessment\\nDescription: Evaluation of collision between the ball and the square.\\nDetails: If the ball's center x-coordinate is less than or equal to the square's left edge, or greater than or equal to the square's right edge, the ball will bounce back. Similarly, if the ball's center y-coordinate is less than or equal to the square's top edge, or greater than or equal to the square's bottom edge, the ball will bounce up or down."
+  },
+  {
+    "question": "What is the size of the square and the yellow ball?",
+    "assumptions": "Assumption: The square has a side length of 500 pixels. The yellow ball has a diameter of 50 pixels.",
+    "assessments": "Title: Collision Detection Assessment\\nDescription: Evaluation of collision between the ball and the square.\\nDetails: If the ball's center x-coordinate is less than or equal to the square's left edge, or greater than or equal to the square's right edge, the ball will bounce back. Similarly, if the ball's center y-coordinate is less than or equal to the square's top edge, or greater than or equal to the square's bottom edge, the ball will bounce up or down."
+  },
+  {
+    "question": "What is the size of the square and the yellow ball?",
+    "assumptions": "Assumption: The square has a side length of 500 pixels. The yellow ball has a diameter of 50 pixels.",
+    "assessments": "Title: Collision Detection Assessment\\nDescription: Evaluation of collision between the ball and the square.\\nDetails: If the ball's center x-coordinate is less than or equal to the square's left edge, or greater than or equal to the square's right edge, the ball will bounce back. Similarly, if the ball's center y-coordinate is less than or equal to the square's top edge, or greater than or equal to the square's bottom edge, the ball will bounce up or down."
+  },
+  {
+    "question": "What is the size of the square and the yellow ball?",
+    "assumptions": "Assumption: The square has a side length of 500 pixels. The yellow ball has a diameter of 50 pixels.",
+    "assessments": "Title: Collision Detection Assessment\\nDescription: Evaluation of collision between the ball and the square.\\nDetails: If the ball's center x-coordinate is less than or equal to the square's left edge, or greater than or equal to the square's right edge, the ball will bounce back. Similarly, if the ball's center y-coordinate is less than or equal to the square's top edge, or greater than or equal to the square's bottom edge, the ball will bounce up or down."
+  },
+  {
+    "question": "What is the size of the square and the yellow ball?",
+    "assumptions": "Assumption: The square has a side length of 500 pixels. The yellow ball has a diameter of 50 pixels.",
+    "assessments": "Title: Collision Detection Assessment\\nDescription: Evaluation of collision between the ball and the square.\\nDetails: If the ball's center x-coordinate is less than or equal to the square's left edge, or greater than or equal to the square's right edge, the ball will bounce back. Similarly, if the ball's center y-coordinate is less than or equal to the square's top edge, or greater than or equal to the square's bottom edge, the ball will bounce up or down."
+  },
+  {
+    "question": "What is the size of the square and the yellow ball?",
+    "assumptions": "Assumption: The square has a side length of 500 pixels. The yellow ball has a diameter of 50 pixels.",
+    "assessments": "Title: Collision Detection Assessment\\nDescription: Evaluation of collision between the ball and the square.\\nDetails: If the ball's center x-coordinate is less than or equal to the square's left edge, or greater than or equal to the square's right edge, the ball will bounce back. Similarly, if the ball's center y-coordinate is less than or equal to the square's top edge, or greater than or equal to the square's bottom edge, the ball will bounce up or down."
+  },
+  {
+    "question": "What is the size of the square and the yellow ball?",
+    "assumptions": "Assumption: The square has a side length of 500 pixels. The yellow ball has a diameter of 50 pixels.",
+    "assessments": "Title: Collision Detection Assessment\\nDescription: Evaluation of collision between the ball and the square.\\nDetails: If the ball's center x-coordinate is less than or equal to the square's left edge, or greater than or equal to the square's right edge, the ball will bounce back. Similarly, if the ball's center y-coordinate is less than or equal to the square's top edge, or greater than or equal to the square's bottom edge, the ball will bounce up or down."
+  },
+  {
+    "question": "What is the size of the square and the yellow ball?",
+    "assumptions": "Assumption: The square has a side length of 500 pixels. The yellow ball has a diameter of 50 pixels.",
+    "assessments": "Title: Collision Detection Assessment\\nDescription: Evaluation of collision between the ball and the square.\\nDetails: If the ball's center x-coordinate is less than or equal to the square's left edge, or greater than or equal to the square's right edge, the ball will bounce back. Similarly, if the ball's center y-coordinate is less than or equal to the square's top edge, or greater than or equal to the square's bottom edge, the ball will bounce up or down."
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "lmstudio-qwen3.5-35b-a3b": {
+    "comment": "Local Qwen 3.5-35B MoE only. Clean run \u2014 no GLM fallback. Proven reliable on schema-strict tasks.",
+    "priority": 0,
+    "luigi_workers": 1,
+    "class": "LMStudio",
+    "arguments": {
+      "model_name": "qwen/qwen3.5-35b-a3b",
+      "base_url": "http://127.0.0.1:1234/v1",
+      "temperature": 0.2,
+      "request_timeout": 600.0,
+      "is_function_calling_model": false,
+      "context_window": 8192,
+      "num_output": 8192,
+      "force_json": true
+    },
+    "pricing_kind": "free"
+  }
+}

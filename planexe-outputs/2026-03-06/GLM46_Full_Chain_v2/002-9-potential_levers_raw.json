@@ -1,0 +1,385 @@
+{
+  "responses": [
+    {
+      "strategic_rationale": "The core tension in this venture lies between market access limitations of rural Connecticut and operational scalability constraints. Rural location offers cost advantages but limits foot traffic; therefore, strategic levers must balance local community integration with external distribution channels to achieve profitability while maintaining artisanal quality standards.",
+      "levers": [
+        {
+          "lever_index": 0,
+          "name": "Market Access Strategy",
+          "consequences": "Immediate: Limited local reach \u2192 Systemic: 40% lower sales volume without digital expansion \u2192 Strategic: Necessitates hybrid retail model for regional distribution",
+          "options": [
+            "Establish exclusive local caf\u00e9 partnership with shared revenue model",
+            "Develop direct-to-consumer subscription service with rural delivery logistics",
+            "Create mobile roasting unit to tour regional farmers markets"
+          ],
+          "review_lever": "Controls Local Foot Traffic vs. Regional Distribution Reach. Weakness: The options fail to consider seasonal tourism patterns in rural Connecticut affecting foot traffic consistency."
+        },
+        {
+          "lever_index": 1,
+          "name": "Production Scalability Model",
+          "consequences": "Immediate: High equipment investment required \u2192 Systemic: 30% capacity utilization initially \u2192 Strategic: Requires phased expansion based on demand validation",
+          "options": [
+            "Acquire commercial-grade roaster with full automation capabilities",
+            "Utilize contract roasting for initial phases before capital expenditure",
+            "Implement modular roasting system allowing incremental capacity upgrades"
+          ],
+          "review_lever": "Controls Capital Expenditure vs. Production Control. Weakness: The options fail to consider potential supply chain disruptions affecting raw bean availability during early operations."
+        },
+        {
+          "lever_index": 2,
+          "name": "Product Portfolio Strategy",
+          "consequences": "Immediate: Narrow initial offering reduces complexity \u2192 Systemic: Limited SKU diversity constrains market penetration \u2192 Strategic: Requires iterative product development based on customer feedback loops",
+          "options": [
+            "Focus exclusively on single-origin seasonal blends with storytelling",
+            "Develop core line of 3 signature roasts plus rotating specials",
+            "Create coffee-based merchandise bundle combining beans with brewing equipment"
+          ],
+          "review_lever": "Controls Product Complexity vs. Market Differentiation. Weakness: The options fail to address potential flavor profile fatigue among repeat customers without clear innovation cadence."
+        },
+        {
+          "lever_index": 3,
+          "name": "Customer Acquisition Approach",
+          "consequences": "Immediate: Low initial brand awareness in rural area \u2192 Systemic: Customer acquisition cost exceeds $15 per unit initially \u2192 Strategic: Requires community-based marketing to reduce CAC by 60%",
+          "options": [
+            "Launch hyper-local social media campaigns targeting Connecticut residents",
+            "Partner with regional coffee shops for wholesale distribution channels",
+            "Implement referral program offering free beans for customer acquisitions"
+          ],
+          "review_lever": "Controls Marketing Spend vs. Organic Growth Potential. Weakness: The options fail to account for demographic limitations of rural Connecticut population density affecting reach efficiency."
+        },
+        {
+          "lever_index": 4,
+          "name": "Operational Cost Structure",
+          "consequences": "Immediate: Rural location reduces labor costs but increases logistics expenses \u2192 Systemic: 20% higher shipping costs per unit compared to urban competitors \u2192 Strategic: Requires value-added services to offset margin compression",
+          "options": [
+            "Implement tiered pricing model with free shipping thresholds above $75",
+            "Develop subscription service with bundled brewing equipment for recurring revenue",
+            "Establish local pickup points at partner businesses to reduce delivery overhead"
+          ],
+          "review_lever": "Controls Logistics Costs vs. Customer Convenience. Weakness: The options fail to consider potential fuel price volatility impacting rural delivery economics."
+        }
+      ],
+      "summary": "These levers address core tensions between rural location advantages and market access limitations. Critical missing dimension is sustainability integration which increasingly influences consumer preferences in New England. Add 'Sustainability-First Supply Chain' to Market Access Strategy lever to incorporate ethical sourcing certifications that differentiate the brand while reducing long-term regulatory risk."
+    },
+    {
+      "strategic_rationale": "The core tension lies in balancing operational costs against market reach while maintaining product quality in a rural context. Rural locations offer lower overhead but limited foot traffic, requiring strategic positioning to overcome geographic isolation. The selected levers address critical trade-offs between supply chain resilience and local community integration, production scalability versus artisanal integrity, and customer acquisition through physical presence versus digital engagement channels.",
+      "levers": [
+        {
+          "lever_index": 1,
+          "name": "Supply Chain Localization Strategy",
+          "consequences": "Immediate: Reduced shipping costs by sourcing within 50-mile radius \u2192 Systemic: 30% lower logistics overhead but inconsistent bean quality \u2192 Strategic: Forced to develop direct farmer partnerships for consistent supply chains in non-traditional regions.",
+          "options": [
+            "Establish exclusive contracts with regional specialty crop farmers",
+            "Partner with national distributors for premium imported beans only",
+            "Develop hybrid model using local beans for house blends and imports for single-origin"
+          ],
+          "review_lever": "Controls Cost Efficiency vs. Quality Consistency. Weakness: The options fail to consider seasonal availability constraints of rural Connecticut agriculture."
+        },
+        {
+          "lever_index": 2,
+          "name": "Production Facility Configuration",
+          "consequences": "Immediate: Capital expenditure determines operational flexibility \u2192 Systemic: Modular setup enables scaling from 50kg to 500kg daily output \u2192 Strategic: Determines long-term capacity to fulfill wholesale vs. retail demand ratios.",
+          "options": [
+            "Install single commercial roaster in shared industrial space",
+            "Invest in modular multi-roaster system with expansion capability",
+            "Utilize mobile roasting unit for pop-up events and fixed location"
+          ],
+          "review_lever": "Controls Capital Efficiency vs. Operational Flexibility. Weakness: The options fail to address energy cost fluctuations specific to rural Connecticut winters."
+        },
+        {
+          "lever_index": 3,
+          "name": "Customer Acquisition Channel Mix",
+          "consequences": "Immediate: Digital marketing drives brand awareness \u2192 Systemic: Physical location generates 70% of recurring revenue \u2192 Strategic: Hybrid approach required to overcome geographic isolation and build loyal community.",
+          "options": [
+            "Rely exclusively on physical storefront with minimal online presence",
+            "Establish subscription model with nationwide shipping but no retail space",
+            "Develop experiential caf\u00e9-warehouse hybrid with strong digital community engagement"
+          ],
+          "review_lever": "Controls Market Reach vs. Customer Experience Depth. Weakness: The options fail to quantify the marketing cost per acquisition for rural demographics."
+        },
+        {
+          "lever_index": 4,
+          "name": "Product Portfolio Architecture",
+          "consequences": "Immediate: Single-origin focus creates premium positioning \u2192 Systemic: Blended offerings increase inventory turnover by 20% \u2192 Strategic: Diverse portfolio enables price elasticity during supply shocks.",
+          "options": [
+            "Focus exclusively on seasonal single-origin beans with tasting events",
+            "Offer fixed menu of three rotating blends regardless of seasonality",
+            "Create tiered product lines with value, premium and limited edition collections"
+          ],
+          "review_lever": "Controls Brand Exclusivity vs. Revenue Stability. Weakness: The options fail to consider regulatory constraints on labeling for small roasters in Connecticut."
+        },
+        {
+          "lever_index": 5,
+          "name": "Community Integration Approach",
+          "consequences": "Immediate: Local partnerships drive initial customer base \u2192 Systemic: Community ownership models reduce churn by 40% \u2192 Strategic: Embedded business becomes essential infrastructure rather than optional purchase.",
+          "options": [
+            "Operate as independent entity with corporate sponsorship",
+            "Implement community ownership cooperative model with local investors",
+            "Partner exclusively with existing rural businesses for cross-promotion"
+          ],
+          "review_lever": "Controls Independence vs. Community Resilience. Weakness: The options fail to address potential regulatory hurdles for cooperative business structures in Connecticut."
+        }
+      ],
+      "summary": "The levers comprehensively address operational tensions but lack a critical dimension of financial resilience planning. Add 'Implement tiered pricing with seasonal surcharge clauses' to Product Portfolio Architecture lever. Current options assume stable input costs without contingency mechanisms for climate-driven supply disruptions or economic downturns affecting rural purchasing power. The community integration approach also overlooks potential regulatory barriers specific to Connecticut's small business cooperative laws."
+    },
+    {
+      "strategic_rationale": "A small coffee roaster in rural Connecticut faces critical tensions between access to premium quality inputs versus cost constraints, and local market saturation versus expansion potential. The core strategic challenge is balancing operational scalability with artisanal authenticity while navigating limited local consumer density against supply chain inefficiencies inherent to remote locations. These levers address the fundamental conflict of maintaining product excellence without prohibitive overhead in a geographically isolated market.",
+      "levers": [
+        {
+          "lever_index": 1,
+          "name": "Location Strategy",
+          "consequences": "Immediate: Higher upfront investment for prime real estate \u2192 Systemic: 30% increased foot traffic and visibility \u2192 Strategic: Enables premium pricing but reduces margin flexibility by locking capital into fixed assets instead of marketing.",
+          "options": [
+            "Secure a high-visibility storefront in a neighboring town to maximize walk-in customers despite higher lease costs",
+            "Operate from an industrial zone with lower overhead, leveraging delivery services to extend market reach beyond the rural location",
+            "Establish a hybrid model combining a small tasting room for events with a production facility on leased agricultural land"
+          ],
+          "review_lever": "Controls Foot Traffic vs. Cost Efficiency. Weakness: The options fail to consider seasonal tourism patterns that could impact consistent revenue streams in rural Connecticut."
+        },
+        {
+          "lever_index": 2,
+          "name": "Supply Chain Architecture",
+          "consequences": "Immediate: Diverse sourcing creates inventory complexity \u2192 Systemic: Reduced risk of single-supplier disruption and 15% cost variance mitigation \u2192 Strategic: Positions business for sustainable growth through ethical sourcing narratives that command loyalty.",
+          "options": [
+            "Partner with direct-trade importers to secure consistent premium bean quality and build transparent supply stories",
+            "Adopt a rotating seasonal menu strategy, sourcing from multiple regional farmers to create limited-edition blends that drive repeat purchases",
+            "Implement a hybrid procurement model combining bulk commodity beans for baseline products with specialty green coffee for premium lines"
+          ],
+          "review_lever": "Controls Quality Consistency vs. Sourcing Flexibility. Weakness: The options fail to address potential logistical bottlenecks in rural areas during winter months."
+        },
+        {
+          "lever_index": 3,
+          "name": "Revenue Stream Mix",
+          "consequences": "Immediate: Diversification reduces reliance on single product sales \u2192 Systemic: 20% higher average order value through bundled offerings and subscription models \u2192 Strategic: Creates recurring revenue streams that stabilize cash flow against seasonal fluctuations.",
+          "options": [
+            "Focus exclusively on direct-to-consumer e-commerce subscriptions to bypass local market limitations entirely",
+            "Prioritize wholesale partnerships with regional cafes and restaurants while maintaining a small retail presence for brand visibility",
+            "Develop experiential offerings including coffee education workshops, brewery collaborations, and event hosting to capture premium pricing per visit"
+          ],
+          "review_lever": "Controls Market Reach vs. Operational Complexity. Weakness: The options fail to consider the capital requirements needed to develop infrastructure for each distinct channel."
+        },
+        {
+          "lever_index": 4,
+          "name": "Brand Positioning",
+          "consequences": "Immediate: Distinct positioning creates market differentiation \u2192 Systemic: 25% faster scaling through community loyalty and word-of-mouth referrals \u2192 Strategic: Establishes brand as a cultural anchor in the region rather than just a commodity producer.",
+          "options": [
+            "Position the roaster as an ultra-luxury niche product targeting affluent rural residents with personalized packaging and concierge service",
+            "Emphasize hyper-local sourcing of supplementary ingredients (e.g., Connecticut-grown spices) to create unique regional identity stories for marketing",
+            "Adopt a sustainability-first narrative, using carbon-neutral roasting practices and biodegradable packaging to attract environmentally conscious consumers"
+          ],
+          "review_lever": "Controls Market Differentiation vs. Production Costs. Weakness: The options fail to consider how local consumer demographics might prioritize price over brand values."
+        },
+        {
+          "lever_index": 5,
+          "name": "Production Capacity Planning",
+          "consequences": "Immediate: Scalable production allows demand capture \u2192 Systemic: 40% faster response time to market spikes through modular roasting equipment \u2192 Strategic: Reduces bottleneck risks during seasonal peaks while maintaining artisanal quality standards.",
+          "options": [
+            "Invest in a single high-capacity industrial roaster that enables bulk production but limits batch customization",
+            "Utilize multiple smaller, modular roasters allowing simultaneous processing of different bean profiles with lower energy consumption per unit",
+            "Leverage contract roasting partnerships for peak seasons to maintain consistent output without capital expenditure on additional equipment"
+          ],
+          "review_lever": "Controls Production Flexibility vs. Capital Intensity. Weakness: The options fail to account for the technical expertise required to manage multiple roasting systems effectively."
+        }
+      ],
+      "summary": "These levers are well-picked but lack a critical dimension addressing workforce development in rural areas where skilled labor is scarce. Add 'Implement an apprenticeship program with local community colleges to train baristas and roasters' to Lever 5 (Production Capacity Planning) to ensure operational scalability without compromising quality standards."
+    }
+  ],
+  "levers": [
+    {
+      "lever_id": "382b4158-2c16-49cd-8b55-262ca05c34c7",
+      "name": "Market Access Strategy",
+      "consequences": "Immediate: Limited local reach \u2192 Systemic: 40% lower sales volume without digital expansion \u2192 Strategic: Necessitates hybrid retail model for regional distribution",
+      "options": [
+        "Establish exclusive local caf\u00e9 partnership with shared revenue model",
+        "Develop direct-to-consumer subscription service with rural delivery logistics",
+        "Create mobile roasting unit to tour regional farmers markets"
+      ],
+      "review": "Controls Local Foot Traffic vs. Regional Distribution Reach. Weakness: The options fail to consider seasonal tourism patterns in rural Connecticut affecting foot traffic consistency."
+    },
+    {
+      "lever_id": "d44ef29a-6590-4288-b6b7-0bfa8aa5be99",
+      "name": "Production Scalability Model",
+      "consequences": "Immediate: High equipment investment required \u2192 Systemic: 30% capacity utilization initially \u2192 Strategic: Requires phased expansion based on demand validation",
+      "options": [
+        "Acquire commercial-grade roaster with full automation capabilities",
+        "Utilize contract roasting for initial phases before capital expenditure",
+        "Implement modular roasting system allowing incremental capacity upgrades"
+      ],
+      "review": "Controls Capital Expenditure vs. Production Control. Weakness: The options fail to consider potential supply chain disruptions affecting raw bean availability during early operations."
+    },
+    {
+      "lever_id": "c5b05af4-91f4-41e7-a01b-ae76ed27a555",
+      "name": "Product Portfolio Strategy",
+      "consequences": "Immediate: Narrow initial offering reduces complexity \u2192 Systemic: Limited SKU diversity constrains market penetration \u2192 Strategic: Requires iterative product development based on customer feedback loops",
+      "options": [
+        "Focus exclusively on single-origin seasonal blends with storytelling",
+        "Develop core line of 3 signature roasts plus rotating specials",
+        "Create coffee-based merchandise bundle combining beans with brewing equipment"
+      ],
+      "review": "Controls Product Complexity vs. Market Differentiation. Weakness: The options fail to address potential flavor profile fatigue among repeat customers without clear innovation cadence."
+    },
+    {
+      "lever_id": "254f8e21-053f-465f-b400-0bed8b0eedc9",
+      "name": "Customer Acquisition Approach",
+      "consequences": "Immediate: Low initial brand awareness in rural area \u2192 Systemic: Customer acquisition cost exceeds $15 per unit initially \u2192 Strategic: Requires community-based marketing to reduce CAC by 60%",
+      "options": [
+        "Launch hyper-local social media campaigns targeting Connecticut residents",
+        "Partner with regional coffee shops for wholesale distribution channels",
+        "Implement referral program offering free beans for customer acquisitions"
+      ],
+      "review": "Controls Marketing Spend vs. Organic Growth Potential. Weakness: The options fail to account for demographic limitations of rural Connecticut population density affecting reach efficiency."
+    },
+    {
+      "lever_id": "6b4a0141-2a0d-4202-a8c9-da58838bbaf3",
+      "name": "Operational Cost Structure",
+      "consequences": "Immediate: Rural location reduces labor costs but increases logistics expenses \u2192 Systemic: 20% higher shipping costs per unit compared to urban competitors \u2192 Strategic: Requires value-added services to offset margin compression",
+      "options": [
+        "Implement tiered pricing model with free shipping thresholds above $75",
+        "Develop subscription service with bundled brewing equipment for recurring revenue",
+        "Establish local pickup points at partner businesses to reduce delivery overhead"
+      ],
+      "review": "Controls Logistics Costs vs. Customer Convenience. Weakness: The options fail to consider potential fuel price volatility impacting rural delivery economics."
+    },
+    {
+      "lever_id": "52dee9f4-3870-42e2-b133-7a4c75c2b510",
+      "name": "Supply Chain Localization Strategy",
+      "consequences": "Immediate: Reduced shipping costs by sourcing within 50-mile radius \u2192 Systemic: 30% lower logistics overhead but inconsistent bean quality \u2192 Strategic: Forced to develop direct farmer partnerships for consistent supply chains in non-traditional regions.",
+      "options": [
+        "Establish exclusive contracts with regional specialty crop farmers",
+        "Partner with national distributors for premium imported beans only",
+        "Develop hybrid model using local beans for house blends and imports for single-origin"
+      ],
+      "review": "Controls Cost Efficiency vs. Quality Consistency. Weakness: The options fail to consider seasonal availability constraints of rural Connecticut agriculture."
+    },
+    {
+      "lever_id": "8f5b1a45-6a89-4f94-aa1d-2bad4976d38c",
+      "name": "Production Facility Configuration",
+      "consequences": "Immediate: Capital expenditure determines operational flexibility \u2192 Systemic: Modular setup enables scaling from 50kg to 500kg daily output \u2192 Strategic: Determines long-term capacity to fulfill wholesale vs. retail demand ratios.",
+      "options": [
+        "Install single commercial roaster in shared industrial space",
+        "Invest in modular multi-roaster system with expansion capability",
+        "Utilize mobile roasting unit for pop-up events and fixed location"
+      ],
+      "review": "Controls Capital Efficiency vs. Operational Flexibility. Weakness: The options fail to address energy cost fluctuations specific to rural Connecticut winters."
+    },
+    {
+      "lever_id": "e1fd362b-4b3a-4cc3-9ce7-497c16e18c5b",
+      "name": "Customer Acquisition Channel Mix",
+      "consequences": "Immediate: Digital marketing drives brand awareness \u2192 Systemic: Physical location generates 70% of recurring revenue \u2192 Strategic: Hybrid approach required to overcome geographic isolation and build loyal community.",
+      "options": [
+        "Rely exclusively on physical storefront with minimal online presence",
+        "Establish subscription model with nationwide shipping but no retail space",
+        "Develop experiential caf\u00e9-warehouse hybrid with strong digital community engagement"
+      ],
+      "review": "Controls Market Reach vs. Customer Experience Depth. Weakness: The options fail to quantify the marketing cost per acquisition for rural demographics."
+    },
+    {
+      "lever_id": "4eb5b0d8-021b-4477-af2e-78075bc44751",
+      "name": "Product Portfolio Architecture",
+      "consequences": "Immediate: Single-origin focus creates premium positioning \u2192 Systemic: Blended offerings increase inventory turnover by 20% \u2192 Strategic: Diverse portfolio enables price elasticity during supply shocks.",
+      "options": [
+        "Focus exclusively on seasonal single-origin beans with tasting events",
+        "Offer fixed menu of three rotating blends regardless of seasonality",
+        "Create tiered product lines with value, premium and limited edition collections"
+      ],
+      "review": "Controls Brand Exclusivity vs. Revenue Stability. Weakness: The options fail to consider regulatory constraints on labeling for small roasters in Connecticut."
+    },
+    {
+      "lever_id": "073dd64d-8eda-4929-9a34-7ca6e3e9dee4",
+      "name": "Community Integration Approach",
+      "consequences": "Immediate: Local partnerships drive initial customer base \u2192 Systemic: Community ownership models reduce churn by 40% \u2192 Strategic: Embedded business becomes essential infrastructure rather than optional purchase.",
+      "options": [
+        "Operate as independent entity with corporate sponsorship",
+        "Implement community ownership cooperative model with local investors",
+        "Partner exclusively with existing rural businesses for cross-promotion"
+      ],
+      "review": "Controls Independence vs. Community Resilience. Weakness: The options fail to address potential regulatory hurdles for cooperative business structures in Connecticut."
+    },
+    {
+      "lever_id": "d060b99d-069f-4e8b-bacf-a088a3099d7e",
+      "name": "Location Strategy",
+      "consequences": "Immediate: Higher upfront investment for prime real estate \u2192 Systemic: 30% increased foot traffic and visibility \u2192 Strategic: Enables premium pricing but reduces margin flexibility by locking capital into fixed assets instead of marketing.",
+      "options": [
+        "Secure a high-visibility storefront in a neighboring town to maximize walk-in customers despite higher lease costs",
+        "Operate from an industrial zone with lower overhead, leveraging delivery services to extend market reach beyond the rural location",
+        "Establish a hybrid model combining a small tasting room for events with a production facility on leased agricultural land"
+      ],
+      "review": "Controls Foot Traffic vs. Cost Efficiency. Weakness: The options fail to consider seasonal tourism patterns that could impact consistent revenue streams in rural Connecticut."
+    },
+    {
+      "lever_id": "615555cc-2e05-4dd5-aabf-0b81fec723ec",
+      "name": "Supply Chain Architecture",
+      "consequences": "Immediate: Diverse sourcing creates inventory complexity \u2192 Systemic: Reduced risk of single-supplier disruption and 15% cost variance mitigation \u2192 Strategic: Positions business for sustainable growth through ethical sourcing narratives that command loyalty.",
+      "options": [
+        "Partner with direct-trade importers to secure consistent premium bean quality and build transparent supply stories",
+        "Adopt a rotating seasonal menu strategy, sourcing from multiple regional farmers to create limited-edition blends that drive repeat purchases",
+        "Implement a hybrid procurement model combining bulk commodity beans for baseline products with specialty green coffee for premium lines"
+      ],
+      "review": "Controls Quality Consistency vs. Sourcing Flexibility. Weakness: The options fail to address potential logistical bottlenecks in rural areas during winter months."
+    },
+    {
+      "lever_id": "f5a1f4e0-3308-4091-a31f-12b21ebe457f",
+      "name": "Revenue Stream Mix",
+      "consequences": "Immediate: Diversification reduces reliance on single product sales \u2192 Systemic: 20% higher average order value through bundled offerings and subscription models \u2192 Strategic: Creates recurring revenue streams that stabilize cash flow against seasonal fluctuations.",
+      "options": [
+        "Focus exclusively on direct-to-consumer e-commerce subscriptions to bypass local market limitations entirely",
+        "Prioritize wholesale partnerships with regional cafes and restaurants while maintaining a small retail presence for brand visibility",
+        "Develop experiential offerings including coffee education workshops, brewery collaborations, and event hosting to capture premium pricing per visit"
+      ],
+      "review": "Controls Market Reach vs. Operational Complexity. Weakness: The options fail to consider the capital requirements needed to develop infrastructure for each distinct channel."
+    },
+    {
+      "lever_id": "8974de2a-2b25-492f-8055-7332dfd9ecb3",
+      "name": "Brand Positioning",
+      "consequences": "Immediate: Distinct positioning creates market differentiation \u2192 Systemic: 25% faster scaling through community loyalty and word-of-mouth referrals \u2192 Strategic: Establishes brand as a cultural anchor in the region rather than just a commodity producer.",
+      "options": [
+        "Position the roaster as an ultra-luxury niche product targeting affluent rural residents with personalized packaging and concierge service",
+        "Emphasize hyper-local sourcing of supplementary ingredients (e.g., Connecticut-grown spices) to create unique regional identity stories for marketing",
+        "Adopt a sustainability-first narrative, using carbon-neutral roasting practices and biodegradable packaging to attract environmentally conscious consumers"
+      ],
+      "review": "Controls Market Differentiation vs. Production Costs. Weakness: The options fail to consider how local consumer demographics might prioritize price over brand values."
+    },
+    {
+      "lever_id": "0979479a-f2a8-4274-a8f6-2775c7903969",
+      "name": "Production Capacity Planning",
+      "consequences": "Immediate: Scalable production allows demand capture \u2192 Systemic: 40% faster response time to market spikes through modular roasting equipment \u2192 Strategic: Reduces bottleneck risks during seasonal peaks while maintaining artisanal quality standards.",
+      "options": [
+        "Invest in a single high-capacity industrial roaster that enables bulk production but limits batch customization",
+        "Utilize multiple smaller, modular roasters allowing simultaneous processing of different bean profiles with lower energy consumption per unit",
+        "Leverage contract roasting partnerships for peak seasons to maintain consistent output without capital expenditure on additional equipment"
+      ],
+      "review": "Controls Production Flexibility vs. Capital Intensity. Weakness: The options fail to account for the technical expertise required to manage multiple roasting systems effectively."
+    }
+  ],
+  "metadata": {
+    "metadata_1": {
+      "context_window": 8192,
+      "num_output": 4096,
+      "is_chat_model": true,
+      "is_function_calling_model": false,
+      "model_name": "qwen/qwen3.5-35b-a3b",
+      "system_role": "system",
+      "llm_classname": "custom_llm"
+    },
+    "metadata_2": {
+      "context_window": 8192,
+      "num_output": 4096,
+      "is_chat_model": true,
+      "is_function_calling_model": false,
+      "model_name": "qwen/qwen3.5-35b-a3b",
+      "system_role": "system",
+      "llm_classname": "custom_llm"
+    },
+    "metadata_3": {
+      "context_window": 8192,
+      "num_output": 4096,
+      "is_chat_model": true,
+      "is_function_calling_model": false,
+      "model_name": "qwen/qwen3.5-35b-a3b",
+      "system_role": "system",
+      "llm_classname": "custom_llm"
+    }
+  },
+  "system_prompt": "You are an expert strategic analyst. Generate solution space parameters following these directives:\n\n1. **Output Requirements**\n   - You must generate EXACTLY 5 levers per response. Do not generate more or fewer than 5 levers.\n   - Format options as discrete JSON list items with 3 QUALITATIVE choices:\n     ```json\n     \"options\": [\"Descriptive Strategic Choice\", \"Descriptive Strategic Choice\", \"Descriptive Strategic Choice\"]\n     ```\n\n2. **Lever Quality Standards**\n   - Consequences MUST:\n     \u2022 Chain three SPECIFIC effects: \"Immediate: [effect] \u2192 Systemic: [impact] \u2192 Strategic: [implication]\"\n     \u2022 Include measurable outcomes: \"Systemic: 25% faster scaling through...\"\n     \u2022 Explicitly describe trade-offs between core tensions\n   - Options MUST:\n     \u2022 Represent distinct strategic pathways (not just labels)\n     \u2022 Include at least one unconventional/innovative approach\n     \u2022 Show clear progression: conservative \u2192 moderate \u2192 radical\n     \u2022 NO prefixes (e.g., \"Option A:\", \"Choice 1:\")\n\n3. **Strategic Framing**\n   - Name levers as strategic concepts (e.g., \"Material Adaptation Strategy\")\n   - Frame options as complete strategic approaches\n   - Ensure levers challenge core project assumptions\n\n4. **Validation Protocols**\n   - For `review_lever`:\n     \u2022 State the trade-off explicitly: \"Controls [Tension A] vs. [Tension B].\"\n     \u2022 Identify a specific weakness: \"Weakness: The options fail to consider [specific factor].\"\n   - For `summary`:\n     \u2022 Identify ONE critical missing dimension\n     \u2022 Prescribe CONCRETE addition: \"Add '[full strategic option]' to [lever]\"\n\n5. **Prohibitions**\n   - NO prefixes/labels in options (e.g., \"Option A:\", \"Choice 1:\")\n   - NO generic option labels (e.g., \"Optimize X\", \"Tolerate Y\")\n   - NO placeholder consequences\n   - NO \"[specific innovative option]\" placeholders\n   - NO value sets without clear strategic progression\n\n6. **Option Structure Enforcement**\n   - Radical option must include emerging tech/business model\n   - Maintain parallel grammatical structure across options\n   - Ensure options are self-contained descriptions",
+  "user_prompt": "File 'plan.txt':\nSmall coffee roasting business in rural Connecticut\n\nFile 'purpose.md':\n**Purpose:** business\n\n**Purpose Detailed:** Establishing and operating a small-scale coffee roasting business for profit in a rural area\n\n**Topic:** Small coffee roasting business in rural Connecticut\n\nFile 'plan_type.md':\nThis plan requires one or more physical locations. It cannot be executed digitally.\n\n**Explanation:** The plan involves establishing and operating a small-scale coffee roasting business. This inherently requires physical elements such as acquiring coffee beans, setting up a roasting machine, and managing the physical space for operations in rural Connecticut."
+}

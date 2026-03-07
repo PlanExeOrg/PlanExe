@@ -1,0 +1,36 @@
+{
+    "lmstudio-glm-4.6v-flash": {
+        "comment": "Local GLM 4.6v Flash 9B (PRIMARY for this run). force_json for clean structured output.",
+        "priority": 0,
+        "luigi_workers": 1,
+        "class": "LMStudio",
+        "arguments": {
+            "model_name": "zai-org/glm-4.6v-flash",
+            "base_url": "http://127.0.0.1:1234/v1",
+            "temperature": 0.2,
+            "request_timeout": 600.0,
+            "is_function_calling_model": false,
+            "context_window": 8192,
+            "num_output": 4096,
+            "force_json": true
+        },
+        "pricing_kind": "free"
+    },
+    "lmstudio-qwen3.5-35b-a3b": {
+        "comment": "Local Qwen 3.5-35B MoE. Fallback.",
+        "priority": 1,
+        "luigi_workers": 1,
+        "class": "LMStudio",
+        "arguments": {
+            "model_name": "qwen/qwen3.5-35b-a3b",
+            "base_url": "http://127.0.0.1:1234/v1",
+            "temperature": 0.2,
+            "request_timeout": 600.0,
+            "is_function_calling_model": false,
+            "context_window": 8192,
+            "num_output": 4096,
+            "force_json": true
+        },
+        "pricing_kind": "free"
+    }
+}

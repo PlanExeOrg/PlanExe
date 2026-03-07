@@ -1,0 +1,2 @@
+- The project will take 3 weeks.
+- The team consists of 3 people.

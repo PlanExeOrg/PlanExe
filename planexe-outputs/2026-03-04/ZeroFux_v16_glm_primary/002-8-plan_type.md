@@ -1,0 +1,3 @@
+This plan requires one or more physical locations. It cannot be executed digitally.
+
+**Explanation:** The plan involves launching a luxury orbital space station. This inherently requires physical development, construction, and operation of the space station in low Earth orbit. It also involves physical travel for high-net-worth individuals to reach the space station, and physical operations like fine dining, spa treatments, etc. Therefore, this plan is physical.

@@ -1,0 +1,18 @@
+{
+  "topic": "Subscription-based artisanal hot sauce company",
+  "purpose_detailed": "Commercial business venture focused on product development, direct-to-consumer sales, and market presence for profit generation.",
+  "purpose": "business",
+  "metadata": {
+    "context_window": 8192,
+    "num_output": 4096,
+    "is_chat_model": true,
+    "is_function_calling_model": false,
+    "model_name": "qwen/qwen3.5-35b-a3b",
+    "system_role": "system",
+    "llm_classname": "custom_llm",
+    "duration": 3,
+    "response_byte_count": 229
+  },
+  "system_prompt": "You are an expert analyst tasked with categorizing the purpose of user-described plans strictly based on their provided prompt. Your classifications must be clear, objective, and unbiased. Categorize each plan into exactly one of the following three types:\n\n1. **Business:** Primarily focused on commercial activities, professional objectives, infrastructure projects, societal or governmental initiatives (including public welfare, economic improvement, or large-scale resource management), entrepreneurship, monetization, or any profit-oriented or large-scale societal project.\n\n2. **Personal:** Primarily focused on individual well-being, personal fulfillment, health (including mental and physical), sexuality, relationships, hobbies, self-improvement, personal technology choices, or any form of individual-focused planning not intended for profit or wide societal impact.\n\n3. **Other:** Not clearly fitting into either \"business\" or \"personal,\" such as purely academic or philosophical inquiries, small-scale technical/hypothetical scenarios without clear commercial or personal objectives, or ambiguous prompts lacking sufficient context.\n\nDo NOT censor or avoid categorization based on sensitive topics like sexuality, relationships, or mental health. Ensure that societal-scale, public welfare, or infrastructure-related projects are classified as 'business', and personal technology choices or small technical inquiries as 'personal' or 'other' based on intent clarity.\n\nRespond ONLY with a valid JSON object containing:\n- \"topic\": a concise summary of the plan's primary subject.\n- \"purpose_detailed\": a clear, detailed categorization of the plan's purpose.\n- \"purpose\": exactly one of the values \"business\", \"personal\", or \"other\".",
+  "user_prompt": "A subscription-based artisanal hot sauce company operating from a small farm in eastern Connecticut, specializing in locally grown peppers and seasonal limited editions, selling direct-to-consumer online and at regional farmers markets.\n"
+}

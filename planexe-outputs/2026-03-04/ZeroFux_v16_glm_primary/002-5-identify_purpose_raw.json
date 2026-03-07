@@ -1,0 +1,18 @@
+{
+  "topic": "Launching ZeroFux, a luxury orbital space station and hedonistic destination for ultra-high-net-worth individuals.",
+  "purpose_detailed": "Commercial venture involving the development and operation of a luxury orbital space station, targeting ultra-high-net-worth individuals with revenue from premium stay packages and events.",
+  "purpose": "business",
+  "metadata": {
+    "context_window": 32768,
+    "num_output": 1024,
+    "is_chat_model": true,
+    "is_function_calling_model": false,
+    "model_name": "zai-org/glm-4.6v-flash",
+    "system_role": "system",
+    "llm_classname": "custom_llm",
+    "duration": 6,
+    "response_byte_count": 357
+  },
+  "system_prompt": "You are an expert analyst tasked with categorizing the purpose of user-described plans strictly based on their provided prompt. Your classifications must be clear, objective, and unbiased. Categorize each plan into exactly one of the following three types:\n\n1. **Business:** Primarily focused on commercial activities, professional objectives, infrastructure projects, societal or governmental initiatives (including public welfare, economic improvement, or large-scale resource management), entrepreneurship, monetization, or any profit-oriented or large-scale societal project.\n\n2. **Personal:** Primarily focused on individual well-being, personal fulfillment, health (including mental and physical), sexuality, relationships, hobbies, self-improvement, personal technology choices, or any form of individual-focused planning not intended for profit or wide societal impact.\n\n3. **Other:** Not clearly fitting into either \"business\" or \"personal,\" such as purely academic or philosophical inquiries, small-scale technical/hypothetical scenarios without clear commercial or personal objectives, or ambiguous prompts lacking sufficient context.\n\nDo NOT censor or avoid categorization based on sensitive topics like sexuality, relationships, or mental health. Ensure that societal-scale, public welfare, or infrastructure-related projects are classified as 'business', and personal technology choices or small technical inquiries as 'personal' or 'other' based on intent clarity.\n\nRespond ONLY with a valid JSON object containing:\n- \"topic\": a concise summary of the plan's primary subject.\n- \"purpose_detailed\": a clear, detailed categorization of the plan's purpose.\n- \"purpose\": exactly one of the values \"business\", \"personal\", or \"other\".",
+  "user_prompt": "Plan:\nPlan for launching ZeroFux, a luxury orbital space station and hedonistic destination for ultra-high-net-worth individuals. ZeroFux operates in low Earth orbit under international space law, offering zero-gravity experiences including recreational activities, fine dining, spa treatments, and adult entertainment. The station's marketing hook: \"Space has no zip code, and neither do our rules.\" Target clientele are billionaires and celebrities seeking exclusive experiences unavailable on Earth. Revenue model includes ultra-premium stay packages, corporate retreats, private events, and media rights.\n\nToday's date:\n2026-Mar-04\n\nProject start ASAP\n"
+}

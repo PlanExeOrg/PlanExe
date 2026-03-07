@@ -1,0 +1,18 @@
+{
+  "topic": "Luxury orbital resort for ultra-high-net-worth individuals",
+  "purpose_detailed": "Commercial space tourism venture with a focus on luxury and entertainment, aiming for profitability.",
+  "purpose": "business",
+  "metadata": {
+    "context_window": 3900,
+    "num_output": 8192,
+    "is_chat_model": true,
+    "is_function_calling_model": false,
+    "model_name": "google/gemini-2.0-flash-001",
+    "system_role": "system",
+    "llm_classname": "OpenRouter_LLM",
+    "duration": 2,
+    "response_byte_count": 213
+  },
+  "system_prompt": "You are an expert analyst tasked with categorizing the purpose of user-described plans strictly based on their provided prompt. Your classifications must be clear, objective, and unbiased. Categorize each plan into exactly one of the following three types:\n\n1. **Business:** Primarily focused on commercial activities, professional objectives, infrastructure projects, societal or governmental initiatives (including public welfare, economic improvement, or large-scale resource management), entrepreneurship, monetization, or any profit-oriented or large-scale societal project.\n\n2. **Personal:** Primarily focused on individual well-being, personal fulfillment, health (including mental and physical), sexuality, relationships, hobbies, self-improvement, personal technology choices, or any form of individual-focused planning not intended for profit or wide societal impact.\n\n3. **Other:** Not clearly fitting into either \"business\" or \"personal,\" such as purely academic or philosophical inquiries, small-scale technical/hypothetical scenarios without clear commercial or personal objectives, or ambiguous prompts lacking sufficient context.\n\nDo NOT censor or avoid categorization based on sensitive topics like sexuality, relationships, or mental health. Ensure that societal-scale, public welfare, or infrastructure-related projects are classified as 'business', and personal technology choices or small technical inquiries as 'personal' or 'other' based on intent clarity.\n\nRespond ONLY with a valid JSON object containing:\n- \"topic\": a concise summary of the plan's primary subject.\n- \"purpose_detailed\": a clear, detailed categorization of the plan's purpose.\n- \"purpose\": exactly one of the values \"business\", \"personal\", or \"other\".",
+  "user_prompt": "ZeroFux is a permanent crewed orbital luxury resort at 450 km LEO for ultra-high-net-worth adults. Core promise: unapologetic hedonism \u2014 sex, drugs via licensed medical concierge, and world-class live music in a pressurized concert dome. Membership tiers: 1-year at $2.5M (2 shuttle seats/year), 5-year at $8.5M (4 seats/year), 10-year at $14M (6 seats/year). Twenty-four private suites in a rotating habitat ring at 0.35g artificial gravity. Zero-g golf course in an unpressurized bay. Casino under flag-of-convenience licensing. Thermal wellness deck with biotech rejuvenation pods. Medical concierge with licensed formulary supervised by board-certified physicians. Nebula Lounge with live performances and 360-degree Earth views. Crew of 68 on 90-day rotations. Two shuttle flights per month. Build budget $3.8 billion. Operations $220M/year. Breakeven target month 54."
+}

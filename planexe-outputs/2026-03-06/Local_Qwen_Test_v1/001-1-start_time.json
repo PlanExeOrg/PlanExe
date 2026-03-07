@@ -1,0 +1,8 @@
+{
+  "start_time_utc": "2026-03-06T21:59:43Z",
+  "run_label": "Local_Qwen_Test_v1",
+  "primary_model": "qwen/qwen3.5-35b-a3b",
+  "fallback_model": "zai-org/glm-4.7-flash",
+  "model_source": "LM Studio (localhost:1234)",
+  "test_type": "local_models_only"
+}

@@ -124,9 +124,12 @@ class ReviewPlan:
         for index, title_question in enumerate(title_question_list, start=1):
             title, question = title_question
             logger.debug(f"Question {index} of {len(title_question_list)}: {question}")
+            # Append /no_think to suppress chain-of-thought output in reasoning models
+            # (e.g. Qwen3). Without this, models output their entire reasoning process
+            # instead of JSON, especially in later turns when accumulated context is large.
             chat_message_list.append(ChatMessage(
                 role=MessageRole.USER,
-                content=question,
+                content=question + "\n/no_think",
             ))
 
             def execute_function(llm: LLM) -> ReviewPlanRunResult:

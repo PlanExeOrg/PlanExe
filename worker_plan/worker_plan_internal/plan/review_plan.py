@@ -49,6 +49,8 @@ Your final output must be a JSON object in the following format:
 Do not include any extra bullet points, header lines, or any additional text outside of this JSON structure.
 
 Do not duplicate issues already identified in previous questions of this review.
+
+Do not include any thinking process, reasoning steps, or analysis before the JSON. Output the JSON object directly and immediately.
 """
 
 @dataclass

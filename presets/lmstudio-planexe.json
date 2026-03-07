@@ -1,0 +1,30 @@
+{
+  "name": "PlanExe",
+  "description": "Optimizes any local LM Studio model for PlanExe's structured JSON pipeline. Sets low temperature for deterministic output, full context window, thinking disabled, and a system prompt that enforces schema-only JSON responses.",
+  "config": [
+    {
+      "key": "llm.prediction.temperature",
+      "value": 0.2
+    },
+    {
+      "key": "llm.prediction.contextLength",
+      "value": 32768
+    },
+    {
+      "key": "llm.prediction.maxTokens",
+      "value": 4096
+    },
+    {
+      "key": "llm.prediction.systemPrompt",
+      "value": "You are a structured planning assistant for PlanExe. Your output is consumed directly by automated pipeline code.\n\nRules:\n- Return ONLY valid JSON matching the requested schema. No markdown fences, no preamble, no trailing text.\n- Fill every field with specific, concrete content. Never echo field names or schema descriptions as values.\n- Do not add fields not in the schema. Do not omit required fields.\n- Vague filler (\"various factors\", \"multiple options\") is not acceptable — be specific.\n- Incomplete or non-JSON output breaks downstream pipeline tasks."
+    },
+    {
+      "key": "ext.virtualModel.customField.qwen.qwen3.59b.enableThinking",
+      "value": false
+    },
+    {
+      "key": "ext.virtualModel.customField.zaiOrg.glm4.7Flash.enableThinking",
+      "value": false
+    }
+  ]
+}

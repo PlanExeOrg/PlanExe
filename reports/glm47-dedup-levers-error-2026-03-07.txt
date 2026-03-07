@@ -1,0 +1,30 @@
+DEBUG: Checking if DeduplicateLeversTask(run_id_dir=/Users/macmini/Documents/GitHub/PlanExe2026/planexe-outputs/2026-03-07/HVT_glm_test3, speedvsdetail=FAST_BUT_SKIP_DETAILS, llm_models=["lmstudio-glm4.7-flash"]) is complete
+INFO: Informed scheduler that task   DeduplicateLeversTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_1c0062edff   has status   PENDING
+2026-03-07 17:34:19 - luigi-interface - INFO - Informed scheduler that task   DeduplicateLeversTask___lmstudio_glm4___Users_macmini_D_FAST_BUT_SKIP_DE_1c0062edff   has status   PENDING
+2026-03-07 17:35:52 - worker_plan_internal.llm_util.llm_executor - ERROR - LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='lmstudio-glm4.7-flash') and llm_executor_uuid: '4d08933c-6f84-4c9d-9dbd-370db0aee66b': 4 validation errors for LeverNarrative
+  Field required [type=missing, input_value={'description': 'Lever 1 ...tive', 'type': 'object'}, input_type=dict]
+  Field required [type=missing, input_value={'description': 'Lever 1 ...tive', 'type': 'object'}, input_type=dict]
+  Field required [type=missing, input_value={'description': 'Lever 1 ...tive', 'type': 'object'}, input_type=dict]
+  Field required [type=missing, input_value={'description': 'Lever 1 ...tive', 'type': 'object'}, input_type=dict]
+pydantic_core._pydantic_core.ValidationError: 4 validation errors for LeverNarrative
+  Field required [type=missing, input_value={'description': 'Lever 1 ...tive', 'type': 'object'}, input_type=dict]
+  Field required [type=missing, input_value={'description': 'Lever 1 ...tive', 'type': 'object'}, input_type=dict]
+  Field required [type=missing, input_value={'description': 'Lever 1 ...tive', 'type': 'object'}, input_type=dict]
+  Field required [type=missing, input_value={'description': 'Lever 1 ...tive', 'type': 'object'}, input_type=dict]
+ - Attempt 0 with LLMModelFromName(name='lmstudio-glm4.7-flash') failed during 'execute' stage: 4 validation errors for LeverNarrative
+  Field required [type=missing, input_value={'description': 'Lever 1 ...tive', 'type': 'object'}, input_type=dict]
+  Field required [type=missing, input_value={'description': 'Lever 1 ...tive', 'type': 'object'}, input_type=dict]
+  Field required [type=missing, input_value={'description': 'Lever 1 ...tive', 'type': 'object'}, input_type=dict]
+  Field required [type=missing, input_value={'description': 'Lever 1 ...tive', 'type': 'object'}, input_type=dict]
+2026-03-07 17:37:06 - worker_plan_internal.llm_util.llm_executor - ERROR - LLMExecutor: error when invoking execute_function. LLM LLMModelFromName(name='lmstudio-glm4.7-flash') and llm_executor_uuid: '2f2136f9-e24f-482b-9c68-d8906dcb0184': 4 validation errors for LeverNarrative
+  Field required [type=missing, input_value={'description': 'Lever 2:...tive', 'type': 'object'}, input_type=dict]
+  Field required [type=missing, input_value={'description': 'Lever 2:...tive', 'type': 'object'}, input_type=dict]
+  Field required [type=missing, input_value={'description': 'Lever 2:...tive', 'type': 'object'}, input_type=dict]
+  Field required [type=missing, input_value={'description': 'Lever 2:...tive', 'type': 'object'}, input_type=dict]
+pydantic_core._pydantic_core.ValidationError: 4 validation errors for LeverNarrative
+  Field required [type=missing, input_value={'description': 'Lever 2:...tive', 'type': 'object'}, input_type=dict]
+  Field required [type=missing, input_value={'description': 'Lever 2:...tive', 'type': 'object'}, input_type=dict]
+  Field required [type=missing, input_value={'description': 'Lever 2:...tive', 'type': 'object'}, input_type=dict]
+  Field required [type=missing, input_value={'description': 'Lever 2:...tive', 'type': 'object'}, input_type=dict]
+ - Attempt 0 with LLMModelFromName(name='lmstudio-glm4.7-flash') failed during 'execute' stage: 4 validation errors for LeverNarrative
+  Field required [type=missing, input_value={'description': 'Lever 2:...tive', 'type': 'object'}, input_type=dict]

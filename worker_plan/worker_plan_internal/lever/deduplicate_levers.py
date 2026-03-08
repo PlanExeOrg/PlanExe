@@ -133,29 +133,30 @@ class DeduplicateLevers:
         _OVERFLOW_KEYWORDS = ("context length", "token limit", "maximum context", "context window", "too long", "context_length_exceeded")
 
         def _build_compact_history(prior_decisions: List[LeverDecision]) -> List[ChatMessage]:
-            """Option C: replace full conversation history with a compact summary block."""
+            """Option C: replace full conversation history with a compact summary in the system message."""
             summary = "\n".join(
                 f"- [{d.lever_id}] {d.classification.value}: {d.justification[:80]}..."
                 for d in prior_decisions
             )
             return [
-                ChatMessage(role=MessageRole.SYSTEM, content=system_prompt),
-                ChatMessage(role=MessageRole.USER, content=(
+                ChatMessage(role=MessageRole.SYSTEM, content=(
+                    f"{system_prompt}\n\n"
                     f"**Project Context:**\n{project_context}\n\n"
                     f"**All levers under review:**\n{all_levers_summary}\n\n"
-                    f"**Prior decisions (compacted):**\n{summary}\n\n"
-                    "Continue classifying the remaining levers one at a time."
+                    f"**Prior decisions (compacted):**\n{summary}"
                 )),
             ]
 
-        # Initialise conversation with full context (option A).
+        # Initialise conversation with full context in the system message (option A).
+        # System message carries project context + lever summary so the first USER
+        # message is the first lever — no dangling USER→USER before the first ASSISTANT.
+        system_message_with_context = (
+            f"{system_prompt}\n\n"
+            f"**Project Context:**\n{project_context}\n\n"
+            f"**All levers under review:**\n{all_levers_summary}"
+        )
         chat_message_list: List[ChatMessage] = [
-            ChatMessage(role=MessageRole.SYSTEM, content=system_prompt),
-            ChatMessage(role=MessageRole.USER, content=(
-                f"**Project Context:**\n{project_context}\n\n"
-                f"**All levers under review:**\n{all_levers_summary}\n\n"
-                "I will ask you to classify each lever one at a time."
-            )),
+            ChatMessage(role=MessageRole.SYSTEM, content=system_message_with_context),
         ]
 
         for lever in input_levers:

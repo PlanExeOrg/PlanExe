@@ -117,6 +117,31 @@ class TestPlanStatusTool(unittest.TestCase):
         self.assertEqual(sc["files_completed"], 23)
         self.assertEqual(sc["files_total"], 30)
 
+    def test_plan_status_file_counts_with_extra_files(self):
+        """files_completed counts only expected files, not extra ones."""
+        plan_id = str(uuid.uuid4())
+        plan_snapshot = {
+            "id": plan_id,
+            "state": PlanState.processing,
+            "stop_requested": False,
+            "progress_percentage": 50.0,
+            "progress_message": "15 of 30. Extra files: 3",
+            "files_completed": 15,
+            "files_total": 30,
+            "timestamp_created": datetime.now(UTC),
+        }
+        with patch(
+            "mcp_cloud.handlers._get_plan_status_snapshot_sync",
+            return_value=plan_snapshot,
+        ), patch(
+            "mcp_cloud.handlers.fetch_file_list_from_worker_plan", new=AsyncMock(return_value=[])
+        ):
+            result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
+
+        sc = result.structuredContent
+        self.assertEqual(sc["files_completed"], 15)
+        self.assertEqual(sc["files_total"], 30)
+
     def test_plan_status_file_counts_null_when_pending(self):
         """files_completed and files_total are null before the worker starts."""
         plan_id = str(uuid.uuid4())

@@ -206,7 +206,7 @@ class DeduplicateLevers:
                     logger.warning(f"Lever {lever.lever_id}: failed after compaction ({e2}). Skipping lever.")
 
             if decision is None:
-                logger.warning(f"Lever {lever.lever_id}: all {max_retries} attempts failed. Defaulting to keep.")
+                logger.warning(f"Lever {lever.lever_id}: classification failed. Defaulting to keep.")
                 decision = LeverClassificationDecision(
                     classification=LeverClassification.keep,
                     justification="Classification failed after retries. Keeping this lever to avoid data loss."

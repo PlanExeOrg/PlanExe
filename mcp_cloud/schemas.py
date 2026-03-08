@@ -2,6 +2,8 @@
 from dataclasses import dataclass
 from typing import Any, Optional
 
+from mcp_cloud.download_tokens import DOWNLOAD_TOKEN_TTL_SECONDS
+
 from mcp_cloud.tool_models import (
     ModelProfilesInput,
     ModelProfilesOutput,
@@ -233,6 +235,8 @@ TOOL_DEFINITIONS = [
             "While the task is still pending or processing, returns {ready:false,reason:\"processing\"}. "
             "Check readiness by testing whether download_url is present in the response. "
             "Once ready, present download_url to the user or fetch and save the file locally. "
+            f"Download URLs expire after {DOWNLOAD_TOKEN_TTL_SECONDS // 60} minutes (see expires_at); "
+            "call plan_file_info again to get a fresh URL if needed. "
             "If your client exposes plan_download (e.g. mcp_local), prefer that to save the file locally. "
             "Terminal error codes: generation_failed (plan failed), content_unavailable (artifact missing). "
             "Unknown plan_id returns error code PLAN_NOT_FOUND."

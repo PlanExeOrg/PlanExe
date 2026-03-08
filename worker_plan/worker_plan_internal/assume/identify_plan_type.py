@@ -9,6 +9,7 @@ import logging
 from math import ceil
 from enum import Enum
 from dataclasses import dataclass
+from typing import Literal
 from pydantic import BaseModel, Field
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
@@ -25,7 +26,7 @@ class DocumentDetails(BaseModel):
     explanation: str = Field(
         description="Providing a high level context."
     )
-    plan_type: PlanType = Field(
+    plan_type: Literal["digital", "physical"] = Field(
         description="Classify the type of plan."
     )
 

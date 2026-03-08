@@ -16,6 +16,7 @@ import logging
 from math import ceil
 from enum import Enum
 from dataclasses import dataclass
+from typing import Literal
 from pydantic import BaseModel, Field
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
@@ -37,10 +38,10 @@ class RiskItem(BaseModel):
     potential_impact: str = Field(
         description="Possible consequences or adverse effects on the project if the risk materializes."
     )
-    likelihood: LowMediumHigh = Field(
+    likelihood: Literal["low", "medium", "high"] = Field(
         description="A qualitative measure (e.g., low, medium, high) indicating the probability that the risk will occur."
     )
-    severity: LowMediumHigh = Field(
+    severity: Literal["low", "medium", "high"] = Field(
         description="A qualitative measure (e.g., low, medium, high) describing the extent of the potential negative impact if the risk occurs."
     )
     action: str = Field(

@@ -18,6 +18,12 @@ from llama_index.core.llms.llm import LLM
 
 logger = logging.getLogger(__name__)
 
+class PlanPurpose:
+    """String constants for plan purpose — replaces Enum to avoid $defs/$ref in JSON schema."""
+    business = "business"
+    personal = "personal"
+    other = "other"
+
 class PlanPurposeInfo(BaseModel):
     """
     Identify the purpose of the plan to be performed.

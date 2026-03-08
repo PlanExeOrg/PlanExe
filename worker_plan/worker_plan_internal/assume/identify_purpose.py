@@ -99,10 +99,13 @@ class IdentifyPurpose:
 
         end_time = time.perf_counter()
         duration = int(ceil(end_time - start_time))
-        response_byte_count = len(chat_response.message.content.encode('utf-8'))
+        raw_content = chat_response.message.content or ""
+        response_byte_count = len(raw_content.encode('utf-8'))
         logger.info(f"LLM chat interaction completed in {duration} seconds. Response byte count: {response_byte_count}")
 
         plan_purpose_instance: PlanPurposeInfo = chat_response.raw
+        if plan_purpose_instance is None:
+            raise ValueError("LLM returned empty structured response (chat_response.raw is None).")
         json_response = plan_purpose_instance.model_dump()
         purpose_value = plan_purpose_instance.purpose.value
         json_response['purpose'] = purpose_value

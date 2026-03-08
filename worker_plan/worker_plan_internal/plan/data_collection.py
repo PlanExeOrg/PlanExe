@@ -23,6 +23,7 @@ import logging
 from math import ceil
 from enum import Enum
 from dataclasses import dataclass
+from typing import Literal
 from pydantic import BaseModel, Field
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
@@ -44,7 +45,7 @@ class AssumptionItem(BaseModel):
     assumption: str = Field(
         description="The assumption to be validated."
     )
-    sensitivity_score: SensitivityScore = Field(
+    sensitivity_score: Literal["low", "medium", "high"] = Field(
         description="The sensitivity score of the assumption."
     )
 

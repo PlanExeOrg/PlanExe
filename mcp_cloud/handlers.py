@@ -3,6 +3,7 @@ import asyncio
 import json
 import logging
 import os
+import re
 import time
 from datetime import UTC, datetime, timedelta
 from typing import Any, Optional
@@ -249,6 +250,19 @@ async def handle_model_profiles(arguments: dict[str, Any]) -> CallToolResult:
     )
 
 
+_PROGRESS_MSG_RE = re.compile(r"^(\d+) of (\d+)")
+
+
+def _parse_file_counts(progress_message: Optional[str]) -> tuple[Optional[int], Optional[int]]:
+    """Extract (files_completed, files_total) from a progress_message like '23 of 30'."""
+    if not progress_message:
+        return None, None
+    m = _PROGRESS_MSG_RE.match(progress_message)
+    if not m:
+        return None, None
+    return int(m.group(1)), int(m.group(2))
+
+
 async def handle_plan_status(arguments: dict[str, Any]) -> CallToolResult:
     """Fetch the current plan status, progress, and recent files for a plan.
 
@@ -311,6 +325,8 @@ async def handle_plan_status(arguments: dict[str, Any]) -> CallToolResult:
                         "updated_at": updated_at.isoformat().replace("+00:00", "Z"),  # Approximate
                     })
 
+    files_completed, files_total = _parse_file_counts(plan_snapshot.get("progress_message"))
+
     created_at = plan_snapshot["timestamp_created"]
     if created_at and created_at.tzinfo is None:
         created_at = created_at.replace(tzinfo=UTC)
@@ -319,6 +335,8 @@ async def handle_plan_status(arguments: dict[str, Any]) -> CallToolResult:
         "plan_id": plan_uuid,
         "state": state,
         "progress_percentage": progress_percentage,
+        "files_completed": files_completed,
+        "files_total": files_total,
         "timing": {
             "started_at": (
                 created_at.replace(microsecond=0).isoformat().replace("+00:00", "Z")

@@ -172,6 +172,7 @@ TOOL_DEFINITIONS = [
             "real-time events; see plan_create description or server instructions for usage. "
             "State contract: pending/processing => keep polling; completed => download is ready; failed => terminal error. "
             "progress_percentage is 0-100 (integer-like float); 100 when completed. "
+            "files_completed and files_total give the number of pipeline output files completed and expected (both nullable). "
             "files lists intermediate outputs produced so far; use their updated_at timestamps to detect stalls. "
             "Unknown plan_id returns error code PLAN_NOT_FOUND. "
             "Troubleshooting: pending for >5 minutes likely means queued but not picked up by a worker. "

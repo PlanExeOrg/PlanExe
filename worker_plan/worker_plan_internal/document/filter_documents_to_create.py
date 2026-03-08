@@ -18,7 +18,7 @@ import logging
 from math import ceil
 from enum import Enum
 from dataclasses import dataclass
-from typing import Optional, List
+from typing import Optional, List, Literal
 from pydantic import BaseModel, Field
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
@@ -46,7 +46,7 @@ class DocumentItem(BaseModel):
     rationale: str = Field(
         description="The reason justifying the assigned impact rating, linked to the project plan's critical goals, risks, or initial tasks."
     )
-    impact_rating: DocumentImpact = Field(
+    impact_rating: Literal["Critical", "High", "Medium", "Low"] = Field(
         description="The assessed impact level of the document for the initial project phase, based on the 80/20 principle."
     )
 

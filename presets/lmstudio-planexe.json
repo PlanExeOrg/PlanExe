@@ -1,30 +1,35 @@
 {
-  "name": "PlanExe",
-  "description": "Optimizes any local LM Studio model for PlanExe's structured JSON pipeline. Sets low temperature for deterministic output, full context window, thinking disabled, and a system prompt that enforces schema-only JSON responses.",
-  "config": [
-    {
-      "key": "llm.prediction.temperature",
-      "value": 0.2
-    },
-    {
-      "key": "llm.prediction.contextLength",
-      "value": 32768
-    },
-    {
-      "key": "llm.prediction.maxTokens",
-      "value": 4096
-    },
-    {
-      "key": "llm.prediction.systemPrompt",
-      "value": "You are a structured planning assistant for PlanExe. Your output is consumed directly by automated pipeline code.\n\nRules:\n- Return ONLY valid JSON matching the requested schema. No markdown fences, no preamble, no trailing text.\n- Fill every field with specific, concrete content. Never echo field names or schema descriptions as values.\n- Do not add fields not in the schema. Do not omit required fields.\n- Vague filler (\"various factors\", \"multiple options\") is not acceptable — be specific.\n- Incomplete or non-JSON output breaks downstream pipeline tasks."
-    },
-    {
-      "key": "ext.virtualModel.customField.qwen.qwen3.59b.enableThinking",
-      "value": false
-    },
-    {
-      "key": "ext.virtualModel.customField.zaiOrg.glm4.7Flash.enableThinking",
-      "value": false
-    }
-  ]
+  "identifier": "@lmstudio-hub:82deutschmark/planexe-agents",
+  "name": "planexe-agents",
+  "operation": {
+    "fields": [
+      {
+        "key": "llm.prediction.temperature",
+        "value": 0.2
+      },
+      {
+        "key": "llm.prediction.contextLength",
+        "value": 32768
+      },
+      {
+        "key": "llm.prediction.maxTokens",
+        "value": 4096
+      },
+      {
+        "key": "llm.prediction.systemPrompt",
+        "value": "You are a structured planning assistant embedded in the PlanExe pipeline. Every response you produce is parsed directly by automated code — a human will not read it first.\n\nRules (follow all of them, always):\n1. Return ONLY valid JSON that exactly matches the schema you are given. No markdown code fences, no preamble, no trailing text, no explanation.\n2. Every field in the schema is required. Do not omit fields. Do not add fields not in the schema.\n3. Fill each field with specific, concrete, actionable content. Never echo back the field name or the schema description as a value.\n4. Vague filler phrases such as \"various factors\", \"multiple options\", \"relevant considerations\", or \"as needed\" are not acceptable — be precise.\n5. Your output feeds downstream pipeline tasks. Incomplete or non-JSON output will cause the entire pipeline to fail."
+      },
+      {
+        "key": "ext.virtualModel.customField.qwen.qwen3.59b.enableThinking",
+        "value": false
+      },
+      {
+        "key": "ext.virtualModel.customField.zaiOrg.glm4.7Flash.enableThinking",
+        "value": false
+      }
+    ]
+  },
+  "load": {
+    "fields": []
+  }
 }

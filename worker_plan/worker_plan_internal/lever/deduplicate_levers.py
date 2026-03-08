@@ -89,7 +89,7 @@ class DeduplicateLevers:
     system_prompt: str
     response: DeduplicationAnalysis
     deduplicated_levers: List[OutputLever]
-    metadata: Dict[str, Any]
+    metadata: List[Dict[str, Any]]
 
     @classmethod
     def execute(cls, llm_executor: LLMExecutor, project_context: str, raw_levers_list: List[dict]) -> 'DeduplicateLevers':
@@ -124,7 +124,7 @@ class DeduplicateLevers:
         )
 
         decisions: List[LeverDecision] = []
-        metadata: dict = {}
+        metadata_list: List[dict] = []
         max_retries = 3
 
         for lever in input_levers:
@@ -146,11 +146,10 @@ class DeduplicateLevers:
                     def execute_function(llm: LLM) -> dict:
                         sllm = llm.as_structured_llm(LeverClassificationDecision)
                         chat_response = sllm.chat(chat_message_list)
-                        nonlocal metadata
-                        metadata = dict(llm.metadata)
-                        return {"chat_response": chat_response}
+                        return {"chat_response": chat_response, "metadata": dict(llm.metadata)}
 
                     result = llm_executor.run(execute_function)
+                    metadata_list.append(result.get("metadata", {}))
                     raw = result["chat_response"].raw
                     if raw is None:
                         logger.warning(f"Lever {lever.lever_id}: attempt {attempt+1} returned None raw. Retrying.")
@@ -220,7 +219,7 @@ class DeduplicateLevers:
             system_prompt=system_prompt,
             response=analysis_result,
             deduplicated_levers=output_levers,
-            metadata=metadata
+            metadata=metadata_list
         )
 
     def to_dict(self, include_response=True, include_deduplicated_levers=True, include_metadata=True, include_system_prompt=True, include_user_prompt=True) -> dict:

@@ -163,15 +163,37 @@ class DeduplicateLevers:
             chat_message_list.append(ChatMessage(role=MessageRole.USER, content=lever_prompt))
 
             decision: LeverClassificationDecision | None = None
+            result = None
 
             def execute_function(llm: LLM) -> dict:
                 sllm = llm.as_structured_llm(LeverClassificationDecision)
                 chat_response = sllm.chat(chat_message_list)
                 return {"chat_response": chat_response, "metadata": dict(llm.metadata)}
 
+            # First attempt with full conversation history.
             try:
                 result = llm_executor.run(execute_function)
                 metadata_list.append(result.get("metadata", {}))
+            except PipelineStopRequested:
+                raise
+            except Exception as e:
+                # Option C: compact history and retry once.
+                logger.warning(f"Lever {lever.lever_id}: call failed ({e}). Compacting history and retrying.")
+                chat_message_list = _build_compact_history(system_message_with_context, decisions)
+                chat_message_list.append(ChatMessage(role=MessageRole.USER, content=lever_prompt))
+
+            # Second attempt with compacted history (only reached if first attempt failed).
+            if result is None:
+                try:
+                    result = llm_executor.run(execute_function)
+                    metadata_list.append(result.get("metadata", {}))
+                except PipelineStopRequested:
+                    raise
+                except Exception as e2:
+                    logger.warning(f"Lever {lever.lever_id}: failed after compaction ({e2}). Skipping lever.")
+
+            # Process whichever attempt succeeded.
+            if result is not None:
                 raw = result["chat_response"].raw
                 if raw is not None:
                     decision = raw
@@ -181,29 +203,6 @@ class DeduplicateLevers:
                     ))
                 else:
                     logger.warning(f"Lever {lever.lever_id}: returned None raw.")
-            except PipelineStopRequested:
-                raise
-            except Exception as e:
-                # Option C: compact history and try once more.
-                logger.warning(f"Lever {lever.lever_id}: call failed ({e}). Compacting history and retrying.")
-                chat_message_list = _build_compact_history(system_message_with_context, decisions)
-                chat_message_list.append(ChatMessage(role=MessageRole.USER, content=lever_prompt))
-                try:
-                    result = llm_executor.run(execute_function)
-                    metadata_list.append(result.get("metadata", {}))
-                    raw = result["chat_response"].raw
-                    if raw is not None:
-                        decision = raw
-                        chat_message_list.append(ChatMessage(
-                            role=MessageRole.ASSISTANT,
-                            content=json.dumps({"classification": decision.classification.value, "justification": decision.justification}),
-                        ))
-                    else:
-                        logger.warning(f"Lever {lever.lever_id}: returned None raw after compaction.")
-                except PipelineStopRequested:
-                    raise
-                except Exception as e2:
-                    logger.warning(f"Lever {lever.lever_id}: failed after compaction ({e2}). Skipping lever.")
 
             if decision is None:
                 logger.warning(f"Lever {lever.lever_id}: classification failed. Defaulting to keep.")

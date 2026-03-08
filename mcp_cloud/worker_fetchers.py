@@ -3,6 +3,7 @@ import asyncio
 import logging
 import tempfile
 import uuid as _uuid
+from datetime import UTC, datetime
 from io import BytesIO
 from typing import Any, Optional
 
@@ -142,20 +143,30 @@ async def _fetch_report_with_fallbacks(run_id: str) -> Optional[bytes]:
 
     return None
 
-async def fetch_file_list_from_worker_plan(run_id: str) -> Optional[list[str]]:
-    """Fetch the list of files from worker_plan via HTTP."""
+async def fetch_file_list_from_worker_plan(run_id: str) -> Optional[list[tuple[str, str]]]:
+    """Fetch the list of files from worker_plan via HTTP.
+
+    Returns list of (filename, ISO-8601 UTC timestamp) tuples, or None.
+    """
+
     try:
         async with httpx.AsyncClient(timeout=httpx.Timeout(10.0, connect=3.0)) as client:
             response = await client.get(f"{WORKER_PLAN_URL}/runs/{run_id}/files")
             if response.status_code == 200:
                 data = response.json()
+                # Prefer files_with_timestamps when available (new worker)
+                timestamped = data.get("files_with_timestamps")
+                if timestamped:
+                    return [(e["name"], e["updated_at"]) for e in timestamped]
+                # Fall back to plain filenames with current time
                 files = data.get("files", [])
                 if files:
-                    return files
+                    now = datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+                    return [(f, now) for f in files]
                 fallback_files = await asyncio.to_thread(list_files_from_zip_snapshot, run_id)
                 if fallback_files:
                     return fallback_files
-                return files
+                return []
             logger.warning(f"Worker plan returned {response.status_code} for files list: {run_id}")
             fallback_files = await asyncio.to_thread(list_files_from_zip_snapshot, run_id)
             if fallback_files is not None:
@@ -166,11 +177,15 @@ async def fetch_file_list_from_worker_plan(run_id: str) -> Optional[list[str]]:
         return None
 
 
-def list_files_from_local_run_dir(run_id: str) -> Optional[list[str]]:
+def list_files_from_local_run_dir(run_id: str) -> Optional[list[tuple[str, str]]]:
     """
     List files from local run directory when this service shares PLANEXE_RUN_DIR
     with the worker (e.g., Docker compose).
+
+    Returns list of (filename, ISO-8601 UTC timestamp) tuples sorted by name,
+    or None if the directory does not exist.
     """
+
     run_dir = (BASE_DIR_RUN / run_id).resolve()
     try:
         if not run_dir.is_relative_to(BASE_DIR_RUN):
@@ -180,7 +195,14 @@ def list_files_from_local_run_dir(run_id: str) -> Optional[list[str]]:
     if not run_dir.exists() or not run_dir.is_dir():
         return None
     try:
-        return sorted([path.name for path in run_dir.iterdir() if path.is_file()])
+        results = []
+        for path in run_dir.iterdir():
+            if path.is_file():
+                mtime = datetime.fromtimestamp(path.stat().st_mtime, tz=UTC)
+                mtime_str = mtime.replace(microsecond=0).isoformat().replace("+00:00", "Z")
+                results.append((path.name, mtime_str))
+        results.sort(key=lambda t: t[0])
+        return results
     except Exception as exc:
         logger.warning("Unable to list local run dir files for %s: %s", run_id, exc)
         return None

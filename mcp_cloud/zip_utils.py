@@ -4,6 +4,7 @@ import io
 import logging
 import uuid as _uuid
 import zipfile
+from datetime import UTC, datetime
 from io import BytesIO
 from typing import Optional
 
@@ -38,12 +39,23 @@ def _load_plan_column(plan_id: str, column_name: str):
         return _query()
 
 
-def list_files_from_zip_bytes(zip_bytes: bytes) -> list[str]:
-    """List file entries from an in-memory zip archive."""
+def list_files_from_zip_bytes(zip_bytes: bytes) -> list[tuple[str, str]]:
+    """List file entries from an in-memory zip archive.
+
+    Returns list of (filename, ISO-8601 UTC timestamp) tuples sorted by name.
+    Timestamps come from zip entry metadata.
+    """
     try:
         with zipfile.ZipFile(BytesIO(zip_bytes), 'r') as zip_file:
-            files = [name for name in zip_file.namelist() if not name.endswith("/")]
-            return sorted(files)
+            results = []
+            for info in zip_file.infolist():
+                if info.filename.endswith("/"):
+                    continue
+                dt = datetime(*info.date_time, tzinfo=UTC)
+                dt_str = dt.replace(microsecond=0).isoformat().replace("+00:00", "Z")
+                results.append((info.filename, dt_str))
+            results.sort(key=lambda t: t[0])
+            return results
     except Exception as exc:
         logger.warning("Unable to list files from zip snapshot: %s", exc)
         return []
@@ -92,8 +104,11 @@ def fetch_file_from_zip_snapshot(plan_id: str, file_path: str) -> Optional[bytes
         return extract_file_from_zip_bytes(zip_bytes, file_path)
     return None
 
-def list_files_from_zip_snapshot(plan_id: str) -> Optional[list[str]]:
-    """List files from the PlanItem zip snapshot."""
+def list_files_from_zip_snapshot(plan_id: str) -> Optional[list[tuple[str, str]]]:
+    """List files from the PlanItem zip snapshot.
+
+    Returns list of (filename, ISO-8601 UTC timestamp) tuples, or None.
+    """
     zip_bytes = _load_plan_column(plan_id, "run_zip_snapshot")
     if zip_bytes is not None:
         return list_files_from_zip_bytes(zip_bytes)

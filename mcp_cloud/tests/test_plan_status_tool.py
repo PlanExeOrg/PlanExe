@@ -52,7 +52,7 @@ class TestPlanStatusTool(unittest.TestCase):
             new=AsyncMock(return_value=[]),
         ), patch(
             "mcp_cloud.handlers.list_files_from_zip_snapshot",
-            return_value=["001-2-plan.txt", "log.txt"],
+            return_value=[("001-2-plan.txt", "2026-03-08T23:49:53Z"), ("log.txt", "2026-03-08T23:50:00Z")],
         ), patch(
             "mcp_cloud.handlers.list_files_from_local_run_dir",
             return_value=None,
@@ -62,6 +62,7 @@ class TestPlanStatusTool(unittest.TestCase):
         files = result.structuredContent["files"]
         self.assertEqual(len(files), 1)
         self.assertEqual(files[0]["path"], "001-2-plan.txt")
+        self.assertEqual(files[0]["updated_at"], "2026-03-08T23:49:53Z")
 
     def test_plan_status_uses_processing_state_name(self):
         plan_id = str(uuid.uuid4())

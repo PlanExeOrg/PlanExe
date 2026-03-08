@@ -305,12 +305,11 @@ async def handle_plan_status(arguments: dict[str, Any]) -> CallToolResult:
                 logger.warning("Worker file list fetch timed out for plan %s", plan_uuid)
                 files_list = None
         if files_list:
-            for file_name in files_list[:10]:  # Limit to 10 most recent
+            for file_name, updated_at in files_list[:10]:  # Limit to 10 most recent
                 if file_name != "log.txt":
-                    updated_at = datetime.now(UTC).replace(microsecond=0)
                     files.append({
                         "path": file_name,
-                        "updated_at": updated_at.isoformat().replace("+00:00", "Z"),  # Approximate
+                        "updated_at": updated_at,
                     })
 
     steps_completed = plan_snapshot.get("steps_completed")

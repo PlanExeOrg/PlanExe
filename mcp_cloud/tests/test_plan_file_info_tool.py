@@ -31,8 +31,9 @@ class TestPlanFileInfoTool(unittest.TestCase):
         zip_bytes = buffer.getvalue()
 
         files = list_files_from_zip_bytes(zip_bytes)
-        self.assertIn(REPORT_FILENAME, files)
-        self.assertIn("001-2-plan.txt", files)
+        file_names = [name for name, _ in files]
+        self.assertIn(REPORT_FILENAME, file_names)
+        self.assertIn("001-2-plan.txt", file_names)
 
         report_bytes = extract_file_from_zip_bytes(zip_bytes, REPORT_FILENAME)
         self.assertEqual(report_bytes, b"<html>ok</html>")
@@ -311,8 +312,9 @@ class TestPlanFileInfoTool(unittest.TestCase):
         self.assertIsNotNone(sanitized)
         assert sanitized is not None
         files = list_files_from_zip_bytes(sanitized)
-        self.assertIn(REPORT_FILENAME, files)
-        self.assertNotIn("nested/track_activity.jsonl", files)
+        file_names = [name for name, _ in files]
+        self.assertIn(REPORT_FILENAME, file_names)
+        self.assertNotIn("nested/track_activity.jsonl", file_names)
 
 
 if __name__ == "__main__":

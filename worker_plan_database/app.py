@@ -269,7 +269,7 @@ def ensure_fractional_credit_columns() -> None:
 
 
 def ensure_step_count_columns() -> None:
-    """Add steps_completed and steps_total columns to task_item (idempotent)."""
+    """Add steps_completed, steps_total, and current_step columns to task_item (idempotent)."""
     insp = inspect(db.engine)
     columns = {col["name"] for col in insp.get_columns("task_item")}
     with db.engine.begin() as conn:
@@ -277,6 +277,8 @@ def ensure_step_count_columns() -> None:
             conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS steps_completed INTEGER"))
         if "steps_total" not in columns:
             conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS steps_total INTEGER"))
+        if "current_step" not in columns:
+            conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS current_step VARCHAR(128)"))
 
 
 def ensure_multi_api_key_columns() -> None:
@@ -349,6 +351,7 @@ def update_task_progress_with_retry(
     progress_message: str,
     steps_completed: Optional[int] = None,
     steps_total: Optional[int] = None,
+    current_step: Optional[str] = None,
     max_retries: int = 3,
     retry_delay: int = 5,
 ) -> bool:
@@ -360,6 +363,7 @@ def update_task_progress_with_retry(
         progress_message: Human-readable status, e.g. ``"23 of 30"``.
         steps_completed: Number of plan generation steps completed so far.
         steps_total: Total number of plan generation steps expected.
+        current_step: Human-readable label of the most recently completed step.
         max_retries: Number of attempts before giving up.
         retry_delay: Seconds to wait between retries.
 
@@ -377,6 +381,7 @@ def update_task_progress_with_retry(
             task.progress_message = progress_message
             task.steps_completed = steps_completed
             task.steps_total = steps_total
+            task.current_step = current_step
             db.session.commit()
             logger.debug(f"Updated task {task_id!r} progress to {progress_percentage}%: {progress_message}")
             return True
@@ -438,6 +443,7 @@ class ServerExecutePipeline(ExecutePipeline):
                     progress_message="Stop requested by user.",
                     steps_completed=parameters.progress.steps_completed,
                     steps_total=parameters.progress.steps_total,
+                    current_step=parameters.progress.current_step,
                 )
             raise PipelineStopRequested(f"Stopping task {self.task_id!r} because a stop was requested.")
 
@@ -470,6 +476,7 @@ class ServerExecutePipeline(ExecutePipeline):
                 progress_message=parameters.progress.progress_message,
                 steps_completed=parameters.progress.steps_completed,
                 steps_total=parameters.progress.steps_total,
+                current_step=parameters.progress.current_step,
             )
 
         # Charge credits incrementally so usage is visible in real time.
@@ -953,6 +960,7 @@ def execute_pipeline_for_job(
                 task_id, 100.0, "Completed",
                 steps_completed=final_progress.steps_total,
                 steps_total=final_progress.steps_total,
+                current_step="Completed",
             )
             billing_result = _charge_usage_credits_once(task_id=task_id, run_id_dir=run_id_dir, success=True)
             event_context.update({

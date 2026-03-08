@@ -315,6 +315,7 @@ async def handle_plan_status(arguments: dict[str, Any]) -> CallToolResult:
 
     steps_completed = plan_snapshot.get("steps_completed")
     steps_total = plan_snapshot.get("steps_total")
+    current_step = plan_snapshot.get("current_step")
     if plan_state == PlanState.completed and steps_total is not None:
         steps_completed = steps_total
 
@@ -328,6 +329,7 @@ async def handle_plan_status(arguments: dict[str, Any]) -> CallToolResult:
         "progress_percentage": progress_percentage,
         "steps_completed": steps_completed,
         "steps_total": steps_total,
+        "current_step": current_step,
         "timing": {
             "started_at": (
                 created_at.replace(microsecond=0).isoformat().replace("+00:00", "Z")

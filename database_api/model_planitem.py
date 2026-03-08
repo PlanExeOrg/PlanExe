@@ -70,6 +70,9 @@ class PlanItem(db.Model):
     # Total number of plan generation steps expected.
     steps_total = db.Column(db.Integer, nullable=True)
 
+    # Human-readable label of the most recently completed step, e.g. "SWOT Analysis".
+    current_step = db.Column(db.String(128), nullable=True)
+
     # When was the last time the browser fetched the /progress endpoint.
     # This is used to determine if the task is still active.
     # If the task is not active, it will be stopped.

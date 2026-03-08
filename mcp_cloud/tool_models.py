@@ -181,6 +181,10 @@ class PlanStatusSuccess(BaseModel):
         default=None,
         description="Total number of plan generation steps expected.",
     )
+    current_step: str | None = Field(
+        default=None,
+        description="Human-readable label of the most recently completed step, e.g. 'SWOT Analysis'.",
+    )
     timing: PlanStatusTiming
     files: list[PlanStatusFile] = Field(
         ...,
@@ -223,6 +227,10 @@ class PlanStatusOutput(BaseModel):
     steps_total: int | None = Field(
         default=None,
         description="Total number of plan generation steps expected.",
+    )
+    current_step: str | None = Field(
+        default=None,
+        description="Human-readable label of the most recently completed step, e.g. 'SWOT Analysis'.",
     )
     timing: PlanStatusTiming | None = None
     files: list[PlanStatusFile] | None = Field(

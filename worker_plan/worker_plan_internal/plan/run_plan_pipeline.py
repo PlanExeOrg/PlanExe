@@ -11,6 +11,7 @@ from datetime import date, datetime
 import os
 import logging
 import json
+import re
 from typing import Any, Optional
 import luigi
 from pathlib import Path
@@ -3808,12 +3809,27 @@ class FullPlanPipeline(PlanTask):
             f.write("Full pipeline executed successfully.\n")
 
 
+def _task_class_to_step_label(class_name: str) -> str:
+    """Convert a PlanTask class name to a human-readable step label.
+
+    Examples: ``SWOTAnalysisTask`` → ``"SWOT Analysis"``,
+    ``GovernancePhase1AuditTask`` → ``"Governance Phase 1 Audit"``.
+    """
+    name = class_name.removesuffix("Task")
+    name = re.sub(r"(?<=[a-z])(?=[A-Z])", " ", name)
+    name = re.sub(r"(?<=[A-Z])(?=[A-Z][a-z])", " ", name)
+    name = re.sub(r"(?<=[a-zA-Z])(?=\d)", " ", name)
+    name = re.sub(r"(?<=\d)(?=[a-zA-Z])", " ", name)
+    return name
+
+
 @dataclass
 class PipelineProgress:
     progress_message: str
     progress_percentage: float
     steps_completed: int
     steps_total: int
+    current_step: str = ""
 
 
 @dataclass
@@ -3982,6 +3998,7 @@ class ExecutePipeline:
         logger.debug(f"ExecutePipeline.callback_run_task: Current task_id: {task.task_id}. Duration: {duration:.2f} seconds")
 
         progress: PipelineProgress = self.get_progress_percentage()
+        progress.current_step = _task_class_to_step_label(task.__class__.__name__)
         logger.debug(f"ExecutePipeline.callback_run_task: Current progress for run {self.run_id_dir}: {progress!r}")
 
         parameters = HandleTaskCompletionParameters(task=task, progress=progress, duration=duration)

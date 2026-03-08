@@ -175,6 +175,7 @@ TOOL_DEFINITIONS = [
             "State contract: pending/processing => keep polling; completed => download is ready; failed => terminal error. "
             "progress_percentage is 0-100 (integer-like float); 100 when completed. "
             "steps_completed and steps_total give the number of plan generation steps completed and expected (both nullable). "
+            "current_step is the human-readable label of the most recently completed step (e.g. 'SWOT Analysis'). "
             "files lists intermediate outputs produced so far; use their updated_at timestamps to detect stalls. "
             "Unknown plan_id returns error code PLAN_NOT_FOUND. "
             "Troubleshooting: pending for >5 minutes likely means queued but not picked up by a worker. "

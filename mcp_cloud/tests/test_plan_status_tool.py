@@ -190,6 +190,31 @@ class TestPlanStatusTool(unittest.TestCase):
         sc = result.structuredContent
         self.assertIsNone(sc["steps_completed"])
         self.assertIsNone(sc["steps_total"])
+        self.assertIsNone(sc["current_step"])
+
+    def test_plan_status_includes_current_step(self):
+        """current_step is the human-readable label from the DB."""
+        plan_id = str(uuid.uuid4())
+        plan_snapshot = {
+            "id": plan_id,
+            "state": PlanState.processing,
+            "stop_requested": False,
+            "progress_percentage": 50.0,
+            "progress_message": "15 of 30",
+            "steps_completed": 15,
+            "steps_total": 30,
+            "current_step": "SWOT Analysis",
+            "timestamp_created": datetime.now(UTC),
+        }
+        with patch(
+            "mcp_cloud.handlers._get_plan_status_snapshot_sync",
+            return_value=plan_snapshot,
+        ), patch(
+            "mcp_cloud.handlers.fetch_file_list_from_worker_plan", new=AsyncMock(return_value=[])
+        ):
+            result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
+
+        self.assertEqual(result.structuredContent["current_step"], "SWOT Analysis")
 
 
 if __name__ == "__main__":

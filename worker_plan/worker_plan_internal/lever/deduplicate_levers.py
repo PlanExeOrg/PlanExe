@@ -59,12 +59,6 @@ class OutputLever(InputLever):
     deduplication_justification: str
 
 
-_OVERFLOW_KEYWORDS = (
-    "context length", "token limit", "maximum context",
-    "context window", "too long", "context_length_exceeded",
-)
-
-
 def _build_compact_history(
     system_message_with_context: str,
     prior_decisions: List[LeverDecision],
@@ -170,6 +164,7 @@ class DeduplicateLevers:
             chat_message_list.append(ChatMessage(role=MessageRole.USER, content=lever_prompt))
 
             decision: LeverClassificationDecision | None = None
+            compacted = False
             for attempt in range(max_retries):
                 try:
                     def execute_function(llm: LLM) -> dict:
@@ -193,14 +188,16 @@ class DeduplicateLevers:
                 except PipelineStopRequested:
                     raise
                 except Exception as e:
-                    err_lower = str(e).lower()
-                    if any(kw in err_lower for kw in _OVERFLOW_KEYWORDS):
-                        # Option C: context too long — compact prior decisions and retry.
-                        logger.warning(f"Lever {lever.lever_id}: context overflow on attempt {attempt+1}. Compacting history.")
+                    if not compacted:
+                        # First failure: compact history (option C) and retry.
+                        logger.warning(f"Lever {lever.lever_id}: attempt {attempt+1} failed, compacting history and retrying.")
                         chat_message_list = _build_compact_history(system_message_with_context, decisions)
                         chat_message_list.append(ChatMessage(role=MessageRole.USER, content=lever_prompt))
+                        compacted = True
                     else:
-                        logger.warning(f"Lever {lever.lever_id}: attempt {attempt+1} failed: {e}")
+                        # Already compacted and still failing — skip this lever.
+                        logger.warning(f"Lever {lever.lever_id}: failed after compaction ({e}). Skipping lever.")
+                        break
 
             if decision is None:
                 logger.warning(f"Lever {lever.lever_id}: all {max_retries} attempts failed. Defaulting to keep.")

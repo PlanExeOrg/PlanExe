@@ -16,7 +16,7 @@ import logging
 import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Literal
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
 from pydantic import BaseModel, Field, ValidationError
@@ -33,7 +33,7 @@ class LeverDecision(BaseModel):
     lever_id: str = Field(
         description="The uuid of the lever."
     )
-    classification: LeverClassification = Field(
+    classification: Literal["keep", "absorb", "remove"] = Field(
         description="What should happen to this lever."
     )
     justification: str = Field(

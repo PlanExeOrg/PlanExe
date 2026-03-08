@@ -352,7 +352,20 @@ def update_task_progress_with_retry(
     max_retries: int = 3,
     retry_delay: int = 5,
 ) -> bool:
-    """Helper function to update task progress with retry logic for database operations."""
+    """Update task progress in the database, retrying on transient failures.
+
+    Args:
+        task_id: PlanItem primary key (UUID as string).
+        progress_percentage: Completion progress from 0.0 to 100.0.
+        progress_message: Human-readable status, e.g. ``"23 of 30"``.
+        files_completed: Number of expected pipeline output files produced so far.
+        files_total: Total number of expected pipeline output files.
+        max_retries: Number of attempts before giving up.
+        retry_delay: Seconds to wait between retries.
+
+    Returns:
+        True if the update was committed, False on persistent failure or missing task.
+    """
     for attempt in range(max_retries):
         try:
             task = db.session.get(PlanItem, task_id)

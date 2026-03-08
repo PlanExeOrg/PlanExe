@@ -142,7 +142,6 @@ class DeduplicateLevers:
 
         decisions: List[LeverDecision] = []
         metadata_list: List[dict] = []
-        max_retries = 3
 
         # Initialise conversation with full context in the system message (option A).
         # System message carries project context + lever summary so the first USER
@@ -164,40 +163,47 @@ class DeduplicateLevers:
             chat_message_list.append(ChatMessage(role=MessageRole.USER, content=lever_prompt))
 
             decision: LeverClassificationDecision | None = None
-            compacted = False
-            for attempt in range(max_retries):
-                try:
-                    def execute_function(llm: LLM) -> dict:
-                        sllm = llm.as_structured_llm(LeverClassificationDecision)
-                        chat_response = sllm.chat(chat_message_list)
-                        return {"chat_response": chat_response, "metadata": dict(llm.metadata)}
 
-                    result = llm_executor.run(execute_function)
-                    metadata_list.append(result.get("metadata", {}))
-                    raw = result["chat_response"].raw
-                    if raw is None:
-                        logger.warning(f"Lever {lever.lever_id}: attempt {attempt+1} returned None raw. Retrying.")
-                        continue
+            def execute_function(llm: LLM) -> dict:
+                sllm = llm.as_structured_llm(LeverClassificationDecision)
+                chat_response = sllm.chat(chat_message_list)
+                return {"chat_response": chat_response, "metadata": dict(llm.metadata)}
+
+            try:
+                result = llm_executor.run(execute_function)
+                metadata_list.append(result.get("metadata", {}))
+                raw = result["chat_response"].raw
+                if raw is not None:
                     decision = raw
-                    # Append the assistant response to grow the conversation (option A).
                     chat_message_list.append(ChatMessage(
                         role=MessageRole.ASSISTANT,
                         content=json.dumps({"classification": decision.classification.value, "justification": decision.justification}),
                     ))
-                    break
+                else:
+                    logger.warning(f"Lever {lever.lever_id}: returned None raw.")
+            except PipelineStopRequested:
+                raise
+            except Exception as e:
+                # Option C: compact history and try once more.
+                logger.warning(f"Lever {lever.lever_id}: call failed ({e}). Compacting history and retrying.")
+                chat_message_list = _build_compact_history(system_message_with_context, decisions)
+                chat_message_list.append(ChatMessage(role=MessageRole.USER, content=lever_prompt))
+                try:
+                    result = llm_executor.run(execute_function)
+                    metadata_list.append(result.get("metadata", {}))
+                    raw = result["chat_response"].raw
+                    if raw is not None:
+                        decision = raw
+                        chat_message_list.append(ChatMessage(
+                            role=MessageRole.ASSISTANT,
+                            content=json.dumps({"classification": decision.classification.value, "justification": decision.justification}),
+                        ))
+                    else:
+                        logger.warning(f"Lever {lever.lever_id}: returned None raw after compaction.")
                 except PipelineStopRequested:
                     raise
-                except Exception as e:
-                    if not compacted:
-                        # First failure: compact history (option C) and retry.
-                        logger.warning(f"Lever {lever.lever_id}: attempt {attempt+1} failed, compacting history and retrying.")
-                        chat_message_list = _build_compact_history(system_message_with_context, decisions)
-                        chat_message_list.append(ChatMessage(role=MessageRole.USER, content=lever_prompt))
-                        compacted = True
-                    else:
-                        # Already compacted and still failing — skip this lever.
-                        logger.warning(f"Lever {lever.lever_id}: failed after compaction ({e}). Skipping lever.")
-                        break
+                except Exception as e2:
+                    logger.warning(f"Lever {lever.lever_id}: failed after compaction ({e2}). Skipping lever.")
 
             if decision is None:
                 logger.warning(f"Lever {lever.lever_id}: all {max_retries} attempts failed. Defaulting to keep.")

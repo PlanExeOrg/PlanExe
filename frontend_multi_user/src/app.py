@@ -609,7 +609,14 @@ class MyFlaskApp:
 
     @staticmethod
     def _get_git_commit_hash() -> str:
-        """Return the short git commit hash, or 'unknown' if unavailable."""
+        """Return the short git commit hash, or 'unknown' if unavailable.
+
+        Checks the PLANEXE_GIT_COMMIT_HASH env var first (set at Docker
+        build time), then falls back to running git directly.
+        """
+        from_env = os.environ.get("PLANEXE_GIT_COMMIT_HASH", "").strip()
+        if from_env and from_env != "unknown":
+            return from_env
         try:
             return subprocess.check_output(
                 ["git", "rev-parse", "--short", "HEAD"],

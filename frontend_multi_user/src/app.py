@@ -484,6 +484,17 @@ class MyFlaskApp:
                     except Exception as exc:
                         logger.warning("Schema update failed for %s: %s", stmt, exc, exc_info=True)
 
+        def _ensure_step_count_columns() -> None:
+            insp = inspect(self.db.engine)
+            columns = {col["name"] for col in insp.get_columns("task_item")}
+            with self.db.engine.begin() as conn:
+                if "steps_completed" not in columns:
+                    conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS steps_completed INTEGER"))
+                if "steps_total" not in columns:
+                    conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS steps_total INTEGER"))
+                if "current_step" not in columns:
+                    conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS current_step VARCHAR(128)"))
+
         def _ensure_planitem_indexes() -> None:
             insp = inspect(self.db.engine)
             table_names = set(insp.get_table_names())
@@ -540,6 +551,7 @@ class MyFlaskApp:
                         _ensure_fractional_credit_columns()
                         _ensure_user_account_columns()
                         _ensure_multi_api_key_columns()
+                        _ensure_step_count_columns()
                         _ensure_planitem_indexes()
                         _seed_initial_records()
                     return

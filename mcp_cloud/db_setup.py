@@ -89,9 +89,24 @@ def ensure_multi_api_key_columns() -> None:
             except Exception as exc:
                 logger.warning("Schema update failed for %s: %s", stmt, exc, exc_info=True)
 
+def ensure_step_count_columns() -> None:
+    """Add steps_completed, steps_total, and current_step columns to task_item (idempotent)."""
+    statements = (
+        "ALTER TABLE task_item ADD COLUMN IF NOT EXISTS steps_completed INTEGER",
+        "ALTER TABLE task_item ADD COLUMN IF NOT EXISTS steps_total INTEGER",
+        "ALTER TABLE task_item ADD COLUMN IF NOT EXISTS current_step VARCHAR(128)",
+    )
+    with db.engine.begin() as conn:
+        for stmt in statements:
+            try:
+                conn.execute(text(stmt))
+            except Exception as exc:
+                logger.warning("Schema update failed for %s: %s", stmt, exc, exc_info=True)
+
 with app.app_context():
     ensure_planitem_stop_columns()
     ensure_multi_api_key_columns()
+    ensure_step_count_columns()
 
 # Shown in MCP initialize (e.g. Inspector) so clients know what PlanExe does.
 PLANEXE_SERVER_INSTRUCTIONS = (

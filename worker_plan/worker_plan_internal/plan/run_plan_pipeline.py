@@ -3812,8 +3812,8 @@ class FullPlanPipeline(PlanTask):
 class PipelineProgress:
     progress_message: str
     progress_percentage: float
-    files_completed: int
-    files_total: int
+    steps_completed: int
+    steps_total: int
 
 
 @dataclass
@@ -3954,8 +3954,8 @@ class ExecutePipeline:
         return PipelineProgress(
             progress_message=progress_message,
             progress_percentage=progress_percentage,
-            files_completed=len(intersection_files),
-            files_total=len(set_expected_files),
+            steps_completed=len(intersection_files),
+            steps_total=len(set_expected_files),
         )
 
     def _handle_task_completion(self, parameters: HandleTaskCompletionParameters) -> None:

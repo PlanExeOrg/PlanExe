@@ -311,8 +311,8 @@ async def handle_plan_status(arguments: dict[str, Any]) -> CallToolResult:
                         "updated_at": updated_at.isoformat().replace("+00:00", "Z"),  # Approximate
                     })
 
-    files_completed = plan_snapshot.get("files_completed")
-    files_total = plan_snapshot.get("files_total")
+    steps_completed = plan_snapshot.get("steps_completed")
+    steps_total = plan_snapshot.get("steps_total")
 
     created_at = plan_snapshot["timestamp_created"]
     if created_at and created_at.tzinfo is None:
@@ -322,8 +322,8 @@ async def handle_plan_status(arguments: dict[str, Any]) -> CallToolResult:
         "plan_id": plan_uuid,
         "state": state,
         "progress_percentage": progress_percentage,
-        "files_completed": files_completed,
-        "files_total": files_total,
+        "steps_completed": steps_completed,
+        "steps_total": steps_total,
         "timing": {
             "started_at": (
                 created_at.replace(microsecond=0).isoformat().replace("+00:00", "Z")

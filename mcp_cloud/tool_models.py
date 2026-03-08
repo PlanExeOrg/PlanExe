@@ -173,13 +173,13 @@ class PlanStatusSuccess(BaseModel):
         ...,
         description="Completion progress from 0 to 100. Monotonically increasing; 100 when state is completed.",
     )
-    files_completed: int | None = Field(
+    steps_completed: int | None = Field(
         default=None,
-        description="Number of output files completed so far.",
+        description="Number of plan generation steps completed so far.",
     )
-    files_total: int | None = Field(
+    steps_total: int | None = Field(
         default=None,
-        description="Total number of output files expected.",
+        description="Total number of plan generation steps expected.",
     )
     timing: PlanStatusTiming
     files: list[PlanStatusFile] = Field(
@@ -216,13 +216,13 @@ class PlanStatusOutput(BaseModel):
         default=None,
         description="Completion progress from 0 to 100. Monotonically increasing; 100 when state is completed.",
     )
-    files_completed: int | None = Field(
+    steps_completed: int | None = Field(
         default=None,
-        description="Number of output files completed so far.",
+        description="Number of plan generation steps completed so far.",
     )
-    files_total: int | None = Field(
+    steps_total: int | None = Field(
         default=None,
-        description="Total number of output files expected.",
+        description="Total number of plan generation steps expected.",
     )
     timing: PlanStatusTiming | None = None
     files: list[PlanStatusFile] | None = Field(

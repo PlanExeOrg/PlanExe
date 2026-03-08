@@ -268,15 +268,15 @@ def ensure_fractional_credit_columns() -> None:
             ))
 
 
-def ensure_file_count_columns() -> None:
-    """Add files_completed and files_total columns to task_item (idempotent)."""
+def ensure_step_count_columns() -> None:
+    """Add steps_completed and steps_total columns to task_item (idempotent)."""
     insp = inspect(db.engine)
     columns = {col["name"] for col in insp.get_columns("task_item")}
     with db.engine.begin() as conn:
-        if "files_completed" not in columns:
-            conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS files_completed INTEGER"))
-        if "files_total" not in columns:
-            conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS files_total INTEGER"))
+        if "steps_completed" not in columns:
+            conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS steps_completed INTEGER"))
+        if "steps_total" not in columns:
+            conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS steps_total INTEGER"))
 
 
 def ensure_multi_api_key_columns() -> None:
@@ -347,8 +347,8 @@ def update_task_progress_with_retry(
     task_id: str,
     progress_percentage: float,
     progress_message: str,
-    files_completed: Optional[int] = None,
-    files_total: Optional[int] = None,
+    steps_completed: Optional[int] = None,
+    steps_total: Optional[int] = None,
     max_retries: int = 3,
     retry_delay: int = 5,
 ) -> bool:
@@ -358,8 +358,8 @@ def update_task_progress_with_retry(
         task_id: PlanItem primary key (UUID as string).
         progress_percentage: Completion progress from 0.0 to 100.0.
         progress_message: Human-readable status, e.g. ``"23 of 30"``.
-        files_completed: Number of expected pipeline output files produced so far.
-        files_total: Total number of expected pipeline output files.
+        steps_completed: Number of plan generation steps completed so far.
+        steps_total: Total number of plan generation steps expected.
         max_retries: Number of attempts before giving up.
         retry_delay: Seconds to wait between retries.
 
@@ -375,8 +375,8 @@ def update_task_progress_with_retry(
 
             task.progress_percentage = progress_percentage
             task.progress_message = progress_message
-            task.files_completed = files_completed
-            task.files_total = files_total
+            task.steps_completed = steps_completed
+            task.steps_total = steps_total
             db.session.commit()
             logger.debug(f"Updated task {task_id!r} progress to {progress_percentage}%: {progress_message}")
             return True
@@ -436,8 +436,8 @@ class ServerExecutePipeline(ExecutePipeline):
                     task_id=self.task_id,
                     progress_percentage=parameters.progress.progress_percentage,
                     progress_message="Stop requested by user.",
-                    files_completed=parameters.progress.files_completed,
-                    files_total=parameters.progress.files_total,
+                    steps_completed=parameters.progress.steps_completed,
+                    steps_total=parameters.progress.steps_total,
                 )
             raise PipelineStopRequested(f"Stopping task {self.task_id!r} because a stop was requested.")
 
@@ -468,8 +468,8 @@ class ServerExecutePipeline(ExecutePipeline):
                 task_id=self.task_id,
                 progress_percentage=parameters.progress.progress_percentage,
                 progress_message=parameters.progress.progress_message,
-                files_completed=parameters.progress.files_completed,
-                files_total=parameters.progress.files_total,
+                steps_completed=parameters.progress.steps_completed,
+                steps_total=parameters.progress.steps_total,
             )
 
         # Charge credits incrementally so usage is visible in real time.
@@ -1184,7 +1184,7 @@ def startup_worker():
         try:
             db.create_all()
             ensure_planitem_artifact_columns()
-            ensure_file_count_columns()
+            ensure_step_count_columns()
             ensure_token_metrics_columns()
             ensure_fractional_credit_columns()
             ensure_multi_api_key_columns()

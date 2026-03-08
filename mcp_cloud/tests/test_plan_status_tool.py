@@ -93,7 +93,7 @@ class TestPlanStatusTool(unittest.TestCase):
 
 
     def test_plan_status_includes_file_counts_from_db(self):
-        """files_completed and files_total are read from DB columns."""
+        """steps_completed and steps_total are read from DB columns."""
         plan_id = str(uuid.uuid4())
         plan_snapshot = {
             "id": plan_id,
@@ -101,8 +101,8 @@ class TestPlanStatusTool(unittest.TestCase):
             "stop_requested": False,
             "progress_percentage": 76.67,
             "progress_message": "23 of 30",
-            "files_completed": 23,
-            "files_total": 30,
+            "steps_completed": 23,
+            "steps_total": 30,
             "timestamp_created": datetime.now(UTC),
         }
         with patch(
@@ -114,11 +114,11 @@ class TestPlanStatusTool(unittest.TestCase):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
         sc = result.structuredContent
-        self.assertEqual(sc["files_completed"], 23)
-        self.assertEqual(sc["files_total"], 30)
+        self.assertEqual(sc["steps_completed"], 23)
+        self.assertEqual(sc["steps_total"], 30)
 
     def test_plan_status_file_counts_with_extra_files(self):
-        """files_completed counts only expected files, not extra ones."""
+        """steps_completed counts only expected files, not extra ones."""
         plan_id = str(uuid.uuid4())
         plan_snapshot = {
             "id": plan_id,
@@ -126,8 +126,8 @@ class TestPlanStatusTool(unittest.TestCase):
             "stop_requested": False,
             "progress_percentage": 50.0,
             "progress_message": "15 of 30. Extra files: 3",
-            "files_completed": 15,
-            "files_total": 30,
+            "steps_completed": 15,
+            "steps_total": 30,
             "timestamp_created": datetime.now(UTC),
         }
         with patch(
@@ -139,19 +139,19 @@ class TestPlanStatusTool(unittest.TestCase):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
         sc = result.structuredContent
-        self.assertEqual(sc["files_completed"], 15)
-        self.assertEqual(sc["files_total"], 30)
+        self.assertEqual(sc["steps_completed"], 15)
+        self.assertEqual(sc["steps_total"], 30)
 
     def test_plan_status_file_counts_null_when_pending(self):
-        """files_completed and files_total are null before the worker starts."""
+        """steps_completed and steps_total are null before the worker starts."""
         plan_id = str(uuid.uuid4())
         plan_snapshot = {
             "id": plan_id,
             "state": PlanState.pending,
             "stop_requested": False,
             "progress_percentage": 0.0,
-            "files_completed": None,
-            "files_total": None,
+            "steps_completed": None,
+            "steps_total": None,
             "timestamp_created": datetime.now(UTC),
         }
         with patch(
@@ -163,8 +163,8 @@ class TestPlanStatusTool(unittest.TestCase):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
         sc = result.structuredContent
-        self.assertIsNone(sc["files_completed"])
-        self.assertIsNone(sc["files_total"])
+        self.assertIsNone(sc["steps_completed"])
+        self.assertIsNone(sc["steps_total"])
 
 
 if __name__ == "__main__":

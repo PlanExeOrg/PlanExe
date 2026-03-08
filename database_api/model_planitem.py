@@ -64,11 +64,11 @@ class PlanItem(db.Model):
     # Example: "Awaiting server to start…" or "42 of 89. Extra files: 8"
     progress_message = db.Column(db.String(128))
 
-    # Number of pipeline output files completed so far.
-    files_completed = db.Column(db.Integer, nullable=True)
+    # Number of plan generation steps completed so far.
+    steps_completed = db.Column(db.Integer, nullable=True)
 
-    # Total number of pipeline output files expected.
-    files_total = db.Column(db.Integer, nullable=True)
+    # Total number of plan generation steps expected.
+    steps_total = db.Column(db.Integer, nullable=True)
 
     # When was the last time the browser fetched the /progress endpoint.
     # This is used to determine if the task is still active.

@@ -9,6 +9,7 @@ import logging
 from enum import Enum
 from math import ceil
 from dataclasses import dataclass
+from typing import Literal
 from pydantic import BaseModel, Field
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
@@ -33,7 +34,7 @@ class TeamMember(BaseModel):
     id: int = Field(
         description="A unique id for the job_category."
     )
-    contract_type: ContractType = Field(
+    contract_type: Literal["full_time_employee", "part_time_employee", "independent_contractor", "agency_temp", "other"] = Field(
         description="The legal and financial agreement."
     )
     justification: str = Field(

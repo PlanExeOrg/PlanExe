@@ -945,10 +945,15 @@ def execute_pipeline_for_job(
         machai_error_message = 'Error. Unable to generate the report. Likely reasons: censorship, restricted content.'
 
     # Update the PlanItem state to completed or failed
+    final_progress = pipeline_instance.get_progress_percentage()
     with app.app_context():
         if pipeline_instance.has_report_file:
             update_task_state_with_retry(task_id, PlanState.completed)
-            update_task_progress_with_retry(task_id, 100.0, "Completed")
+            update_task_progress_with_retry(
+                task_id, 100.0, "Completed",
+                steps_completed=final_progress.steps_total,
+                steps_total=final_progress.steps_total,
+            )
             billing_result = _charge_usage_credits_once(task_id=task_id, run_id_dir=run_id_dir, success=True)
             event_context.update({
                 "billing_usage_cost_usd": str(billing_result["usage_cost_usd"]),

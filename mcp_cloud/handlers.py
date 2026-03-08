@@ -284,6 +284,8 @@ async def handle_plan_status(arguments: dict[str, Any]) -> CallToolResult:
 
     plan_state = plan_snapshot["state"]
     state = get_plan_state_mapping(plan_state)
+    # Normalize completed plans: state is the source of truth, so progress
+    # fields must agree even if the final progress DB write was lost.
     if plan_state == PlanState.completed:
         progress_percentage = 100.0
 
@@ -313,6 +315,8 @@ async def handle_plan_status(arguments: dict[str, Any]) -> CallToolResult:
 
     steps_completed = plan_snapshot.get("steps_completed")
     steps_total = plan_snapshot.get("steps_total")
+    if plan_state == PlanState.completed and steps_total is not None:
+        steps_completed = steps_total
 
     created_at = plan_snapshot["timestamp_created"]
     if created_at and created_at.tzinfo is None:

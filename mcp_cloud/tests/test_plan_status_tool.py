@@ -92,6 +92,31 @@ class TestPlanStatusTool(unittest.TestCase):
         self.assertEqual(result.structuredContent["error"]["code"], "PLAN_NOT_FOUND")
 
 
+    def test_plan_status_completed_normalizes_steps(self):
+        """Completed plans must show steps_completed == steps_total even if DB is stale."""
+        plan_id = str(uuid.uuid4())
+        plan_snapshot = {
+            "id": plan_id,
+            "state": PlanState.completed,
+            "stop_requested": False,
+            "progress_percentage": 96.0,
+            "steps_completed": 29,
+            "steps_total": 30,
+            "timestamp_created": datetime.now(UTC),
+        }
+        with patch(
+            "mcp_cloud.handlers._get_plan_status_snapshot_sync",
+            return_value=plan_snapshot,
+        ), patch(
+            "mcp_cloud.handlers.fetch_file_list_from_worker_plan", new=AsyncMock(return_value=[])
+        ):
+            result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
+
+        sc = result.structuredContent
+        self.assertEqual(sc["progress_percentage"], 100.0)
+        self.assertEqual(sc["steps_completed"], 30)
+        self.assertEqual(sc["steps_total"], 30)
+
     def test_plan_status_includes_file_counts_from_db(self):
         """steps_completed and steps_total are read from DB columns."""
         plan_id = str(uuid.uuid4())

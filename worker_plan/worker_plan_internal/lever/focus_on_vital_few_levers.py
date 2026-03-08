@@ -10,7 +10,7 @@ import os
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import List
+from typing import List, Literal
 
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
@@ -49,7 +49,7 @@ class LeverAssessment(BaseModel):
     lever_name: str = Field(
         description="The name of the lever being assessed."
     )
-    strategic_importance: StrategicImportance = Field(
+    strategic_importance: Literal["Critical", "High", "Medium", "Low"] = Field(
         description="The assessed strategic importance of this lever, based on the 80/20 principle."
     )
     justification: str = Field(

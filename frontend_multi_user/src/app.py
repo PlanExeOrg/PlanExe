@@ -16,6 +16,7 @@ import io
 import zipfile
 import secrets
 import hashlib
+import subprocess
 import tempfile
 from urllib.parse import quote_plus, urlparse
 from typing import ClassVar, Dict, Optional, Tuple, Any, cast
@@ -606,14 +607,29 @@ class MyFlaskApp:
 
         self._track_flask_app_started()
 
+    @staticmethod
+    def _get_git_commit_hash() -> str:
+        """Return the short git commit hash, or 'unknown' if unavailable."""
+        try:
+            return subprocess.check_output(
+                ["git", "rev-parse", "--short", "HEAD"],
+                stderr=subprocess.DEVNULL,
+                text=True,
+            ).strip()
+        except Exception:
+            return "unknown"
+
     def _track_flask_app_started(self):
         logger.info(f"MyFlaskApp._track_flask_app_started. Starting...")
-        
+
         # Determine if this is the main process or reloader process
         is_reloader = os.environ.get('WERKZEUG_RUN_MAIN') == 'true'
         is_debug_mode = self.app.debug if hasattr(self, 'app') else True
-        
+
+        commit_hash = self._get_git_commit_hash()
+
         event_context = {
+            "commit_hash": commit_hash,
             "pid": str(os.getpid()),
             "parent_pid": str(os.getppid()),
             "is_reloader_process": is_reloader,
@@ -624,18 +640,18 @@ class MyFlaskApp:
             "FLASK_ENV": os.environ.get('FLASK_ENV', 'not_set'),
             "FLASK_DEBUG": os.environ.get('FLASK_DEBUG', 'not_set')
         }
-            
+
         with self.app.app_context():
             event = _new_model(
                 EventItem,
                 event_type=EventType.GENERIC_EVENT,
-                message="Flask app started",
+                message=f"Flask app started (commit {commit_hash})",
                 context=event_context,
             )
             self.db.session.add(event)
             self.db.session.commit()
-            
-        logger.info(f"MyFlaskApp._track_flask_app_started. Logged {event_context!r}")
+
+        logger.info(f"MyFlaskApp._track_flask_app_started. commit={commit_hash} context={event_context!r}")
 
     def _start_check(self):
         # When the Flask app launches in debug mode it runs __init__ twice, so that the app can hot reload.

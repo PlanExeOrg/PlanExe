@@ -284,6 +284,10 @@ class PlanFileInfoReadyOutput(BaseModel):
         default=None,
         description="Absolute URL where the requested artifact can be downloaded.",
     )
+    expires_at: str | None = Field(
+        default=None,
+        description="ISO 8601 UTC timestamp when the download_url expires. Present only when download_url is set.",
+    )
 
 
 class PlanFileInfoOutput(BaseModel):
@@ -293,6 +297,10 @@ class PlanFileInfoOutput(BaseModel):
     download_url: str | None = Field(
         default=None,
         description="Absolute URL where the requested artifact can be downloaded.",
+    )
+    expires_at: str | None = Field(
+        default=None,
+        description="ISO 8601 UTC timestamp when the download_url expires. Present only when download_url is set.",
     )
     error: ErrorDetail | None = None
 

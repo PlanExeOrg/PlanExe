@@ -4,7 +4,7 @@ import json
 import logging
 import os
 import time
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any, Optional
 
 from mcp.types import CallToolResult, Tool, TextContent, ToolAnnotations
@@ -47,7 +47,7 @@ from mcp_cloud.worker_fetchers import (
     fetch_user_downloadable_zip,
 )
 from mcp_cloud.model_profiles import _get_model_profiles_sync
-from mcp_cloud.download_tokens import build_report_download_url, build_zip_download_url, _get_download_base_url
+from mcp_cloud.download_tokens import build_report_download_url, build_zip_download_url, _get_download_base_url, DOWNLOAD_TOKEN_TTL_SECONDS
 from mcp_cloud.example_prompts import _load_mcp_example_prompts
 from mcp_cloud.schemas import TOOL_DEFINITIONS
 
@@ -510,6 +510,7 @@ async def handle_plan_file_info(arguments: dict[str, Any]) -> CallToolResult:
         download_url = build_zip_download_url(run_id)
         if download_url:
             response["download_url"] = download_url
+            response["expires_at"] = (datetime.now(UTC) + timedelta(seconds=DOWNLOAD_TOKEN_TTL_SECONDS)).isoformat()
 
         return CallToolResult(
             content=[TextContent(type="text", text=json.dumps(response))],
@@ -558,6 +559,7 @@ async def handle_plan_file_info(arguments: dict[str, Any]) -> CallToolResult:
     download_url = build_report_download_url(run_id)
     if download_url:
         response["download_url"] = download_url
+        response["expires_at"] = (datetime.now(UTC) + timedelta(seconds=DOWNLOAD_TOKEN_TTL_SECONDS)).isoformat()
 
     return CallToolResult(
         content=[TextContent(type="text", text=json.dumps(response))],

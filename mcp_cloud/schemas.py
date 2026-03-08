@@ -225,7 +225,7 @@ TOOL_DEFINITIONS = [
     ToolDefinition(
         name="plan_file_info",
         description=(
-            "Returns file metadata (content_type, download_url, download_size) for the report or zip artifact. "
+            "Returns file metadata (content_type, download_url, download_size, expires_at) for the report or zip artifact. "
             "Use artifact='report' (default) for the interactive HTML report (~700KB, self-contained with embedded JS "
             "for collapsible sections and interactive Gantt charts — open in a browser). "
             "Use artifact='zip' for the full pipeline output bundle (md, json, csv intermediary files that fed the report). "

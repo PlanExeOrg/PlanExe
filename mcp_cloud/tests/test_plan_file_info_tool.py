@@ -230,6 +230,78 @@ class TestPlanFileInfoTool(unittest.TestCase):
         self.assertFalse(result.isError)
         self.assertEqual(result.structuredContent["error"]["code"], "generation_failed")
 
+    def test_report_expires_at_present_when_download_url_set(self):
+        """expires_at must be an ISO 8601 UTC timestamp when download_url is present."""
+        import mcp_cloud.download_tokens as _dt_mod
+        from datetime import datetime, timezone
+
+        plan_id = str(uuid.uuid4())
+        content_bytes = b"<html>report</html>"
+        plan_snapshot = {
+            "id": "plan-id",
+            "state": PlanState.completed,
+            "progress_message": None,
+        }
+        with patch("mcp_cloud.handlers._get_plan_for_report_sync", return_value=plan_snapshot):
+            with patch(
+                "mcp_cloud.handlers.fetch_artifact_from_worker_plan",
+                new=AsyncMock(return_value=content_bytes),
+            ):
+                with patch.object(_dt_mod, "_get_download_base_url", return_value="https://example.com"):
+                    result = asyncio.run(handle_plan_file_info({"plan_id": plan_id, "artifact": "report"}))
+
+        sc = result.structuredContent
+        self.assertIn("download_url", sc)
+        self.assertIn("expires_at", sc)
+        expires = datetime.fromisoformat(sc["expires_at"])
+        self.assertGreater(expires, datetime.now(timezone.utc))
+
+    def test_zip_expires_at_present_when_download_url_set(self):
+        """expires_at must be present for zip artifacts when download_url is set."""
+        import mcp_cloud.download_tokens as _dt_mod
+        from datetime import datetime, timezone
+
+        plan_id = str(uuid.uuid4())
+        content_bytes = b"zipdata"
+        plan_snapshot = {
+            "id": "plan-id",
+            "state": PlanState.completed,
+            "progress_message": None,
+        }
+        with patch("mcp_cloud.handlers._get_plan_for_report_sync", return_value=plan_snapshot):
+            with patch(
+                "mcp_cloud.handlers.fetch_user_downloadable_zip",
+                new=AsyncMock(return_value=content_bytes),
+            ):
+                with patch.object(_dt_mod, "_get_download_base_url", return_value="https://example.com"):
+                    result = asyncio.run(handle_plan_file_info({"plan_id": plan_id, "artifact": "zip"}))
+
+        sc = result.structuredContent
+        self.assertIn("download_url", sc)
+        self.assertIn("expires_at", sc)
+        expires = datetime.fromisoformat(sc["expires_at"])
+        self.assertGreater(expires, datetime.now(timezone.utc))
+
+    def test_expires_at_absent_when_no_download_url(self):
+        """expires_at must NOT be present when download_url is absent."""
+        plan_id = str(uuid.uuid4())
+        content_bytes = b"<html>report</html>"
+        plan_snapshot = {
+            "id": "plan-id",
+            "state": PlanState.completed,
+            "progress_message": None,
+        }
+        with patch("mcp_cloud.handlers._get_plan_for_report_sync", return_value=plan_snapshot):
+            with patch(
+                "mcp_cloud.handlers.fetch_artifact_from_worker_plan",
+                new=AsyncMock(return_value=content_bytes),
+            ):
+                result = asyncio.run(handle_plan_file_info({"plan_id": plan_id}))
+
+        sc = result.structuredContent
+        self.assertNotIn("download_url", sc)
+        self.assertNotIn("expires_at", sc)
+
     def test_sanitize_legacy_zip_snapshot_removes_track_activity_jsonl(self):
         buffer = BytesIO()
         with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:

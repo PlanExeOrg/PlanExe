@@ -59,6 +59,29 @@ class OutputLever(InputLever):
     deduplication_justification: str
 
 
+_OVERFLOW_KEYWORDS = (
+    "context length", "token limit", "maximum context",
+    "context window", "too long", "context_length_exceeded",
+)
+
+
+def _build_compact_history(
+    system_message_with_context: str,
+    prior_decisions: List[LeverDecision],
+) -> List[ChatMessage]:
+    """Option C: replace full conversation history with a compact summary in the system message."""
+    summary = "\n".join(
+        f"- [{d.lever_id}] {d.classification.value}: {d.justification[:80]}..."
+        for d in prior_decisions
+    )
+    return [
+        ChatMessage(role=MessageRole.SYSTEM, content=(
+            f"{system_message_with_context}\n\n"
+            f"**Prior decisions (compacted):**\n{summary}"
+        )),
+    ]
+
+
 DEDUPLICATE_SYSTEM_PROMPT = """
 Evaluate each of the provided strategic levers individually. Classify every lever explicitly into one of:
 
@@ -127,26 +150,6 @@ class DeduplicateLevers:
         metadata_list: List[dict] = []
         max_retries = 3
 
-        # Option A: grow a single conversation so the model sees all prior decisions.
-        # Option C fallback: if a call fails due to context overflow, compact prior
-        # decisions into a single summary message and retry.
-        _OVERFLOW_KEYWORDS = ("context length", "token limit", "maximum context", "context window", "too long", "context_length_exceeded")
-
-        def _build_compact_history(prior_decisions: List[LeverDecision]) -> List[ChatMessage]:
-            """Option C: replace full conversation history with a compact summary in the system message."""
-            summary = "\n".join(
-                f"- [{d.lever_id}] {d.classification.value}: {d.justification[:80]}..."
-                for d in prior_decisions
-            )
-            return [
-                ChatMessage(role=MessageRole.SYSTEM, content=(
-                    f"{system_prompt}\n\n"
-                    f"**Project Context:**\n{project_context}\n\n"
-                    f"**All levers under review:**\n{all_levers_summary}\n\n"
-                    f"**Prior decisions (compacted):**\n{summary}"
-                )),
-            ]
-
         # Initialise conversation with full context in the system message (option A).
         # System message carries project context + lever summary so the first USER
         # message is the first lever — no dangling USER→USER before the first ASSISTANT.
@@ -194,7 +197,7 @@ class DeduplicateLevers:
                     if any(kw in err_lower for kw in _OVERFLOW_KEYWORDS):
                         # Option C: context too long — compact prior decisions and retry.
                         logger.warning(f"Lever {lever.lever_id}: context overflow on attempt {attempt+1}. Compacting history.")
-                        chat_message_list = _build_compact_history(decisions)
+                        chat_message_list = _build_compact_history(system_message_with_context, decisions)
                         chat_message_list.append(ChatMessage(role=MessageRole.USER, content=lever_prompt))
                     else:
                         logger.warning(f"Lever {lever.lever_id}: attempt {attempt+1} failed: {e}")

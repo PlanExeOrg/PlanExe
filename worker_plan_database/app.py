@@ -268,6 +268,17 @@ def ensure_fractional_credit_columns() -> None:
             ))
 
 
+def ensure_file_count_columns() -> None:
+    """Add files_completed and files_total columns to task_item (idempotent)."""
+    insp = inspect(db.engine)
+    columns = {col["name"] for col in insp.get_columns("task_item")}
+    with db.engine.begin() as conn:
+        if "files_completed" not in columns:
+            conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS files_completed INTEGER"))
+        if "files_total" not in columns:
+            conn.execute(text("ALTER TABLE task_item ADD COLUMN IF NOT EXISTS files_total INTEGER"))
+
+
 def ensure_multi_api_key_columns() -> None:
     """Add columns for multi-API-key support (idempotent)."""
     statements = (
@@ -332,7 +343,15 @@ def update_task_state_with_retry(task_id: str, new_state: PlanState, max_retries
                 return False
     return False
 
-def update_task_progress_with_retry(task_id: str, progress_percentage: float, progress_message: str, max_retries: int = 3, retry_delay: int = 5) -> bool:
+def update_task_progress_with_retry(
+    task_id: str,
+    progress_percentage: float,
+    progress_message: str,
+    files_completed: Optional[int] = None,
+    files_total: Optional[int] = None,
+    max_retries: int = 3,
+    retry_delay: int = 5,
+) -> bool:
     """Helper function to update task progress with retry logic for database operations."""
     for attempt in range(max_retries):
         try:
@@ -340,9 +359,11 @@ def update_task_progress_with_retry(task_id: str, progress_percentage: float, pr
             if task is None:
                 logger.error(f"Task with ID {task_id!r} not found in database. Cannot update task progress.")
                 return False
-            
+
             task.progress_percentage = progress_percentage
             task.progress_message = progress_message
+            task.files_completed = files_completed
+            task.files_total = files_total
             db.session.commit()
             logger.debug(f"Updated task {task_id!r} progress to {progress_percentage}%: {progress_message}")
             return True
@@ -402,6 +423,8 @@ class ServerExecutePipeline(ExecutePipeline):
                     task_id=self.task_id,
                     progress_percentage=parameters.progress.progress_percentage,
                     progress_message="Stop requested by user.",
+                    files_completed=parameters.progress.files_completed,
+                    files_total=parameters.progress.files_total,
                 )
             raise PipelineStopRequested(f"Stopping task {self.task_id!r} because a stop was requested.")
 
@@ -431,7 +454,9 @@ class ServerExecutePipeline(ExecutePipeline):
             update_task_progress_with_retry(
                 task_id=self.task_id,
                 progress_percentage=parameters.progress.progress_percentage,
-                progress_message=parameters.progress.progress_message
+                progress_message=parameters.progress.progress_message,
+                files_completed=parameters.progress.files_completed,
+                files_total=parameters.progress.files_total,
             )
 
         # Charge credits incrementally so usage is visible in real time.
@@ -1146,6 +1171,7 @@ def startup_worker():
         try:
             db.create_all()
             ensure_planitem_artifact_columns()
+            ensure_file_count_columns()
             ensure_token_metrics_columns()
             ensure_fractional_credit_columns()
             ensure_multi_api_key_columns()

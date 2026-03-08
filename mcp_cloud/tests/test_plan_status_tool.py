@@ -92,8 +92,8 @@ class TestPlanStatusTool(unittest.TestCase):
         self.assertEqual(result.structuredContent["error"]["code"], "PLAN_NOT_FOUND")
 
 
-    def test_plan_status_includes_file_counts_from_progress_message(self):
-        """files_completed and files_total are parsed from progress_message."""
+    def test_plan_status_includes_file_counts_from_db(self):
+        """files_completed and files_total are read from DB columns."""
         plan_id = str(uuid.uuid4())
         plan_snapshot = {
             "id": plan_id,
@@ -101,6 +101,8 @@ class TestPlanStatusTool(unittest.TestCase):
             "stop_requested": False,
             "progress_percentage": 76.67,
             "progress_message": "23 of 30",
+            "files_completed": 23,
+            "files_total": 30,
             "timestamp_created": datetime.now(UTC),
         }
         with patch(
@@ -115,37 +117,16 @@ class TestPlanStatusTool(unittest.TestCase):
         self.assertEqual(sc["files_completed"], 23)
         self.assertEqual(sc["files_total"], 30)
 
-    def test_plan_status_file_counts_with_extra_files(self):
-        """files_completed and files_total are parsed even with extra files in the message."""
-        plan_id = str(uuid.uuid4())
-        plan_snapshot = {
-            "id": plan_id,
-            "state": PlanState.processing,
-            "stop_requested": False,
-            "progress_percentage": 50.0,
-            "progress_message": "15 of 30. Extra files: 3",
-            "timestamp_created": datetime.now(UTC),
-        }
-        with patch(
-            "mcp_cloud.handlers._get_plan_status_snapshot_sync",
-            return_value=plan_snapshot,
-        ), patch(
-            "mcp_cloud.handlers.fetch_file_list_from_worker_plan", new=AsyncMock(return_value=[])
-        ):
-            result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
-
-        sc = result.structuredContent
-        self.assertEqual(sc["files_completed"], 15)
-        self.assertEqual(sc["files_total"], 30)
-
-    def test_plan_status_file_counts_null_when_no_progress_message(self):
-        """files_completed and files_total are null when progress_message is absent."""
+    def test_plan_status_file_counts_null_when_pending(self):
+        """files_completed and files_total are null before the worker starts."""
         plan_id = str(uuid.uuid4())
         plan_snapshot = {
             "id": plan_id,
             "state": PlanState.pending,
             "stop_requested": False,
             "progress_percentage": 0.0,
+            "files_completed": None,
+            "files_total": None,
             "timestamp_created": datetime.now(UTC),
         }
         with patch(

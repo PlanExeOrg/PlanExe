@@ -10,21 +10,21 @@ import time
 from math import ceil
 import logging
 import json
-from typing import Literal
+from enum import Enum
 from dataclasses import dataclass
-from pydantic import BaseModel, Field
+from pydantic import Field
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
+from worker_plan_internal.llm_util.flat_schema_model import FlatSchemaModel
 
 logger = logging.getLogger(__name__)
 
-class PlanPurpose:
-    """String constants for plan purpose — replaces Enum to avoid $defs/$ref in JSON schema."""
-    business = "business"
-    personal = "personal"
-    other = "other"
+class PlanPurpose(str, Enum):
+    personal = 'personal'
+    business = 'business'
+    other = 'other'
 
-class PlanPurposeInfo(BaseModel):
+class PlanPurposeInfo(FlatSchemaModel):
     """
     Identify the purpose of the plan to be performed.
     """
@@ -32,7 +32,7 @@ class PlanPurposeInfo(BaseModel):
     purpose_detailed: str = Field(
         description="Detailed purpose of the plan, such as: health, healthier habits, product, market trend, strategic planning, project management."
     )
-    purpose: Literal["personal", "business", "other"] = Field(
+    purpose: PlanPurpose = Field(
         description="Purpose of the plan."
     )
 
@@ -108,7 +108,7 @@ class IdentifyPurpose:
         if plan_purpose_instance is None:
             raise ValueError("LLM returned empty structured response (chat_response.raw is None).")
         json_response = plan_purpose_instance.model_dump()
-        purpose_value = plan_purpose_instance.purpose  # Literal str, no .value needed
+        purpose_value = plan_purpose_instance.purpose.value
         json_response['purpose'] = purpose_value
 
         metadata = dict(llm.metadata)
@@ -148,11 +148,11 @@ class IdentifyPurpose:
         """
         rows = []
 
-        if plan_purpose_info.purpose == "personal":
+        if plan_purpose_info.purpose == PlanPurpose.personal:
             rows.append("**Purpose:** personal")
-        elif plan_purpose_info.purpose == "business":
+        elif plan_purpose_info.purpose == PlanPurpose.business:
             rows.append("**Purpose:** business")
-        elif plan_purpose_info.purpose == "other":
+        elif plan_purpose_info.purpose == PlanPurpose.other:
             rows.append("**Purpose:** other. This plan doesn't clearly fit into personal or business categories.")
         else:
             rows.append(f"Invalid plan purpose. {plan_purpose_info.purpose}")

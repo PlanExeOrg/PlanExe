@@ -137,12 +137,9 @@ class PlanCreateOutput(BaseModel):
     sse_url: str | None = Field(
         default=None,
         description=(
-            "GET endpoint returning text/event-stream with real-time plan progress. "
-            "No API key required — the plan_id UUID serves as the access token. "
-            "Usage: `curl -N <sse_url>`. "
-            "Emits 'status' events on progress changes, 'heartbeat' every ~20 s, "
-            "and a final 'complete' event (state completed/failed) then auto-closes. "
-            "Alternative to polling plan_status."
+            "Optional completion detector. Run `curl -N <sse_url>` in a background shell — "
+            "the stream auto-closes when the plan reaches a terminal state (completed/failed). "
+            "For structured progress data, use plan_status instead."
         ),
     )
 
@@ -197,9 +194,8 @@ class PlanStatusSuccess(BaseModel):
     sse_url: str | None = Field(
         default=None,
         description=(
-            "GET endpoint (text/event-stream) for real-time progress. "
-            "Available when plan is not in a terminal state. "
-            "See plan_create sse_url description for usage."
+            "Optional completion detector URL. Available when plan is not in a terminal state. "
+            "Run `curl -N <sse_url>` in a background shell — auto-closes on completion/failure."
         ),
     )
 
@@ -244,9 +240,8 @@ class PlanStatusOutput(BaseModel):
     sse_url: str | None = Field(
         default=None,
         description=(
-            "GET endpoint (text/event-stream) for real-time progress. "
-            "Available when plan is not in a terminal state. "
-            "See plan_create sse_url description for usage."
+            "Optional completion detector URL. Available when plan is not in a terminal state. "
+            "Run `curl -N <sse_url>` in a background shell — auto-closes on completion/failure."
         ),
     )
     error: ErrorDetail | None = None
@@ -284,12 +279,9 @@ class PlanRetryOutput(BaseModel):
     sse_url: str | None = Field(
         default=None,
         description=(
-            "GET endpoint returning text/event-stream with real-time plan progress. "
-            "No API key required — the plan_id UUID serves as the access token. "
-            "Usage: `curl -N <sse_url>`. "
-            "Emits 'status' events on progress changes, 'heartbeat' every ~20 s, "
-            "and a final 'complete' event (state completed/failed) then auto-closes. "
-            "Alternative to polling plan_status."
+            "Optional completion detector. Run `curl -N <sse_url>` in a background shell — "
+            "the stream auto-closes when the plan reaches a terminal state (completed/failed). "
+            "For structured progress data, use plan_status instead."
         ),
     )
     error: ErrorDetail | None = None

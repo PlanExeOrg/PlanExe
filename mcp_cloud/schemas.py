@@ -173,6 +173,8 @@ TOOL_DEFINITIONS = [
             "(baseline profile) and may take longer on higher-quality profiles. "
             "State contract: pending/processing => keep polling; completed => download is ready; failed => terminal error. "
             "progress_percentage is 0-100 (integer-like float); 100 when completed. "
+            "Note: steps vary in duration — early steps complete quickly while later steps (review, report generation) "
+            "take longer. Do not use progress_percentage to estimate time remaining. "
             "steps_completed and steps_total give the number of plan generation steps completed and expected (both nullable). "
             "current_step is the human-readable label of the most recently completed step (e.g. 'SWOT Analysis'). "
             "files lists intermediate outputs produced so far; use their updated_at timestamps to detect stalls. "

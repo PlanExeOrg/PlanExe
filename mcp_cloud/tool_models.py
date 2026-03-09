@@ -168,15 +168,19 @@ class PlanStatusSuccess(BaseModel):
     )
     progress_percentage: float = Field(
         ...,
-        description="Completion progress from 0 to 100. Monotonically increasing; 100 when state is completed.",
+        description=(
+            "Completion progress from 0 to 100. Monotonically increasing; 100 when state is completed. "
+            "Steps vary in duration (early steps are fast, later steps like review and report generation are slower), "
+            "so do not use this to estimate time remaining."
+        ),
     )
     steps_completed: int | None = Field(
         default=None,
-        description="Number of plan generation steps completed so far.",
+        description="Number of plan generation steps completed so far. Steps vary in duration.",
     )
     steps_total: int | None = Field(
         default=None,
-        description="Total number of plan generation steps expected.",
+        description="Total number of plan generation steps expected. Not all steps take equal time.",
     )
     current_step: str | None = Field(
         default=None,
@@ -214,15 +218,19 @@ class PlanStatusOutput(BaseModel):
     )
     progress_percentage: float | None = Field(
         default=None,
-        description="Completion progress from 0 to 100. Monotonically increasing; 100 when state is completed.",
+        description=(
+            "Completion progress from 0 to 100. Monotonically increasing; 100 when state is completed. "
+            "Steps vary in duration (early steps are fast, later steps like review and report generation are slower), "
+            "so do not use this to estimate time remaining."
+        ),
     )
     steps_completed: int | None = Field(
         default=None,
-        description="Number of plan generation steps completed so far.",
+        description="Number of plan generation steps completed so far. Steps vary in duration.",
     )
     steps_total: int | None = Field(
         default=None,
-        description="Total number of plan generation steps expected.",
+        description="Total number of plan generation steps expected. Not all steps take equal time.",
     )
     current_step: str | None = Field(
         default=None,

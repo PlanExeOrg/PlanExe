@@ -86,7 +86,7 @@ from worker_plan_internal.schedule.schedule import ProjectSchedule
 from worker_plan_internal.schedule.export_gantt_dhtmlx import ExportGanttDHTMLX
 from worker_plan_internal.schedule.export_gantt_csv import ExportGanttCSV
 # from worker_plan_internal.schedule.export_gantt_mermaid import ExportGanttMermaid
-from worker_plan_internal.llm_util.llm_executor import LLMExecutor, LLMModelFromName, ShouldStopCallbackParameters, PipelineStopRequested
+from worker_plan_internal.llm_util.llm_executor import LLMExecutor, LLMModelFromName, ShouldStopCallbackParameters, PipelineStopRequested, RetryConfig
 from worker_plan_internal.llm_factory import get_llm_names_by_priority, SPECIAL_AUTO_ID, is_valid_llm_name
 from worker_plan_api.model_profile import ModelProfileEnum, normalize_model_profile
 from worker_plan_internal.format_json_for_use_in_query import format_json_for_use_in_query
@@ -144,7 +144,8 @@ class PlanTask(luigi.Task):
 
         return LLMExecutor(
             llm_models=llm_model_instances,
-            should_stop_callback=should_stop_callback
+            should_stop_callback=should_stop_callback,
+            retry_config=RetryConfig(),
         )
 
     def run(self):

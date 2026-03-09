@@ -5,7 +5,7 @@ I want all LLM invocations to go through this class.
 
 It happens that the json output of the LLM doesn't match the expected schema.
 When I inspect the raw response, I can see that the json comes close to the expected schema,
-with tiny mistakes here and there. I guess with a more fuzzy json parser than Pydantic, 
+with tiny mistakes here and there. I guess with a more fuzzy json parser than Pydantic,
 the json could be extracted.
 
 It happens that an LLM provider is unavailable. Where a model used to be available, and have been removed from the provider.
@@ -17,16 +17,6 @@ If all of them fails, then the exception is raised. Exhausted all LLMs.
 
 This is the class that `PlanTask` is using, the root class of all tasks in the pipeline.
 Subtasks such as `ReviewPlan` are also using this class to invoke the LLM.
-
-IDEA: Scheduling strategy: randomize the order of LLMs.
-IDEA: Scheduling strategy: cycle through the LLM list twice, so there are two chances to succeed.
-IDEA: Measure the number of tokens used by each LLM.
-IDEA: Measure the duration of each LLM.
-IDEA: Measure the number of times each LLM was used.
-IDEA: Measure the number of times each LLM failed. Is there a common reason for failure.
-IDEA: track stats about token usage
-IDEA: track what LLM was succeeded
-IDEA: track if the LLM failed and why
 """
 import time
 import logging
@@ -35,12 +25,46 @@ import typing
 import traceback
 from uuid import uuid4
 from typing import Any, Callable, Optional, List
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from llama_index.core.llms.llm import LLM
 from llama_index.core.instrumentation.dispatcher import instrument_tags
 from worker_plan_internal.llm_factory import get_llm
 
 logger = logging.getLogger(__name__)
+
+# Substrings (lowercased) that indicate a transient / retriable error.
+_TRANSIENT_PATTERNS: list[str] = [
+    "rate limit", "rate_limit", "ratelimit", "429",
+    "timeout", "timed out", "connection", "connect",
+    "temporarily unavailable", "503", "502", "500",
+    "overloaded", "capacity", "try again",
+    "server error", "internal error",
+]
+
+
+def is_transient_error(error: Exception) -> bool:
+    """Return True if *error* looks like a transient network / rate-limit issue."""
+    error_str = str(error).lower()
+    return any(pattern in error_str for pattern in _TRANSIENT_PATTERNS)
+
+
+@dataclass
+class RetryConfig:
+    """Controls per-model retry behaviour inside :class:`LLMExecutor`.
+
+    Retries only fire for errors classified as *transient* by
+    :func:`is_transient_error`.  Permanent errors (auth failures, invalid
+    model, validation errors) immediately fall through to the next model.
+    """
+    max_retries: int = 2
+    base_delay: float = 1.0       # seconds
+    max_delay: float = 30.0       # seconds
+    backoff_multiplier: float = 2.0
+
+    def delay_for_retry(self, retry_index: int) -> float:
+        """Compute delay in seconds for the *retry_index*-th retry (0-based)."""
+        delay = self.base_delay * (self.backoff_multiplier ** retry_index)
+        return min(delay, self.max_delay)
 
 class PipelineStopRequested(RuntimeError):
     """
@@ -108,8 +132,17 @@ class LLMExecutor:
     """
     Cycle through multiple LLMs, falling back to the next on failure.
     A callback can be used to abort execution after any attempt.
+
+    When *retry_config* is provided, transient errors (rate-limits, timeouts,
+    connection problems) are retried with exponential back-off before moving
+    on to the next model.
     """
-    def __init__(self, llm_models: list[LLMModelBase], should_stop_callback: Optional[Callable[[ShouldStopCallbackParameters], None]] = None):
+    def __init__(
+        self,
+        llm_models: list[LLMModelBase],
+        should_stop_callback: Optional[Callable[[ShouldStopCallbackParameters], None]] = None,
+        retry_config: Optional[RetryConfig] = None,
+    ):
         """
         Args:
             llm_models: A list of LLM models to try.
@@ -118,15 +151,19 @@ class LLMExecutor:
                 If the callback raises any other exception, the execution will be aborted. This indicates a problem with the callback.
                 If the callback returns None, the execution will continue.
                 If no callback is provided, the execution will continue until all LLMs are exhausted.
+            retry_config: Optional retry settings for transient errors.
+                When provided, each model is retried up to ``retry_config.max_retries``
+                times on transient errors before falling through to the next model.
         """
         if not llm_models:
             raise ValueError("No LLMs provided")
-        
+
         if should_stop_callback is not None and not callable(should_stop_callback):
             raise TypeError("should_stop_callback must be a function that can raise PipelineStopRequested to stop execution")
-        
+
         self.llm_models = llm_models
         self.should_stop_callback = should_stop_callback
+        self.retry_config = retry_config or RetryConfig(max_retries=0)
         self.attempts: List[LLMAttempt] = []
 
     @property
@@ -141,16 +178,32 @@ class LLMExecutor:
         overall_start_time = time.perf_counter()
 
         for index, llm_model in enumerate(self.llm_models):
-            # Attempt invoking the execute_function with one LLM.
+            # First attempt with this model.
             attempt = self._try_one_attempt(llm_model, execute_function)
             self.attempts.append(attempt)
-
-            # Check if the callback wants to abort execution.
             self._check_stop_callback(attempt, overall_start_time, index)
 
-            # If the attempt succeeded and we weren't told to abort, we are done.
             if attempt.success:
                 return attempt.result
+
+            # Retry transient errors with exponential back-off.
+            for retry_num in range(self.retry_config.max_retries):
+                if attempt.exception is None or not is_transient_error(attempt.exception):
+                    break  # permanent error — skip to next model
+
+                delay = self.retry_config.delay_for_retry(retry_num)
+                logger.info(
+                    f"LLMExecutor: transient error from {llm_model!r}, "
+                    f"retrying in {delay:.1f}s (retry {retry_num + 1}/{self.retry_config.max_retries})"
+                )
+                time.sleep(delay)
+
+                attempt = self._try_one_attempt(llm_model, execute_function)
+                self.attempts.append(attempt)
+                self._check_stop_callback(attempt, overall_start_time, index)
+
+                if attempt.success:
+                    return attempt.result
 
         # If we get here, all attempts have failed.
         self._raise_final_exception()

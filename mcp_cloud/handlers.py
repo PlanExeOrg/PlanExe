@@ -8,6 +8,7 @@ from datetime import UTC, datetime, timedelta
 from typing import Any, Optional
 
 from mcp.types import CallToolResult, Tool, TextContent, ToolAnnotations
+from worker_plan_api.format_datetime import format_datetime_utc
 
 from mcp_cloud.db_setup import (
     PlanState,
@@ -330,11 +331,7 @@ async def handle_plan_status(arguments: dict[str, Any]) -> CallToolResult:
         "steps_total": steps_total,
         "current_step": current_step,
         "timing": {
-            "started_at": (
-                created_at.replace(microsecond=0).isoformat().replace("+00:00", "Z")
-                if created_at
-                else None
-            ),
+            "started_at": format_datetime_utc(created_at) if created_at else None,
             "elapsed_sec": (datetime.now(UTC) - created_at).total_seconds() if created_at else 0,
         },
         "files": files[:10],  # Limit to 10 most recent

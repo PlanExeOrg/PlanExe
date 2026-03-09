@@ -9,6 +9,7 @@ from io import BytesIO
 from typing import Optional
 
 from flask import has_app_context
+from worker_plan_api.format_datetime import format_datetime_utc
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +53,7 @@ def list_files_from_zip_bytes(zip_bytes: bytes) -> list[tuple[str, str]]:
                 if info.filename.endswith("/"):
                     continue
                 dt = datetime(*info.date_time, tzinfo=UTC)
-                dt_str = dt.replace(microsecond=0).isoformat().replace("+00:00", "Z")
+                dt_str = format_datetime_utc(dt)
                 results.append((info.filename, dt_str))
             results.sort(key=lambda t: t[0])
             return results

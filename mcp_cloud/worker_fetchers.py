@@ -9,6 +9,7 @@ from typing import Any, Optional
 
 import httpx
 from flask import has_app_context
+from worker_plan_api.format_datetime import format_datetime_utc
 
 from mcp_cloud.db_setup import (
     BASE_DIR_RUN,
@@ -161,7 +162,7 @@ async def fetch_file_list_from_worker_plan(run_id: str) -> Optional[list[tuple[s
                 # Fall back to plain filenames with current time
                 files = data.get("files", [])
                 if files:
-                    now = datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+                    now = format_datetime_utc(datetime.now(UTC))
                     return [(f, now) for f in files]
                 fallback_files = await asyncio.to_thread(list_files_from_zip_snapshot, run_id)
                 if fallback_files:
@@ -199,7 +200,7 @@ def list_files_from_local_run_dir(run_id: str) -> Optional[list[tuple[str, str]]
         for path in run_dir.iterdir():
             if path.is_file():
                 mtime = datetime.fromtimestamp(path.stat().st_mtime, tz=UTC)
-                mtime_str = mtime.replace(microsecond=0).isoformat().replace("+00:00", "Z")
+                mtime_str = format_datetime_utc(mtime)
                 results.append((path.name, mtime_str))
         results.sort(key=lambda t: t[0])
         return results

@@ -22,6 +22,7 @@ from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
 from worker_plan_api.filenames import FilenameEnum, ExtraFilenameEnum
+from worker_plan_api.format_datetime import format_datetime_utc
 from worker_plan_api.generate_run_id import generate_run_id
 from worker_plan_api.llm_info import LLMInfo
 from worker_plan_api.model_profile import ModelProfileEnum, DEFAULT_MODEL_PROFILE, normalize_model_profile
@@ -334,7 +335,7 @@ def run_files(run_id: str) -> RunFilesResponse:
             path = run_dir / name
             if path.is_file():
                 mtime = datetime.fromtimestamp(path.stat().st_mtime, tz=UTC)
-                mtime_str = mtime.replace(microsecond=0).isoformat().replace("+00:00", "Z")
+                mtime_str = format_datetime_utc(mtime)
                 entries.append(RunFileEntry(name=name, updated_at=mtime_str))
         files = [e.name for e in entries]
     except FileNotFoundError:

@@ -10,6 +10,7 @@ from datetime import UTC, datetime
 from typing import AsyncGenerator, Optional
 
 from mcp_cloud.db_queries import _get_plan_status_snapshot_sync, get_plan_state_mapping
+from worker_plan_api.format_datetime import format_datetime_utc
 from database_api.model_planitem import PlanState
 
 logger = logging.getLogger(__name__)
@@ -167,7 +168,7 @@ async def plan_progress_stream(
             # Send heartbeat if enough silence has passed
             if time.monotonic() - last_event_time >= SSE_HEARTBEAT_INTERVAL:
                 yield _format_sse_event("heartbeat", {
-                    "timestamp": datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+                    "timestamp": format_datetime_utc(datetime.now(UTC)),
                 })
                 last_event_time = time.monotonic()
 

@@ -7,6 +7,7 @@ from typing import Any, Optional
 from flask import has_app_context
 from sqlalchemy import cast
 from sqlalchemy.dialects.postgresql import JSONB
+from worker_plan_api.format_datetime import format_datetime_utc
 from worker_plan_api.model_profile import normalize_model_profile
 
 from mcp_cloud.db_setup import app, db, PlanItem, PlanState, EventItem, EventType
@@ -117,7 +118,7 @@ def _create_plan_sync(
             created_at = created_at.replace(tzinfo=UTC)
         return {
             "plan_id": plan_id,
-            "created_at": created_at.replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+            "created_at": format_datetime_utc(created_at),
         }
 
 def _get_plan_status_snapshot_sync(plan_id: str) -> Optional[dict[str, Any]]:
@@ -246,7 +247,7 @@ def _retry_failed_plan_sync(plan_id: str, model_profile: str, caller_metadata: O
             "plan_id": str(plan.id),
             "state": get_plan_state_mapping(plan.state),
             "model_profile": normalized_profile,
-            "retried_at": now_utc.replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+            "retried_at": format_datetime_utc(now_utc),
         }
 
 
@@ -301,10 +302,7 @@ def _list_plans_sync(user_id: Optional[str], limit: int) -> list[dict[str, Any]]
                 "plan_id": str(row.id),
                 "state": get_plan_state_mapping(row.state),
                 "progress_percentage": float(row.progress_percentage or 0.0),
-                "created_at": (
-                    created_at.replace(microsecond=0).isoformat().replace("+00:00", "Z")
-                    if created_at else None
-                ),
+                "created_at": format_datetime_utc(created_at) if created_at else None,
                 "prompt_excerpt": (row.prompt_excerpt or "").strip()[:PROMPT_EXCERPT_MAX_LENGTH],
             })
         return results

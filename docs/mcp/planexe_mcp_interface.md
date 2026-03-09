@@ -689,14 +689,9 @@ PlanExe is artifact-first, and MCP already has a native concept for that: resour
 
 The following tools remove common UX friction without expanding the core model.
 
-### 17.1 plan_list (or plan_recent)
+### ~~17.1 plan_list~~ (IMPLEMENTED)
 
-Return a short list of recent plans so agents can recover if they lost a plan_id.
-
-**Notes**
-
-- Default limit: 5–10 plans.
-- Include plan_id, created_at, state, and prompt summary.
+Implemented. Returns up to 50 plans newest-first, each with plan_id, state, progress_percentage, created_at, and prompt_excerpt. Default limit: 10.
 
 ### 17.2 plan_wait
 

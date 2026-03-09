@@ -49,7 +49,7 @@ Suggest how we will measure success:
 
 ## Deliverables
 
-1. This doc-only PR in `docs/proposals/70-fermi-sanity-check-validation-gate.md`
+1. This doc-only PR in `docs/proposals/88-fermi-sanity-check-validation-gate.md`
 2. A short appendix with example validation reports and sample prompts for hallucination triggers
 3. A review checklist for Simon: do these checks cover the key failure modes? Are the hooks for downstream tasks clear?
 

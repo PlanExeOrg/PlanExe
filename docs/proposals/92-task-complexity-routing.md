@@ -92,9 +92,9 @@ Key rule: **Opus writes the plan. The plan must be specific enough (file paths, 
 The rubric scores above are hypotheses. Different models assess complexity differently — a model working near its capability ceiling perceives tasks as harder than a model with headroom. Without ground truth, the thresholds (4–7, 8–11, etc.) are arbitrary.
 
 **This proposal includes three independent complexity assessments of Simon's 26 Feb 2026 refactor:**
-- `72-complexity-assessment-larry-sonnet.md` — Larry's view (Claude Sonnet 4.6)
+- `91-complexity-assessment-larry-sonnet.md` — Larry's view (Claude Sonnet 4.6)
 - `72-complexity-assessment-egon-minimax.md` — Egon's view (Minimax M2.5)
-- `72-complexity-assessment-bubba-haiku.md` — Bubba's view (Haiku 4.5)
+- `90-complexity-assessment-bubba-haiku.md` — Bubba's view (Haiku 4.5)
 
 Each agent scored the same 8 task clusters independently, without seeing the others' assessments. Simon's feedback on these three documents is the first real calibration data for the rubric.
 

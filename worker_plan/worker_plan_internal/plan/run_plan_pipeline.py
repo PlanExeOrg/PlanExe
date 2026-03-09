@@ -78,6 +78,7 @@ from worker_plan_internal.team.enrich_team_members_with_environment_info import 
 from worker_plan_internal.team.team_markdown_document import TeamMarkdownDocumentBuilder
 from worker_plan_internal.team.review_team import ReviewTeam
 from worker_plan_internal.self_audit.self_audit import SelfAudit
+from worker_plan_internal.plan.boost_initial_prompt import BoostInitialPrompt
 from worker_plan_internal.wbs.wbs_task import WBSTask, WBSProject
 from worker_plan_internal.wbs.wbs_populate import WBSPopulate
 from worker_plan_internal.wbs.wbs_task_tooltip import WBSTaskTooltip
@@ -207,6 +208,29 @@ class SetupTask(PlanTask):
         # The Gradio/Flask app that starts the luigi pipeline, must first create the `INITIAL_PLAN` file inside the `run_id_dir`.
         # This code will ONLY run if the Gradio/Flask app *failed* to create the file.
         raise AssertionError(f"This code is not supposed to be run. Before starting the pipeline the '{FilenameEnum.INITIAL_PLAN.value}' file must be present in the `run_id_dir`: {self.run_id_dir!r}")
+
+
+class BoostInitialPromptTask(PlanTask):
+    """Score the initial prompt quality and rewrite weak prompts before the pipeline runs."""
+    def requires(self):
+        return self.clone(SetupTask)
+
+    def output(self):
+        return {
+            'raw': self.local_target(FilenameEnum.BOOST_INITIAL_PROMPT_RAW),
+            'markdown': self.local_target(FilenameEnum.BOOST_INITIAL_PROMPT_MARKDOWN),
+        }
+
+    def run_inner(self):
+        llm_executor: LLMExecutor = self.create_llm_executor()
+
+        with self.input().open("r") as f:
+            plan_prompt = f.read()
+
+        result = BoostInitialPrompt.execute(llm_executor, plan_prompt)
+
+        result.save_raw(self.output()['raw'].path)
+        result.save_markdown(self.output()['markdown'].path)
 
 
 class RedlineGateTask(PlanTask):
@@ -3739,6 +3763,7 @@ class FullPlanPipeline(PlanTask):
         return {
             'start_time': self.clone(StartTimeTask),
             'setup': self.clone(SetupTask),
+            'boost_initial_prompt': self.clone(BoostInitialPromptTask),
             'redline_gate': self.clone(RedlineGateTask),
             'premise_attack': self.clone(PremiseAttackTask),
             'identify_purpose': self.clone(IdentifyPurposeTask),

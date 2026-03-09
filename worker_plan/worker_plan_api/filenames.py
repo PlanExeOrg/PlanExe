@@ -3,6 +3,8 @@ from enum import Enum
 class FilenameEnum(str, Enum):
     START_TIME = "001-1-start_time.json"
     INITIAL_PLAN = "001-2-plan.txt"
+    BOOST_INITIAL_PROMPT_RAW = "001-3-boost_initial_prompt_raw.json"
+    BOOST_INITIAL_PROMPT_MARKDOWN = "001-4-boost_initial_prompt.md"
     REDLINE_GATE_RAW = "002-1-redline_gate.json"
     REDLINE_GATE_MARKDOWN = "002-2-redline_gate.md"
     PREMISE_ATTACK_RAW = "002-3-premise_attack.json"

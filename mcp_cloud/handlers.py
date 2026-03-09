@@ -306,7 +306,7 @@ async def handle_plan_status(arguments: dict[str, Any]) -> CallToolResult:
                 logger.warning("Worker file list fetch timed out for plan %s", plan_uuid)
                 files_list = None
         if files_list:
-            for file_name, updated_at in files_list[:10]:  # Limit to 10 most recent
+            for file_name, updated_at in files_list:
                 if file_name != "log.txt":
                     files.append({
                         "path": file_name,
@@ -334,7 +334,8 @@ async def handle_plan_status(arguments: dict[str, Any]) -> CallToolResult:
             "started_at": format_datetime_utc(created_at) if created_at else None,
             "elapsed_sec": (datetime.now(UTC) - created_at).total_seconds() if created_at else 0,
         },
-        "files": files[:10],  # Limit to 10 most recent
+        "files_count": len(files),
+        "files": files[:10],
     }
 
     if state == "failed":

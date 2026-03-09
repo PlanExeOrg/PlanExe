@@ -187,10 +187,14 @@ class PlanStatusSuccess(BaseModel):
         description="Human-readable label of the most recently completed step, e.g. 'SWOT Analysis'.",
     )
     timing: PlanStatusTiming
+    files_count: int = Field(
+        ...,
+        description="Total number of output files produced so far (files list is capped at 10).",
+    )
     files: list[PlanStatusFile] = Field(
         ...,
         description=(
-            "Intermediate output files produced so far. "
+            "Intermediate output files produced so far (most recent 10). "
             "Use updated_at timestamps to detect stalls. "
             "These files are included in the zip artifact when the plan completes."
         ),
@@ -237,10 +241,14 @@ class PlanStatusOutput(BaseModel):
         description="Human-readable label of the most recently completed step, e.g. 'SWOT Analysis'.",
     )
     timing: PlanStatusTiming | None = None
+    files_count: int | None = Field(
+        default=None,
+        description="Total number of output files produced so far (files list is capped at 10).",
+    )
     files: list[PlanStatusFile] | None = Field(
         default=None,
         description=(
-            "Intermediate output files produced so far. "
+            "Intermediate output files produced so far (most recent 10). "
             "Use updated_at timestamps to detect stalls. "
             "These files are included in the zip artifact when the plan completes."
         ),

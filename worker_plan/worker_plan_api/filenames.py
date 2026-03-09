@@ -37,6 +37,8 @@ class FilenameEnum(str, Enum):
     REVIEW_ASSUMPTIONS_MARKDOWN = "003-9-review_assumptions.md"
     CONSOLIDATE_ASSUMPTIONS_FULL_MARKDOWN = "003-10-consolidate_assumptions_full.md"
     CONSOLIDATE_ASSUMPTIONS_SHORT_MARKDOWN = "003-11-consolidate_assumptions_short.md"
+    FERMI_SANITY_CHECK_RAW = "003-12-fermi_sanity_check_raw.json"
+    FERMI_SANITY_CHECK_MARKDOWN = "003-13-fermi_sanity_check.md"
     PRE_PROJECT_ASSESSMENT_RAW = "004-1-pre_project_assessment_raw.json"
     PRE_PROJECT_ASSESSMENT = "004-2-pre_project_assessment.json"
     PROJECT_PLAN_RAW = "005-1-project_plan_raw.json"

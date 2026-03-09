@@ -35,6 +35,7 @@ from worker_plan_internal.assume.identify_risks import IdentifyRisks
 from worker_plan_internal.assume.make_assumptions import MakeAssumptions
 from worker_plan_internal.assume.distill_assumptions import DistillAssumptions
 from worker_plan_internal.assume.review_assumptions import ReviewAssumptions
+from worker_plan_internal.validation.fermi_sanity_check import run_fermi_sanity_check
 from worker_plan_internal.assume.shorten_markdown import ShortenMarkdown
 from worker_plan_internal.expert.pre_project_assessment import PreProjectAssessment
 from worker_plan_internal.plan.project_plan import ProjectPlan
@@ -1018,6 +1019,49 @@ class ReviewAssumptionsTask(PlanTask):
         review_assumptions.save_raw(str(output_raw_path))
         output_markdown_path = self.output()['markdown'].path
         review_assumptions.save_markdown(str(output_markdown_path))
+
+
+class FermiSanityCheckTask(PlanTask):
+    """
+    Rule-based validation gate for plan assumptions.
+    No LLM calls — runs fast and catches common failure modes.
+    """
+    def requires(self):
+        return {
+            'distill_assumptions': self.clone(DistillAssumptionsTask),
+        }
+
+    def output(self):
+        return {
+            'raw': self.local_target(FilenameEnum.FERMI_SANITY_CHECK_RAW),
+            'markdown': self.local_target(FilenameEnum.FERMI_SANITY_CHECK_MARKDOWN),
+        }
+
+    def run_inner(self):
+        # Read the distilled assumptions JSON.
+        with self.input()['distill_assumptions']['raw'].open("r") as f:
+            raw_data = json.loads(f.read())
+
+        # Extract assumption_list from the response field.
+        response = raw_data.get("response", {})
+        assumption_list = response.get("assumption_list", [])
+
+        if not assumption_list:
+            logger.warning("No assumptions found for Fermi sanity check.")
+
+        report = run_fermi_sanity_check(assumption_list)
+
+        # Write outputs.
+        report.save_raw(self.output()['raw'].path)
+        report.save_markdown(self.output()['markdown'].path)
+
+        logger.info(
+            "Fermi sanity check: %s (pass=%d, warn=%d, fail=%d)",
+            report.overall_result.value,
+            report.pass_count,
+            report.warn_count,
+            report.fail_count,
+        )
 
 
 class ConsolidateAssumptionsMarkdownTask(PlanTask):
@@ -3757,6 +3801,7 @@ class FullPlanPipeline(PlanTask):
             'make_assumptions': self.clone(MakeAssumptionsTask),
             'assumptions': self.clone(DistillAssumptionsTask),
             'review_assumptions': self.clone(ReviewAssumptionsTask),
+            'fermi_sanity_check': self.clone(FermiSanityCheckTask),
             'consolidate_assumptions_markdown': self.clone(ConsolidateAssumptionsMarkdownTask),
             'pre_project_assessment': self.clone(PreProjectAssessmentTask),
             'project_plan': self.clone(ProjectPlanTask),

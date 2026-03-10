@@ -2920,6 +2920,7 @@ class MyFlaskApp:
                 parameters = {}
             raw_profile = parameters.get("model_profile")
             parameters["model_profile"] = normalize_model_profile(raw_profile).value
+            parameters["pipeline_version"] = PIPELINE_VERSION
 
             # Get length of prompt_param in bytes and in characters
             prompt_param_bytes = len(prompt_param.encode('utf-8'))
@@ -3363,6 +3364,7 @@ class MyFlaskApp:
             selected_model_profile = normalize_model_profile(raw_profile).value
             parameters = dict(task.parameters) if isinstance(task.parameters, dict) else {}
             parameters["model_profile"] = selected_model_profile
+            parameters["pipeline_version"] = PIPELINE_VERSION
             task.parameters = parameters
 
             task.state = PlanState.pending

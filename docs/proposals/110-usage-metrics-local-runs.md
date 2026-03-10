@@ -214,3 +214,41 @@ The `model` field contains the full `provider:model` string (e.g.
 2. **Thread safety**: JSONL append-per-line is safe for concurrent Luigi workers.
 3. **Thinking tokens**: Recorded when available (e.g. from OpenRouter reasoning models). `null` for providers that don't expose them.
 4. **Retention on resume**: Appended. A resumed run adds only the new calls alongside the restored snapshot's existing metrics.
+
+---
+
+## Follow-up: Error Classification (PR #236)
+
+Raw Python exception strings in the `"error"` field were verbose and could leak raw model output.
+PR #236 added `classify_error()` to replace them with short category labels:
+
+| Category | Matches on |
+|---|---|
+| `invalid_json` | "json", "validation error", "pydantic" |
+| `timeout` | "timeout", "timed out" |
+| `empty_response` | "empty", "none", "no response" |
+| `connection_error` | "connection", "connect", "dns", "network" |
+| `rate_limit` | "rate limit", "429", "too many requests" |
+| `auth_error` | "auth", "401", "403", "unauthorized", "forbidden" |
+| `server_error` | "500", "502", "503", "504", "server error", "internal server" |
+| `model_not_found` | "model not found", "not found", "404" |
+| `unknown` | fallback — raw message preserved in `error_detail` (truncated to 200 chars) |
+
+---
+
+## Follow-up: Error Traceability (PR #237)
+
+All 38 call sites that raised `ValueError("LLM chat interaction failed.")` were converted to
+`LLMChatError` (see [proposal 113](113-llm-error-traceability.md)). This:
+
+- **Preserves the root cause** in `str(LLMChatError)`, so `classify_error()` categorizes correctly
+  (previously all were `"unknown"`).
+- **Adds `error_id`** (12-char UUID) to both log output and the JSONL row, enabling cross-referencing.
+
+Example failure row after both PRs:
+
+```json
+{"timestamp": "2026-03-10T19:50:18.821350", "success": false, "model": "openrouter-gemini-2.0-flash-001", "duration_seconds": 5.391, "error": "invalid_json", "error_id": "4c2a64973bcd"}
+```
+
+A user can `grep 4c2a64973bcd` in the logs to find the full traceback.

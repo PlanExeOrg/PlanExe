@@ -25,6 +25,7 @@ from worker_plan_internal.lever.deduplicate_levers import DeduplicateLevers
 from worker_plan_internal.lever.scenarios_markdown import ScenariosMarkdown
 from worker_plan_internal.lever.strategic_decisions_markdown import StrategicDecisionsMarkdown
 from worker_plan_api.filenames import FilenameEnum, ExtraFilenameEnum
+from worker_plan_api.pipeline_version import PIPELINE_VERSION
 from worker_plan_api.speedvsdetail import SpeedVsDetailEnum
 from worker_plan_internal.utils.planexe_llmconfig import PlanExeLLMConfig
 from worker_plan_internal.assume.identify_purpose import IdentifyPurpose
@@ -102,9 +103,34 @@ REPORT_EXECUTE_PLAN_SECTION_HIDDEN = True
 # REPORT_EXECUTE_PLAN_SECTION_HIDDEN = False
 
 class PlanTask(luigi.Task):
+    # PLANEXE_OUTPUTS_DIR: Configurable pipeline outputs directory
+    # ============================================================
+    # WHY IT EXISTS:
+    #   Pipeline outputs were previously stored in a directory that was not covered
+    #   by .gitignore. A `git clean` operation destroyed hours of live pipeline
+    #   computation data. The default `run/` directory is now gitignored, which
+    #   prevents accidental git-related data loss. This env var adds optional
+    #   flexibility for operators who want outputs on a separate filesystem
+    #   (e.g., an external drive or mounted volume for performance/backup).
+    #
+    # WHAT IT DOES:
+    #   Allows pipeline operators to place pipeline outputs (run directories, logs,
+    #   results) outside the git repository using the PLANEXE_OUTPUTS_DIR environment
+    #   variable. Useful for large/long-running pipelines where output isolation or
+    #   separate storage is desired.
+    #
+    # DEFAULT BEHAVIOR:
+    #   Falls back to 'run/' (gitignored, safe by default). No action required
+    #   from existing operators unless they want a different output location.
+    #
+    # EXAMPLE:
+    #   export PLANEXE_OUTPUTS_DIR=/mnt/fast-storage/planexe-runs
+    #   python -m worker_plan_internal.plan.run_plan_pipeline
+    #
     # Default it to the current timestamp, eg. 19841231_235959
     # Path to the 'run/{run_id}' directory
-    run_id_dir = luigi.Parameter(default=Path('run') / datetime.now().strftime("%Y%m%d_%H%M%S"))
+    _default_outputs_dir = os.getenv('PLANEXE_OUTPUTS_DIR', 'run')
+    run_id_dir = luigi.Parameter(default=Path(_default_outputs_dir) / datetime.now().strftime("%Y%m%d_%H%M%S"))
 
     # By default, run everything but it's slow.
     # This can be overridden in developer mode, where a quick turnaround is needed, and the details are not important.
@@ -3948,6 +3974,7 @@ class ExecutePipeline:
             ExtraFilenameEnum.EXPECTED_FILENAMES1_JSON.value,
             ExtraFilenameEnum.LOG_TXT.value,
             ExtraFilenameEnum.PIPELINE_STOP_REQUESTED_FLAG.value,
+            ExtraFilenameEnum.USAGE_METRICS_JSONL.value,
             '.DS_Store',
         ]
         files = [f for f in files if f not in ignore_files]
@@ -4029,11 +4056,23 @@ class ExecutePipeline:
             logger.debug(f"Removing pre-existing stop flag file: {stop_flag_path!r}")
             stop_flag_path.unlink()
 
+        # Enable file-based usage metrics for this run.
+        from worker_plan_internal.llm_util.usage_metrics import set_usage_metrics_path
+        usage_metrics_path = self.run_id_dir / ExtraFilenameEnum.USAGE_METRICS_JSONL.value
+        set_usage_metrics_path(usage_metrics_path)
+        logger.info(f"Usage metrics will be written to {usage_metrics_path}")
+
         # create a json file with the expected filenames. Save it to the run/run_id/expected_filenames1.json
         expected_filenames_path = self.run_id_dir / ExtraFilenameEnum.EXPECTED_FILENAMES1_JSON.value
         with open(expected_filenames_path, "w") as f:
             json.dump(self.all_expected_filenames, f, indent=2)
         logger.info(f"Saved {len(self.all_expected_filenames)} expected filenames to {expected_filenames_path}")
+
+        # Write pipeline metadata so the version is preserved in the zip snapshot.
+        metadata_path = self.run_id_dir / FilenameEnum.PLANEXE_METADATA.value
+        with open(metadata_path, "w") as f:
+            json.dump({"pipeline_version": PIPELINE_VERSION}, f, indent=2)
+        logger.info(f"Wrote pipeline metadata (pipeline_version={PIPELINE_VERSION}) to {metadata_path}")
 
         luigi_workers = self.resolve_luigi_workers()
         logger.info(f"Luigi workers: {luigi_workers}")
@@ -4042,6 +4081,9 @@ class ExecutePipeline:
             local_scheduler=True,
             workers=luigi_workers
         )
+
+        # Clear the usage metrics path after the run.
+        set_usage_metrics_path(None)
 
         # After the pipeline finishes (or fails), check for the stop flag.
         if self.has_stop_flag_file:

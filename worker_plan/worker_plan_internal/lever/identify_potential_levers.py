@@ -16,6 +16,7 @@ from llama_index.core.llms.llm import LLM
 from pydantic import BaseModel, Field, field_validator
 from llama_index.core.llms import ChatMessage, MessageRole
 from worker_plan_internal.llm_util.llm_executor import LLMExecutor, PipelineStopRequested
+from worker_plan_internal.llm_util.llm_errors import LLMChatError
 
 logger = logging.getLogger(__name__)
 
@@ -185,9 +186,10 @@ class IdentifyPotentialLevers:
                 # Re-raise PipelineStopRequested without wrapping it
                 raise
             except Exception as e:
-                logger.debug(f"LLM chat interaction failed: {e}")
-                logger.error("LLM chat interaction failed.", exc_info=True)
-                raise ValueError("LLM chat interaction failed.") from e
+                llm_error = LLMChatError(cause=e)
+                logger.debug(f"LLM chat interaction failed [{llm_error.error_id}]: {e}")
+                logger.error(f"LLM chat interaction failed [{llm_error.error_id}]", exc_info=True)
+                raise llm_error from e
             
             chat_message_list.append(
                 ChatMessage(

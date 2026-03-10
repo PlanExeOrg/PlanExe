@@ -87,6 +87,46 @@ ssh -N -L 1234:localhost:1234 user@remote-host
 
 Then set `base_url` to `http://localhost:1234` while the tunnel is running.
 
+## Thinking Tokens and Reasoning Content
+
+Some advanced models (like Qwen3.5 with extended thinking) can be configured in LM Studio to emit **thinking tokens** — internal chain-of-thought reasoning that doesn't appear in the final output.
+
+### The Gotcha
+
+When thinking tokens are enabled:
+- The model may return `reasoning_content` (internal reasoning) but `content: null` (final output empty)
+- llama_index's standard `OpenAILike` class only reads `content`, causing a crash if it's None
+
+### Solution
+
+Use the `ThinkingAwareOpenAILike` class instead of `OpenAILike` in your config:
+
+```json
+"lmstudio-qwen3.5-9b-with-thinking": {
+    "class": "ThinkingAwareOpenAILike",
+    "arguments": {
+        "model": "qwen/qwen3.5-9b",
+        "api_base": "http://127.0.0.1:1234/v1",
+        "api_key": "lm-studio",
+        "temperature": 0.55,
+        "timeout": 600.0,
+        "is_function_calling_model": false,
+        "is_chat_model": true,
+        "context_window": 32768,
+        "max_tokens": 4096,
+        "should_use_structured_outputs": true
+    }
+}
+```
+
+`ThinkingAwareOpenAILike` safely handles both:
+1. **With thinking:** Falls back to `reasoning_content` if `content` is null
+2. **Without thinking:** Works exactly like `OpenAILike` for normal responses
+
+### Best Practice
+
+If you're enabling thinking in LM Studio (e.g., via the Developer preset), always use `ThinkingAwareOpenAILike` to avoid crashes. See [issue #228](https://github.com/PlanExeOrg/PlanExe/pull/228) for technical details.
+
 ---
 
 ## Next steps

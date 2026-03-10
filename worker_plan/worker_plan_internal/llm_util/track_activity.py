@@ -299,6 +299,23 @@ class TrackActivity(BaseEventHandler):
         except Exception:
             logger.debug("Failed to persist token metrics from TrackActivity", exc_info=True)
 
+    def _record_file_usage_metric(self, event_data: dict, token_usage: Optional[dict], duration_seconds: Optional[float]) -> None:
+        """Write a usage metric row to usage_metrics.jsonl via the shared module."""
+        cost = self._extract_cost(event_data)
+        if not token_usage and cost == 0.0:
+            return
+        from worker_plan_internal.llm_util.usage_metrics import record_usage_metric
+        model_name = self._extract_model_name(event_data)
+        record_usage_metric(
+            model=model_name or "unknown",
+            duration_seconds=duration_seconds or 0.0,
+            success=True,
+            input_tokens=int(token_usage["input_tokens"]) if token_usage and token_usage.get("input_tokens") is not None else None,
+            output_tokens=int(token_usage["output_tokens"]) if token_usage and token_usage.get("output_tokens") is not None else None,
+            thinking_tokens=int(token_usage["thinking_tokens"]) if token_usage and token_usage.get("thinking_tokens") is not None else None,
+            cost_usd=cost or None,
+        )
+
     @staticmethod
     def _split_provider_and_model(model_name: str) -> tuple[Optional[str], Optional[str]]:
         if not model_name:
@@ -367,6 +384,7 @@ class TrackActivity(BaseEventHandler):
                     event_record["token_usage"] = token_usage
                 self._update_activity_overview(filtered_event_data)
                 self._record_token_metrics_row(filtered_event_data, duration_seconds=duration_seconds)
+                self._record_file_usage_metric(filtered_event_data, token_usage, duration_seconds)
             elif isinstance(event, (LLMChatStartEvent, LLMCompletionStartEvent, LLMStructuredPredictStartEvent)):
                 match_key = self._event_match_key(filtered_event_data)
                 start_ts = self._parse_event_timestamp(filtered_event_data)

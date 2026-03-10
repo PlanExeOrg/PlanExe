@@ -18,6 +18,7 @@ from llama_index.llms.openai import OpenAI
 from llama_index.llms.lmstudio import LMStudio
 from llama_index.llms.openrouter import OpenRouter
 from worker_plan_internal.llm_util.ollama_info import OllamaInfo
+from worker_plan_internal.llm_util.thinking_aware_openai_like import ThinkingAwareOpenAILike
 from worker_plan_api.llm_info import LLMConfigItem, LLMInfo, OllamaStatus
 
 # You can disable this if you don't want to send app info to OpenRouter.

@@ -40,6 +40,7 @@ from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
 from worker_plan_internal.llm_util.llm_executor import LLMExecutor, PipelineStopRequested
 from worker_plan_api.speedvsdetail import SpeedVsDetailEnum
+from worker_plan_internal.llm_util.llm_errors import LLMChatError
 
 logger = logging.getLogger(__name__)
 
@@ -175,11 +176,12 @@ class Premortem:
                 # Re-raise PipelineStopRequested without wrapping it
                 raise
             except Exception as e:
-                logger.debug(f"LLM chat interaction failed: {e}")
-                logger.error("LLM chat interaction failed.", exc_info=True)
+                llm_error = LLMChatError(cause=e)
+                logger.debug(f"LLM chat interaction failed [{llm_error.error_id}]: {e}")
+                logger.error(f"LLM chat interaction failed [{llm_error.error_id}]", exc_info=True)
                 if user_prompt_index == 0:
                     logger.error("The first user prompt failed. This is a critical error. Please check the system prompt and user prompt.")
-                    raise ValueError("LLM chat interaction failed.") from e
+                    raise llm_error from e
                 else:
                     logger.error(f"User prompt {user_prompt_index+1} failed. Continuing with next user prompt.")
                     continue

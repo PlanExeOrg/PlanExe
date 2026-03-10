@@ -29,6 +29,7 @@ from dataclasses import dataclass, field
 from llama_index.core.llms.llm import LLM
 from llama_index.core.instrumentation.dispatcher import instrument_tags
 from worker_plan_internal.llm_factory import get_llm
+from worker_plan_internal.llm_util.usage_metrics import record_usage_metric
 
 logger = logging.getLogger(__name__)
 
@@ -268,6 +269,7 @@ class LLMExecutor:
                 success=False,
                 error_message=str(e),
                 response=None,
+                exception=e,
             )
             return LLMAttempt(stage='create', llm_model=llm_model, success=False, duration=duration, exception=e)
 
@@ -298,6 +300,7 @@ class LLMExecutor:
                 success=False,
                 error_message=str(e),
                 response=None,
+                exception=e,
             )
             return LLMAttempt(stage='execute', llm_model=llm_model, success=False, duration=duration, exception=e)
 
@@ -308,6 +311,7 @@ class LLMExecutor:
         success: bool,
         error_message: Optional[str],
         response: Optional[Any],
+        exception: Optional[Exception] = None,
     ) -> None:
         """Best-effort token metrics recording; never blocks LLM execution flow."""
         try:
@@ -323,6 +327,22 @@ class LLMExecutor:
             )
         except Exception as exc:
             logger.debug("Failed to record token metrics for attempt: %s", exc)
+
+        # File-based usage metrics for local runs (no database required).
+        # Successful calls are recorded by TrackActivity via llama_index
+        # instrumentation, which has access to the real ChatResponse with
+        # full token counts and upstream provider/model info.
+        # Here we only record failures, since instrumentation end events
+        # are not emitted when the LLM call fails.
+        if not success:
+            error_id = getattr(exception, "error_id", None) if exception else None
+            record_usage_metric(
+                model=llm_model_name,
+                duration_seconds=duration,
+                success=False,
+                error_message=error_message,
+                error_id=error_id,
+            )
 
     def _check_stop_callback(self, last_attempt: LLMAttempt, start_time: float, attempt_index: int) -> None:
         """Checks the callback, if it exists, to see if execution should stop."""

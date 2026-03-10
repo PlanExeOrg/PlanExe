@@ -42,6 +42,63 @@ The target is practical: reduce repeated run failures caused by structured-outpu
 3. **Schema echo** (model repeats schema shape/descriptions, not values).  
 4. **Code-path assumption bugs** (`KeyError` on non-API path).
 
+### 1.4 Local model testing findings: llama_index silent prompt truncation (March 2026)
+
+#### Root cause: llama_index default constants
+
+Testing on Mac Mini M4 Pro (March 4-6, 2026) with qwen/qwen3.5-35b-a3b via LM Studio revealed the underlying cause of silent structured-output failures:
+
+**File**: `llama_index/core/constants.py`
+```python
+DEFAULT_CONTEXT_WINDOW = 3900  # applies to ALL OpenAILike models unless overridden
+DEFAULT_NUM_OUTPUT = 256       # affects PromptHelper budget, NOT model output limit
+```
+
+These defaults apply to **all OpenAILike models** unless explicitly overridden in the model config. The `PromptHelper` computes:
+```
+available_prompt_budget = context_window - num_output = 3900 - 256 = 3644 tokens
+```
+
+#### The failure mode
+
+`DeduplicateLeversTask` input was ~8,400 tokens. With the default budget of 3644 tokens, the prompt was **silently truncated to 3644 tokens** before being sent to the model. The model received a mangled, mid-sentence prompt, produced thinking text instead of valid JSON, and the pipeline failed with `ValueError: Could not extract json string`.
+
+This is **silent** — no warning, no log entry, no error at truncation time. The failure manifests downstream as a JSON extraction error, making it extremely hard to diagnose.
+
+#### Critical insight: `num_output` does NOT limit model output
+
+A common misunderstanding: setting `num_output: 4096` does NOT cap the model's actual output length. The LM Studio API generates freely (10K+ tokens observed). The limit ONLY affects llama_index's internal `PromptHelper` budget calculation for **input** truncation. This is the root cause of misdiagnosis.
+
+#### The fix
+
+Add explicit overrides to each LM Studio model entry in `llm_config/custom.json`:
+```json
+"context_window": 8192,
+"num_output": 4096
+```
+
+This expands the available prompt budget from 3644 to 4096 tokens, accommodating tasks with large combined inputs. For models with larger context windows (e.g., 32K), use `context_window: 32768, num_output: 4096`.
+
+#### Tasks most vulnerable to silent truncation
+
+Tasks with large combined inputs (multiple prior outputs concatenated):
+- `DeduplicateLeversTask` — ~8,400 tokens input (confirmed failure point)
+- `PremortemTask` / `ReviewPlanTask` / `QuestionsAndAnswersTask` — 10-12 docs concatenated
+- `GovernancePhase4-6` — accumulating context chain
+
+#### Detection method
+
+To verify if your deployment is vulnerable:
+```bash
+grep -r "DEFAULT_CONTEXT_WINDOW\|DEFAULT_NUM_OUTPUT" $(pip show llama-index-core | grep Location | cut -d' ' -f2)/llama_index/core/constants.py
+```
+
+If values are 3900/256 and your model config doesn't override them, you're vulnerable to silent truncation.
+
+#### Relationship to this roadmap
+
+Silent truncation is exactly the class of mid-pipeline failures that the containment and telemetry work packages (WP-1, WP-2, WP-3) are designed to catch and surface. By adding structured failure logging (WP-3), future truncation events will be diagnosable instantly. By adding a preflight smoke test (WP-5), bad model profiles can be caught before expensive full-pipeline runs.
+
 ---
 
 ## 2) Guardrails and merge policy

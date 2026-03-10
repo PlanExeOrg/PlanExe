@@ -730,7 +730,7 @@ async def plan_resume(
     plan_id: str = Field(..., description="UUID of the failed plan to resume."),
     model_profile: Annotated[
         ModelProfileInput,
-        Field(description="Model profile used for the resumed run. Defaults to baseline."),
+        Field(description="Model profile used for the resumed plan. Defaults to baseline."),
     ] = "baseline",
 ) -> CallToolResult:
     return await handle_plan_resume({"plan_id": plan_id, "model_profile": model_profile})

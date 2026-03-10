@@ -3,6 +3,11 @@ This project monitors the database for pending PlanItems and automatically chang
 when found. It then executes the pipeline for each task.
 
 PROMPT> PLANEXE_WORKER_ID=1 python -m app.py
+
+Naming migration (in progress):
+- task_id -> plan_id: New code should use "plan_id" for the plan UUID.
+- run -> plan: New code should use "plan" when referring to a single plan (e.g. "for plan %s" not "for run %s").
+  The base output directory is still named "run/" for legacy reasons and will likely be renamed in the future.
 """
 from datetime import UTC, datetime
 from decimal import Decimal
@@ -141,6 +146,7 @@ try:
     from worker_plan_internal.plan.speedvsdetail import SpeedVsDetailEnum
     from worker_plan_api.start_time import StartTime
     from worker_plan_api.plan_file import PlanFile
+    from worker_plan_api.pipeline_version import PIPELINE_VERSION
     from worker_plan_internal.plan.filenames import FilenameEnum
     from worker_plan_api.planexe_dotenv import PlanExeDotEnv
     from worker_plan_internal.llm_util.llm_executor import LLMModelFromName, PipelineStopRequested
@@ -239,6 +245,16 @@ def ensure_token_metrics_columns() -> None:
             conn.execute(text("ALTER TABLE token_metrics ADD COLUMN IF NOT EXISTS upstream_model VARCHAR(255)"))
         if "cost_usd" not in columns:
             conn.execute(text("ALTER TABLE token_metrics ADD COLUMN IF NOT EXISTS cost_usd DOUBLE PRECISION"))
+        if "thinking_tokens" not in columns:
+            conn.execute(text("ALTER TABLE token_metrics ADD COLUMN IF NOT EXISTS thinking_tokens INTEGER"))
+        if "duration_seconds" not in columns:
+            conn.execute(text("ALTER TABLE token_metrics ADD COLUMN IF NOT EXISTS duration_seconds DOUBLE PRECISION"))
+        if "success" not in columns:
+            conn.execute(text("ALTER TABLE token_metrics ADD COLUMN IF NOT EXISTS success BOOLEAN"))
+        if "error_message" not in columns:
+            conn.execute(text("ALTER TABLE token_metrics ADD COLUMN IF NOT EXISTS error_message TEXT"))
+        if "raw_usage_data" not in columns:
+            conn.execute(text("ALTER TABLE token_metrics ADD COLUMN IF NOT EXISTS raw_usage_data JSON"))
 
 
 def ensure_fractional_credit_columns() -> None:
@@ -415,18 +431,32 @@ class ServerExecutePipeline(ExecutePipeline):
         self.task_id = task_id
 
     def _handle_task_completion(self, parameters: HandleTaskCompletionParameters) -> None:
+        """Called after each Luigi step completes.
+
+        NOTE: This callback runs inside the app.app_context() opened by
+        execute_pipeline_for_job().  Do NOT open nested app contexts here —
+        nested contexts cause Flask-SQLAlchemy to tear down the scoped session
+        on exit, corrupting the outer context's session and triggering
+        psycopg2 / SQLAlchemy errors in subsequent db operations (e.g. token
+        metrics recording).
+        """
         logger.debug(f"ServerExecutePipeline._handle_task_completion")
 
-        with app.app_context():
+        try:
             WorkerItem.upsert_heartbeat(worker_id=WORKER_ID, current_task_id=self.task_id)
+        except Exception as exc:
+            logger.warning("Heartbeat upsert failed (non-fatal): %s", exc)
+            try:
+                db.session.rollback()
+            except Exception:
+                pass
 
         # Lookup the taskitem in the database by self.task_id
-        with app.app_context():
-            task = db.session.get(PlanItem, self.task_id)
-            if task is None:
-                logger.error(f"Task with ID {self.task_id!r} not found in database, while running the pipeline. This is an inconsistency.")
-                raise Exception(f"Task with ID {self.task_id!r} not found in database, while running the pipeline. This is an inconsistency.")
-            stop_requested = bool(task.stop_requested)
+        task = db.session.get(PlanItem, self.task_id)
+        if task is None:
+            logger.error(f"Task with ID {self.task_id!r} not found in database, while running the pipeline. This is an inconsistency.")
+            raise Exception(f"Task with ID {self.task_id!r} not found in database, while running the pipeline. This is an inconsistency.")
+        stop_requested = bool(task.stop_requested)
 
         if task.last_seen_timestamp is None:
             # A new PlanItem is supposed to have a last_seen_timestamp.
@@ -436,15 +466,14 @@ class ServerExecutePipeline(ExecutePipeline):
 
         if stop_requested:
             logger.info("Stopping task %s because a stop was requested.", self.task_id)
-            with app.app_context():
-                update_task_progress_with_retry(
-                    task_id=self.task_id,
-                    progress_percentage=parameters.progress.progress_percentage,
-                    progress_message="Stop requested by user.",
-                    steps_completed=parameters.progress.steps_completed,
-                    steps_total=parameters.progress.steps_total,
-                    current_step=parameters.progress.current_step,
-                )
+            update_task_progress_with_retry(
+                task_id=self.task_id,
+                progress_percentage=parameters.progress.progress_percentage,
+                progress_message="Stop requested by user.",
+                steps_completed=parameters.progress.steps_completed,
+                steps_total=parameters.progress.steps_total,
+                current_step=parameters.progress.current_step,
+            )
             raise PipelineStopRequested(f"Stopping task {self.task_id!r} because a stop was requested.")
 
         # Detect if the browser has been inactive for N seconds.
@@ -452,11 +481,11 @@ class ServerExecutePipeline(ExecutePipeline):
         last_seen_aware = task.last_seen_timestamp
         if last_seen_aware.tzinfo is None:
             last_seen_aware = last_seen_aware.replace(tzinfo=UTC)
-        
+
         limit = BROWSER_INACTIVE_AFTER_N_SECONDS
         time_since_last_seen = (datetime.now(UTC) - last_seen_aware).total_seconds()
         if time_since_last_seen > limit:
-            # The browser has been inactive for more than N seconds. 
+            # The browser has been inactive for more than N seconds.
             # The user appears to have navigated away from the progress bar page, or closed the browser.
             if CONTINUE_GENERATING_PLAN_DESPITE_BROWSER_INACTIVE:
                 logger.debug(f"Task {self.task_id!r} has been inactive for {time_since_last_seen} seconds. Continuing to generate the plan.")
@@ -464,20 +493,19 @@ class ServerExecutePipeline(ExecutePipeline):
                 # Optimization: Stop generating the plan and save resources. So other users can use the server.
                 logger.info(f"Stopping task {self.task_id!r} because it the browser has not been active for {limit} seconds")
                 raise PipelineStopRequested(f"Stopping task {self.task_id!r} because it the browser has not been active for {limit} seconds")
-        
-        # The browser is still open and the progress bar is visible. 
+
+        # The browser is still open and the progress bar is visible.
         # The user is still interested in continuing generating the plan.
         logger.info(f"Task {self.task_id!r} is still active. The user is still interested in continuing generating the plan.")
 
-        with app.app_context():
-            update_task_progress_with_retry(
-                task_id=self.task_id,
-                progress_percentage=parameters.progress.progress_percentage,
-                progress_message=parameters.progress.progress_message,
-                steps_completed=parameters.progress.steps_completed,
-                steps_total=parameters.progress.steps_total,
-                current_step=parameters.progress.current_step,
-            )
+        update_task_progress_with_retry(
+            task_id=self.task_id,
+            progress_percentage=parameters.progress.progress_percentage,
+            progress_message=parameters.progress.progress_message,
+            steps_completed=parameters.progress.steps_completed,
+            steps_total=parameters.progress.steps_total,
+            current_step=parameters.progress.current_step,
+        )
 
         # Charge credits incrementally so usage is visible in real time.
         try:
@@ -516,24 +544,24 @@ def create_zip_bytes(run_dir: Path) -> bytes:
     return buffer.read()
 
 
-def restore_run_dir_from_zip_snapshot(task_id: str, run_id_dir: Path) -> bool:
-    """Restore a run directory from the zip snapshot stored in the database.
+def restore_output_dir_from_zip_snapshot(plan_id: str, run_id_dir: Path) -> bool:
+    """Restore the output directory from the zip snapshot stored in the database.
 
-    Used by plan_resume to reconstruct the run directory so Luigi can skip
-    completed tasks and pick up where it left off.
+    Used by plan_resume to reconstruct the output directory so Luigi can skip
+    completed steps and pick up where it left off.
 
     Returns True on success, False if snapshot is None or extraction fails.
     """
     try:
-        plan_uuid = uuid.UUID(task_id)
+        plan_uuid = uuid.UUID(plan_id)
     except ValueError:
-        logger.warning("Invalid task_id for zip restore: %s", task_id)
+        logger.warning("Invalid plan_id for zip restore: %s", plan_id)
         return False
 
     with app.app_context():
         plan = db.session.get(PlanItem, plan_uuid)
         if plan is None or plan.run_zip_snapshot is None:
-            logger.warning("No zip snapshot found for task %s", task_id)
+            logger.warning("No zip snapshot found for plan %s", plan_id)
             return False
         zip_bytes = plan.run_zip_snapshot
 
@@ -542,10 +570,10 @@ def restore_run_dir_from_zip_snapshot(task_id: str, run_id_dir: Path) -> bool:
         buffer = io.BytesIO(zip_bytes)
         with zipfile.ZipFile(buffer, "r") as zipf:
             zipf.extractall(run_id_dir)
-        logger.info("Restored run directory from zip snapshot for task %s (%d bytes)", task_id, len(zip_bytes))
+        logger.info("Restored output directory from zip snapshot for plan %s (%d bytes)", plan_id, len(zip_bytes))
         return True
     except Exception as exc:
-        logger.warning("Failed to restore run directory from zip snapshot for task %s: %s", task_id, exc)
+        logger.warning("Failed to restore output directory from zip snapshot for plan %s: %s", plan_id, exc)
         return False
 
 
@@ -1136,17 +1164,52 @@ def process_pending_tasks() -> bool:
     is_resume = bool(parameters and parameters.get("resume", False))
 
     if is_resume:
-        logger.info("Resume requested for task %s; restoring run directory from zip snapshot.", task_id)
-        restored = restore_run_dir_from_zip_snapshot(task_id, run_id_dir)
+        logger.info("Resume requested for plan %s; restoring output directory from zip snapshot.", task_id)
+        restored = restore_output_dir_from_zip_snapshot(task_id, run_id_dir)
         if restored:
-            # Remove pipeline completion markers so Luigi re-evaluates what to run
+            # Verify the snapshot was produced by a compatible pipeline version.
+            metadata_path = run_id_dir / FilenameEnum.PLANEXE_METADATA.value
+            snapshot_version = None
+            try:
+                if metadata_path.exists():
+                    with open(metadata_path, "r") as f:
+                        snapshot_metadata = json.load(f)
+                    snapshot_version = snapshot_metadata.get("pipeline_version")
+            except (json.JSONDecodeError, OSError) as exc:
+                logger.error("Failed to read pipeline metadata for plan %s: %s", task_id, exc)
+
+            if snapshot_version != PIPELINE_VERSION:
+                mismatch_detail = (
+                    f"Not resumable: the intermediary files were generated by a different version of PlanExe "
+                    f"(snapshot={snapshot_version}, current={PIPELINE_VERSION}). "
+                    f"Use plan_retry for a clean restart."
+                )
+                logger.error("Plan %s: %s", task_id, mismatch_detail)
+                # progress_message column is varchar(128); use a short summary.
+                short_msg = f"Not resumable: version mismatch (v{snapshot_version} vs v{PIPELINE_VERSION}). Use Retry."
+                with app.app_context():
+                    plan = db.session.get(PlanItem, task_id)
+                    if plan is not None:
+                        plan.state = PlanState.failed
+                        plan.progress_message = short_msg[:128]
+                        # Clear pipeline_version so the frontend version
+                        # check correctly rejects subsequent resume attempts.
+                        params = dict(plan.parameters) if isinstance(plan.parameters, dict) else {}
+                        params.pop("pipeline_version", None)
+                        plan.parameters = params
+                        db.session.commit()
+                return False
+
+            logger.info("Pipeline version check passed for plan %s (version=%s)", task_id, PIPELINE_VERSION)
+
+            # Remove completion markers so Luigi re-evaluates what steps to execute
             for marker_name in ("999-pipeline_complete.txt", "pipeline_stop_requested.txt"):
                 marker_path = run_id_dir / marker_name
                 if marker_path.exists():
                     marker_path.unlink()
-                    logger.info("Removed pipeline marker %s for resumed task %s", marker_name, task_id)
+                    logger.info("Removed completion marker %s for resumed plan %s", marker_name, task_id)
         else:
-            logger.warning("Zip snapshot restore failed for task %s; falling back to fresh run.", task_id)
+            logger.warning("Zip snapshot restore failed for plan %s; falling back to fresh start.", task_id)
             is_resume = False  # fall through to fresh setup below
 
     if not is_resume:

@@ -169,6 +169,20 @@
         cursor: not-allowed;
         pointer-events: none;
     }
+    .btn-plan-meta:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    .plan-resume-error {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 10px;
+        font-size: 0.8rem;
+        color: var(--color-danger, #c0392b);
+        background: var(--color-danger-bg, #fdf0ef);
+        border: 1px solid var(--color-danger-border, #e6b0aa);
+        border-radius: var(--radius);
+    }
     .plan-state {
         display: inline-flex;
         align-items: center;
@@ -542,20 +556,25 @@
             </p>
         </div>
         <div class="plan-meta-actions">
-            <form method="POST" action="{{ url_for('plan_retry') }}" class="plan-action-form" id="retry-form" {% if not ((task.state and task.state.name == 'failed') or task.stop_requested) %}style="display:none"{% endif %}>
+            <form method="POST" class="plan-action-form" id="retry-resume-form" {% if not ((task.state and task.state.name == 'failed') or task.stop_requested) %}style="display:none"{% endif %}>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="id" value="{{ task.id }}">
                 <div class="plan-action-group">
-                    <select name="model_profile" class="plan-action-model-profile" title="Choose model profile for retry">
+                    <select name="model_profile" class="plan-action-model-profile" title="Choose model profile">
                         <option value="baseline" {% if selected_model_profile == 'baseline' %}selected{% endif %}>baseline</option>
                         <option value="premium" {% if selected_model_profile == 'premium' %}selected{% endif %}>premium</option>
                         <option value="frontier" {% if selected_model_profile == 'frontier' %}selected{% endif %}>frontier</option>
                         <option value="custom" {% if selected_model_profile == 'custom' %}selected{% endif %}>custom</option>
                     </select>
-                    <button type="submit" class="btn-plan-meta">Retry</button>
+                    <button type="submit" formaction="{{ url_for('plan_retry') }}" class="btn-plan-meta" title="Discard all progress and start over from scratch">Retry</button>
+                    <button type="submit" formaction="{{ url_for('plan_resume') }}" class="btn-plan-meta" id="resume-btn" title="Continue from where it left off, skipping completed steps" {% if not (task.state and task.state.name == 'failed') %}disabled{% endif %}>Resume</button>
+                    {% if resume_error == "version_mismatch" %}
+                    <span class="plan-resume-error" id="resume-error-banner">Resume unavailable — plan was created with a different PlanExe version. Use Retry.</span>
+                    {% endif %}
                 </div>
             </form>
-            <span class="btn-plan-meta btn-plan-meta-disabled" id="retry-disabled" {% if (task.state and task.state.name == 'failed') or task.stop_requested %}style="display:none"{% endif %}>Retry</span>
+            <span class="btn-plan-meta btn-plan-meta-disabled" id="retry-disabled" title="Discard all progress and start over from scratch" {% if (task.state and task.state.name == 'failed') or task.stop_requested %}style="display:none"{% endif %}>Retry</span>
+            <span class="btn-plan-meta btn-plan-meta-disabled" id="resume-disabled" title="Continue from where it left off, skipping completed steps" {% if (task.state and task.state.name == 'failed') or task.stop_requested %}style="display:none"{% endif %}>Resume</span>
 
             <form method="POST" action="{{ url_for('plan_stop') }}" class="plan-action-form" id="stop-form" {% if not (task.state and (task.state.name == 'pending' or task.state.name == 'processing') and not task.stop_requested) %}style="display:none"{% endif %}>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -1123,8 +1142,12 @@
             }
 
             const canRetry = state === "failed" || !!meta.stop_requested;
-            setVisible("retry-form", canRetry);
+            const canResume = state === "failed";
+            setVisible("retry-resume-form", canRetry);
             setVisible("retry-disabled", !canRetry);
+            setVisible("resume-disabled", !canRetry);
+            var resumeBtn = document.getElementById("resume-btn");
+            if (resumeBtn) resumeBtn.disabled = !canResume;
 
             const canStop = (state === "pending" || state === "processing") && !meta.stop_requested;
             setVisible("stop-form", canStop);

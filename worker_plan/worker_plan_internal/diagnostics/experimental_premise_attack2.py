@@ -24,6 +24,7 @@ from typing import List, Optional, Literal
 from pydantic import BaseModel, Field, conint
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
+from worker_plan_internal.llm_util.llm_errors import LLMChatError
 
 logger = logging.getLogger(__name__)
 
@@ -126,8 +127,9 @@ class PremiseAttack:
             self.validated_data = response.raw
             self.raw_response = self.validated_data.model_dump(mode='json')
         except Exception as e:
-            logger.error("LLM chat interaction failed to produce valid structured output.", exc_info=True)
-            raise ValueError(f"LLM chat interaction failed: {e}") from e
+            llm_error = LLMChatError(cause=e)
+            logger.error(f"LLM chat interaction failed [{llm_error.error_id}]", exc_info=True)
+            raise llm_error from e
         finally:
             end_time = time.perf_counter()
             duration = int(ceil(end_time - start_time))

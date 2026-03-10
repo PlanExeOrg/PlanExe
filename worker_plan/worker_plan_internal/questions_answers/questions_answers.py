@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from pydantic import BaseModel, Field
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
+from worker_plan_internal.llm_util.llm_errors import LLMChatError
 
 logger = logging.getLogger(__name__)
 
@@ -117,9 +118,10 @@ class QuestionsAnswers:
         try:
             chat_response1 = sllm.chat(chat_message_list1)
         except Exception as e:
-            logger.debug(f"LLM chat interaction failed: {e}")
-            logger.error("LLM chat interaction failed.", exc_info=True)
-            raise ValueError("LLM chat interaction failed.") from e
+            llm_error = LLMChatError(cause=e)
+            logger.debug(f"LLM chat interaction failed [{llm_error.error_id}]: {e}")
+            logger.error(f"LLM chat interaction failed [{llm_error.error_id}]", exc_info=True)
+            raise llm_error from e
 
         end_time = time.perf_counter()
         duration1 = int(ceil(end_time - start_time))
@@ -144,9 +146,10 @@ class QuestionsAnswers:
         try:
             chat_response2 = sllm.chat(chat_message_list2)
         except Exception as e:
-            logger.debug(f"LLM chat interaction 2 failed: {e}")
-            logger.error("LLM chat interaction 2 failed.", exc_info=True)
-            raise ValueError("LLM chat interaction 2 failed.") from e
+            llm_error = LLMChatError(cause=e, message="LLM chat interaction 2 failed")
+            logger.debug(f"{llm_error.message} [{llm_error.error_id}]: {e}")
+            logger.error(f"{llm_error.message} [{llm_error.error_id}]", exc_info=True)
+            raise llm_error from e
 
         end_time = time.perf_counter()
         duration2 = int(ceil(end_time - start_time))

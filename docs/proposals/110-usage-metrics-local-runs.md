@@ -2,7 +2,7 @@
 
 **Author:** Bubba (VoynichLabs)  
 **Date:** 2026-03-08  
-**Status:** Proposal
+**Status:** Implemented (PR #219)
 
 ---
 
@@ -165,18 +165,90 @@ None of these are present in a bare CLI run. The file-based approach requires on
 
 ---
 
-## Open Questions
+## Implementation Notes (PR #219)
 
-1. **Ollama field mapping**: `prompt_eval_count` / `eval_count` vs `prompt_tokens` /
-   `completion_tokens` — should `extract_token_count()` add an Ollama-specific branch, or
-   should the Ollama LLM adapter normalize field names before returning?
+The final implementation diverges from Option A above in several ways:
 
-2. **Thread safety**: Luigi runs tasks in parallel workers. The appender needs an
-   `fcntl.flock()` or atomic rename approach to avoid corruption under concurrent writes.
+### File format: JSONL, not JSON
 
-3. **Thinking tokens for local models**: Qwen 3 thinking tokens are stripped before the
-   response reaches llama_index (LM Studio does not expose them separately). The
-   `thinking_tokens` field will be `null` for local runs — acceptable for now.
+`usage_metrics.jsonl` uses one JSON object per line (append-only). This avoids the need for
+atomic rename or in-memory accumulation — each LLM call appends a single line. Thread-safe
+by nature since each write is a short append to a file handle.
 
-4. **Retention**: Should `usage_metrics.json` be overwritten on resume (Luigi skip-completed
-   behavior) or appended? Appending is safer — a resumed run adds only the new calls.
+### Recording source: llama_index instrumentation, not LLMExecutor
+
+Successful calls are recorded by `TrackActivity` (the llama_index `BaseEventHandler`) which
+receives the actual `ChatResponse` with full token counts, cost, and `provider:model` info.
+`LLMExecutor._record_attempt_token_metrics()` only records **failures**, since instrumentation
+end events are not emitted when the LLM call fails.
+
+This was necessary because `execute_function(llm)` returns the processed result (a Pydantic
+model or string), not the raw `ChatResponse`. The instrumentation layer is the only place
+with access to the real response.
+
+### Model field includes provider
+
+The `model` field contains the full `provider:model` string (e.g.
+`Google AI Studio:google/gemini-2.0-flash-001`), matching `activity_overview.json`.
+
+### Example output
+
+```json
+{"timestamp": "2026-03-10T13:36:48.250446", "success": true, "model": "Google AI Studio:google/gemini-2.0-flash-001", "duration_seconds": 4.879, "input_tokens": 5316, "output_tokens": 643, "cost_usd": 0.0007888}
+{"timestamp": "2026-03-10T13:36:53.554864", "success": true, "model": "Google:google/gemini-2.0-flash-001", "duration_seconds": 5.237, "input_tokens": 8877, "output_tokens": 562, "cost_usd": 0.0011125}
+```
+
+### Key files
+
+| File | Role |
+|------|------|
+| `worker_plan/worker_plan_internal/llm_util/usage_metrics.py` | Core module: `set_usage_metrics_path()`, `record_usage_metric()` |
+| `worker_plan/worker_plan_internal/llm_util/track_activity.py` | Records successful calls via `_record_file_usage_metric()` |
+| `worker_plan/worker_plan_internal/llm_util/llm_executor.py` | Records failed calls only |
+| `worker_plan/worker_plan_internal/plan/run_plan_pipeline.py` | Sets/clears metrics path around pipeline execution |
+| `worker_plan/worker_plan_api/filenames.py` | `USAGE_METRICS_JSONL` constant |
+
+### Resolved open questions
+
+1. **Ollama field mapping**: Handled by `extract_token_count()` and `TrackActivity._extract_token_usage()` which already support multiple field name variations.
+2. **Thread safety**: JSONL append-per-line is safe for concurrent Luigi workers.
+3. **Thinking tokens**: Recorded when available (e.g. from OpenRouter reasoning models). `null` for providers that don't expose them.
+4. **Retention on resume**: Appended. A resumed run adds only the new calls alongside the restored snapshot's existing metrics.
+
+---
+
+## Follow-up: Error Classification (PR #236)
+
+Raw Python exception strings in the `"error"` field were verbose and could leak raw model output.
+PR #236 added `classify_error()` to replace them with short category labels:
+
+| Category | Matches on |
+|---|---|
+| `invalid_json` | "json", "validation error", "pydantic" |
+| `timeout` | "timeout", "timed out" |
+| `empty_response` | "empty", "none", "no response" |
+| `connection_error` | "connection", "connect", "dns", "network" |
+| `rate_limit` | "rate limit", "429", "too many requests" |
+| `auth_error` | "auth", "401", "403", "unauthorized", "forbidden" |
+| `server_error` | "500", "502", "503", "504", "server error", "internal server" |
+| `model_not_found` | "model not found", "not found", "404" |
+| `unknown` | fallback — raw message preserved in `error_detail` (truncated to 200 chars) |
+
+---
+
+## Follow-up: Error Traceability (PR #237)
+
+All 38 call sites that raised `ValueError("LLM chat interaction failed.")` were converted to
+`LLMChatError` (see [proposal 113](113-llm-error-traceability.md)). This:
+
+- **Preserves the root cause** in `str(LLMChatError)`, so `classify_error()` categorizes correctly
+  (previously all were `"unknown"`).
+- **Adds `error_id`** (12-char UUID) to both log output and the JSONL row, enabling cross-referencing.
+
+Example failure row after both PRs:
+
+```json
+{"timestamp": "2026-03-10T19:50:18.821350", "success": false, "model": "openrouter-gemini-2.0-flash-001", "duration_seconds": 5.391, "error": "invalid_json", "error_id": "4c2a64973bcd"}
+```
+
+A user can `grep 4c2a64973bcd` in the logs to find the full traceback.

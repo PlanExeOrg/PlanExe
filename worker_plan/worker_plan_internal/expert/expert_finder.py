@@ -22,6 +22,7 @@ from pydantic import BaseModel, Field
 from llama_index.core.llms.llm import LLM
 from llama_index.core.llms import ChatMessage, MessageRole
 from worker_plan_internal.llm_util.llm_executor import LLMExecutor, PipelineStopRequested
+from worker_plan_internal.llm_util.llm_errors import LLMChatError
 
 logger = logging.getLogger(__name__)
 
@@ -204,8 +205,9 @@ class ExpertFinder:
         except PipelineStopRequested:
             raise
         except Exception as e:
-            logger.error("LLM chat interaction 1 failed.", exc_info=True)
-            raise ValueError("LLM chat interaction 1 failed.") from e
+            llm_error = LLMChatError(cause=e, message="LLM chat interaction 1 failed")
+            logger.error(f"{llm_error.message} [{llm_error.error_id}]", exc_info=True)
+            raise llm_error from e
 
         chat_response1 = result1["chat_response"]
 
@@ -248,8 +250,9 @@ class ExpertFinder:
         except PipelineStopRequested:
             raise
         except Exception as e:
-            logger.error("LLM chat interaction 2 failed.", exc_info=True)
-            raise ValueError("LLM chat interaction 2 failed.") from e
+            llm_error = LLMChatError(cause=e, message="LLM chat interaction 2 failed")
+            logger.error(f"{llm_error.message} [{llm_error.error_id}]", exc_info=True)
+            raise llm_error from e
 
         chat_response2 = result2["chat_response"]
 

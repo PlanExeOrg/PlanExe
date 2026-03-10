@@ -68,6 +68,15 @@ class TestPlanResumeTool(unittest.TestCase):
         self.assertTrue(result.isError)
         self.assertEqual(result.structuredContent["error"]["code"], "PLAN_NOT_RESUMABLE")
 
+    def test_plan_resume_returns_pipeline_version_mismatch(self):
+        plan_id = str(uuid.uuid4())
+        payload = {"error": {"code": "PIPELINE_VERSION_MISMATCH", "message": "Snapshot pipeline_version mismatch."}}
+        with patch("mcp_cloud.handlers._resume_plan_sync", return_value=payload):
+            result = asyncio.run(handle_plan_resume({"plan_id": plan_id}))
+
+        self.assertTrue(result.isError)
+        self.assertEqual(result.structuredContent["error"]["code"], "PIPELINE_VERSION_MISMATCH")
+
     def test_plan_resume_default_model_profile(self):
         """plan_resume should default model_profile to baseline."""
         from mcp_cloud.app import PLAN_RESUME_INPUT_SCHEMA

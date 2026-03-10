@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from pydantic import BaseModel, Field
 from llama_index.core.llms.llm import LLM
 from llama_index.core.llms import ChatMessage, MessageRole
+from worker_plan_internal.llm_util.llm_errors import LLMChatError
 
 logger = logging.getLogger(__name__)
 
@@ -249,9 +250,10 @@ class MakeAssumptions:
         try:
             chat_response = sllm.chat(chat_message_list)
         except Exception as e:
-            logger.debug(f"LLM chat interaction failed: {e}")
-            logger.error("LLM chat interaction failed.", exc_info=True)
-            raise ValueError("LLM chat interaction failed.") from e
+            llm_error = LLMChatError(cause=e)
+            logger.debug(f"LLM chat interaction failed [{llm_error.error_id}]: {e}")
+            logger.error(f"LLM chat interaction failed [{llm_error.error_id}]", exc_info=True)
+            raise llm_error from e
         end_time = time.perf_counter()
         duration = int(ceil(end_time - start_time))
         response_byte_count = len(chat_response.message.content.encode('utf-8'))

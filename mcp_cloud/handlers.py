@@ -445,7 +445,7 @@ async def handle_plan_retry(arguments: dict[str, Any]) -> CallToolResult:
 
 
 async def handle_plan_resume(arguments: dict[str, Any]) -> CallToolResult:
-    """Resume a failed plan without discarding completed pipeline outputs."""
+    """Resume a failed plan without discarding completed intermediary files."""
     req = PlanResumeRequest(**arguments)
     plan_id = req.plan_id
 

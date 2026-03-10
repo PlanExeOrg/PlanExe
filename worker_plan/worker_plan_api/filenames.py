@@ -3,6 +3,7 @@ from enum import Enum
 class FilenameEnum(str, Enum):
     START_TIME = "001-1-start_time.json"
     INITIAL_PLAN = "001-2-plan.txt"
+    PLANEXE_METADATA = "001-3-planexe_metadata.json"
     REDLINE_GATE_RAW = "002-1-redline_gate.json"
     REDLINE_GATE_MARKDOWN = "002-2-redline_gate.md"
     PREMISE_ATTACK_RAW = "002-3-premise_attack.json"
@@ -126,3 +127,4 @@ class ExtraFilenameEnum(str, Enum):
     PIPELINE_STOP_REQUESTED_FLAG = "pipeline_stop_requested.txt"
     TRACK_ACTIVITY_JSONL = "track_activity.jsonl"
     ACTIVITY_OVERVIEW_JSON = "activity_overview.json"
+    USAGE_METRICS_JSONL = "usage_metrics.jsonl"

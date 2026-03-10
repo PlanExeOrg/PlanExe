@@ -15,7 +15,7 @@ The plan is a **project plan**: a DAG of steps (Luigi pipeline stages) that prod
 Implementors should expose the following to agents so they understand what PlanExe does:
 
 - **What:** PlanExe turns a plain-English goal into a strategic project-plan draft (20+ sections) in ~10–20 min. Sections include executive summary, interactive Gantt charts, investor pitch, SWOT, governance, team profiles, work breakdown, scenario comparison, expert criticism, and adversarial sections (premortem, self-audit, premise attacks) that stress-test the plan. The output is a draft to refine, not an executable or final document — but it surfaces hard questions the prompter may not have considered.
-- **Required interaction order:** Call `example_plans` (optional) and `example_prompts` first. Optional before `plan_create`: call `model_profiles` to inspect profile guidance and available models in each profile. Then complete a non-tool step: formulate a detailed prompt as flowing prose (not structured markdown), typically ~300-800 words, using the examples as a baseline; include objective, scope, constraints, timeline, stakeholders, budget/resources, and success criteria; get user approval. Only after approval, call `plan_create`. Then poll `plan_status` (about every 5 minutes); use `plan_download` (mcp_local helper) or `plan_file_info` (mcp_cloud tool) when complete (`pending`/`processing` = keep polling, `completed` = download now, `failed` = terminal). If a plan fails mid-pipeline, call `plan_resume` to continue from where it left off without discarding completed tasks. Use `plan_retry` for a full restart. Both accept the failed `plan_id` and optional `model_profile` (default `baseline`). To stop, call `plan_stop` with the `plan_id` from `plan_create`.
+- **Required interaction order:** Call `example_plans` (optional) and `example_prompts` first. Optional before `plan_create`: call `model_profiles` to inspect profile guidance and available models in each profile. Then complete a non-tool step: formulate a detailed prompt as flowing prose (not structured markdown), typically ~300-800 words, using the examples as a baseline; include objective, scope, constraints, timeline, stakeholders, budget/resources, and success criteria; get user approval. Only after approval, call `plan_create`. Then poll `plan_status` (about every 5 minutes); use `plan_download` (mcp_local helper) or `plan_file_info` (mcp_cloud tool) when complete (`pending`/`processing` = keep polling, `completed` = download now, `failed` = terminal). If a plan fails before completing all steps, call `plan_resume` to continue from where it left off without discarding completed work. Use `plan_retry` for a full restart (plan must be in failed state). Both accept the failed `plan_id` and optional `model_profile` (default `baseline`). To stop, call `plan_stop` with the `plan_id` from `plan_create`.
 - **Output:** Self-contained interactive HTML report (~700KB) with collapsible sections and interactive Gantt charts — open in a browser. The zip contains the intermediary pipeline files (md, json, csv) that fed the report.
 
 ### 1.3 Scope of this document
@@ -438,9 +438,9 @@ Retries a plan that is currently in `failed` state.
 
 ### 6.6 plan_resume
 
-Resume a failed plan without discarding completed pipeline outputs. The pipeline restarts from the first incomplete task, skipping all tasks that already produced output files.
+Resume a failed plan without discarding completed intermediary files. Plan generation restarts from the first incomplete step, skipping all steps that already produced output files.
 
-Use `plan_resume` when `plan_status` shows `failed` and the run was interrupted mid-pipeline (network drop, timeout, `plan_stop`, worker crash). For a full restart or to change `model_profile`, use `plan_retry` instead.
+Use `plan_resume` when `plan_status` shows `failed` and plan generation was interrupted before completing all steps (network drop, timeout, `plan_stop`, worker crash). For a full restart or to change `model_profile`, use `plan_retry` instead.
 
 **Request**
 
@@ -470,25 +470,42 @@ Use `plan_resume` when `plan_status` shows `failed` and the run was interrupted 
 
 **Required semantics**
 
-- Only failed plans are resumable.
+- The MCP tool only accepts plans in `failed` state. However, the underlying Luigi mechanism is more general: Luigi skips any task whose output file already exists and re-executes any task whose output file is missing. This means a completed plan can be partially re-run by deleting `999-pipeline_complete.txt` and the output files of the tasks you want to regenerate — Luigi will re-execute those tasks and all their downstream dependents. The MCP API does not yet expose this capability; it is available when running the pipeline locally via `run_plan_pipeline.py`.
 - On success, the same plan_id is reset to `pending` and requeued.
-- Prior artifacts are **preserved** — the worker restores the run directory from the stored zip snapshot.
-- Luigi skips tasks whose output files already exist; only incomplete tasks are re-executed.
+- Prior artifacts are **preserved** — the worker restores the output directory from the stored zip snapshot.
 - `resume_count` tracks how many times the plan has been resumed.
 
 **When to use plan_resume vs plan_retry**
 
 | Scenario | Use |
 |----------|-----|
-| Run interrupted mid-pipeline (network drop, timeout, stop, crash) | `plan_resume` |
+| Interrupted before completing all steps (network drop, timeout, stop, crash) | `plan_resume` |
 | Full restart from scratch | `plan_retry` |
-| Change model_profile for a fresh run | `plan_retry` |
+| Change model_profile for a fresh start | `plan_retry` |
 | Continue where you left off, preserving completed work | `plan_resume` |
+
+**Pipeline compatibility caveat**
+
+Resuming restores the output directory from a stored zip snapshot and relies on Luigi's file-based step skipping: if an output file exists, the step is skipped. This works reliably when the server code matches the code that produced the snapshot. It can break when the server has changed between the original plan generation and the resume attempt:
+
+- **Renamed or removed filenames** (`FilenameEnum` in `filenames.py`): if a step's output filename changes, Luigi won't find the old file and will re-execute the step — but downstream steps that already completed may reference the old filename's content, producing inconsistencies.
+- **New steps added**: new steps may expect upstream outputs that don't exist in the snapshot.
+- **Changed step dependencies**: if the DAG wiring changes, Luigi may execute steps in a different order or skip steps that should re-execute.
+- **Changed JSON schemas**: resumed steps may read snapshot files whose internal structure no longer matches what the current code expects.
+
+In practice, resuming a plan that failed minutes or hours ago on the same deployment is safe. Resuming a plan that is weeks or months old — after the server has been updated with pipeline changes — may produce errors or inconsistent output. When in doubt, use `plan_retry` for a clean restart.
+
+**Pipeline version check**
+
+A `PIPELINE_VERSION` integer constant (in `worker_plan_api/pipeline_version.py`) is stamped into the plan's `parameters` on every `plan_create`, `plan_retry`, and `plan_resume`. On `plan_resume`, the stored version is compared to the current constant using strict equality. If they differ, resume is rejected with error code `PIPELINE_VERSION_MISMATCH` and the caller should use `plan_retry` for a clean restart. Legacy plans with no stored version are treated as incompatible.
+
+Bump `PIPELINE_VERSION` whenever the pipeline changes in a way that would break resume from an older snapshot (renamed filenames, new tasks, changed DAG wiring, changed JSON schemas). Finer-grained approaches (manifest, per-task schema versions) can be layered on later if needed.
 
 **Error behavior**
 
 - Unknown plan_id: `PLAN_NOT_FOUND` (`isError=true`).
 - Plan not failed: `PLAN_NOT_RESUMABLE` (`isError=true`).
+- Pipeline version mismatch: `PIPELINE_VERSION_MISMATCH` (`isError=true`). Use `plan_retry` instead.
 
 ---
 
@@ -594,6 +611,7 @@ Cloud/core tool codes:
 - `PLAN_NOT_FOUND`: plan_id not found.
 - `PLAN_NOT_FAILED`: plan_retry called for a plan that is not in failed state.
 - `PLAN_NOT_RESUMABLE`: plan_resume called for a plan that is not in failed state.
+- `PIPELINE_VERSION_MISMATCH`: plan_resume snapshot was created by a different pipeline version; use plan_retry instead.
 - `INVALID_USER_API_KEY`: provided user_api_key is invalid.
 - `USER_API_KEY_REQUIRED`: deployment requires user_api_key for plan_create.
 - `INSUFFICIENT_CREDITS`: caller account has no credits for plan_create.
@@ -619,6 +637,7 @@ Local proxy specific codes:
   - `INVALID_TOOL`
 - For `PLAN_NOT_FAILED`: call `plan_retry` only after `plan_status.state == failed`.
 - For `PLAN_NOT_RESUMABLE`: call `plan_resume` only after `plan_status.state == failed`.
+- For `PIPELINE_VERSION_MISMATCH`: the snapshot is incompatible with the current pipeline; use `plan_retry` for a clean restart.
 - For `PLAN_NOT_FOUND`: verify plan_id source and stop polling that id.
 - For `generation_failed`: treat as terminal failure and surface plan progress_message to user.
 

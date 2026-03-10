@@ -18,8 +18,8 @@ Agents need PlanExe runs to complete reliably without human intervention. A fail
 
 | # | Proposal | Agent Impact |
 |---|----------|-------------|
-| **87** | Plan Resume MCP Tool | Agents recover from failures without restarting the full pipeline. Luigi already supports resume — needs DB flag + worker logic |
-| **109** | LLM Executor Retry Improvements | Structured retry logic for transient failures. Agents shouldn't need to implement their own retry wrappers |
+| **87** | Plan Resume MCP Tool | ✅ **Implemented**. `plan_resume` MCP tool lets agents recover from failures without restarting the full pipeline. Includes pipeline version checking and zip snapshot restore |
+| **109** | LLM Executor Retry Improvements | ✅ **Implemented (PR #220)**. `RetryConfig` with exponential backoff for transient errors (rate limits, timeouts, connection failures). `is_transient_error()` classifies exceptions; permanent errors fall through to next model immediately. Agents no longer need their own retry wrappers |
 | **102** | Pipeline Intelligence Layer | Error-feedback retries — the LLM gets its own error message and retries with an adjusted approach. Eliminates a class of silent failures |
 | **103** | Pipeline Hardening for Local Models | Fix silent truncation and context-window overflows. Critical for agents running local models where failures are subtle |
 | **113** | LLM Error Traceability | ✅ **Implemented (PR #237)**. `LLMChatError` replaces generic `ValueError` across 38 call sites. Root cause preserved for error classification; `error_id` UUID enables log-to-metrics cross-referencing. Agents can programmatically diagnose failures |
@@ -92,8 +92,8 @@ This is PlanExe's largest gap: *"I have a plan. Now what?"* For agents, a plan t
 
 ```
 Phase 1: Reliable foundation         (now)
-  ├─ #87  Plan resume
-  ├─ #109 Retry improvements
+  ├─ #87  Plan resume ✅
+  ├─ #109 Retry improvements ✅ (PR #220)
   ├─ #102 Error-feedback retries
   ├─ #110 Usage metrics ✅ (PR #219, #236, #237)
   ├─ #113 Error traceability ✅ (PR #237)

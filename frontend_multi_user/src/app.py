@@ -3340,7 +3340,7 @@ class MyFlaskApp:
 
             task.stop_requested = True
             task.stop_requested_timestamp = datetime.now(UTC)
-            if task.state == PlanState.pending:
+            if task.state in (PlanState.pending, PlanState.processing):
                 task.state = PlanState.failed
                 task.progress_message = "Stop requested by user."
             self.db.session.commit()

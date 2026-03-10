@@ -54,6 +54,7 @@ logger = logging.getLogger(__name__)
 from worker_plan_api.planexe_dotenv import DotEnvKeyEnum, PlanExeDotEnv
 from worker_plan_api.planexe_config import PlanExeConfig
 from worker_plan_api.model_profile import ModelProfileEnum, normalize_model_profile
+from worker_plan_api.pipeline_version import PIPELINE_VERSION
 from worker_plan_api.llm_class_filter import (
     ENV_PLANEXE_LLM_CONFIG_WHITELISTED_CLASSES,
     is_llm_class_allowed,
@@ -3268,6 +3269,7 @@ class MyFlaskApp:
             preferred_plan_view_mode = self._get_plan_view_mode_preference()
             parameters = task.parameters if isinstance(task.parameters, dict) else {}
             selected_model_profile = normalize_model_profile(parameters.get("model_profile")).value
+            resume_error = request.args.get('resume_error', '')
             return render_template(
                 "plan_iframe.html",
                 run_id=run_id,
@@ -3276,6 +3278,7 @@ class MyFlaskApp:
                 failure_trace=failure_trace,
                 preferred_plan_view_mode=preferred_plan_view_mode,
                 selected_model_profile=selected_model_profile,
+                resume_error=resume_error,
             )
 
         @self.app.route('/plan/download/report')
@@ -3384,6 +3387,68 @@ class MyFlaskApp:
             ).update({"source": "usage_billing_settled"})
 
             self.db.session.commit()
+            return redirect(url_for('plan', id=run_id))
+
+        @self.app.route('/plan/resume', methods=['POST'])
+        @login_required
+        def plan_resume():
+            run_id = request.form.get('id', '').strip()
+            task = self.db.session.get(PlanItem, run_id)
+            if task is None:
+                abort(404)
+            if not current_user.is_admin and str(task.user_id) != str(current_user.id):
+                abort(403)
+
+            if task.state != PlanState.failed:
+                return redirect(url_for('plan', id=run_id))
+
+            # Reject resume if the snapshot was created by a different pipeline version.
+            stored_params = task.parameters if isinstance(task.parameters, dict) else {}
+            stored_version = stored_params.get("pipeline_version")
+            if stored_version != PIPELINE_VERSION:
+                return redirect(url_for(
+                    'plan', id=run_id,
+                    resume_error="version_mismatch",
+                ))
+
+            raw_profile = request.form.get("model_profile")
+            selected_model_profile = normalize_model_profile(raw_profile).value
+            parameters = dict(task.parameters) if isinstance(task.parameters, dict) else {}
+            parameters["model_profile"] = selected_model_profile
+            parameters["trigger_source"] = "frontend resume"
+            parameters["resume"] = True
+            parameters["resume_count"] = parameters.get("resume_count", 0) + 1
+            task.parameters = parameters
+
+            # Reset state to pending but preserve all artifacts (key difference from retry).
+            task.state = PlanState.pending
+            task.progress_message = "Resume requested by user."
+            task.stop_requested = False
+            task.stop_requested_timestamp = None
+            task.last_seen_timestamp = datetime.now(UTC)
+
+            # Archive old incremental billing entries so the new run starts fresh.
+            CreditHistory.query.filter_by(
+                source="usage_billing_progress",
+                external_id=str(task.id),
+            ).update({"source": "usage_billing_settled"})
+
+            self.db.session.commit()
+
+            event_context = {
+                "plan_id": str(task.id),
+                "task_handle": str(task.id),
+                "resume_of_plan_id": str(task.id),
+                "model_profile": selected_model_profile,
+                "resume_count": parameters["resume_count"],
+            }
+            event = EventItem()
+            event.event_type = EventType.TASK_PENDING
+            event.message = "Resumed failed task via frontend"
+            event.context = event_context
+            self.db.session.add(event)
+            self.db.session.commit()
+
             return redirect(url_for('plan', id=run_id))
 
         @self.app.route('/plan/meta')

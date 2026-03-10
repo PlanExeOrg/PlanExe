@@ -2,13 +2,13 @@
 
 **Author:** neoneye
 **Date:** 2026-03-10
-**Status:** Draft
+**Status:** Implemented (PR #237)
 
 ---
 
 ## Problem
 
-When an LLM call fails inside a pipeline task, the exception is caught and re-raised as a generic `ValueError`:
+When an LLM call fails inside a pipeline task, the exception was caught and re-raised as a generic `ValueError`:
 
 ```python
 except Exception as e:
@@ -17,11 +17,11 @@ except Exception as e:
     raise ValueError("LLM chat interaction failed.") from e
 ```
 
-This pattern appears in **36 files** across the codebase. By the time `LLMExecutor` catches the re-raised `ValueError`, `str(e)` is the fixed string `"LLM chat interaction failed."` — the root cause (timeout, auth error, invalid JSON, etc.) is lost.
+This pattern appeared in **38 files** across the codebase. By the time `LLMExecutor` caught the re-raised `ValueError`, `str(e)` was the fixed string `"LLM chat interaction failed."` — the root cause (timeout, auth error, invalid JSON, etc.) was lost.
 
-PR #236 added `classify_error()` to categorize error strings into short labels for `usage_metrics.jsonl`. But because the original exception is masked, these errors all classify as `"unknown"` with `error_detail: "LLM chat interaction failed."` — defeating the purpose of classification.
+PR #236 added `classify_error()` to categorize error strings into short labels for `usage_metrics.jsonl`. But because the original exception was masked, these errors all classified as `"unknown"` with `error_detail: "LLM chat interaction failed."` — defeating the purpose of classification.
 
-The root cause *is* logged via `logger.error(..., exc_info=True)`, but there is no way to correlate a log line with a specific row in `usage_metrics.jsonl`.
+The root cause *was* logged via `logger.error(..., exc_info=True)`, but there was no way to correlate a log line with a specific row in `usage_metrics.jsonl`.
 
 ---
 
@@ -29,51 +29,46 @@ The root cause *is* logged via `logger.error(..., exc_info=True)`, but there is 
 
 1. **Preserve the root cause** so `classify_error()` can categorize it correctly.
 2. **Correlate metrics with logs** so a user can look up the full traceback for any failed metric row.
-3. **Keep the change mechanical** — the 36 call sites should all follow the same pattern.
+3. **Keep the change mechanical** — the call sites should all follow the same pattern.
 4. **No behaviour change** — callers that catch `ValueError` must continue to work.
 
 ---
 
-## Design
+## Implementation
 
-### 1. Introduce `LLMChatError` exception
+### 1. `LLMChatError` exception
 
-Replace the generic `ValueError` with a dedicated exception that carries structured context:
+A dedicated exception that carries structured context, defined in
+`worker_plan/worker_plan_internal/llm_util/llm_errors.py`:
 
 ```python
-# worker_plan/worker_plan_internal/llm_util/llm_errors.py
-
 import uuid
 
-class LLMChatError(Exception):
+class LLMChatError(ValueError):
     """Raised when an LLM chat interaction fails.
 
     Carries the root-cause exception and a unique error_id for
     cross-referencing log entries with usage_metrics.jsonl rows.
+
+    Extends ValueError for backward compatibility with existing
+    except ValueError catch sites.
     """
-    def __init__(self, cause: Exception, error_id: str | None = None):
+    def __init__(self, cause: Exception, error_id: str | None = None, message: str | None = None):
         self.cause = cause
         self.error_id = error_id or uuid.uuid4().hex[:12]
-        super().__init__(f"LLM chat interaction failed [{self.error_id}]: {cause}")
+        self.message = message or "LLM chat interaction failed"
+        super().__init__(f"{self.message} [{self.error_id}]: {cause}")
 ```
 
 Key properties:
-- `str(LLMChatError)` now includes the root cause, so `classify_error()` works correctly.
+- `str(LLMChatError)` includes the root cause, so `classify_error()` categorizes correctly.
 - `error_id` is a short UUID (12 hex chars) printed in both the log and the metric row.
-- Subclasses `Exception` (not `ValueError`), but see migration notes below.
+- `message` allows callers to distinguish between numbered interactions (e.g. interaction 1 vs 2).
+- Extends `ValueError` for backward compatibility with existing catch sites.
 
-### 2. Update the 36 call sites
+### 2. Updated call sites (38 files)
 
-Each call site changes from:
-
-```python
-except Exception as e:
-    logger.debug(f"LLM chat interaction failed: {e}")
-    logger.error("LLM chat interaction failed.", exc_info=True)
-    raise ValueError("LLM chat interaction failed.") from e
-```
-
-To:
+The standard pattern (30 files):
 
 ```python
 from worker_plan_internal.llm_util.llm_errors import LLMChatError
@@ -85,34 +80,24 @@ except Exception as e:
     raise llm_error from e
 ```
 
-This is mechanical — every site follows the same 4-line pattern.
-
-### 3. Record `error_id` in `usage_metrics.jsonl`
-
-In `record_usage_metric()`, accept an optional `error_id` parameter:
+For files with numbered interactions (e.g. `expert_finder.py`, `questions_answers.py`):
 
 ```python
-def record_usage_metric(
-    ...
-    error_message: Optional[str] = None,
-    error_id: Optional[str] = None,
-    ...
-) -> None:
-    ...
-    if error_message:
-        category = classify_error(error_message)
-        record["error"] = category
-        if category == "unknown":
-            record["error_detail"] = error_message[:200]
-        if error_id:
-            record["error_id"] = error_id
+except Exception as e:
+    llm_error = LLMChatError(cause=e, message="LLM chat interaction 2 failed")
+    logger.debug(f"{llm_error.message} [{llm_error.error_id}]: {e}")
+    logger.error(f"{llm_error.message} [{llm_error.error_id}]", exc_info=True)
+    raise llm_error from e
 ```
 
-In `LLMExecutor._record_attempt_token_metrics()`, extract the `error_id` from the exception when available:
+### 3. `error_id` in `usage_metrics.jsonl`
+
+`record_usage_metric()` accepts an optional `error_id` parameter.
+`LLMExecutor._record_attempt_token_metrics()` extracts the `error_id` from the exception:
 
 ```python
 if not success:
-    error_id = getattr(exc, "error_id", None) if exc else None
+    error_id = getattr(exception, "error_id", None) if exception else None
     record_usage_metric(
         model=llm_model_name,
         duration_seconds=duration,
@@ -122,69 +107,35 @@ if not success:
     )
 ```
 
-### 4. Example output
+### 4. Verified output
 
 **Log output:**
 ```
-ERROR LLM chat interaction failed [a3f1b9c2d4e5]: 1 validation error for ...
+ERROR LLM chat interaction failed [4c2a64973bcd]: 1 validation error for ...
 Traceback (most recent call last):
   ...
 ```
 
 **usage_metrics.jsonl row:**
 ```json
-{
-  "timestamp": "2026-03-10T17:16:17",
-  "success": false,
-  "model": "openrouter-gemini-2.0-flash-001",
-  "duration_seconds": 24.839,
-  "error": "invalid_json",
-  "error_id": "a3f1b9c2d4e5"
-}
+{"timestamp": "2026-03-10T19:50:18.821350", "success": false, "model": "openrouter-gemini-2.0-flash-001", "duration_seconds": 5.391, "error": "invalid_json", "error_id": "4c2a64973bcd"}
 ```
 
-A user can now `grep a3f1b9c2d4e5` in the logs to find the full traceback.
+A user can now `grep 4c2a64973bcd` in the logs to find the full traceback.
 
 ---
 
-## Migration: `ValueError` to `LLMChatError`
-
-`LLMChatError` extends `Exception`, not `ValueError`. Any code that catches `ValueError` from LLM calls would break. There are two migration strategies:
-
-**Option A: Temporary dual inheritance (recommended)**
-
-```python
-class LLMChatError(ValueError):
-    ...
-```
-
-This keeps backward compatibility. A follow-up PR can grep for `except ValueError` near LLM calls and migrate them to `except LLMChatError`, then remove the `ValueError` base class.
-
-**Option B: Big-bang migration**
-
-Change `LLMChatError` to extend `Exception` and update all `except ValueError` catch sites in the same PR. Riskier but cleaner.
-
----
-
-## Files to modify
+## Files changed
 
 | File | Change |
 |---|---|
-| `worker_plan/worker_plan_internal/llm_util/llm_errors.py` | **New file.** `LLMChatError` exception class. |
-| `worker_plan/worker_plan_internal/llm_util/usage_metrics.py` | Add `error_id` parameter to `record_usage_metric()`. |
+| `worker_plan/worker_plan_internal/llm_util/llm_errors.py` | **New.** `LLMChatError` exception class with `cause`, `error_id`, `message`. |
+| `worker_plan/worker_plan_internal/llm_util/usage_metrics.py` | Added `error_id` parameter to `record_usage_metric()`. |
 | `worker_plan/worker_plan_internal/llm_util/llm_executor.py` | Extract `error_id` from exception, pass to `record_usage_metric()`. |
 | 36 files with `raise ValueError("LLM chat interaction failed.")` | Mechanical replacement with `LLMChatError`. |
-| `worker_plan/tests/test_usage_metrics.py` | Add tests for `error_id` field. |
-| `worker_plan/tests/test_llm_errors.py` | **New file.** Tests for `LLMChatError`. |
-
----
-
-## Verification
-
-1. Run existing tests — nothing should break if Option A (dual inheritance) is used.
-2. Run a plan with a model that triggers errors — verify `error_id` appears in both log and JSONL.
-3. Grep for `error_id` in the log — confirm it matches the JSONL row.
-4. Verify `classify_error()` now correctly categorizes errors that were previously `"unknown"`.
+| 2 files with `raise ValueError("LLM chat interaction N failed.")` | Replaced with `LLMChatError(cause=e, message=...)`. |
+| `worker_plan/tests/test_llm_errors.py` | **New.** 8 tests for `LLMChatError`. |
+| `worker_plan/tests/test_usage_metrics.py` | Added tests for `error_id` field and `LLMChatError` integration. |
 
 ---
 

@@ -22,6 +22,7 @@ Agents need PlanExe runs to complete reliably without human intervention. A fail
 | **109** | LLM Executor Retry Improvements | Structured retry logic for transient failures. Agents shouldn't need to implement their own retry wrappers |
 | **102** | Pipeline Intelligence Layer | Error-feedback retries — the LLM gets its own error message and retries with an adjusted approach. Eliminates a class of silent failures |
 | **103** | Pipeline Hardening for Local Models | Fix silent truncation and context-window overflows. Critical for agents running local models where failures are subtle |
+| **113** | LLM Error Traceability | ✅ **Implemented (PR #237)**. `LLMChatError` replaces generic `ValueError` across 38 call sites. Root cause preserved for error classification; `error_id` UUID enables log-to-metrics cross-referencing. Agents can programmatically diagnose failures |
 | **101** | Luigi Resume Enhancements | Webhook hooks on task completion/failure — agents can subscribe to events instead of polling |
 
 ---
@@ -34,7 +35,7 @@ Agents need to discover PlanExe, understand its tools, and consume outputs progr
 |---|----------|-------------|
 | **86** | Agent-Optimized Pipeline | Removes the 5 key friction points for autonomous agent use: human approval gate, no agent prompt examples, poll intervals tuned for humans, no machine-readable output, no autonomous agent setup docs |
 | **62** | Agent-First Frontend Discoverability | `llms.txt`, `/.well-known/mcp.json`, agent-readable README — standard discovery protocols so agents find PlanExe without human guidance |
-| **110** | Usage Metrics for Local Runs | ✅ **Implemented (PR #219)**. Agents need cost accounting for budget-constrained workflows. `usage_metrics.jsonl` answers "how much did this run cost?" with per-call granularity (model, tokens, cost, duration). Complements `activity_overview.json` aggregated totals |
+| **110** | Usage Metrics for Local Runs | ✅ **Implemented (PR #219, #236, #237)**. Agents need cost accounting for budget-constrained workflows. `usage_metrics.jsonl` answers "how much did this run cost?" with per-call granularity (model, tokens, cost, duration). Errors are classified into short categories with traceable `error_id` UUIDs. Complements `activity_overview.json` aggregated totals |
 
 Key friction points from #86 that block autonomous agent use:
 - **F1**: Human approval step before `plan_create` — autonomous agents can't proceed
@@ -94,7 +95,8 @@ Phase 1: Reliable foundation         (now)
   ├─ #87  Plan resume
   ├─ #109 Retry improvements
   ├─ #102 Error-feedback retries
-  ├─ #110 Usage metrics ✅
+  ├─ #110 Usage metrics ✅ (PR #219, #236, #237)
+  ├─ #113 Error traceability ✅ (PR #237)
   └─ #58  Prompt boost
 
 Phase 2: Agent-native interface       (next)

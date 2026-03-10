@@ -17,6 +17,9 @@ If all of them fails, then the exception is raised. Exhausted all LLMs.
 
 This is the class that `PlanTask` is using, the root class of all tasks in the pipeline.
 Subtasks such as `ReviewPlan` are also using this class to invoke the LLM.
+
+IDEA: Scheduling strategy: randomize the order of LLMs.
+IDEA: Scheduling strategy: cycle through the LLM list twice, so there are two chances to succeed.
 """
 import time
 import logging

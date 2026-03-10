@@ -69,6 +69,7 @@ def record_usage_metric(
     duration_seconds: float,
     success: bool,
     error_message: Optional[str] = None,
+    error_id: Optional[str] = None,
     input_tokens: Optional[int] = None,
     output_tokens: Optional[int] = None,
     thinking_tokens: Optional[int] = None,
@@ -94,6 +95,8 @@ def record_usage_metric(
         record["error"] = category
         if category == "unknown":
             record["error_detail"] = error_message[:200]
+        if error_id:
+            record["error_id"] = error_id
     if input_tokens is not None:
         record["input_tokens"] = input_tokens
     if output_tokens is not None:

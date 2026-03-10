@@ -59,6 +59,14 @@ def test_classify_error(error_message: str, expected_category: str) -> None:
     assert classify_error(error_message) == expected_category
 
 
+def test_classify_error_with_llm_chat_error_str() -> None:
+    """classify_error should see through LLMChatError wrapping to the root cause."""
+    from worker_plan_internal.llm_util.llm_errors import LLMChatError
+    cause = ValueError("1 validation error for MyModel")
+    err = LLMChatError(cause=cause)
+    assert classify_error(str(err)) == "invalid_json"
+
+
 def test_classify_error_case_insensitive() -> None:
     assert classify_error("RATE LIMIT exceeded") == "rate_limit"
     assert classify_error("Pydantic ValidationError") == "invalid_json"
@@ -155,5 +163,60 @@ def test_record_usage_metric_unknown_truncates_long_error(tmp_path: Path) -> Non
         record = json.loads(metrics_file.read_text().strip())
         assert record["error"] == "unknown"
         assert len(record["error_detail"]) == 200
+    finally:
+        set_usage_metrics_path(None)
+
+
+# ---------- error_id ----------
+
+def test_record_usage_metric_includes_error_id(tmp_path: Path) -> None:
+    metrics_file = tmp_path / "usage_metrics.jsonl"
+    set_usage_metrics_path(metrics_file)
+    try:
+        record_usage_metric(
+            model="gpt-4",
+            duration_seconds=1.0,
+            success=False,
+            error_message="Connection refused",
+            error_id="abc123def456",
+        )
+
+        record = json.loads(metrics_file.read_text().strip())
+        assert record["error"] == "connection_error"
+        assert record["error_id"] == "abc123def456"
+    finally:
+        set_usage_metrics_path(None)
+
+
+def test_record_usage_metric_no_error_id_when_not_provided(tmp_path: Path) -> None:
+    metrics_file = tmp_path / "usage_metrics.jsonl"
+    set_usage_metrics_path(metrics_file)
+    try:
+        record_usage_metric(
+            model="gpt-4",
+            duration_seconds=1.0,
+            success=False,
+            error_message="Connection refused",
+        )
+
+        record = json.loads(metrics_file.read_text().strip())
+        assert "error_id" not in record
+    finally:
+        set_usage_metrics_path(None)
+
+
+def test_record_usage_metric_no_error_id_on_success(tmp_path: Path) -> None:
+    metrics_file = tmp_path / "usage_metrics.jsonl"
+    set_usage_metrics_path(metrics_file)
+    try:
+        record_usage_metric(
+            model="gpt-4",
+            duration_seconds=0.5,
+            success=True,
+            error_id="should_not_appear",
+        )
+
+        record = json.loads(metrics_file.read_text().strip())
+        assert "error_id" not in record
     finally:
         set_usage_metrics_path(None)

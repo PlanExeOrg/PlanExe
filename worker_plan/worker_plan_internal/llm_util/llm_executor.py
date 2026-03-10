@@ -216,6 +216,7 @@ class LLMExecutor:
                 success=False,
                 error_message=str(e),
                 response=None,
+                exception=e,
             )
             return LLMAttempt(stage='create', llm_model=llm_model, success=False, duration=duration, exception=e)
 
@@ -246,6 +247,7 @@ class LLMExecutor:
                 success=False,
                 error_message=str(e),
                 response=None,
+                exception=e,
             )
             return LLMAttempt(stage='execute', llm_model=llm_model, success=False, duration=duration, exception=e)
 
@@ -256,6 +258,7 @@ class LLMExecutor:
         success: bool,
         error_message: Optional[str],
         response: Optional[Any],
+        exception: Optional[Exception] = None,
     ) -> None:
         """Best-effort token metrics recording; never blocks LLM execution flow."""
         try:
@@ -279,11 +282,13 @@ class LLMExecutor:
         # Here we only record failures, since instrumentation end events
         # are not emitted when the LLM call fails.
         if not success:
+            error_id = getattr(exception, "error_id", None) if exception else None
             record_usage_metric(
                 model=llm_model_name,
                 duration_seconds=duration,
                 success=False,
                 error_message=error_message,
+                error_id=error_id,
             )
 
     def _check_stop_callback(self, last_attempt: LLMAttempt, start_time: float, attempt_index: int) -> None:

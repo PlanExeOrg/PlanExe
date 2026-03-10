@@ -25,7 +25,34 @@ consumers.
 - If new environment variables or endpoints are added, update
   `worker_plan/README.md` and any Railway docs.
 
+## LLM Error Handling
+- When an LLM call fails inside a pipeline task, raise `LLMChatError` (from
+  `worker_plan_internal.llm_util.llm_errors`), **not** a bare `ValueError`.
+  `LLMChatError` preserves the root cause and generates an `error_id` UUID for
+  cross-referencing logs with `usage_metrics.jsonl` rows.
+- Standard pattern (30+ call sites):
+  ```python
+  from worker_plan_internal.llm_util.llm_errors import LLMChatError
+  try:
+      result = llm_executor.run(execute_function)
+  except PipelineStopRequested:
+      raise
+  except Exception as e:
+      llm_error = LLMChatError(cause=e)
+      logger.debug(f"LLM chat interaction failed [{llm_error.error_id}]: {e}")
+      logger.error(f"LLM chat interaction failed [{llm_error.error_id}]", exc_info=True)
+      raise llm_error from e
+  ```
+- For tasks with multiple LLM calls, use the `message` parameter to
+  distinguish them: `LLMChatError(cause=e, message="LLM chat interaction 2 failed")`.
+- Error classification: `classify_error()` in `usage_metrics.py` maps raw
+  exception strings to short categories (`invalid_json`, `timeout`,
+  `rate_limit`, etc.) stored in `usage_metrics.jsonl`. Unknown errors preserve
+  a truncated `error_detail` field.
+
 ## Testing
 - Prefer unit tests over manual server checks. Run `python test.py` from repo
   root; worker tests live under `worker_plan/worker_plan_internal/**/tests` and
   `worker_plan/worker_plan_api/tests`.
+- Error handling tests: `worker_plan/tests/test_llm_errors.py` and
+  `worker_plan/tests/test_usage_metrics.py`.

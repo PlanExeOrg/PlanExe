@@ -39,3 +39,16 @@ def test_llm_chat_error_unique_ids() -> None:
     err1 = LLMChatError(cause=RuntimeError("a"))
     err2 = LLMChatError(cause=RuntimeError("b"))
     assert err1.error_id != err2.error_id
+
+
+def test_llm_chat_error_default_message() -> None:
+    err = LLMChatError(cause=RuntimeError("x"))
+    assert err.message == "LLM chat interaction failed"
+    assert str(err).startswith("LLM chat interaction failed [")
+
+
+def test_llm_chat_error_custom_message() -> None:
+    err = LLMChatError(cause=RuntimeError("timeout"), message="LLM chat interaction 2 failed")
+    assert err.message == "LLM chat interaction 2 failed"
+    assert str(err).startswith("LLM chat interaction 2 failed [")
+    assert "timeout" in str(err)

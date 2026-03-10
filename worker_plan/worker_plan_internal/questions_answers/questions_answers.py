@@ -146,9 +146,10 @@ class QuestionsAnswers:
         try:
             chat_response2 = sllm.chat(chat_message_list2)
         except Exception as e:
-            logger.debug(f"LLM chat interaction 2 failed: {e}")
-            logger.error("LLM chat interaction 2 failed.", exc_info=True)
-            raise ValueError("LLM chat interaction 2 failed.") from e
+            llm_error = LLMChatError(cause=e, message="LLM chat interaction 2 failed")
+            logger.debug(f"{llm_error.message} [{llm_error.error_id}]: {e}")
+            logger.error(f"{llm_error.message} [{llm_error.error_id}]", exc_info=True)
+            raise llm_error from e
 
         end_time = time.perf_counter()
         duration2 = int(ceil(end_time - start_time))

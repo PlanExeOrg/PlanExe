@@ -169,25 +169,27 @@ class DeduplicateLevers:
             decision: LeverClassificationDecision | None = None
             result = None
 
-            # Attempt classification. LLMExecutor handles transient retries
-            # (rate limits, timeouts) internally. If it still fails, compact
-            # conversation history and try once more (context may be too large).
+            # First attempt with full conversation history.
             try:
                 result = llm_executor.run(execute_function)
                 metadata_list.append(result.get("metadata", {}))
             except PipelineStopRequested:
                 raise
             except Exception as e:
+                # Option C: compact history and retry once.
                 logger.warning(f"Lever {lever.lever_id}: call failed ({e}). Compacting history and retrying.")
                 chat_message_list = _build_compact_history(system_message_with_context, decisions)
                 chat_message_list.append(ChatMessage(role=MessageRole.USER, content=lever_prompt))
+
+            # Second attempt with compacted history (only reached if first attempt failed).
+            if result is None:
                 try:
                     result = llm_executor.run(execute_function)
                     metadata_list.append(result.get("metadata", {}))
                 except PipelineStopRequested:
                     raise
                 except Exception as e2:
-                    logger.warning(f"Lever {lever.lever_id}: failed after compaction ({e2}). Defaulting to keep.")
+                    logger.warning(f"Lever {lever.lever_id}: failed after compaction ({e2}). Skipping lever.")
 
             # Process whichever attempt succeeded.
             if result is not None:

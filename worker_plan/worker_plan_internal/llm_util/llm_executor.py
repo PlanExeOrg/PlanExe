@@ -265,14 +265,15 @@ class LLMExecutor:
             llm = llm_model.create_llm()
         except Exception as e:
             duration = time.perf_counter() - attempt_start_time
-            logger.error(f"LLMExecutor: Error creating LLM {llm_model!r}: {e!r} traceback: {traceback.format_exc()}")
+            error_id = getattr(e, "error_id", None) or uuid4().hex[:12]
+            logger.error(f"LLMExecutor: Error creating LLM {llm_model!r} error_id={error_id!r}: {e!r} traceback: {traceback.format_exc()}")
             self._record_attempt_token_metrics(
                 llm_model_name=getattr(llm_model, "name", llm_model.__class__.__name__),
                 duration=duration,
                 success=False,
                 error_message=str(e),
                 response=None,
-                exception=e,
+                error_id=error_id,
             )
             return LLMAttempt(stage='create', llm_model=llm_model, success=False, duration=duration, exception=e)
 
@@ -296,14 +297,15 @@ class LLMExecutor:
             raise
         except Exception as e:
             duration = time.perf_counter() - attempt_start_time
-            logger.error(f"LLMExecutor: error when invoking execute_function. LLM {llm_model!r} and llm_executor_uuid: {llm_executor_uuid!r}: {e!r} traceback: {traceback.format_exc()}")
+            error_id = getattr(e, "error_id", None) or uuid4().hex[:12]
+            logger.error(f"LLMExecutor: error when invoking execute_function. LLM {llm_model!r} and llm_executor_uuid: {llm_executor_uuid!r} and error_id: {error_id!r}: {e!r} traceback: {traceback.format_exc()}")
             self._record_attempt_token_metrics(
                 llm_model_name=getattr(llm_model, "name", llm.__class__.__name__),
                 duration=duration,
                 success=False,
                 error_message=str(e),
                 response=None,
-                exception=e,
+                error_id=error_id,
             )
             return LLMAttempt(stage='execute', llm_model=llm_model, success=False, duration=duration, exception=e)
 
@@ -314,7 +316,7 @@ class LLMExecutor:
         success: bool,
         error_message: Optional[str],
         response: Optional[Any],
-        exception: Optional[Exception] = None,
+        error_id: Optional[str] = None,
     ) -> None:
         """Best-effort token metrics recording; never blocks LLM execution flow."""
         try:
@@ -338,7 +340,6 @@ class LLMExecutor:
         # Here we only record failures, since instrumentation end events
         # are not emitted when the LLM call fails.
         if not success:
-            error_id = getattr(exception, "error_id", None) if exception else None
             record_usage_metric(
                 model=llm_model_name,
                 duration_seconds=duration,

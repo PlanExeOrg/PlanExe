@@ -5,7 +5,7 @@ import logging
 import os
 import time
 from datetime import UTC, datetime, timedelta
-from typing import Any, Optional
+from typing import Any, Optional, Protocol
 
 from mcp.types import CallToolResult, Tool, TextContent, ToolAnnotations
 from worker_plan_api.format_datetime import format_datetime_utc
@@ -102,7 +102,98 @@ async def handle_call_tool(name: str, arguments: dict[str, Any]) -> CallToolResu
             isError=True,
         )
 
-async def handle_plan_create(arguments: dict[str, Any]) -> CallToolResult:
+class ProgressContext(Protocol):
+    """Minimal interface for MCP context progress reporting."""
+    async def report_progress(self, progress: float, total: float | None = None, message: str | None = None) -> None: ...
+    async def info(self, message: str) -> None: ...
+
+
+async def _monitor_plan_progress(
+    plan_id: str,
+    ctx: ProgressContext,
+    poll_interval: float = 10.0,
+) -> dict[str, Any]:
+    """Poll plan status and send MCP progress notifications until terminal state.
+
+    Sends both ``ctx.report_progress`` (MCP ProgressNotification — requires the
+    client to have supplied a ``progressToken``) and ``ctx.info`` (MCP log
+    notification — always delivered) on every poll cycle.
+
+    Returns the final status snapshot dict when the plan reaches a terminal
+    state (completed, failed, or stopped).
+    """
+    terminal_states = {"completed", "failed", "stopped"}
+    prev_steps_completed: int | None = None
+
+    while True:
+        try:
+            await asyncio.sleep(poll_interval)
+        except asyncio.CancelledError:
+            logger.info("monitor_progress plan=%s cancelled", plan_id)
+            raise
+
+        snapshot = await asyncio.to_thread(_get_plan_status_snapshot_sync, plan_id)
+        if snapshot is None:
+            logger.warning("monitor_progress plan=%s snapshot is None, stopping", plan_id)
+            return {"error": {"code": "PLAN_NOT_FOUND", "message": f"Plan not found: {plan_id}"}}
+
+        plan_state = snapshot["state"]
+        state = get_plan_state_mapping(plan_state)
+        steps_completed = snapshot.get("steps_completed") or 0
+        steps_total = snapshot.get("steps_total") or 0
+        current_step = snapshot.get("current_step") or ""
+        progress_pct = float(snapshot.get("progress_percentage") or 0.0)
+
+        if plan_state == PlanState.completed:
+            steps_completed = steps_total or steps_completed
+            progress_pct = 100.0
+
+        # Build human-readable message
+        if steps_total:
+            pct_int = int(progress_pct)
+            msg = f"Step {steps_completed} of {steps_total} ({pct_int}%)"
+            if current_step:
+                msg += f". {current_step}"
+        elif current_step:
+            msg = current_step
+        else:
+            msg = f"{int(progress_pct)}% complete"
+
+        # Only send notifications when progress has changed
+        if steps_completed != prev_steps_completed or state in terminal_states:
+            prev_steps_completed = steps_completed
+
+            # Send MCP progress notification (needs client progressToken)
+            try:
+                await ctx.report_progress(
+                    float(steps_completed),
+                    float(steps_total) if steps_total else 100.0,
+                    msg,
+                )
+            except Exception:
+                logger.debug("report_progress failed for plan=%s (no progressToken?)", plan_id)
+
+            # Send MCP log notification (always works)
+            log_msg = f"plan {plan_id}: {msg.lower()}"
+            if state in terminal_states:
+                log_msg = f"plan {plan_id}: {state} ({int(progress_pct)}%). {steps_completed} of {steps_total} steps."
+            try:
+                await ctx.info(log_msg)
+            except Exception:
+                logger.debug("ctx.info failed for plan=%s", plan_id)
+
+        if state in terminal_states:
+            return {
+                "plan_id": str(snapshot.get("id", plan_id)),
+                "state": state,
+                "progress_percentage": progress_pct,
+                "steps_completed": steps_completed,
+                "steps_total": steps_total,
+                "current_step": current_step,
+            }
+
+
+async def handle_plan_create(arguments: dict[str, Any], ctx: Optional[ProgressContext] = None) -> CallToolResult:
     """Create a new PlanExe task and enqueue it for processing.
 
     Examples:
@@ -166,6 +257,18 @@ async def handle_plan_create(arguments: dict[str, Any]) -> CallToolResult:
     base_url = _get_download_base_url()
     if base_url and response.get("plan_id"):
         response["sse_url"] = f"{base_url}/sse/plan/{response['plan_id']}"
+
+    plan_id = response.get("plan_id")
+    if req.monitor and ctx is not None and plan_id:
+        # Send the initial creation info before entering the monitoring loop
+        try:
+            await ctx.info(f"plan {plan_id}: created. Monitoring progress...")
+        except Exception:
+            pass
+        final_status = await _monitor_plan_progress(plan_id, ctx)
+        # Merge creation response with final status
+        response.update(final_status)
+
     return CallToolResult(
         content=[TextContent(type="text", text=json.dumps(response))],
         structuredContent=response,

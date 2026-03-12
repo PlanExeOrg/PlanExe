@@ -233,7 +233,12 @@ Use the returned `profile` values directly in `plan_create.model_profile`.
       "enum": ["baseline", "premium", "frontier", "custom"],
       "default": "baseline"
     },
-    "user_api_key": { "type": "string" }
+    "user_api_key": { "type": "string" },
+    "monitor": {
+      "type": "boolean",
+      "default": false,
+      "description": "When true, blocks and sends MCP progress notifications until terminal state."
+    }
   },
   "required": ["prompt"]
 }
@@ -245,7 +250,8 @@ Use the returned `profile` values directly in `plan_create.model_profile`.
 {
   "prompt": "string",
   "model_profile": "baseline",
-  "user_api_key": "pex_..."
+  "user_api_key": "pex_...",
+  "monitor": true
 }
 ```
 
@@ -285,6 +291,16 @@ Use a normal single LLM response (not PlanExe) for one-shot micro-tasks. PlanExe
 
 - model_profile: LLM profile (`baseline` | `premium` | `frontier` | `custom`). If unsure, call `model_profiles` first.
 - user_api_key: user API key for credits and attribution (if your deployment requires it).
+- monitor: boolean (default `false`). When `true`, the tool blocks after creating the plan and sends MCP progress notifications every ~10 seconds until the plan reaches a terminal state (completed/failed/stopped). The response includes the final plan status (state, progress, steps). When `false`, returns immediately with just `plan_id` and `created_at` — use `plan_status` to poll.
+
+**Monitor mode notifications**
+
+When `monitor=true`, two types of MCP notifications are sent on each poll cycle:
+
+1. `notifications/progress` (MCP `ProgressNotification`) — requires the client to supply a `progressToken` in the tool call. Format: `progress=<steps_completed>, total=<steps_total>, message="Step 63 of 115 (54%). SWOT Analysis"`.
+2. `notifications/message` (MCP log notification, level=info) — always delivered. Format: `"plan <plan_id>: step 63 of 115 (54%). SWOT Analysis"`.
+
+On terminal state, a final notification is sent: `"plan <plan_id>: completed (100%). 115 of 115 steps."`.
 
 Clients can call the MCP tool **example_prompts** to retrieve example prompts. Use these as examples for plan_create; they can also call plan_create with any prompt—short prompts produce less detailed plans.
 

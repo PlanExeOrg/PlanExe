@@ -172,11 +172,11 @@ PLANEXE_SERVER_INSTRUCTIONS = (
     "Write the prompt as flowing prose — weave specs, constraints, and targets naturally into sentences. "
     "Only after approval, call plan_create. "
     "Each plan_create call creates a new plan_id; the server does not enforce a global per-client concurrency limit. "
-    "Then poll plan_status (about every 5 minutes) to check progress; use plan_file_info when complete. "
+    "For MCP agents: set monitor=true on plan_create to receive progress notifications every ~10 seconds "
+    "via MCP notifications/progress and notifications/message — no polling needed. "
+    "When monitor=false (default), poll plan_status (about every 5 minutes) to check progress; use plan_file_info when complete. "
     "plan_status is the primary way to track progress — it returns structured JSON with progress_percentage, "
     "steps_completed/steps_total, and current_step. "
-    "Optionally, run `curl -N <sse_url>` in a background shell as a completion detector — "
-    "the stream auto-closes when the plan reaches a terminal state (completed/failed). "
     "If plan generation fails before completing all steps, call plan_resume to continue from where it left off without discarding completed work. "
     "Use plan_retry instead for a full restart (plan must be in failed state). "
     "Both accept a failed plan_id and optional model_profile (defaults to baseline). "
@@ -230,6 +230,7 @@ class PlanCreateRequest(BaseModel):
     prompt: str
     model_profile: Optional[ModelProfileInput] = None
     user_api_key: Optional[str] = None
+    monitor: bool = False
 
 class PlanStatusRequest(BaseModel):
     plan_id: str

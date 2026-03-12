@@ -126,6 +126,8 @@ The `recoverable` boolean lets the agent immediately suggest `plan_resume` (tran
 
 ### I5 — SSE is the wrong mechanism for MCP agents
 
+**Status:** Implemented. Added `monitor` boolean parameter to `plan_create`. When `true`, the handler blocks after creating the plan, polls the DB every 10 seconds, sends MCP progress notifications via `ctx.report_progress()` (notifications/progress) and `ctx.info()` (notifications/message), and returns the final status when the plan reaches a terminal state. Backward compatible — `monitor=false` (default) preserves existing behavior.
+
 **Updated in v3:** The original framing ("SSE events lack structured data") missed the deeper problem. SSE is designed for real-time UI clients, not turn-based agents.
 
 **Problem:** The agent's SSE monitoring pattern across all 13 plans was:

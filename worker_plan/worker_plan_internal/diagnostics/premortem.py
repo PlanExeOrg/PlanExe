@@ -87,6 +87,9 @@ ARCHETYPES = [
     ("Environmental/Regulatory", "A4", 4),
     ("Execution/Operational", "A5", 5),
     ("Technology/Infrastructure", "A6", 6),
+    ("Legal/Compliance", "A7", 7),
+    ("Strategic/Competitive", "A8", 8),
+    ("Stakeholder/Political", "A9", 9),
 ]
 
 PREMORTEM_SYSTEM_PROMPT_NARRATIVE = """

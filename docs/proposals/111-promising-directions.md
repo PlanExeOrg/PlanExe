@@ -44,9 +44,9 @@ Agents need to discover PlanExe, understand its tools, and consume outputs progr
 | **110** | Usage Metrics for Local Runs | ✅ **Implemented (PR #219, #236, #237)**. Agents need cost accounting for budget-constrained workflows. `usage_metrics.jsonl` answers "how much did this run cost?" with per-call granularity (model, tokens, cost, duration). Errors are classified into short categories with traceable `error_id` UUIDs. Complements `activity_overview.json` aggregated totals |
 | **114-I3** | Plan Delete / Archive | Stopped and failed plans persist in `plan_list` forever. After 10 plans, the list is noisy. Add `plan_delete` (hard delete) or `plan_archive` (soft delete, hidden from list but retained for billing) |
 | **114-I4** | Idempotency Guard on `plan_create` | ✅ **Implemented (PR #242)**. Server-side auto-dedup on `(user_id, prompt, model_profile)` within configurable time window (default 10 min) |
-| **114-I5** | SSE Wrong for Agents; MCP Notifications Needed | **Corrected in v3.** SSE is designed for real-time UI clients, not turn-based agents. The agent never read SSE event content — it abused connection close as a binary "done" signal, which failed on remote (stream dropped at ~48%). MCP notifications over the existing connection are the correct mechanism; `plan_wait` (I8) is the fallback. SSE should only be recommended to non-MCP consumers. **Promoted to P1** |
+| **114-I5** | SSE Wrong for Agents; MCP Notifications Deprioritized | **Corrected in v3, re-corrected in v4.** SSE is designed for real-time UI clients, not turn-based agents — the agent abused connection close as a binary "done" signal. v3 proposed MCP notifications as the replacement. v4 tested `monitor=true` (implemented and reverted): Claude Code silently drops `notifications/progress` and `notifications/message` — it only supports `list_changed`. No current MCP client can consume progress notifications. **Practical priority:** (1) polling `plan_status` — works everywhere, (2) `plan_wait` blocking tool (I8) — would eliminate polling, (3) MCP notifications — correct long-term solution, blocked by client support. SSE remains useful as a local completion detector for non-agent consumers |
 | **114-I6** | Download URL TTL Extension | 15-minute signed URL expiry surprises users who review before downloading. Extend to 30–60 min, make configurable via env var |
-| **114-I8** | `plan_wait` Tool | **Upgraded from P3 to P2 in v3.** Validated as the correct fallback when MCP notifications (I5) aren't available. A blocking `plan_wait(plan_id, timeout)` tool returns final status on completion — replaces both SSE monitoring and follow-up `plan_status` in a single call |
+| **114-I8** | `plan_wait` Tool | **Upgraded from P3 to P2.** The most practical improvement for agents today, given that MCP notifications are blocked by client support (I5). A blocking `plan_wait(plan_id, timeout)` tool returns final status on completion — replaces both SSE monitoring and polling `plan_status` in a single call |
 | **114-I9** | Prompt Iteration Linking | Each `plan_create` is independent. Optional `parent_plan_id` links iteration chains so agents and users can track prompt refinement across plan versions |
 | **114-I11** | Server Identity in Responses | **New in v3.** Agent cannot programmatically determine which backend it's connected to (local vs remote). Plans from one server aren't accessible from the other, speed expectations differ (13 min vs 28 min), and SSE behavior varies. `plan_status` should include a `server` field or `plan_create` should return `server_info` with capabilities |
 
@@ -113,7 +113,7 @@ Phase 1: Reliable foundation         (nearly complete)
   ├─ #58  Prompt boost ⚙️ (open PR #222)
   ├─ #114-I1 Stopped vs failed state ✅
   ├─ #114-I2 Failure diagnostics in plan_status ✅
-  ├─ #114-I5 MCP notifications for agents  ← P1 (v3 correction: SSE wrong for agents)
+  ├─ #114-I5 MCP notifications for agents  ← deprioritized (v4: Claude Code can't consume them; polling is primary)
   ├─ #114-I7 Stalled-plan detection
   ├─ #114-I10 Silent partial failures in completed plans
   └─ #114-I12 Remote files visibility during processing
@@ -125,7 +125,7 @@ Phase 2: Agent-native interface       (next)
   ├─ #114-I3 Plan delete/archive
   ├─ #114-I6 Download URL TTL extension
   ├─ #114-I4 Idempotency guard ✅ (PR #242)
-  ├─ #114-I8 plan_wait tool (upgraded P2 — fallback for MCP notifications)
+  ├─ #114-I8 plan_wait tool (P2 — primary polling alternative now that MCP notifications are blocked)
   ├─ #114-I9 Prompt iteration linking
   ├─ #114-I11 Server identity in responses
   └─ #114-I13 Remote SSE reliability (if SSE kept for non-agent consumers)

@@ -291,7 +291,7 @@ Use a normal single LLM response (not PlanExe) for one-shot micro-tasks. PlanExe
 
 - model_profile: LLM profile (`baseline` | `premium` | `frontier` | `custom`). If unsure, call `model_profiles` first.
 - user_api_key: user API key for credits and attribution (if your deployment requires it).
-- monitor: boolean (default `false`). When `true`, the tool blocks after creating the plan and sends MCP progress notifications every ~10 seconds until the plan reaches a terminal state (completed/failed/stopped). The response includes the final plan status (state, progress, steps). When `false`, returns immediately with just `plan_id` and `created_at` — use `plan_status` to poll.
+- monitor: boolean (default `false`). When `true`, the tool blocks after creating the plan and sends MCP progress notifications every ~10 seconds until the plan reaches a terminal state (completed/failed/stopped). The response includes the final plan status (state, progress, steps). When `false`, returns immediately with just `plan_id` and `created_at` — use `plan_status` to poll. Also available on `plan_retry` and `plan_resume`.
 
 **Monitor mode notifications**
 
@@ -301,6 +301,12 @@ When `monitor=true`, two types of MCP notifications are sent on each poll cycle:
 2. `notifications/message` (MCP log notification, level=info) — always delivered. Format: `"plan <plan_id>: step 63 of 115 (54%). SWOT Analysis"`.
 
 On terminal state, a final notification is sent: `"plan <plan_id>: completed (100%). 115 of 115 steps."`.
+
+**Client compatibility note**
+
+Most MCP clients as of early 2026 — including Claude Code — do not support `notifications/progress` or `notifications/message`. They only handle `list_changed` notifications (for refreshing tool/resource definitions). Notifications sent by PlanExe are silently dropped by these clients.
+
+The `monitor` parameter is forward-looking: when MCP clients add progress notification support, PlanExe will work without server changes. Until then, **poll `plan_status` as the primary method** for tracking progress. Do not rely on `monitor=true` as the sole progress mechanism.
 
 Clients can call the MCP tool **example_prompts** to retrieve example prompts. Use these as examples for plan_create; they can also call plan_create with any prompt—short prompts produce less detailed plans.
 

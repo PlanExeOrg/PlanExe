@@ -169,7 +169,7 @@ class PlanCreateOutput(BaseModel):
         default=None,
         description=(
             "Optional completion detector. Run `curl -N <sse_url>` in a background shell — "
-            "the stream auto-closes when the plan reaches a terminal state (completed/failed). "
+            "the stream auto-closes when the plan reaches a terminal state (completed/failed/stopped). "
             "For structured progress data, use plan_status instead."
         ),
     )
@@ -235,7 +235,7 @@ class PlanStatusSuccess(BaseModel):
         default=None,
         description=(
             "Optional completion detector URL. Available when plan is not in a terminal state. "
-            "Run `curl -N <sse_url>` in a background shell — auto-closes on completion/failure."
+            "Run `curl -N <sse_url>` in a background shell — auto-closes on completion/failure/stop."
         ),
     )
     error: FailureErrorDetail | None = Field(
@@ -297,7 +297,7 @@ class PlanStatusOutput(BaseModel):
         default=None,
         description=(
             "Optional completion detector URL. Available when plan is not in a terminal state. "
-            "Run `curl -N <sse_url>` in a background shell — auto-closes on completion/failure."
+            "Run `curl -N <sse_url>` in a background shell — auto-closes on completion/failure/stop."
         ),
     )
     error: FailureErrorDetail | ErrorDetail | None = Field(
@@ -343,7 +343,7 @@ class PlanRetryOutput(BaseModel):
         default=None,
         description=(
             "Optional completion detector. Run `curl -N <sse_url>` in a background shell — "
-            "the stream auto-closes when the plan reaches a terminal state (completed/failed). "
+            "the stream auto-closes when the plan reaches a terminal state (completed/failed/stopped). "
             "For structured progress data, use plan_status instead."
         ),
     )
@@ -388,7 +388,7 @@ class PlanResumeOutput(BaseModel):
         default=None,
         description=(
             "Optional completion detector. Run `curl -N <sse_url>` in a background shell — "
-            "the stream auto-closes when the plan reaches a terminal state (completed/failed). "
+            "the stream auto-closes when the plan reaches a terminal state (completed/failed/stopped). "
             "For structured progress data, use plan_status instead."
         ),
     )

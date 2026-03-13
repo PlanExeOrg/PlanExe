@@ -153,7 +153,7 @@ TOOL_DEFINITIONS = [
             "Returns plan_id (UUID); use it for plan_status, plan_stop, plan_retry, and plan_file_info. "
             "To track progress, poll plan_status at reasonable intervals (e.g. every 5 minutes). "
             "Optionally, run `curl -N <sse_url>` in a background shell as a completion detector — "
-            "the stream auto-closes on terminal state (completed/failed). "
+            "the stream auto-closes on terminal state (completed/failed/stopped). "
             "If you lose a plan_id, call plan_list to recover it. "
             "If the same prompt + model_profile is submitted by the same user within a short window, "
             "the existing plan is returned (with deduplicated=true) instead of creating a new one. "

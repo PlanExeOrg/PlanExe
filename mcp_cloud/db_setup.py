@@ -176,7 +176,7 @@ PLANEXE_SERVER_INSTRUCTIONS = (
     "plan_status is the primary way to track progress — it returns structured JSON with progress_percentage, "
     "steps_completed/steps_total, and current_step. "
     "Optionally, run `curl -N <sse_url>` in a background shell as a completion detector — "
-    "the stream auto-closes when the plan reaches a terminal state (completed/failed). "
+    "the stream auto-closes when the plan reaches a terminal state (completed/failed/stopped). "
     "If plan generation fails before completing all steps, call plan_resume to continue from where it left off without discarding completed work. "
     "Use plan_retry instead for a full restart (plan must be in failed state). "
     "Both accept a failed plan_id and optional model_profile (defaults to baseline). "

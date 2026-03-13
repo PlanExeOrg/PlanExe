@@ -138,13 +138,6 @@ class PlanRetryInput(BaseModel):
             "Model profile used for the retry run. Defaults to baseline if omitted."
         ),
     )
-    monitor: bool = Field(
-        default=False,
-        description=(
-            "When true, blocks after retrying and sends MCP progress notifications every ~10 seconds "
-            "until the plan reaches a terminal state. When false (default), returns immediately."
-        ),
-    )
 
 
 class PlanFileInfoInput(BaseModel):
@@ -368,13 +361,6 @@ class PlanResumeInput(BaseModel):
             "Model profile used for the resumed run. Defaults to baseline if omitted."
         ),
     )
-    monitor: bool = Field(
-        default=False,
-        description=(
-            "When true, blocks after resuming and sends MCP progress notifications every ~10 seconds "
-            "until the plan reaches a terminal state. When false (default), returns immediately."
-        ),
-    )
 
 
 class PlanResumeOutput(BaseModel):
@@ -497,15 +483,5 @@ class PlanCreateInput(BaseModel):
     user_api_key: str | None = Field(
         default=None,
         description="Optional user API key for credits and attribution.",
-    )
-    monitor: bool = Field(
-        default=False,
-        description=(
-            "When true, the tool blocks after creating the plan and sends MCP progress "
-            "notifications (notifications/progress and notifications/message) every ~10 seconds "
-            "until the plan reaches a terminal state (completed/failed/stopped). "
-            "Returns the final plan status instead of just the plan_id. "
-            "When false (default), returns immediately with the plan_id — use plan_status to poll."
-        ),
     )
 

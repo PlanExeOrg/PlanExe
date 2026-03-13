@@ -20,7 +20,7 @@ from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, StreamingResponse
 from pydantic import BaseModel, Field
-from mcp.server.fastmcp import Context, FastMCP
+from mcp.server.fastmcp import FastMCP
 from mcp.types import CallToolResult, ContentBlock, TextContent, ToolAnnotations
 
 from mcp_cloud.http_utils import strip_redundant_content
@@ -681,32 +681,22 @@ ResultArtifactInput = Literal["report", "zip"]
 
 
 async def plan_create(
-    ctx: Context,
     prompt: str,
     model_profile: Annotated[
         ModelProfileInput,
         Field(description="Model profile: baseline, premium, frontier, custom. Call model_profiles to inspect options."),
     ] = "baseline",
-    monitor: Annotated[
-        bool,
-        Field(description=(
-            "When true, blocks and sends MCP progress notifications every ~10s until the plan "
-            "reaches a terminal state. When false (default), returns immediately."
-        )),
-    ] = False,
 ) -> CallToolResult:
     """Create a new PlanExe task. Use example_prompts first for example prompts."""
     authenticated_user_api_key = _get_authenticated_user_api_key()
     arguments: dict[str, Any] = {
         "prompt": prompt,
         "model_profile": model_profile,
-        "monitor": monitor,
     }
     if authenticated_user_api_key:
         arguments["user_api_key"] = authenticated_user_api_key
     return await handle_plan_create(
         arguments,
-        ctx=ctx,
     )
 
 
@@ -723,43 +713,27 @@ async def plan_stop(
 
 
 async def plan_retry(
-    ctx: Context,
     plan_id: str = Field(..., description="UUID of the failed plan to retry."),
     model_profile: Annotated[
         ModelProfileInput,
         Field(description="Model profile used for retry. Defaults to baseline."),
     ] = "baseline",
-    monitor: Annotated[
-        bool,
-        Field(description=(
-            "When true, blocks and sends MCP progress notifications every ~10s until the plan "
-            "reaches a terminal state. When false (default), returns immediately."
-        )),
-    ] = False,
 ) -> CallToolResult:
-    arguments: dict[str, Any] = {"plan_id": plan_id, "model_profile": model_profile, "monitor": monitor}
+    arguments: dict[str, Any] = {"plan_id": plan_id, "model_profile": model_profile}
     authenticated_user_api_key = _get_authenticated_user_api_key()
     if authenticated_user_api_key:
         arguments["user_api_key"] = authenticated_user_api_key
-    return await handle_plan_retry(arguments, ctx=ctx)
+    return await handle_plan_retry(arguments)
 
 
 async def plan_resume(
-    ctx: Context,
     plan_id: str = Field(..., description="UUID of the failed plan to resume."),
     model_profile: Annotated[
         ModelProfileInput,
         Field(description="Model profile used for the resumed plan. Defaults to baseline."),
     ] = "baseline",
-    monitor: Annotated[
-        bool,
-        Field(description=(
-            "When true, blocks and sends MCP progress notifications every ~10s until the plan "
-            "reaches a terminal state. When false (default), returns immediately."
-        )),
-    ] = False,
 ) -> CallToolResult:
-    return await handle_plan_resume({"plan_id": plan_id, "model_profile": model_profile, "monitor": monitor}, ctx=ctx)
+    return await handle_plan_resume({"plan_id": plan_id, "model_profile": model_profile})
 
 
 async def plan_file_info(

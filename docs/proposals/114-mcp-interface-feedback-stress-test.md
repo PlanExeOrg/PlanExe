@@ -126,17 +126,15 @@ The `recoverable` boolean lets the agent immediately suggest `plan_resume` (tran
 
 ### I5 — SSE is the wrong mechanism for MCP agents
 
-**Status:** Implemented. Added `monitor` boolean parameter to `plan_create`, `plan_retry`, and `plan_resume`. When `true`, the handler blocks after creating/retrying/resuming the plan, polls the DB every 10 seconds, sends MCP progress notifications via `ctx.report_progress()` (notifications/progress) and `ctx.info()` (notifications/message), and returns the final status when the plan reaches a terminal state. Backward compatible — `monitor=false` (default) preserves existing behavior.
+**Status:** Not implemented — deprioritized after v4 real-world testing.
 
-**v4 real-world testing (March 2026):** Claude Code tested `monitor=true` on `plan_resume`. The resume succeeded and the plan completed, but zero notifications were received. Investigation showed that Claude Code only supports `list_changed` MCP notifications (for refreshing tool/resource definitions). It does not handle `notifications/progress` or `notifications/message` — they are silently dropped. The server is sending notifications correctly; the gap is on the client side.
-
-**Implication:** The `monitor` parameter is forward-looking and correct, but most MCP clients (including Claude Code as of March 2026) cannot consume progress notifications. Polling `plan_status` remains the primary and recommended method for all agents. Do not remove `plan_status` polling in favor of notifications — both paths must remain first-class.
+**v4 real-world testing (March 2026):** A `monitor=true` parameter was implemented and tested. Claude Code tested `monitor=true` on `plan_resume`. The resume succeeded and the plan completed, but zero notifications were received. Investigation showed that Claude Code only supports `list_changed` MCP notifications (for refreshing tool/resource definitions). It does not handle `notifications/progress` or `notifications/message` — they are silently dropped. The server was sending notifications correctly; the gap is on the client side. The implementation was reverted as unused code — no MCP client can consume it today. See `docs/proposals/mcp-interface-perception-v4.md` for the full agent feedback.
 
 **Corrected priority ranking (from v4 agent feedback):**
 
 1. Polling `plan_status` — reliable, works everywhere, recommended default
 2. `plan_wait` blocking tool (see I8) — would eliminate polling for agents without notification support
-3. MCP notifications (`monitor=true`) — correct long-term solution, waiting on client support
+3. MCP notifications — correct long-term solution, blocked by client support (revisit when clients add `notifications/progress` handling)
 4. SSE — only useful for non-agent consumers (browser UIs, dashboards)
 5. HTTP webhooks — only useful for server-to-server
 
@@ -163,11 +161,9 @@ The v3 priority ranking assumed MCP clients would surface progress notifications
 
 2. **`plan_wait` blocking tool:** See I8. Would eliminate polling for agents without notification support.
 
-3. **MCP notifications (`monitor=true`):** Implemented and correct, but blocked by client support. When MCP clients add `notifications/progress` and `notifications/message` handling, PlanExe will just work — no server changes needed.
+3. **MCP notifications:** Correct long-term solution, but blocked by client support. Revisit when MCP clients add `notifications/progress` and `notifications/message` handling.
 
 4. **SSE (for non-MCP real-time clients only):** Keep SSE for browser UIs, streaming dashboards, and CLI scripts that can consume events in real time. Do not recommend to MCP agents.
-
-**Practical recommendation:** Keep `sse_url` in responses — it remains useful for non-agent consumers and as a completion detector for agents with shell access. Do not remove `plan_status` polling support; it is the primary method for all agents today.
 
 **Overlap:** Proposal 70 §5.1 (SSE progress streaming) is implemented but serves the wrong consumer type for agent use cases.
 

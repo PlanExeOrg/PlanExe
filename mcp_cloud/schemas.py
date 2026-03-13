@@ -152,8 +152,8 @@ TOOL_DEFINITIONS = [
             "The adversarial sections (premortem, self-audit, premise attacks) surface risks and questions the prompter may not have considered. "
             "Returns plan_id (UUID); use it for plan_status, plan_stop, plan_retry, and plan_file_info. "
             "To track progress, poll plan_status at reasonable intervals (e.g. every 5 minutes). "
-            "Optionally set monitor=true to also receive MCP progress notifications every ~10 seconds "
-            "(requires client support for notifications/progress and notifications/message). "
+            "Optionally, run `curl -N <sse_url>` in a background shell as a completion detector — "
+            "the stream auto-closes on terminal state (completed/failed). "
             "If you lose a plan_id, call plan_list to recover it. "
             "If the same prompt + model_profile is submitted by the same user within a short window, "
             "the existing plan is returned (with deduplicated=true) instead of creating a new one. "
@@ -228,9 +228,6 @@ TOOL_DEFINITIONS = [
             "Retry a plan that is currently in failed or stopped state. "
             "Pass the plan_id and optionally model_profile (defaults to baseline). "
             "The plan is reset to pending, prior artifacts are cleared, and the same plan_id is requeued for processing. "
-            "Use plan_status to poll progress after retrying. "
-            "Optionally set monitor=true to also receive MCP progress notifications every ~10 seconds "
-            "(requires client support for notifications/progress). "
             "Returns PLAN_NOT_FOUND when plan_id is unknown and PLAN_NOT_FAILED when the plan is not in failed or stopped state."
         ),
         input_schema=PLAN_RETRY_INPUT_SCHEMA,
@@ -251,9 +248,6 @@ TOOL_DEFINITIONS = [
             "(network drop, timeout, plan_stop, worker crash). "
             "For a full restart or to change model_profile, use plan_retry instead. "
             "Only failed or stopped plans can be resumed. "
-            "Use plan_status to poll progress after resuming. "
-            "Optionally set monitor=true to also receive MCP progress notifications every ~10 seconds "
-            "(requires client support for notifications/progress). "
             "Returns PLAN_NOT_FOUND when plan_id is unknown and PLAN_NOT_RESUMABLE when the plan is not in failed or stopped state. "
             "Returns PIPELINE_VERSION_MISMATCH when the snapshot was created by a different pipeline version; use plan_retry instead."
         ),

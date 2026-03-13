@@ -52,7 +52,7 @@ class AssumptionItem(BaseModel):
 class FailureModeItem(BaseModel):
     failure_mode_index: int = Field(description="Index of this failure mode, starting from 1.")
     root_cause_assumption_id: str = Field(description="The assumption_id of the assumption that is the root cause of this failure (e.g. 'A1').")
-    failure_mode_archetype: str = Field(description="The archetype: 'Process/Financial', 'Technical/Logistical', or 'Market/Human'.")
+    failure_mode_archetype: str = Field(description="The failure archetype (e.g. 'Process/Financial', 'Technical/Logistical', 'Market/Human', 'Environmental/Regulatory', 'Execution/Operational', 'Technology/Infrastructure', or a more specific variant suited to this project).")
     failure_mode_title: str = Field(description="A compelling, story-like title (e.g. 'The Gridlock Gamble').")
     risk_analysis: str = Field(description="Factual breakdown of causes, contributing factors, and impacts.")
     early_warning_signs: List[str] = Field(description="Measurable indicators that this failure may occur.")
@@ -84,6 +84,9 @@ ARCHETYPES = [
     ("Process/Financial", "A1", 1),
     ("Technical/Logistical", "A2", 2),
     ("Market/Human", "A3", 3),
+    ("Environmental/Regulatory", "A4", 4),
+    ("Execution/Operational", "A5", 5),
+    ("Technology/Infrastructure", "A6", 6),
 ]
 
 PREMORTEM_SYSTEM_PROMPT_NARRATIVE = """

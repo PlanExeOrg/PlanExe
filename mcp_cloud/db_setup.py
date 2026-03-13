@@ -241,10 +241,12 @@ class PlanStopRequest(BaseModel):
 class PlanRetryRequest(BaseModel):
     plan_id: str
     model_profile: ModelProfileInput = "baseline"
+    monitor: bool = False
 
 class PlanResumeRequest(BaseModel):
     plan_id: str
     model_profile: ModelProfileInput = "baseline"
+    monitor: bool = False
 
 class PlanFileInfoRequest(BaseModel):
     plan_id: str

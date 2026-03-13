@@ -138,6 +138,13 @@ class PlanRetryInput(BaseModel):
             "Model profile used for the retry run. Defaults to baseline if omitted."
         ),
     )
+    monitor: bool = Field(
+        default=False,
+        description=(
+            "When true, blocks after retrying and sends MCP progress notifications every ~10 seconds "
+            "until the plan reaches a terminal state. When false (default), returns immediately."
+        ),
+    )
 
 
 class PlanFileInfoInput(BaseModel):
@@ -359,6 +366,13 @@ class PlanResumeInput(BaseModel):
         default="baseline",
         description=(
             "Model profile used for the resumed run. Defaults to baseline if omitted."
+        ),
+    )
+    monitor: bool = Field(
+        default=False,
+        description=(
+            "When true, blocks after resuming and sends MCP progress notifications every ~10 seconds "
+            "until the plan reaches a terminal state. When false (default), returns immediately."
         ),
     )
 

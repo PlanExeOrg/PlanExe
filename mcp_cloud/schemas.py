@@ -228,6 +228,7 @@ TOOL_DEFINITIONS = [
             "Retry a plan that is currently in failed or stopped state. "
             "Pass the plan_id and optionally model_profile (defaults to baseline). "
             "The plan is reset to pending, prior artifacts are cleared, and the same plan_id is requeued for processing. "
+            "Set monitor=true to block and receive MCP progress notifications every ~10 seconds until completion. "
             "Returns PLAN_NOT_FOUND when plan_id is unknown and PLAN_NOT_FAILED when the plan is not in failed or stopped state."
         ),
         input_schema=PLAN_RETRY_INPUT_SCHEMA,
@@ -248,6 +249,7 @@ TOOL_DEFINITIONS = [
             "(network drop, timeout, plan_stop, worker crash). "
             "For a full restart or to change model_profile, use plan_retry instead. "
             "Only failed or stopped plans can be resumed. "
+            "Set monitor=true to block and receive MCP progress notifications every ~10 seconds until completion. "
             "Returns PLAN_NOT_FOUND when plan_id is unknown and PLAN_NOT_RESUMABLE when the plan is not in failed or stopped state. "
             "Returns PIPELINE_VERSION_MISMATCH when the snapshot was created by a different pipeline version; use plan_retry instead."
         ),

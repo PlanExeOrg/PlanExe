@@ -723,27 +723,43 @@ async def plan_stop(
 
 
 async def plan_retry(
+    ctx: Context,
     plan_id: str = Field(..., description="UUID of the failed plan to retry."),
     model_profile: Annotated[
         ModelProfileInput,
         Field(description="Model profile used for retry. Defaults to baseline."),
     ] = "baseline",
+    monitor: Annotated[
+        bool,
+        Field(description=(
+            "When true, blocks and sends MCP progress notifications every ~10s until the plan "
+            "reaches a terminal state. When false (default), returns immediately."
+        )),
+    ] = False,
 ) -> CallToolResult:
-    arguments: dict[str, Any] = {"plan_id": plan_id, "model_profile": model_profile}
+    arguments: dict[str, Any] = {"plan_id": plan_id, "model_profile": model_profile, "monitor": monitor}
     authenticated_user_api_key = _get_authenticated_user_api_key()
     if authenticated_user_api_key:
         arguments["user_api_key"] = authenticated_user_api_key
-    return await handle_plan_retry(arguments)
+    return await handle_plan_retry(arguments, ctx=ctx)
 
 
 async def plan_resume(
+    ctx: Context,
     plan_id: str = Field(..., description="UUID of the failed plan to resume."),
     model_profile: Annotated[
         ModelProfileInput,
         Field(description="Model profile used for the resumed plan. Defaults to baseline."),
     ] = "baseline",
+    monitor: Annotated[
+        bool,
+        Field(description=(
+            "When true, blocks and sends MCP progress notifications every ~10s until the plan "
+            "reaches a terminal state. When false (default), returns immediately."
+        )),
+    ] = False,
 ) -> CallToolResult:
-    return await handle_plan_resume({"plan_id": plan_id, "model_profile": model_profile})
+    return await handle_plan_resume({"plan_id": plan_id, "model_profile": model_profile, "monitor": monitor}, ctx=ctx)
 
 
 async def plan_file_info(

@@ -470,6 +470,7 @@ Retries a plan that is currently in `failed` state.
 
 - plan_id: UUID of a failed plan.
 - model_profile: optional (`baseline` | `premium` | `frontier` | `custom`), default `baseline`.
+- monitor: optional boolean (default `false`). When `true`, blocks after retrying and sends MCP progress notifications every ~10 seconds until the plan reaches a terminal state. Same behavior as `plan_create` monitor mode.
 
 **Response**
 
@@ -514,6 +515,7 @@ Use `plan_resume` when `plan_status` shows `failed` or `stopped` and plan genera
 
 - plan_id: UUID of a failed plan.
 - model_profile: optional (`baseline` | `premium` | `frontier` | `custom`), default `baseline`.
+- monitor: optional boolean (default `false`). When `true`, blocks after resuming and sends MCP progress notifications every ~10 seconds until the plan reaches a terminal state. Same behavior as `plan_create` monitor mode.
 
 **Response**
 

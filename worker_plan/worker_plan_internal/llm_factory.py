@@ -232,10 +232,15 @@ def get_llm(llm_name: Optional[str] = None, model_profile: Optional[ModelProfile
         }
         arguments.update(arguments_extra)
 
+    # Filter out config-metadata parameters that are not accepted by the LLM class constructor.
+    # These are used for PlanExe scheduling/routing decisions, not for LLM instantiation.
+    _METADATA_PARAMETERS = {"context_window", "is_function_calling_model", "is_chat_model"}
+    filtered_arguments = {k: v for k, v in arguments.items() if k not in _METADATA_PARAMETERS}
+
     # Dynamically instantiate the class
     try:
         llm_class = globals()[class_name]  # Get class from global scope
-        llm_instance = llm_class(**arguments)
+        llm_instance = llm_class(**filtered_arguments)
 
         # Post-init: swap underlying SDK clients for OAuth tokens.
         # llama_index always builds its internal client with api_key= (x-api-key header),

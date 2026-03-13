@@ -2,18 +2,19 @@
 
 **Date:** 2026-03-11
 **Status:** Proposal (I1, I2, I4 implemented; remainder open)
-**Source:** Feedback from Claude (Opus 4.6) after three stress-testing sessions (13 plans total) operated through Claude Code CLI.
+**Source:** Feedback from Claude (Opus 4.6) after four stress-testing sessions (17 plans total) operated through Claude Code CLI.
 **Scope:** MCP interface design, observability, and lifecycle management. Does not cover plan content quality or pipeline output improvements.
 
 ---
 
 ## 1. Context
 
-Three stress-testing sessions were conducted through Claude Code CLI using the PlanExe MCP interface:
+Four stress-testing sessions were conducted through Claude Code CLI using the PlanExe MCP interface:
 
 - **Session 1** (10 plans): Surfaced core MCP interface friction points — state ambiguity, missing diagnostics, lifecycle gaps.
 - **Session 2** (2 plans, with stop/resume cycling): Validated the `stopped` state implementation and identified remaining gaps.
 - **Session 3** (1 plan on remote server): First use of `planexeremote` alongside `planexelocal`. Exposed local-vs-remote behavioral differences and prompted a fundamental correction on SSE's role for agents.
+- **Session 4** (4 plans, including MCP notification test): First test of `monitor=true` MCP notifications. Validated error dict in a real content-safety failure. Operated the most complex plan lifecycle (stop → resume → fail → resume → complete). Discovered that Claude Code silently drops MCP progress notifications.
 
 The testing surfaced concrete MCP interface friction points that affect agent operators — issues with state management, observability, lifecycle hygiene, and workflow ergonomics. This proposal catalogues the MCP-specific issues and maps them against existing proposals.
 
@@ -128,7 +129,7 @@ The `recoverable` boolean lets the agent immediately suggest `plan_resume` (tran
 
 **Status:** Implemented and reverted. A `monitor` boolean parameter was added to `plan_create`, `plan_retry`, and `plan_resume` using the MCP SDK's `ctx.report_progress()` and `ctx.info()` APIs. The server sent `notifications/progress` and `notifications/message` correctly, but v4 real-world testing revealed that Claude Code — PlanExe's primary MCP consumer — silently drops both notification types. Claude Code only supports `list_changed` notifications (for refreshing tool/resource definitions). Since no current MCP client can consume the notifications, the implementation was reverted as unused code.
 
-**v4 real-world testing (March 2026):** A `monitor=true` parameter was implemented and tested. Claude Code tested `monitor=true` on `plan_resume`. The resume succeeded and the plan completed, but zero notifications were received. Investigation showed that Claude Code only supports `list_changed` MCP notifications (for refreshing tool/resource definitions). It does not handle `notifications/progress` or `notifications/message` — they are silently dropped. The server was sending notifications correctly; the gap is on the client side. The implementation was reverted as unused code — no MCP client can consume it today. See `docs/proposals/mcp-interface-perception-v4.md` for the full agent feedback.
+**v4 real-world testing (March 2026, session 4):** A `monitor=true` parameter was implemented and tested. Claude Code tested `monitor=true` on `plan_resume`. The resume succeeded and the plan completed, but zero notifications were received. Investigation showed that Claude Code only supports `list_changed` MCP notifications (for refreshing tool/resource definitions). It does not handle `notifications/progress` or `notifications/message` — they are silently dropped. The server was sending notifications correctly; the gap is on the client side. The implementation was reverted as unused code — no MCP client can consume it today. See session 4 observations in section 7.
 
 **Corrected priority ranking (from v4 agent feedback):**
 
@@ -368,7 +369,7 @@ If accepted, I1–I4 and I7–I13 should be added to Proposal 70's quick-win che
 
 ---
 
-## 6. Agent Perception (after 13 plans across three sessions)
+## 6. Agent Perception (sessions 1–3, 13 plans)
 
 **Overall rating: 8.5/10** (unchanged from session 2). The remote server works — same workflow, same tool contract — but exposed new friction that local hid.
 
@@ -411,23 +412,103 @@ Session 3 forced a fundamental re-evaluation of how the agent used SSE. The agen
 
 ### Evolution across sessions
 
-| Aspect | Session 1 | Session 2 | Session 3 | Direction |
-|--------|-----------|-----------|-----------|-----------|
-| Stop state | `failed` (ambiguous) | `stopped` (clear) | `stopped` (clear) | Fixed |
-| Resume tracking | No history | `resume_count` field | `resume_count` field | Fixed |
-| Tool descriptions | Excellent | Updated with `stopped` state | Identical across servers | Stable |
-| Failure diagnostics | Missing | Still missing | **Implemented** | Fixed |
-| Silent partial failures | Not surfaced | Not surfaced | Not surfaced | Unchanged |
-| Plan cleanup | No delete | No delete | No delete | Unchanged |
-| SSE understanding | "Reliable completion detector" | "Reliable completion detector" | "Wrong tool for agents" | Corrected |
-| Server awareness | Single server | Single server | No server identity signal | New gap |
-| Files during processing | Visible | Visible | Not visible (remote) | New gap |
+| Aspect | Session 1 | Session 2 | Session 3 | Session 4 | Direction |
+|--------|-----------|-----------|-----------|-----------|-----------|
+| Stop state | `failed` (ambiguous) | `stopped` (clear) | `stopped` (clear) | `stopped` (clear) | Fixed |
+| Resume tracking | No history | `resume_count` field | `resume_count` field | `resume_count` field | Fixed |
+| Tool descriptions | Excellent | Updated with `stopped` state | Identical across servers | Updated for notifications | Stable |
+| Failure diagnostics | Missing | Still missing | **Implemented** | Validated in real failure | Fixed |
+| Error dict | N/A | N/A | N/A | Clean, actionable, no stale leakage | Validated |
+| Silent partial failures | Not surfaced | Not surfaced | Not surfaced | Not surfaced | Unchanged |
+| Plan cleanup | No delete | No delete | No delete | No delete | Unchanged |
+| SSE understanding | "Reliable completion detector" | "Reliable completion detector" | "Wrong tool for agents" | Still works as local detector | Corrected |
+| MCP notifications | N/A | N/A | Proposed | Implemented → reverted (client gap) | Blocked |
+| Server awareness | Single server | Single server | No server identity signal | N/A | New gap |
+| Files during processing | Visible | Visible | Not visible (remote) | Recent 10 shown (fixed ordering) | Improved |
 
 ### Session totals
 
-| # | Plan ID | Description | Server | Time | Files |
-|---|---------|-------------|--------|------|-------|
-| 1–10 | (various) | Session 1 plans | local | varies | varies |
-| 11 | ff5488dc | Riemann Hypothesis Bonn | local | ~13 min | 179 |
-| 12 | 6d0c1d80 | Parasomnia facility Bonn | local | ~14 min (with 2 stop/resume) | 172 |
-| 13 | d623f577 | Delhi water purification | remote | ~28 min | 198 |
+| # | Plan ID | Description | Server | Time | Files | State |
+|---|---------|-------------|--------|------|-------|-------|
+| 1–10 | (various) | Session 1 plans | local | varies | varies | various |
+| 11 | ff5488dc | Riemann Hypothesis Bonn | local | ~13 min | 179 | completed |
+| 12 | 6d0c1d80 | Parasomnia facility Bonn | local | ~14 min (with 2 stop/resume) | 172 | completed |
+| 13 | d623f577 | Delhi water purification | remote | ~28 min | 198 | completed |
+| 14 | 450371f8 | Silo underground complex | local | ~32 min | 189 | completed |
+| 15 | 76619026 | GTA game development | local | ~14 min | 179 | completed |
+| 16 | 48cee8b6 | GTA (remote rerun) | remote | ~17 min | 203 | completed |
+| 17 | 5d3e45ed | GTA (local, monitor test) | local | ~40 min (1 stop + 1 failure + 2 resumes) | 189 | completed |
+
+---
+
+## 7. Agent Perception — Session 4 (4 plans, 17 total)
+
+**Overall rating: 8.5/10 → 9/10.** The interface keeps improving. The `error` dict consolidation, `stopped` state, and files list ordering fix all landed since session 3. The MCP notification feature (`monitor=true`) was implemented correctly but Claude Code can't consume MCP notifications yet.
+
+### MCP notifications (`monitor=true`)
+
+The `plan_create` and `plan_resume` tools had a `monitor` parameter added (default: `false`). When `true`, the server sends MCP progress notifications every ~10 seconds until the plan reaches a terminal state — push notifications over the existing MCP connection, no SSE, no polling.
+
+The implementation was clean: non-blocking (tool returns immediately, notifications arrive asynchronously), consistent (same parameter name and default across tools), and opt-in (agents that don't support notifications get the same behavior as before).
+
+**What happened when tested:**
+
+```
+plan_resume(plan_id="5d3e45ed-...", monitor=true)
+→ returned immediately with empty output
+→ plan resumed successfully (confirmed via plan_status)
+→ zero notifications received
+```
+
+The resume worked. The notifications didn't arrive. Investigation showed that **Claude Code only supports `list_changed` MCP notifications** (for refreshing tool/resource definitions when a server's capabilities change). It does not handle `notifications/progress` or `notifications/message` — they are silently dropped. The PlanExe server was sending notifications correctly; the gap is on the client side.
+
+The implementation was reverted as unused code since no current MCP client can consume it. When Claude Code (or other MCP clients) adds support for progress/message notifications, PlanExe can re-add the feature with no server-side design changes needed.
+
+### Error dict in practice — content safety failure
+
+Plan `5d3e45ed` (GTA, local) failed at step 98/110 on "Executive Summary" with:
+
+```json
+{
+  "failure_reason": "generation_error",
+  "failed_step": "Executive Summary",
+  "message": "Error. Unable to generate the report. Likely reasons: censorship, restricted content.",
+  "recoverable": true
+}
+```
+
+This was the first time the `error` dict was tested in a real failure (not a synthetic test). Observations:
+
+1. **Clean and actionable**: All four fields present, no contradicting information from multiple sources. The old dual-source problem is gone.
+2. **`recoverable: true` was correct**: The plan completed successfully on resume. The LLM that refused the executive summary on the first try accepted it on retry — typical non-deterministic content safety behavior.
+3. **`failed_step` was precise**: "Executive Summary" told the agent exactly where it broke. Combined with 98/110 steps completed, it was clear the plan was nearly done and only the final report generation steps needed to re-run.
+4. **Agent decision was trivial**: `recoverable: true` → resume. No ambiguity, no need to inspect logs or guess.
+
+### Most complex lifecycle tested
+
+Plan `5d3e45ed` went through the full lifecycle:
+
+```
+pending → processing → stopped (user request, 31%)
+  → processing (resume #1) → failed (content safety, 89%)
+  → processing (resume #2) → completed (100%, 189 files)
+```
+
+Every state transition was clean:
+- `plan_stop` → immediate `stopped` state, no error dict (correct)
+- `plan_resume` → `resume_count: 1`, picked up from step 34
+- Content safety failure → `failed` state with error dict (correct)
+- `plan_resume` again → `resume_count: 2`, picked up from step 98
+- Final completion → `completed`, error dict absent (correct)
+
+No stale error information leaked between states.
+
+### Files list ordering fix
+
+The files list in `plan_status` now shows the most recent 10 files instead of the first 10. When the plan completed, the agent saw `029-2-self_audit.md`, `030-report.html`, `999-pipeline_complete.txt` etc. instead of the same early pipeline files every time. Much more useful for monitoring progress.
+
+### Agent-server capability mismatch (systemic observation)
+
+This session surfaced a systemic issue that goes beyond PlanExe: **MCP servers can't know what their clients support.** There is no capability negotiation for notification types in the MCP handshake. This creates a design tension: servers that implement features some clients can't use (wasted effort) vs. servers that wait for client support (chicken-and-egg).
+
+**Takeaway for MCP server developers**: implement notification support, but always provide a polling fallback. Don't remove `plan_status` polling just because notifications exist. Some clients will be notification-capable; others won't. The polling path should remain first-class.

@@ -126,7 +126,7 @@ The `recoverable` boolean lets the agent immediately suggest `plan_resume` (tran
 
 ### I5 — SSE is the wrong mechanism for MCP agents
 
-**Status:** Not implemented — deprioritized after v4 real-world testing.
+**Status:** Implemented and reverted. A `monitor` boolean parameter was added to `plan_create`, `plan_retry`, and `plan_resume` using the MCP SDK's `ctx.report_progress()` and `ctx.info()` APIs. The server sent `notifications/progress` and `notifications/message` correctly, but v4 real-world testing revealed that Claude Code — PlanExe's primary MCP consumer — silently drops both notification types. Claude Code only supports `list_changed` notifications (for refreshing tool/resource definitions). Since no current MCP client can consume the notifications, the implementation was reverted as unused code.
 
 **v4 real-world testing (March 2026):** A `monitor=true` parameter was implemented and tested. Claude Code tested `monitor=true` on `plan_resume`. The resume succeeded and the plan completed, but zero notifications were received. Investigation showed that Claude Code only supports `list_changed` MCP notifications (for refreshing tool/resource definitions). It does not handle `notifications/progress` or `notifications/message` — they are silently dropped. The server was sending notifications correctly; the gap is on the client side. The implementation was reverted as unused code — no MCP client can consume it today. See `docs/proposals/mcp-interface-perception-v4.md` for the full agent feedback.
 

@@ -193,7 +193,10 @@ class IdentifyPotentialLevers:
             chat_message_list.append(
                 ChatMessage(
                     role=MessageRole.ASSISTANT,
-                    content=result["chat_response"].message.content,
+                    content=(
+                        result["chat_response"].message.content
+                        or result["chat_response"].raw.model_dump_json()
+                    ),
                 )
             )
 

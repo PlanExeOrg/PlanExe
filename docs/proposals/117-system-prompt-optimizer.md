@@ -37,38 +37,54 @@ I want to track metrics for how much improvement have happened.
   - **Root cause**: `llama-index-llms-anthropic` overrides `structured_predict()` and calls `self._client.beta.messages.parse()` directly, bypassing `self.chat()`. LlamaIndex instrumentation events (`LLMChatEndEvent`) never fire, so `TrackActivity` never writes `usage_metrics.jsonl` or `activity_overview.json`.
   - **Fix**: `LLMExecutor._record_attempt_token_metrics()` now records basic metrics (model, duration, success) for all calls, not just failures. For Anthropic, this is the only record; for other backends, TrackActivity also writes richer data (token counts, cost).
   - Added `ANTHROPIC_API_KEY` to `.env` example files and documented Anthropic usage in `prompt_optimizer/AGENTS.md`.
-- **Runner tested across 8 models** (history runs 00–09):
+- **GLM models removed** ([PR #266](https://github.com/PlanExeOrg/PlanExe/pull/266)) — `openrouter-z-ai-glm-4-7-flash` returned the schema instead of data (schema-echoing failure). Removed from `llm_config`.
+- **Runner tested across 8 models** (history runs 00–08, pre-fix):
   - 5/5: `ollama-llama3.1`, `openrouter-openai-gpt-oss-20b`, `openai-gpt-5-nano`, `openrouter-qwen3-30b-a3b`, `openrouter-openai-gpt-4o-mini`, `anthropic-claude-haiku-4-5-pinned`
-  - 3/5: `openrouter-stepfun-step-3-5-flash`
-  - 0/5: `openrouter-z-ai-glm-4-7-flash` (returned schema instead of data), `openrouter-nvidia-nemotron-3-nano-30b-a3b` (empty output)
-- **Analysis automation** — two Python scripts in `PlanExe-prompt-lab/analysis/` that run Claude Code and Codex in parallel:
-  - **`run_insight.py`** (phase 1): reads `meta.json`, builds a prompt referencing `AGENTS.md` conventions and history runs, produces independent `insight_claude.md` and `insight_codex.md` with quantitative metrics, tiered rankings, and labeled hypotheses (H1–H4, C1–C4).
+  - 0/5: `openrouter-z-ai-glm-4-7-flash` (schema-echoing), `openrouter-nvidia-nemotron-3-nano-30b-a3b` (empty output), `openrouter-stepfun-step-3-5-flash` (removed from config)
+- **Analysis automation** — Python scripts in `PlanExe-prompt-lab/analysis/` that run Claude Code and Codex:
+  - **`create_analysis_dir.py`** (phase 0): scans existing analysis directories and history runs, creates a new auto-incremented analysis directory with `meta.json` containing only unanalyzed runs. Ensures no runs are accidentally skipped.
+  - **`run_insight.py`** (phase 1): reads `meta.json`, builds a prompt referencing `AGENTS.md` conventions and history runs, runs Claude Code and Codex in parallel. Produces independent `insight_claude.md` and `insight_codex.md` with quantitative metrics, tiered rankings, and labeled hypotheses (H1–H4, C1–C4).
   - **`run_code_review.py`** (phase 2): reads the insight files from phase 1 as context, asks both agents to review PlanExe source code (`identify_potential_levers.py`, `runner.py`) for bugs and improvements. Produces `code_claude.md` and `code_codex.md` with file:line references traced back to insight findings.
+  - **`run_synthesis.py`** (phase 3): reads all insight and code review files, cross-references across agents, resolves disagreements by reading source code, and produces a single `synthesis.md` with top 5 ranked directions and 1 recommendation.
+  - **`run_assessment.py`** (phase 4): compares the current analysis against the previous one, reads actual output samples from history, and produces `assessment.md` with a metric-by-metric comparison table and a keeper verdict (YES/NO/CONDITIONAL).
+  - **`update_meta_pr.py`**: fetches PR info from GitHub via `gh` and writes `pr_url`, `pr_title`, `pr_description` into `meta.json` for provenance.
   - Conventions documented in [`analysis/AGENTS.md`](https://github.com/PlanExeOrg/PlanExe-prompt-lab/blob/main/analysis/AGENTS.md).
-- **First analysis complete** for `identify_potential_levers` (step 0):
-  - Insight files identify run 09 (claude-haiku) as best content quality, run 02 (gpt-5-nano) as best structural regularity. 56% overall success rate (28/50 plan-runs). Three models failed completely (schema mismatch, empty output, config error).
-  - Code review files confirmed a double user-prompt bug in `identify_potential_levers.py` (the user prompt is sent twice on the first LLM call), template leakage from the prompt example name "Material Adaptation Strategy", and thread-safety issues in `runner.py`.
+- **`run_optimization_iteration.py`** — orchestrates a full optimization loop: reads the latest `synthesis.md`, extracts the top recommendation, invokes Claude Code to implement it (branch + PR), runs experiments across models, and runs the full analysis pipeline (phases 0–4). Supports `--skip-implement`, `--skip-runner`, `--skip-analysis`, and `--models`.
+- **First analysis complete** ([analysis 0](https://github.com/PlanExeOrg/PlanExe-prompt-lab/tree/main/analysis/0_identify_potential_levers)):
+  - Insight files identify run 09 (claude-haiku) as best content quality, run 02 (gpt-5-nano) as best structural regularity. ~70% artifact-level success rate. Three models failed completely (schema mismatch, empty output, config error).
+  - Code review files confirmed bugs: B1 (double user-prompt), B7 (field description mismatch), thread-safety issues, no post-call validation.
+  - Synthesis ranked B1 as the top recommendation.
+- **First optimization iteration complete** — B1 fix ([PR #268](https://github.com/PlanExeOrg/PlanExe/pull/268)):
+  - **Fix**: removed the initial `USER(user_prompt)` from `chat_message_list` initialization in `identify_potential_levers.py`. All three LLM turns now handled uniformly by the loop.
+  - **Post-fix runs** (09–16): 7 models re-tested, 29/30 plans succeeded (96.7% excluding infrastructure failures).
+  - **[Assessment verdict: YES](https://github.com/PlanExeOrg/PlanExe-prompt-lab/blob/main/analysis/1_identify_potential_levers/assessment.md)** — PR merged. Key improvements:
+    - Review format violations: 67 → ~4
+    - Consequence chain violations: 35 → 7
+    - Bracket placeholder leakage: ~17 → ~1
+    - No regressions in success rate, content depth, or cross-call duplication.
+  - New issues surfaced (not caused by B1): assistant turn stored as `dict` instead of `str` (corrupts turns 2–3 context), metric exemplar leakage ("25% faster scaling through").
 
 ### Not Started
 
-- **Synthesis step** — no agent yet to read all insight + code review files and produce a ranked action plan.
 - **Evaluator prompt** — no scoring rubric or comparison prompt written.
 - **Candidate generator** — no mechanism for producing prompt variants.
 - **Scorer / Optimizer loop** — no automated train/verify loop.
 
 ### Next Steps
 
-1. **Fix the double user-prompt bug** in `identify_potential_levers.py`. The code pre-loads `chat_message_list` with `[SYSTEM, USER(prompt)]`, then the loop appends the same `user_prompt` again before the first call. This causes call 1 to send the prompt twice, which may explain template leakage and robotic repetition in weaker models. This is a code fix, not a prompt change, so it benefits all models.
-2. **Build synthesis step** — an agent reads `meta.json`, all `insight_*.md`, and all `code_*.md` for a step, resolves disagreements, ranks hypotheses by impact and evidence, and produces a prioritized action plan (prompt edits, code fixes, or both).
-3. **Re-run history after the bug fix** — re-execute the runner on a few models to measure whether fixing the double-prompt bug improves uniqueness and reduces template leakage.
-4. **Design the evaluator prompt and scoring rubric.** Define concrete dimensions (completeness, specificity, actionability, structure) and a numeric scale. Version-control it alongside the system prompts.
-5. **Build `evaluator.py`** — calls a pinned reasoning model to score/compare runner outputs against baseline.
-6. **Run baseline scoring** — score the current default prompt outputs to establish a numeric starting point.
-7. **Build `candidate_generator.py`** — produce prompt variants (LLM rewrites, structured mutations), informed by synthesis conclusions and failed-attempt logs.
-8. **Build `optimizer.py`** — orchestrate the train/verify loop (Stage 1-2).
-9. **Pin the reasoning model** for evaluation so scores are reproducible across runs.
-10. **Add regression detection** — after optimizing one step, re-run downstream steps to check for cascade regressions before committing.
-11. **Extend runner to other pipeline steps** — the runner is designed for this; each step needs an adapter for input assembly, execute call, output filenames, and step name.
+1. **Fix assistant turn serialization** in `identify_potential_levers.py:196`. `result["chat_response"].raw.model_dump()` passes a Python dict as `ChatMessage.content`; it should be `result["chat_response"].message.content` (the raw JSON string). This corrupts conversation context for turns 2 and 3 on 100% of runs and is the top-priority fix per synthesis 1.
+2. **Replace metric exemplar** in `identify_potential_levers.py:95`. The literal `"Systemic: 25% faster scaling through..."` is copied verbatim by 5/6 models. Replace with `"Systemic: [N]% [measurable outcome] through [mechanism]"`.
+3. **Add stateful "more" turns** — inject already-generated lever names into turns 2 and 3 to reduce cross-call thematic redundancy.
+4. **Add per-call lever count validation** — `levers_raw.extend()` has no count guard; llama3.1 produced 20 levers instead of 15.
+5. **Add model preflight check** — move `LLMModelFromName.from_names()` before the plan loop to catch bad model aliases early.
+6. **Fix `Lever.options` field description** from `"2-5 options"` to `"Exactly 3 options"` (B7 from synthesis 0).
+7. **Design the evaluator prompt and scoring rubric.** Define concrete dimensions (completeness, specificity, actionability, structure) and a numeric scale. Version-control it alongside the system prompts.
+8. **Build `evaluator.py`** — calls a pinned reasoning model to score/compare runner outputs against baseline.
+9. **Run baseline scoring** — score the current default prompt outputs to establish a numeric starting point.
+10. **Build `candidate_generator.py`** — produce prompt variants (LLM rewrites, structured mutations), informed by synthesis conclusions and failed-attempt logs.
+11. **Build `optimizer.py`** — orchestrate the train/verify loop (Stage 1-2).
+12. **Add regression detection** — after optimizing one step, re-run downstream steps to check for cascade regressions before committing.
+13. **Extend runner to other pipeline steps** — the runner is designed for this; each step needs an adapter for input assembly, execute call, output filenames, and step name.
 
 
 ## Stage 1 - one improvement iteration
@@ -275,10 +291,30 @@ prompts/
     prompt_1_long-sha-here.txt
     prompt_2_long-sha-here.txt
 analysis/
-  0_identify_purpose/
-  1_identify_potential_levers/
-    summary.json                    # ranked candidates, aggregate scores
-    failed_attempts.log
+  AGENTS.md                         # conventions for analysis artifacts
+  create_analysis_dir.py            # phase 0: create analysis dir with unanalyzed runs
+  run_insight.py                    # phase 1: Claude + Codex insight in parallel
+  run_code_review.py                # phase 2: Claude + Codex code review in parallel
+  run_synthesis.py                  # phase 3: Claude synthesis (single agent)
+  run_assessment.py                 # phase 4: before/after comparison + verdict
+  update_meta_pr.py                 # register PR info in meta.json
+  0_identify_potential_levers/      # pre-fix analysis (runs 00-08)
+    meta.json
+    insight_claude.md
+    insight_codex.md
+    code_claude.md
+    code_codex.md
+    synthesis.md
+  1_identify_potential_levers/      # post-fix analysis (runs 09-16, PR #268)
+    meta.json                       # includes pr_url, pr_title, pr_description
+    insight_claude.md
+    insight_codex.md
+    code_claude.md
+    code_codex.md
+    synthesis.md
+    assessment.md                   # verdict: YES/NO/CONDITIONAL
+
+run_optimization_iteration.py       # orchestrates full iteration
 
 scores/                             # longitudinal tracking
   scoreboard.csv                    # step, date, baseline_score, best_score, delta
@@ -358,3 +394,33 @@ This turns the failure log into a learning dataset that can feed the next round 
 ### Implementation Suggestion: Freeze the evaluation model
 
 The reasoning model used for comparison should be pinned to a specific model version (not a rolling alias) for the duration of an optimization run. Model updates can shift evaluation scores without any change to the system prompts being tested. `meta.json` should record the exact evaluator model used.
+
+## Feedback from Claude Code (2026-03-14)
+
+After building and running the first complete optimization iteration (B1 fix, PR #268), here are observations on the loop's strengths and weaknesses.
+
+### What works well
+
+**The audit trail is the real win.** Every change has a PR, every PR has an assessment with a comparison table and verdict. You can trace any decision back to evidence. Most optimization systems are black boxes; this one is readable.
+
+**Dual-agent analysis reduces blind spots.** Claude and Codex independently analyze the same data, then synthesis resolves disagreements by checking source code. This caught real issues — codex corrected claude's success rate miscount in iteration 0 (claude counted raw `outputs.jsonl` rows including pre-retry errors; codex counted final artifacts on disk).
+
+**It found a real bug on the first iteration.** B1 was a genuine code defect, not a prompt tweak. The loop surfaced it, fixed it, verified the fix, and moved on to deeper issues. That's the loop working as intended.
+
+### Concerns
+
+**It's slow and expensive.** Each iteration runs 7 models × 5 plans, then 4 phases of LLM analysis (2 insight + 2 code review + 1 synthesis + 1 assessment = 6 LLM sessions). That's a lot of API calls for one recommendation. The low-hanging fruit (B1) justified it, but as fixes get more marginal the cost-per-insight ratio will worsen.
+
+**There's no numeric scoring yet.** The assessment says "review violations 67→4" but those numbers come from agents counting by hand, not a deterministic evaluator. Two runs of the same analysis could produce different counts. Until `evaluator.py` exists with a pinned rubric, the loop is making keep/reject decisions on qualitative agent impressions, not reproducible scores.
+
+**The synthesis bottleneck.** Everything funnels through one synthesis agent that picks THE recommendation. If it picks wrong (e.g., a prompt tweak when a code fix would help more), you burn a full iteration discovering that. The ranking is only as good as that single agent's judgment.
+
+**It optimizes in series, not parallel.** One recommendation per iteration. You could test multiple fixes simultaneously on separate branches and compare, but the current flow is strictly sequential.
+
+### Suggested priorities
+
+1. **Build the numeric evaluator** — a deterministic script that computes the same metrics the insight agents compute (uniqueness, option count violations, template leakage, format compliance) without LLM calls. This makes assessment reproducible and fast.
+2. **Use the evaluator to gate the assessment** — run it before the expensive 4-phase analysis. If the numbers clearly improve, fast-track. If they clearly regress, skip analysis entirely.
+3. **Consider parallelizing fixes** — the synthesis already produces a top-5 list. You could implement 2-3 in parallel on separate branches and let the evaluator pick the winner.
+
+The loop is a solid foundation. The main risk is that it stays in "expensive qualitative analysis" mode when it should graduate to "cheap quantitative scoring with qualitative analysis reserved for ambiguous cases."

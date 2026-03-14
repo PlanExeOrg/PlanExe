@@ -4,6 +4,157 @@
 
 Optimizes system prompts for pipeline steps in `run_plan_pipeline.py`. Re-executes a step with a candidate system prompt against baseline training data and captures the output. Currently supports `IdentifyPotentialLevers`; will extend to other pipeline tasks.
 
+## Optimization Flow
+
+The optimizer runs in a loop. Each iteration reads the previous analysis,
+implements the top recommendation, tests it across models, and evaluates the
+result. The loop produces an auditable trail: every change has a PR, every PR
+has an assessment verdict (YES/NO/CONDITIONAL).
+
+```
+                    ┌──────────────────────────────────────┐
+                    │        Read latest synthesis.md       │
+                    │     (extract top recommendation)      │
+                    └──────────────┬───────────────────────┘
+                                   │
+                    ┌──────────────▼───────────────────────┐
+                    │     Step 1: Implement recommendation  │
+                    │  Claude Code creates branch + PR in   │
+                    │  PlanExe repo (code fix or prompt)    │
+                    └──────────────┬───────────────────────┘
+                                   │
+                    ┌──────────────▼───────────────────────┐
+                    │     Step 2: Run experiments           │
+                    │  runner.py × N models × 5 plans      │
+                    │  outputs land in prompt-lab history/  │
+                    └──────────────┬───────────────────────┘
+                                   │
+                    ┌──────────────▼───────────────────────┐
+                    │     Step 3: Analysis pipeline         │
+                    │                                       │
+                    │  Phase 0: create_analysis_dir.py      │
+                    │    (diff history vs already-analyzed)  │
+                    │                                       │
+                    │  Phase 1: run_insight.py               │
+                    │    (Claude + Codex in parallel)        │
+                    │                                       │
+                    │  Phase 2: run_code_review.py           │
+                    │    (Claude + Codex in parallel)        │
+                    │                                       │
+                    │  Phase 3: run_synthesis.py              │
+                    │    (Claude only — reconciles analyses) │
+                    │                                       │
+                    │  Phase 4: run_assessment.py             │
+                    │    (compare before vs after, verdict)  │
+                    └──────────────┬───────────────────────┘
+                                   │
+                    ┌──────────────▼───────────────────────┐
+                    │     Register PR in meta.json          │
+                    │  update_meta_pr.py <dir> <PR#>        │
+                    └──────────────┬───────────────────────┘
+                                   │
+                    ┌──────────────▼───────────────────────┐
+                    │     Verdict: is the PR a keeper?       │
+                    │  YES → merge PR, loop back to top     │
+                    │  NO  → close PR, adjust approach      │
+                    │  CONDITIONAL → fix issues, re-test    │
+                    └──────────────────────────────────────┘
+```
+
+### Running a full iteration
+
+```bash
+# From the prompt-lab repo:
+python run_optimization_iteration.py
+```
+
+This reads the latest `synthesis.md`, implements the recommendation, runs
+experiments, and runs the full analysis pipeline. Supports `--skip-implement`,
+`--skip-runner`, `--skip-analysis`, and `--models` for partial runs.
+
+### Running steps individually
+
+```bash
+# Step 1: implement (or do it manually, then --skip-implement)
+# Step 2: run experiments for specific models
+python run_optimization_iteration.py --skip-implement --models haiku,llama
+
+# Step 3: analysis phases individually
+python analysis/create_analysis_dir.py identify_potential_levers      # Phase 0
+python analysis/run_insight.py analysis/1_identify_potential_levers    # Phase 1
+python analysis/run_code_review.py analysis/1_identify_potential_levers # Phase 2
+python analysis/run_synthesis.py analysis/1_identify_potential_levers   # Phase 3
+python analysis/update_meta_pr.py analysis/1_identify_potential_levers 268  # Register PR
+python analysis/run_assessment.py analysis/1_identify_potential_levers  # Phase 4
+```
+
+## Two-Repo Architecture
+
+The optimizer spans two repositories:
+
+- **PlanExe** (`prompt_optimizer/runner.py`, pipeline step source code) —
+  the code being optimized. PRs are created here.
+- **PlanExe-prompt-lab** (data repo) — baseline training data, history
+  outputs, registered prompts, and analysis artifacts. No PRs; commits
+  directly to main.
+
+```
+PlanExe/                              PlanExe-prompt-lab/
+  prompt_optimizer/                     baseline/train/          ← gold-standard outputs
+    runner.py                           prompts/                 ← registered system prompts
+    register_prompt.py                  history/                 ← runner output per model
+  worker_plan/.../                      analysis/                ← insight/review/synthesis/assessment
+    identify_potential_levers.py          AGENTS.md
+  llm_config/                             create_analysis_dir.py
+    baseline.json                         run_insight.py
+    anthropic_claude.json                 run_code_review.py
+                                          run_synthesis.py
+                                          run_assessment.py
+                                          update_meta_pr.py
+                                        run_optimization_iteration.py
+```
+
+## Analysis Artifacts Per Iteration
+
+Each iteration produces a numbered directory in `analysis/`:
+
+```
+analysis/1_identify_potential_levers/
+  meta.json           ← provenance: prompt, history runs, PR info
+  insight_claude.md   ← independent quality analysis (Claude Code)
+  insight_codex.md    ← independent quality analysis (Codex)
+  code_claude.md      ← code review informed by insights (Claude Code)
+  code_codex.md       ← code review informed by insights (Codex)
+  synthesis.md        ← cross-agent reconciliation, top 5 directions, recommendation
+  assessment.md       ← before/after comparison, metric table, keeper verdict
+```
+
+The `meta.json` links to the PR being evaluated:
+
+```json
+{
+  "prompt": "identify_potential_levers/prompt_0_fa5dfb88...txt",
+  "pr_url": "https://github.com/PlanExeOrg/PlanExe/pull/268",
+  "pr_title": "fix: remove doubled user prompt (B1)",
+  "pr_description": "...",
+  "history": ["0/09_identify_potential_levers", "0/10_identify_potential_levers", ...]
+}
+```
+
+## Assessment Verdicts
+
+Each iteration ends with an assessment that compares the before and after
+analyses and produces a verdict:
+
+- **YES** — the PR improved quality, merge it.
+- **NO** — the PR made things worse or did not help, close it.
+- **CONDITIONAL** — the PR helps but needs additional changes before merging.
+
+The assessment compares metrics only for models that appear in both batches:
+success rate, bracket placeholder leakage, option count violations, lever
+name uniqueness, template leakage, review format compliance, consequence chain
+format, content depth, and cross-call duplication.
+
 ## Prerequisites
 
 - Python venv: `worker_plan/.venv/bin/python` (has llama_index and dependencies)

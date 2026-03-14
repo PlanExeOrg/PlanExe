@@ -150,10 +150,6 @@ class IdentifyPotentialLevers:
                 role=MessageRole.SYSTEM,
                 content=system_prompt,
             ),
-            ChatMessage(
-                role=MessageRole.USER,
-                content=user_prompt,
-            )
         ]
 
         user_prompt_list = [

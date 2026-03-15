@@ -31,7 +31,7 @@ if _worker_plan_dir not in sys.path:
 
 from llama_index.core.instrumentation import get_dispatcher
 from worker_plan_internal.lever.identify_potential_levers import IdentifyPotentialLevers
-from worker_plan_internal.llm_util.llm_executor import LLMExecutor, LLMModelFromName
+from worker_plan_internal.llm_util.llm_executor import LLMExecutor, LLMModelFromName, RetryConfig
 from worker_plan_internal.llm_util.track_activity import TrackActivity
 from worker_plan_internal.llm_util.usage_metrics import set_usage_metrics_path
 
@@ -91,7 +91,7 @@ def run_single_plan(
     plan_output_dir.mkdir(parents=True, exist_ok=True)
 
     llm_models = LLMModelFromName.from_names(model_names)
-    llm_executor = LLMExecutor(llm_models=llm_models)
+    llm_executor = LLMExecutor(llm_models=llm_models, retry_config=RetryConfig())
 
     # Set up per-plan usage tracking.
     # set_usage_metrics_path and the dispatcher are global state, so we hold

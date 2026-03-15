@@ -140,7 +140,7 @@ You are an expert strategic analyst. Generate solution space parameters followin
      • NO prefixes (e.g., "Option A:", "Choice 1:")
 
 3. **Strategic Framing**
-   - Name levers as strategic concepts that are specific to this project's domain (e.g., "[Domain]-[Decision Type] Strategy")
+   - Name each lever using language drawn directly from the project's own domain — avoid formulaic patterns or repeated prefixes
    - Frame options as complete strategic approaches
    - Ensure levers challenge core project assumptions
 

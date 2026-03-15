@@ -77,8 +77,8 @@ class DocumentDetails(BaseModel):
     )
     levers: list[Lever] = Field(
         min_length=5,
-        max_length=7,
-        description="Propose 5 to 7 levers."
+        max_length=5,
+        description="Propose exactly 5 levers."
     )
     summary: str = Field(
         description="Are these levers well picked? Are they well balanced? Are they well thought out? Point out flaws. 100 words."
@@ -200,7 +200,7 @@ class IdentifyPotentialLevers:
             else:
                 names_list = ", ".join(f'"{n}"' for n in generated_lever_names)
                 prompt_content = (
-                    f"Generate 5 to 7 MORE levers with completely different names. "
+                    f"Generate exactly 5 MORE levers with completely different names. "
                     f"Do NOT reuse any of these already-generated names: [{names_list}]\n\n"
                     f"{user_prompt}"
                 )

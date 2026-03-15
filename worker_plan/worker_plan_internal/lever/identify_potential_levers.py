@@ -12,6 +12,7 @@ PROMPT> python -m worker_plan_internal.lever.identify_potential_levers
 """
 import json
 import logging
+import re
 from pathlib import Path
 from typing import Optional
 from dataclasses import dataclass
@@ -246,9 +247,31 @@ class IdentifyPotentialLevers:
         for response in responses:
             levers_raw.extend(response.levers)
 
-        # Clean the raw levers
+        # Clean the raw levers with quality gate checks
+        placeholder_pattern = re.compile(r'\[[^\]]{3,}\]')
+        seen_names: set[str] = set()
         levers_cleaned: list[LeverCleaned] = []
         for i, lever in enumerate(levers_raw, start=1):
+            # Check 1: Review-text contamination in consequences
+            if "Controls" in lever.consequences and "vs." in lever.consequences:
+                logger.warning(f"Lever '{lever.name}': consequences contains review markers ('Controls ... vs.'), skipping.")
+                continue
+            if "Weakness:" in lever.consequences:
+                logger.warning(f"Lever '{lever.name}': consequences contains 'Weakness:', skipping.")
+                continue
+
+            # Check 2: Bracket placeholder check
+            all_text = lever.name + lever.consequences + " ".join(lever.options) + lever.review_lever
+            if placeholder_pattern.search(all_text):
+                logger.warning(f"Lever '{lever.name}': contains bracket placeholder, skipping.")
+                continue
+
+            # Check 3: Duplicate name check
+            if lever.name in seen_names:
+                logger.warning(f"Duplicate lever name '{lever.name}', skipping.")
+                continue
+            seen_names.add(lever.name)
+
             lever_id = str(uuid.uuid4())
             lever_cleaned = LeverCleaned(
                 lever_id=lever_id,

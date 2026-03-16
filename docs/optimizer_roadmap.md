@@ -121,7 +121,7 @@ scope, regulatory constraints vs. stated approach).
 
 ## Notes
 
-- All phases assume the EggIncubator Qwen 3.5-35B run completes successfully
+- All phases assume a complete Qwen 3.5-35B local run exists
   as the baseline reference for "what good looks like" on local models
 - The swarm-coordination `planexe-runs/` archive is the source of truth for
   observed failures; new optimizer runs should be archived there for comparison

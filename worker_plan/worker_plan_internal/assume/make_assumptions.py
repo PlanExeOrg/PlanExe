@@ -17,6 +17,43 @@ from worker_plan_internal.llm_util.llm_errors import LLMChatError
 
 logger = logging.getLogger(__name__)
 
+OPTIMIZE_INSTRUCTIONS = """\
+Goal: generate assumptions that fill genuine information gaps in the user's
+prompt — grounded, reasonable, and specific to this plan's context.
+
+Pipeline context
+----------------
+MakeAssumptions runs early (step 4) and its output is used throughout the
+pipeline: by IdentifyRisks, governance phases, and the final plan review.
+Assumptions that are vague or obviously inferable add noise without value.
+Assumptions that misread the prompt produce a plan built on a false foundation.
+
+Known problems to guard against
+---------------------------------
+- Restating what the prompt already says. If the user states "budget: $500",
+  an assumption of "budget will be limited" is not an assumption — it is a
+  restatement. Assumptions should address what the prompt does NOT specify:
+  timeline, team availability, regulatory environment, specific technical
+  constraints, weather conditions, etc.
+- Aspirational assumptions presented as reasonable. "It is assumed the team
+  will work cohesively" and "stakeholders will remain engaged throughout" are
+  optimistic assertions, not grounded assumptions. Assumptions should reflect
+  what is plausible given the prompt's constraints, not what would be ideal.
+- Eight-questions-exactly rigidity. The system prompt requests exactly eight
+  questions across eight critical areas. This structure exists to enforce
+  breadth, not to force padding. If a plan genuinely only has five meaningful
+  unknowns, do not invent three more to hit the count. Quality over compliance.
+- Assumptions that anticipate failure rather than plan for success. The
+  assumption phase should identify what we're taking for granted in order to
+  proceed — not pre-enumerate all the ways the plan might fail (that's
+  IdentifyRisks's job).
+- Language and locale assumptions. PlanExe receives prompts in many languages
+  (Chinese, Japanese, Arabic, German, etc.). Do not assume English-language
+  resources, English-speaking team members, or US/UK regulatory frameworks
+  unless the prompt explicitly sets that context. Locale-specific assumptions
+  (currency, law, language) must be grounded in the prompt's geography.
+"""
+
 class QuestionAssumptionItem(BaseModel):
     item_index: int = Field(description="Index in the list")
     question: str = Field(description="Question to clarify and refine the user's description")

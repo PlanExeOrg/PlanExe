@@ -73,46 +73,6 @@ Known problems to guard against
   sections are present.
 """
 
-OPTIMIZE_INSTRUCTIONS = """\
-Goal: produce a self-audit that identifies genuine internal inconsistencies
-and unresolved conflicts in the plan — not a quality checklist that passes
-every well-formatted plan regardless of content.
-
-Pipeline context
-----------------
-SelfAudit runs near the end of the pipeline, after governance, team review,
-expert criticism, and premortem. It receives the full accumulated plan and
-must evaluate it for internal coherence. It is one of the highest context-
-pressure tasks and has historically been associated with Mac Mini kernel
-panics on sustained GPU inference runs (IOGPUFamily memory exhaustion after
-extended operation).
-
-SelfAudit generates 20+ serial structured calls. Each call reviews a
-different aspect of the plan. Models that perform well on the first 5-10
-calls but degrade on later ones are exhibiting context fatigue.
-
-Known problems to guard against
----------------------------------
-- Passing everything. A self-audit that finds no issues is almost certainly
-  wrong. Real plans have internal inconsistencies. If every audit item passes,
-  the audit is not reading the plan critically — it is rubber-stamping it.
-  At minimum, identify 2-3 genuine tensions or gaps.
-- Duplicate findings across audit items. Because SelfAudit runs many serial
-  calls over the same plan, it is prone to repeating the same finding in
-  different audit items. Each audit item should check a distinct aspect of
-  the plan. If two items both flag "budget is insufficient for stated goals",
-  one of them is a duplicate.
-- Context fatigue in later audit items. The 15th-20th audit calls run with
-  the largest accumulated context. Models under pressure tend to produce
-  shorter, less specific findings for later items. If early items are
-  specific and later items are generic, the model is degrading. Prefer
-  concise, specific language throughout to reduce context pressure.
-- Auditing the format rather than the content. Findings like "the plan
-  includes a clear executive summary" and "governance bodies are named"
-  evaluate document structure, not plan quality. Audit whether the content
-  makes sense — not whether required sections are present.
-"""
-
 
 class ChecklistAnswer(BaseModel):
     level: str = Field(

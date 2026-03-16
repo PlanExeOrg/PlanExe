@@ -71,8 +71,8 @@ Known problems to guard against
   of insight without the substance. Plain, specific analysis anchored in the
   prompt's facts is more useful than invented jargon or dramatic terminology.
 - Template language. The construction "This plan is not X; it is Y waiting to
-  happen" is a GLM/GPT signature phrase that appears across unrelated runs.
-  Judges recognise it as template output. Every sentence must be earned by the
+  happen" is a model signature phrase that appears across unrelated prompts.
+  It reads as template output. Every sentence must be earned by the
   specific prompt at hand.
 - Context pressure on the fifth lens (Escalation). By the time the fifth lens
   runs, accumulated context from four prior attacks can cause models to

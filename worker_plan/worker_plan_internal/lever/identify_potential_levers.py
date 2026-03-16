@@ -24,6 +24,50 @@ from worker_plan_internal.llm_util.llm_errors import LLMChatError
 
 logger = logging.getLogger(__name__)
 
+OPTIMIZE_INSTRUCTIONS = """\
+Goal: produce levers that lead to realistic, feasible, actionable plans that
+humans or AI agents can actually execute.
+
+Pipeline context
+----------------
+This step (IdentifyPotentialLevers) is part of a 6-step solution-space
+exploration pipeline inside run_plan_pipeline.py:
+
+  1. IdentifyPotentialLevers  ← you are here
+  2. DeduplicateLevers        — removes near-duplicate levers
+  3. EnrichLevers             — adds description, synergy, and conflict text
+  4. FocusOnVitalFewLevers    — filters down to 4-6 high-impact levers
+  5. ScenarioGeneration       — builds 3 scenarios (aggressive, medium, safe)
+  6. ScenarioSelection        — picks the best-fitting scenario
+
+Over-generation is fine; step 2 handles extras. Quality of content matters more
+than hitting an exact count.
+
+Known problems to guard against
+--------------------------------
+- Overly optimistic scenarios. The downstream scenario picker tends to choose
+  the most ambitious option unless the levers themselves offer grounded,
+  pragmatic choices. Each lever's options should include at least one
+  conservative, low-risk path — not just aspirational moonshots.
+- Fabricated numbers. Do not invent percentages, cost savings, market-share
+  figures, or performance deltas. If the project context supplies a number,
+  cite it; otherwise use qualitative language.
+- Hype and marketing copy. Words like "game-changing", "revolutionary",
+  "cutting-edge", "disruptive", and "breakthrough" erode credibility.
+  Use plain, concrete language instead.
+- Vague aspirations posing as options. Each option must be a specific,
+  actionable approach — something a project manager could actually schedule
+  and resource — not a slogan.
+- Fragile English-only validation. PlanExe receives initial prompts in many
+  non-English languages (Chinese, Japanese, Arabic, German, etc.). Validators
+  and auto-correct logic must not rely on English keywords like "Controls",
+  "Weakness:", "versus"/"vs." being present in the LLM output. Hard-coded
+  English substring checks (e.g. `'Controls ' not in response_str`) will reject
+  perfectly valid levers whenever the model responds in the prompt's
+  language. Prefer structural checks (field count, JSON shape) over
+  language-dependent string matching.
+"""
+
 class Lever(BaseModel):
     lever_index: int = Field(
         description="Index of this lever."

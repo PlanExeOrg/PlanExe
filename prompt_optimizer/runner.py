@@ -275,14 +275,24 @@ def _next_history_counter(history_dir: Path) -> int:
 
 
 def _history_run_dir(prompt_lab_dir: Path, step_name: str) -> Path:
-    """Create and return the next history run directory."""
+    """Create and return the next history run directory.
+
+    Uses mkdir without exist_ok so that parallel processes that race on the
+    same counter will fail and retry with the next number instead of silently
+    sharing a directory.
+    """
     history_dir = prompt_lab_dir / "history"
     counter = _next_history_counter(history_dir)
-    bucket = str(counter // 100)
-    entry = f"{counter % 100:02d}_{step_name}"
-    run_dir = history_dir / bucket / entry
-    run_dir.mkdir(parents=True, exist_ok=True)
-    return run_dir
+    for _ in range(50):
+        bucket = str(counter // 100)
+        entry = f"{counter % 100:02d}_{step_name}"
+        run_dir = history_dir / bucket / entry
+        try:
+            run_dir.mkdir(parents=True, exist_ok=False)
+            return run_dir
+        except FileExistsError:
+            counter += 1
+    raise RuntimeError(f"Could not allocate history run dir after 50 attempts (last: {run_dir})")
 
 
 def _run_plan_task(

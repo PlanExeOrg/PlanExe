@@ -23,8 +23,8 @@ prompt — grounded, reasonable, and specific to this plan's context.
 
 Pipeline context
 ----------------
-MakeAssumptions is one of the earliest tasks in the luigi pipeline, and
-downstream tasks depend on high quality assumptions. Its output is used by
+MakeAssumptions is one of the earliest tasks in the Luigi pipeline.
+Downstream tasks depend on high-quality assumptions. Its output is used by
 IdentifyRisks, governance phases, and the final plan review.
 Assumptions that are vague or obviously inferable add noise without value.
 Assumptions that misread the prompt produce a plan built on a false foundation.

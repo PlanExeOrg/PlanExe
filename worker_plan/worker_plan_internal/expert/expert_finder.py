@@ -26,37 +26,39 @@ from worker_plan_internal.llm_util.llm_errors import LLMChatError
 
 logger = logging.getLogger(__name__)
 
-OPTIMIZE_INSTRUCTIONS = """\
-Goal: identify the specific domain experts whose knowledge would most improve
-this plan — not a generic professional roster that applies to any project.
+OPTIMIZE_INSTRUCTIONS = """Goal: select experts whose domain knowledge is directly relevant to this
+specific plan — not generic project management roles that apply to any project.
 
 Pipeline context
 ----------------
-ExpertFinder runs before ExpertCriticism. The experts it selects determine
-which domains get reviewed. If the wrong experts are selected, all downstream
-criticism is off-domain regardless of how well ExpertCriticism performs.
-Expert selection is the upstream gate that determines critique quality.
+ExpertFinder selects the experts who will critique the plan in ExpertCriticism.
+Currently 8 experts are selected (4 per LLM call, 2 calls). Only the first
+2 experts receive enriched profiles. If the wrong experts are selected, all
+downstream criticism is off-domain regardless of how good expert_criticism.py is.
+
+ExpertFinder is the root cause of cross-domain expert advice. Getting selection
+right here is more valuable than improving the criticism prompts downstream.
 
 Known problems to guard against
 ---------------------------------
-- Generic professional roles. "Project Manager", "Business Analyst", and
-  "Communications Specialist" are default-safe outputs that apply to any
-  project. They signal the model did not read the plan. Every expert must be
-  grounded in the plan's specific domain: a construction plan needs a
-  structural engineer, an animal care plan needs a veterinarian, a food
-  business needs a health inspector or food safety specialist.
-- Mismatched expertise for the plan's geography. A plan operating in Germany
-  should not default to US-licensed professionals or UK regulatory bodies.
-  Expert selection must reflect the jurisdiction, language, and professional
-  frameworks relevant to where the plan will execute.
-- Overlapping domains across experts. If two experts cover the same ground
-  (e.g., "Risk Analyst" and "Insurance Specialist" both reviewing financial
-  exposure), one is redundant. Each expert should represent a distinct
-  knowledge domain with minimal overlap.
-- Selecting too few or too many experts. Scale the expert panel to the
-  project's complexity. A personal or small-scale project does not need 8
-  domain experts. A multi-stakeholder infrastructure project may need more
-  than the default count.
+- Generic role selection. "Project Manager", "Business Analyst", and "Stakeholder
+  Engagement Specialist" apply to any plan. They produce generic advice. Each
+  expert must have a specific domain that is relevant to the content of this plan:
+  the industry, the technology, the geography, the regulatory environment.
+- Missing domain-critical experts. Plans often have an obvious expert gap:
+  a construction plan without a structural engineer, a medical plan without a
+  clinician, a legal plan without a relevant legal specialist. These absences
+  produce the most harmful blind spots in the final plan.
+- Duplicate or overlapping experts. Two experts with nearly identical domains
+  (e.g., "Financial Analyst" and "Budget Specialist") duplicate rather than
+  complement each other. Each expert should cover a distinct perspective.
+- Ignoring plan geography and regulatory context. A plan in Germany needs
+  experts familiar with German regulations, not US/UK ones. A plan in a
+  regulated industry (healthcare, construction, food) needs experts with
+  that regulatory knowledge, not generic business advisors.
+- Selecting experts by seniority label rather than domain. "Senior Consultant"
+  and "Chief Strategy Officer" are seniority labels, not domains. Specify
+  what the expert actually knows, not their job title hierarchy.
 """
 
 class Expert(BaseModel):

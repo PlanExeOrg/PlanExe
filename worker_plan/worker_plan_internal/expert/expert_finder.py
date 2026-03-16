@@ -26,6 +26,39 @@ from worker_plan_internal.llm_util.llm_errors import LLMChatError
 
 logger = logging.getLogger(__name__)
 
+OPTIMIZE_INSTRUCTIONS = """\
+Goal: identify the specific domain experts whose knowledge would most improve
+this plan — not a generic professional roster that applies to any project.
+
+Pipeline context
+----------------
+ExpertFinder runs before ExpertCriticism. The experts it selects determine
+which domains get reviewed. If the wrong experts are selected, all downstream
+criticism is off-domain regardless of how well ExpertCriticism performs.
+Expert selection is the upstream gate that determines critique quality.
+
+Known problems to guard against
+---------------------------------
+- Generic professional roles. "Project Manager", "Business Analyst", and
+  "Communications Specialist" are default-safe outputs that apply to any
+  project. They signal the model did not read the plan. Every expert must be
+  grounded in the plan's specific domain: a construction plan needs a
+  structural engineer, an animal care plan needs a veterinarian, a food
+  business needs a health inspector or food safety specialist.
+- Mismatched expertise for the plan's geography. A plan operating in Germany
+  should not default to US-licensed professionals or UK regulatory bodies.
+  Expert selection must reflect the jurisdiction, language, and professional
+  frameworks relevant to where the plan will execute.
+- Overlapping domains across experts. If two experts cover the same ground
+  (e.g., "Risk Analyst" and "Insurance Specialist" both reviewing financial
+  exposure), one is redundant. Each expert should represent a distinct
+  knowledge domain with minimal overlap.
+- Selecting too few or too many experts. Scale the expert panel to the
+  project's complexity. A personal or small-scale project does not need 8
+  domain experts. A multi-stakeholder infrastructure project may need more
+  than the default count.
+"""
+
 class Expert(BaseModel):
     expert_title: str = Field(description="Job title of the expert.")
     expert_knowledge: str = Field(description="Industry Knowledge/Specialization, specific industries or subfields where they have focused their career, such as: tech industry for an IT consultant, healthcare sector for a medical expert. **Must be a brief comma separated list**.")

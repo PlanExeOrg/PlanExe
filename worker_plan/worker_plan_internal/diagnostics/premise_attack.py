@@ -88,6 +88,57 @@ Known problems to guard against
   the pipeline's credibility with reviewers.
 """
 
+OPTIMIZE_INSTRUCTIONS = """\
+Goal: surface fatal flaws in a plan's premise quickly and accurately, so
+downstream pipeline steps don't build elaborate plans on broken foundations.
+
+Pipeline context
+----------------
+PremiseAttack runs five independent lenses over the user's prompt. Each lens
+applies a different analytical frame (Integrity, Accountability, Spectrum,
+Cascade, Escalation) and produces a REJECT or PROCEED verdict with supporting
+evidence. All five run even when earlier lenses reject — the pipeline does not
+short-circuit.
+
+The five lenses are designed to be orthogonal: each should attack the premise
+from a genuinely distinct angle. If four lenses all cite the same flaw (e.g.
+Fourth Amendment violations), the output is redundant, not thorough.
+
+Known problems to guard against
+---------------------------------
+- Non-orthogonal attacks. The most common failure: models repeat the same core
+  argument across multiple lenses, just rephased. Each lens must anchor on a
+  distinct axis: e.g., Integrity on structural soundness, Accountability on
+  rights/oversight, Spectrum on breadth across ethical/feasibility/governance
+  axes, Cascade on second/third-order propagation, Escalation on the narrative
+  of worsening failure. Overlap means one lens is doing another's job.
+- Fabricated evidence. Models routinely invent plausible-sounding historical
+  incidents ("The Bambi Syndrome of 2018", "Operation Minotaur 1984"). Only
+  cite sources you are ≥95% confident exist: real case law, real statutes, real
+  documented incidents. If no solid evidence applies, use an empty evidence
+  list rather than a fabricated analogy. Invented evidence is worse than no
+  evidence — it gives a false impression of grounded analysis.
+- Branded-concept inflation. Coining memorable labels ("The Unmasking Trap",
+  "The RICO Trap", "The Vigilante Mirage") creates the appearance of insight
+  without the substance. Plain, specific analysis anchored in the prompt's
+  facts is more useful than jargon.
+- Template language. The construction "This plan is not X; it is Y waiting to
+  happen" is a GLM/GPT signature phrase that appears across unrelated runs.
+  Judges recognise it as template output. Every sentence must be earned by the
+  specific prompt at hand.
+- Context pressure on the fifth lens (Escalation). By the time the fifth lens
+  runs, accumulated context from four prior attacks can cause models to
+  truncate or produce incomplete JSON. The Escalation lens must complete its
+  second_order_effects array. If truncation is detected, prefer shorter, denser
+  phrasing over long cascades that exceed the model's output window.
+- REJECT on feasibility masquerading as moral condemnation. If a plan's flaw
+  is strategic (unrealistic budget, impossible timeline, naive assumptions),
+  classify it [STRATEGIC] and critique it on feasibility grounds. Reserve
+  [MORAL] for plans that are genuinely unethical. Misclassifying a budget
+  problem as an ethical violation produces melodramatic output that undermines
+  the pipeline's credibility with reviewers.
+"""
+
 class DocumentDetails(BaseModel):
     core_thesis: str = Field(..., description="Summary of the fundamental, unfixable flaw in the prompt's premise.")
     reasons: List[str] = Field(..., description="Reasons to reject, 3-5 items.")

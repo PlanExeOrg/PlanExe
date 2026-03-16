@@ -12,6 +12,51 @@ from pydantic import BaseModel, Field
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
 
+OPTIMIZE_INSTRUCTIONS = """\
+Goal: produce expert critiques that are technically grounded, actionable,
+and specific to this plan — not generic advice any expert in the field
+would give to any project.
+
+Pipeline context
+----------------
+ExpertCriticism runs for each expert identified in ExpertFinder. Each expert
+reviews the full plan and produces a structured critique: primary actions,
+secondary actions, follow-up consultation, and specific issues with
+mitigation paths. The output is used in the final plan review and executive
+summary.
+
+In practice, not all experts produce output. Models under context pressure
+may return empty critiques or incomplete issue lists for later experts in the
+sequence. The first 2-3 experts tend to receive the most complete outputs.
+
+Known problems to guard against
+---------------------------------
+- Generic advice that applies to any project. "Conduct stakeholder analysis"
+  and "establish clear communication protocols" are default outputs. Every
+  primary action must be tied to a specific element of this plan: a named
+  budget figure, a specific technology, a geographic constraint, a particular
+  risk identified in the plan.
+- Fabricated citations. The issue mitigation fields often contain legal case
+  citations, standard references, or report names. Only cite sources that
+  exist with >=95% confidence. "The 'Clean Hands' Protocol" is not a legal
+  standard. Carpenter v. United States (2018) is. When in doubt, use
+  qualitative language rather than a fabricated reference.
+- Expert role confusion. Each expert has a defined knowledge domain. The
+  Federal RICO Attorney should not advise on hardware procurement. The
+  Geospatial Analyst should not advise on corporate law. Keep each expert
+  within their stated domain — cross-domain advice from a single expert
+  signals context confusion.
+- Incomplete issue fields. Each issue requires: issue description, tags,
+  mitigation, consequence, and root cause. Truncated issues that are missing
+  consequence or root_cause are incomplete and reduce the plan's
+  reviewability. Prefer fewer complete issues over many incomplete ones.
+- Assuming English-language resources. Expert recommendations should reflect
+  the plan's geography and language context. A plan in Japan should not
+  default to US/UK regulatory frameworks or English-language professional
+  bodies.
+"""
+
+
 class NegativeFeedbackItem(BaseModel):
     feedback_index: int = Field(description="Incrementing index, such as 1, 2, 3, 4, 5.")
     feedback_title: str = Field(description="Constructive criticism. What is the problem?")

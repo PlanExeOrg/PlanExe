@@ -91,12 +91,11 @@ class Lever(BaseModel):
     )
     review_lever: str = Field(
         description=(
-            "Required format: Two sentences in a single field. "
+            "Two sentences. First sentence names the core tension this lever "
+            "controls. Second sentence identifies a weakness the options miss. "
             "Example: 'Controls centralization vs. local autonomy. "
             "Weakness: The options fail to account for transition costs.' "
-            "The 'Controls [A] vs. [B].' sentence MUST come first, "
-            "followed immediately by the 'Weakness: ...' sentence. "
-            "Both sentences are mandatory in every response."
+            "Do not use square brackets or placeholder text."
         )
     )
 
@@ -129,26 +128,18 @@ class Lever(BaseModel):
     @field_validator('review_lever', mode='after')
     @classmethod
     def check_review_format(cls, v):
-        """Auto-correct common format deviations, then reject if still invalid.
+        """Structural validation only — no English keyword checks.
 
-        The prompt requires 'Controls [A] vs. [B].' and 'Weakness: ...'.
-        Some models (e.g. haiku on hong_kong_game, run 89/23) produce valid
-        tension pairs like 'Narrative structure vs. ...' but omit the leading
-        'Controls' word, causing all levers in the response to be discarded.
-        Auto-correcting recovers these otherwise-valid levers.
+        PlanExe receives prompts in many non-English languages, so the
+        validator must not rely on English markers like "Controls" or
+        "Weakness:". Instead we enforce structural properties:
+        - minimum length (at least 20 characters)
+        - no square-bracket placeholders (e.g. [Tension A])
         """
-        # Normalise "versus" to "vs." before any other checks.
-        v = v.replace(' versus ', ' vs. ').replace(' Versus ', ' vs. ')
-
-        # Auto-correct: if the field has a tension pair and Weakness clause
-        # but is missing the "Controls" prefix, prepend it.
-        if 'Controls ' not in v and ' vs. ' in v and 'Weakness:' in v:
-            v = 'Controls ' + v
-
-        if 'Controls ' not in v:
-            raise ValueError("review_lever must contain 'Controls [Tension A] vs. [Tension B].'")
-        if 'Weakness:' not in v:
-            raise ValueError("review_lever must contain 'Weakness: ...'")
+        if len(v) < 20:
+            raise ValueError(f"review_lever is too short ({len(v)} chars); expected at least 20")
+        if '[' in v or ']' in v:
+            raise ValueError("review_lever must not contain square-bracket placeholders")
         return v
 
 class DocumentDetails(BaseModel):
@@ -164,7 +155,7 @@ class DocumentDetails(BaseModel):
         description="Propose 5 to 7 levers."
     )
     summary: str = Field(
-        description="Are these levers well picked? Are they well balanced? Are they well thought out? Point out flaws. 100 words."
+        description="One sentence prescribing a concrete addition to a specific lever. Example: \"Add 'partner with a regional distributor' to Supply Chain Strategy.\""
     )
 
 class LeverCleaned(BaseModel):
@@ -194,12 +185,11 @@ class LeverCleaned(BaseModel):
     )
     review: str = Field(
         description=(
-            "Required format: Two sentences in a single field. "
+            "Two sentences. First sentence names the core tension this lever "
+            "controls. Second sentence identifies a weakness the options miss. "
             "Example: 'Controls centralization vs. local autonomy. "
             "Weakness: The options fail to account for transition costs.' "
-            "The 'Controls [A] vs. [B].' sentence MUST come first, "
-            "followed immediately by the 'Weakness: ...' sentence. "
-            "Both sentences are mandatory in every response."
+            "Do not use square brackets or placeholder text."
         )
     )
 
@@ -223,12 +213,13 @@ You are an expert strategic analyst. Generate solution space parameters followin
    - Ensure levers challenge core project assumptions
 
 4. **Validation Protocols**
-   - For `review_lever` (one field, two sentences, in this order):
-     "Controls [Tension A] vs. [Tension B]. Weakness: The options fail to consider [specific factor]."
-     Both clauses are mandatory in every response, in this exact order, in one field.
+   - For `review_lever` (one field, two sentences):
+     First sentence names the core tension. Second sentence identifies a weakness.
+     Example: "Controls centralization vs. local autonomy. Weakness: The options fail to account for transition costs."
+     Do not use square brackets or placeholder text.
    - For `summary`:
-     • Identify ONE critical missing dimension
-     • Prescribe CONCRETE addition: "Add '[full strategic option]' to [lever]"
+     One sentence prescribing a concrete addition to a specific lever.
+     Example: "Add 'partner with a regional distributor for last-mile logistics' to Supply Chain Strategy."
 
 5. **Prohibitions**
    - NO prefixes/labels in options (e.g., "Option A:", "Choice 1:")

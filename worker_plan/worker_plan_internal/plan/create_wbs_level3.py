@@ -15,6 +15,45 @@ from pydantic import BaseModel, Field
 from llama_index.core.llms.llm import LLM
 from worker_plan_internal.format_json_for_use_in_query import format_json_for_use_in_query
 
+OPTIMIZE_INSTRUCTIONS = """\
+Goal: decompose project phases into 3-5 concrete, actionable subtasks that
+a real project manager could schedule and resource — not generic filler.
+
+Pipeline context
+----------------
+CreateWBSLevel3Task runs on every WBS level 2 phase (typically 6-12 phases),
+making 6-12 serial LLM calls in sequence. This makes it one of the most
+resource-intensive tasks in the pipeline and a known failure point for
+smaller local models (structured output validation errors accumulate across
+the serial call sequence).
+
+Each call receives: the project plan, the specific phase being decomposed,
+and the existing level 2 structure. The output is a list of 3-5 subtasks
+with names, descriptions, and resources needed.
+
+Known problems to guard against
+---------------------------------
+- Over-decomposition. Merge related micro-steps into meaningful deliverables.
+  Each subtask should represent work that takes days or weeks, not hours.
+- Generic subtasks that apply to any phase. "Conduct initial research",
+  "document findings", "review and approve" are templates, not subtasks.
+  Each subtask must be tied to the specific phase being decomposed and
+  reflect the actual work described in the project plan.
+- Resource list inflation. The resources_needed field should name the actual
+  humans and materials required (e.g., "licensed electrician", "concrete
+  mixer", "structural engineer"). Generic entries like "team members",
+  "tools", "budget" provide no planning value.
+- Serial call degradation. Later calls in the WBS level 3 sequence run with
+  more accumulated context than earlier ones. If subtask quality degrades
+  across phases (generic late phases, specific early phases), the model is
+  exhibiting context fatigue. Prefer concise, dense descriptions to reduce
+  context pressure.
+- Phase-context mismatch. Each decomposition call receives the specific
+  phase to break down. Do not decompose a different phase than the one
+  provided, and do not repeat subtasks from previous phases.
+"""
+
+
 class WBSSubtask(BaseModel):
     """
     A subtask.

@@ -31,9 +31,9 @@ any plan.
 
 Pipeline context
 ----------------
-IdentifyRisks runs early in the pipeline (step 3, after premise attack and
-scenario selection). Its output feeds directly into MakeAssumptions and the
-governance phase. If the risk register is vague or fabricated, downstream
+IdentifyRisks is one of the earliest tasks in the Luigi pipeline, running
+after premise attack and scenario selection. Its output feeds directly into
+MakeAssumptions and the governance phase. If the risk register is vague or fabricated, downstream
 tasks build on a false foundation and governance bodies will be designed to
 mitigate risks that don't exist while missing the real ones.
 

@@ -44,6 +44,54 @@ from worker_plan_internal.llm_util.llm_errors import LLMChatError
 
 logger = logging.getLogger(__name__)
 
+OPTIMIZE_INSTRUCTIONS = """\
+Goal: produce a premortem that imagines specific, plausible failure scenarios
+grounded in this plan's actual risks — not generic failure templates.
+
+Pipeline context
+----------------
+Premortem runs near the end of the pipeline (after governance, team review,
+and expert criticism). It receives the full accumulated plan context. This
+makes it one of the highest context-pressure tasks in the pipeline, and one
+of the most prone to truncation on smaller models.
+
+The premortem has two distinct components:
+- assumptions_to_kill: the foundational beliefs that, if false, kill the
+  project. These are the INPUTS.
+- failure_modes: the narrative stories of what happens if an assumption proves
+  false. These are the OUTPUTS — causal chains, not just risk labels.
+
+Known problems to guard against
+---------------------------------
+- Failure mode inflation. Rating all failure modes as "High" or "Critical"
+  defeats the purpose of prioritisation. If everything is critical, nothing
+  is. Calibrate honestly: a failure mode that is plausible but not project-
+  ending should be rated lower. The top 2-3 failure modes should be
+  genuinely distinct from the rest.
+- Generic failure templates. "Budget overrun leads to project cancellation"
+  and "stakeholder disengagement causes timeline slippage" are not premortem
+  insights — they are defaults. Each failure mode must trace back to a
+  specific assumption from this plan's assumptions_to_kill list.
+- Reactive-only playbooks. The "Contain, Assess, Respond" structure addresses
+  what to do when a tripwire is hit. Proactive mitigation — actions taken
+  before the tripwire fires — is more valuable. At minimum, each failure mode
+  should include one proactive step, not just a reactive response.
+- Assumption-failure_mode mismatch. Every failure mode should be traceable to
+  a specific assumption. If a failure mode appears that isn't connected to any
+  listed assumption, the assumption list is incomplete. Fix the assumptions
+  before adding failure modes.
+- Context pressure and truncation. Premortem runs late in the pipeline with a
+  large context window. This task has been observed to produce truncated JSON
+  on models with smaller output windows (e.g., GLM 4.7 Flash during the
+  Batman RICO v2 run). Prefer concise failure narratives (3-5 sentences per
+  failure mode) over exhaustive multi-paragraph cascades. Completeness of
+  structure matters more than verbosity.
+- Static risk landscape assumption. The premortem models failure as if the
+  plan's context is frozen. In practice, external conditions change. Where
+  relevant, note if a failure mode is primarily driven by external factors
+  (market, weather, regulatory change) rather than execution failures.
+"""
+
 class AssumptionItem(BaseModel):
     assumption_id: str = Field(description="Enumerate the assumption items starting from 'A1', 'A2', 'A3', 'A4', etc. Do not restart at A1.")
     statement: str = Field(description="The core assumption we are making that, if false, would kill the project.")

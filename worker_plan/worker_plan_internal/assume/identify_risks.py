@@ -24,6 +24,48 @@ from worker_plan_internal.llm_util.llm_errors import LLMChatError
 
 logger = logging.getLogger(__name__)
 
+OPTIMIZE_INSTRUCTIONS = """\
+Goal: produce a risk register that is credible, actionable, and grounded in
+the specific project context — not a generic checklist that could apply to
+any plan.
+
+Pipeline context
+----------------
+IdentifyRisks runs early in the pipeline (step 3, after premise attack and
+scenario selection). Its output feeds directly into MakeAssumptions and the
+governance phase. If the risk register is vague or fabricated, downstream
+tasks build on a false foundation and governance bodies will be designed to
+mitigate risks that don't exist while missing the real ones.
+
+Known problems to guard against
+---------------------------------
+- Generic risks that apply to any project. "Budget overruns", "scope creep",
+  and "stakeholder misalignment" are default-safe outputs that provide no
+  analytical value for a specific plan. Every risk must be tied to a concrete
+  detail from the plan: the specific budget, timeline, geography, technology,
+  or team structure described in the prompt.
+- Fabricated likelihood/severity inflation. Models tend to rate all risks as
+  "high" likelihood and "high" severity, which flattens the register and makes
+  prioritisation impossible. Calibrate honestly: a risk that is plausible but
+  improbable should be rated low or medium likelihood, not high.
+- Missing the plan-specific existential risk. Each plan has at least one risk
+  that is specific to its premise and would cause complete failure if it
+  materialised (e.g., for a breeding plan: dystocia requiring surgery the
+  budget cannot cover; for a RICO case: evidence suppression under Carpenter
+  v. United States). That risk must appear in the register — it is the most
+  important output of this step.
+- Overly broad risk areas. "Technical" and "Operational" are categories, not
+  risks. The risk_area field should name the specific domain (e.g.,
+  "Veterinary Emergency", "Fourth Amendment Admissibility", "GPU Memory
+  Stability") so the governance phase can assign it to the right owner.
+- Context pressure and truncation. IdentifyRisks runs after accumulating
+  several prior task outputs in the context window. Models under pressure
+  tend to produce truncated risk descriptions or incomplete action fields.
+  Prefer concise, specific language over lengthy prose per risk item.
+  A 10-item register with dense, specific entries is more useful than
+  a 20-item register with half-finished action fields.
+"""
+
 class LowMediumHigh(str, Enum):
     low = 'low'
     medium = 'medium'

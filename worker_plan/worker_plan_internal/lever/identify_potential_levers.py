@@ -33,15 +33,12 @@ class Lever(BaseModel):
     )
     consequences: str = Field(
         description=(
-            "Required format: 'Immediate: [direct first-order effect] → "
-            "Systemic: [second-order impact with a measurable indicator, e.g. a % change or cost delta] → "
-            "Strategic: [long-term implication for the project]'. "
-            "All three labels and at least one quantitative estimate are mandatory. "
-            "The Systemic or Strategic clause MUST name an explicit trade-off between two competing forces "
-            "(e.g. 'This accelerates delivery but increases defect risk'). "
+            "What happens when this lever is pulled? Describe the direct effect and "
+            "at least one downstream implication or trade-off. Be concise and grounded — "
+            "only cite numbers if the project context provides evidence for them. "
             "Do NOT include 'Controls ... vs.', 'Weakness:', or other review/critique text in this field — "
             "those belong exclusively in review_lever. "
-            "Target length: 3–5 sentences (approximately 60–120 words)."
+            "Target length: 2–4 sentences."
         )
     )
     options: list[str] = Field(
@@ -139,15 +136,12 @@ class LeverCleaned(BaseModel):
     )
     consequences: str = Field(
         description=(
-            "Required format: 'Immediate: [direct first-order effect] → "
-            "Systemic: [second-order impact with a measurable indicator, e.g. a % change or cost delta] → "
-            "Strategic: [long-term implication for the project]'. "
-            "All three labels and at least one quantitative estimate are mandatory. "
-            "The Systemic or Strategic clause MUST name an explicit trade-off between two competing forces "
-            "(e.g. 'This accelerates delivery but increases defect risk'). "
+            "What happens when this lever is pulled? Describe the direct effect and "
+            "at least one downstream implication or trade-off. Be concise and grounded — "
+            "only cite numbers if the project context provides evidence for them. "
             "Do NOT include 'Controls ... vs.', 'Weakness:', or other review/critique text in this field — "
             "those belong exclusively in review_lever. "
-            "Target length: 3–5 sentences (approximately 60–120 words)."
+            "Target length: 2–4 sentences."
         )
     )
     options: list[str] = Field(
@@ -173,14 +167,10 @@ You are an expert strategic analyst. Generate solution space parameters followin
    - Each lever's `options` field must contain exactly 3 qualitative strategic choices as plain strings.
 
 2. **Lever Quality Standards**
-   - Consequences MUST:
-     • Chain three SPECIFIC effects: "Immediate: [effect] → Systemic: [impact] → Strategic: [implication]"
-     • Include measurable outcomes: "Systemic: [a specific, domain-relevant second-order impact with a measurable indicator, such as a % change, capacity shift, or cost delta]"
-     • Explicitly describe trade-offs between core tensions
+   - Consequences: describe the direct effect of pulling this lever, then at least one downstream implication or trade-off. Be concise and grounded — only cite specific numbers if the project context provides evidence for them. Do not fabricate percentages or cost estimates. Target length: 2–4 sentences.
    - Options MUST:
-     • Represent distinct strategic pathways (not just labels)
-     • Include at least one unconventional/innovative approach
-     • Show clear progression: conservative → moderate → radical
+     • Represent genuinely distinct strategic pathways (not just labels)
+     • Include at least one unconventional or non-obvious approach
      • NO prefixes (e.g., "Option A:", "Choice 1:")
 
 3. **Strategic Framing**
@@ -197,16 +187,16 @@ You are an expert strategic analyst. Generate solution space parameters followin
      • Prescribe CONCRETE addition: "Add '[full strategic option]' to [lever]"
 
 5. **Prohibitions**
-   - NO prefixes/labels in options (e.g., "Option A:", "Choice 1:", "Conservative:", "Moderate:", "Radical:")
+   - NO prefixes/labels in options (e.g., "Option A:", "Choice 1:")
    - NO generic option labels (e.g., "Optimize X", "Tolerate Y")
-   - NO placeholder consequences
-   - NO "[specific innovative option]" placeholders
-   - NO value sets without clear strategic progression
+   - NO placeholder consequences or bracket-wrapped templates
+   - NO fabricated statistics or percentages without evidence from the project context
+   - NO marketing language (e.g., "game-changing", "cutting-edge", "revolutionary")
 
-6. **Option Structure Enforcement**
-   - Radical option must include emerging tech/business model
+6. **Option Structure**
    - Maintain parallel grammatical structure across options
    - Ensure options are self-contained descriptions
+   - Each option should be a concrete, actionable approach — not a vague aspiration
 """
 
 @dataclass

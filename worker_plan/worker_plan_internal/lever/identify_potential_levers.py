@@ -271,7 +271,8 @@ class IdentifyPotentialLevers:
                 prompt_content = (
                     f"Generate 5 to 7 MORE levers with completely different names. "
                     f"Do NOT reuse any of these already-generated names: [{names_list}]\n"
-                    f"Each option must be a complete strategic sentence (at least 15 words with an action verb), not a short label.\n\n"
+                    f"Each option must be a complete strategic sentence (at least 15 words with an action verb), not a short label.\n"
+                    f"Do not invent percentages, cost savings, or performance deltas — use qualitative language unless the project document supplies the number.\n\n"
                     f"{user_prompt}"
                 )
 

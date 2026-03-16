@@ -31,11 +31,13 @@ Assumptions that misread the prompt produce a plan built on a false foundation.
 
 Known problems to guard against
 ---------------------------------
-- Restating what the prompt already says. If the user states "budget: $500",
-  an assumption of "budget will be limited" is not an assumption — it is a
-  restatement. Assumptions should address what the prompt does NOT specify:
-  timeline, team availability, regulatory environment, specific technical
-  constraints, weather conditions, etc.
+- Restating what the prompt already says. If the user explicitly states a
+  budget, timeline, or team size, do not restate it as an assumption. Assumptions
+  should address what the prompt does NOT specify.
+- Budget omission is a common case. Users frequently set budget to 0, "none",
+  "N/A", or "I don't know". This is not a reason to leave budget undefined —
+  it is an invitation for the assumptions phase to establish a realistic budget
+  based on the plan's scope, geography, and complexity.
 - Aspirational assumptions presented as reasonable. "It is assumed the team
   will work cohesively" and "stakeholders will remain engaged throughout" are
   optimistic assertions, not grounded assumptions. Assumptions should reflect

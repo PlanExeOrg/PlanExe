@@ -16,6 +16,49 @@ from worker_plan_internal.llm_util.llm_errors import LLMChatError
 
 logger = logging.getLogger(__name__)
 
+OPTIMIZE_INSTRUCTIONS = """\
+Goal: produce a team review that is proportionate to the project's scale and
+surfaces genuine gaps — not a generic list of formal roles that ignores
+context.
+
+Pipeline context
+----------------
+ReviewTeamTask runs after the team has been assembled (FindTeamMembers,
+EnrichTeamMembers*). It receives the full team document including roles,
+contract types, background stories, and resource needs. Its output (omissions
+and potential_improvements) feeds into the final plan review and expert
+criticism phases.
+
+This task is a known high-failure-rate task on smaller/local models. It
+requires generating structured output over a large accumulated context window
+(the full team document can be long). Models under context pressure tend to
+produce truncated omissions lists or malformed JSON. Keep each omission and
+improvement item concise.
+
+Known problems to guard against
+---------------------------------
+- Scale mismatch. If the project is personal or small-scale (e.g., a backyard
+  chicken enclosure, a puppy whelping setup, a home workshop), do not suggest
+  enterprise roles (Marketing Specialist, Legal Advisor, PR Consultant, HR
+  Manager). Recommending a Marketing Specialist for a $600 chicken coop
+  signals a failure to read the prompt. Scale recommendations to match the
+  project's actual scope and resources.
+- Generic omissions that apply to any team. "No dedicated project manager" and
+  "lack of documentation" are default-safe outputs. Every omission must be
+  tied to a specific gap in the team document being reviewed — a role that
+  this specific plan demonstrably needs and doesn't have.
+- Recommending roles that are already present. Read the team document carefully
+  before flagging an omission. Suggesting "add a veterinarian" when the team
+  already includes one is a direct failure of the task.
+- Context pressure causing truncation. ReviewTeamTask runs after many prior
+  tasks and receives a large context. Prefer concise, specific items over
+  lengthy explanations. Three well-targeted omissions are more useful than
+  eight generic ones.
+- Overlap between omissions and potential_improvements. Omissions should flag
+  missing roles or expertise. Improvements should address how existing roles
+  or structures could work better. Do not list the same issue in both arrays.
+"""
+
 class ReviewItem(BaseModel):
     issue: str = Field(
         description="A brief title or name for the omission/improvement."

@@ -34,10 +34,10 @@ Known problems to guard against
 - Restating what the prompt already says. If the user explicitly states a
   budget, timeline, or team size, do not restate it as an assumption. Assumptions
   should address what the prompt does NOT specify.
-- Budget omission is a common case. Users frequently set budget to 0, "none",
-  "N/A", or "I don't know". This is not a reason to leave budget undefined —
-  it is an invitation for the assumptions phase to establish a realistic budget
-  based on the plan's scope, geography, and complexity.
+- Missing budget. A common user error is to omit the budget entirely (e.g.,
+  "budget: 0", "N/A", "I don't know"). In this case, MakeAssumptions should
+  establish a realistic budget estimate based on the project scope — not
+  assume zero or skip the budget entirely.
 - Aspirational assumptions presented as reasonable. "It is assumed the team
   will work cohesively" and "stakeholders will remain engaged throughout" are
   optimistic assertions, not grounded assumptions. Assumptions should reflect

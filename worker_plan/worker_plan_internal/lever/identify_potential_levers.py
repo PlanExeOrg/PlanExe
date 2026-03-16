@@ -270,7 +270,8 @@ class IdentifyPotentialLevers:
                 names_list = ", ".join(f'"{n}"' for n in generated_lever_names)
                 prompt_content = (
                     f"Generate 5 to 7 MORE levers with completely different names. "
-                    f"Do NOT reuse any of these already-generated names: [{names_list}]\n\n"
+                    f"Do NOT reuse any of these already-generated names: [{names_list}]\n"
+                    f"Each option must be a complete strategic sentence (at least 15 words with an action verb), not a short label.\n\n"
                     f"{user_prompt}"
                 )
 

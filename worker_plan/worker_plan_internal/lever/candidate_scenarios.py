@@ -24,6 +24,44 @@ from worker_plan_internal.llm_util.llm_executor import LLMExecutor, PipelineStop
 
 logger = logging.getLogger(__name__)
 
+OPTIMIZE_INSTRUCTIONS = """\
+Goal: synthesize the vital levers into 3 distinct, internally coherent scenarios
+that represent genuinely different strategic directions — not variations on the
+same approach with different intensity levels.
+
+Pipeline context
+----------------
+CandidateScenarios is a branching point in the pipeline. It receives the
+"vital few" levers and synthesizes them into 3 scenarios (typically:
+conservative, moderate, aggressive). The next task (SelectScenario) picks
+one. Everything downstream — WBS, team, governance, expert criticism — is
+shaped by this choice. A poorly differentiated scenario set produces a plan
+that could have gone in any direction.
+
+Known problems to guard against
+---------------------------------
+- Scenarios that differ only in intensity, not in kind. "Do less", "do the
+  same", "do more" are not three scenarios — they are one scenario at three
+  budget levels. Genuine scenarios should differ in strategic approach: who
+  does the work, what risks are accepted, what is deferred, what partnerships
+  are formed.
+- Fabricated lever settings. Each scenario specifies how each vital lever is
+  set. The setting must be one of the actual options from that lever's
+  strategic_choices — not a new option invented for the scenario.
+- Internally incoherent scenarios. A scenario that is simultaneously
+  "low budget" and "highest quality materials" is incoherent. Check that
+  the lever settings within each scenario are mutually consistent.
+- Optimistic bias in scenario framing. Models tend to make all three scenarios
+  sound positive. The conservative scenario should honestly represent the
+  downsides of conservatism (slower, smaller, less capable). The aggressive
+  scenario should honestly represent its risks (higher cost, more complexity,
+  more failure modes).
+- Holistic_profile fabrication. The holistic_profile field summarises the
+  scenario's overall character. It must be derivable from the lever settings,
+  not a generic description that could apply to any plan.
+"""
+
+
 # Represents a lever from the 'vital_levers' file
 class VitalLever(BaseModel):
     lever_id: str

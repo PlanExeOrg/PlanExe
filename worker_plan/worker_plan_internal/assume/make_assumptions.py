@@ -23,8 +23,9 @@ prompt — grounded, reasonable, and specific to this plan's context.
 
 Pipeline context
 ----------------
-MakeAssumptions runs early (step 4) and its output is used throughout the
-pipeline: by IdentifyRisks, governance phases, and the final plan review.
+MakeAssumptions is one of the earliest tasks in the luigi pipeline, and
+downstream tasks depend on high quality assumptions. Its output is used by
+IdentifyRisks, governance phases, and the final plan review.
 Assumptions that are vague or obviously inferable add noise without value.
 Assumptions that misread the prompt produce a plan built on a false foundation.
 

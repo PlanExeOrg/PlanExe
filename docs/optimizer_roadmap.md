@@ -1,8 +1,7 @@
 # Optimizer Roadmap
 
 This document proposes a sequenced roadmap for PlanExe optimizer work, based
-on observed failure patterns across GLM 4.7 Flash, Qwen 3.5-35B, and Nemotron
-120B runs (March 2026).
+on observed failure patterns across local models tested in March 2026.
 
 ## Background
 
@@ -114,14 +113,14 @@ scope, regulatory constraints vs. stated approach).
 
 - `QuestionsAndAnswersTask` / `ReviewPlanTask` — high context pressure but
   not a primary failure gate in current runs
-- `EstimateTaskDurationsTask` — chunked, moderately reliable with Qwen
-- `CandidateScenariosTask` — Nemotron-specific failure; GLM and Qwen pass it
+- `EstimateTaskDurationsTask` — chunked, moderately reliable on tested models
+- `CandidateScenariosTask` — JSON schema validation errors observed in practice
 
 ---
 
 ## Notes
 
-- All phases assume a complete Qwen 3.5-35B local run exists
+- All phases assume a complete local model run exists
   as the baseline reference for "what good looks like" on local models
 - The swarm-coordination `planexe-runs/` archive is the source of truth for
   observed failures; new optimizer runs should be archived there for comparison

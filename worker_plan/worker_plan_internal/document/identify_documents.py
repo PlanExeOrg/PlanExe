@@ -84,16 +84,20 @@ class FindDocumentItem(BaseModel):
 
 class DocumentDetails(BaseModel):
     documents_to_create: list[CreateDocumentItem] = Field(
-        description="Documents essential for project planning and execution that need to be created. Includes both subject-matter reports and standard project management artifacts."
+        max_length=6,
+        description="Documents essential for project planning and execution that need to be created. Includes both subject-matter reports and standard project management artifacts. Maximum 6 items."
     )
     documents_to_find: list[FindDocumentItem] = Field(
-        description="Existing documents or datasets that must be obtained to inform the planning process."
+        max_length=6,
+        description="Existing documents or datasets that must be obtained to inform the planning process. Maximum 6 items."
     )
     documents_to_create_part2: list[CreateDocumentItem] = Field(
-        description="Documents that are to be created, that for some reason were not identified in the first pass. Do not repeat documents already identified in the first pass."
+        max_length=3,
+        description="Documents that are to be created, that for some reason were not identified in the first pass. Do not repeat documents already identified in the first pass. Maximum 3 items."
     )
     documents_to_find_part2: list[FindDocumentItem] = Field(
-        description="Documents that are to be found online or in a physical location, that for some reason were not identified in the first pass. Do not repeat documents already identified in the first pass."
+        max_length=3,
+        description="Documents that are to be found online or in a physical location, that for some reason were not identified in the first pass. Do not repeat documents already identified in the first pass. Maximum 3 items."
     )
 
 class CleanedupCreateDocumentItem(BaseModel):

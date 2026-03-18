@@ -21,6 +21,10 @@ STEP_PROMPTS = {
         "worker_plan_internal.lever.identify_potential_levers",
         "IDENTIFY_POTENTIAL_LEVERS_SYSTEM_PROMPT",
     ),
+    "identify_documents": (
+        "worker_plan_internal.document.identify_documents",
+        "IDENTIFY_DOCUMENTS_BUSINESS_SYSTEM_PROMPT",
+    ),
 }
 
 

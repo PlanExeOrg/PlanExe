@@ -2,7 +2,7 @@
 
 ## What this does
 
-Optimizes system prompts and validation logic for pipeline steps in `run_plan_pipeline.py`. Re-executes a step with a candidate system prompt against baseline training data and captures the output. Currently supports `IdentifyPotentialLevers` (23 iterations completed); will extend to other pipeline tasks.
+Optimizes system prompts and validation logic for pipeline steps in `run_plan_pipeline.py`. Re-executes a step with a candidate system prompt against baseline training data and captures the output. Currently supports `IdentifyPotentialLevers` (26 iterations completed); will extend to other pipeline tasks.
 
 ## Optimization Flow
 
@@ -169,7 +169,12 @@ format, content depth, and cross-call duplication.
 4. **The runner always uses the code constant.** There is no external prompt file
    or CLI override — the runner uses `IDENTIFY_POTENTIAL_LEVERS_SYSTEM_PROMPT`
    from PlanExe's code. To change the prompt, modify `identify_potential_levers.py`
-   and merge the PR before running experiments.
+   on the PR branch before running experiments.
+
+5. **Verify the runner is on the PR branch, not main.** The runner imports code
+   from PlanExe, so it must be on the PR branch to test the PR's changes.
+   `run_optimization_iteration.py` verifies this automatically. Iteration 24
+   was invalidated because the runner ran against main.
 
 ## Prerequisites
 

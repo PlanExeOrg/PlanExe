@@ -3,6 +3,7 @@
         "comment": "Local Qwen 2.5 7B (DEFAULT). Lightweight, compatible with most consumer hardware. Uses OpenAILike with should_use_structured_outputs=true so llama_index sends response_format:json_schema (grammar-enforced) instead of injecting the schema as prompt text.",
         "priority": 0,
         "luigi_workers": 1,
+        "self_improve_sequential": true,
         "class": "OpenAILike",
         "arguments": {
             "model": "qwen/qwen2.5-7b",
@@ -22,6 +23,7 @@
         "comment": "Local Qwen 3.5-9B (RECOMMENDED for capable hardware, e.g. Apple M4 Pro 64GB). Model: lmstudio-community/Qwen3.5-9B-GGUF (Qwen3.5-9B-Q4_K_M.gguf), 6.1 GB (https://huggingface.co/lmstudio-community/Qwen3.5-9B-GGUF). Verified: 63/63 tasks, 0 failures on Mac Mini M4 Pro 64GB. context_window 32768 required \u2014 default 3900 causes silent prompt truncation on longer tasks. Requires LM Studio planexe-agents preset (or equivalent) to suppress Qwen3 thinking tokens; without it, thinking output breaks structured JSON parsing.",
         "priority": 1,
         "luigi_workers": 1,
+        "self_improve_sequential": true,
         "class": "OpenAILike",
         "arguments": {
             "model": "qwen/qwen3.5-9b",
@@ -41,6 +43,7 @@
         "comment": "Local LM Studio fallback model. Uses OpenAILike with should_use_structured_outputs=true for grammar-enforced structured output.",
         "priority": 2,
         "luigi_workers": 1,
+        "self_improve_sequential": true,
         "class": "OpenAILike",
         "arguments": {
             "model": "qwen/qwen2.5-7b",

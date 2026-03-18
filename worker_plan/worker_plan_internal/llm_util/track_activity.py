@@ -175,6 +175,35 @@ class TrackActivity(BaseEventHandler):
         except (TypeError, ValueError):
             return 0.0
 
+    def _estimate_cost_from_tokens(self, event_data: dict) -> float:
+        """Estimate cost from token counts using the pricing registry.
+
+        Used as a fallback when the provider does not include cost in
+        the usage response (e.g. direct OpenAI / Anthropic calls).
+        """
+        try:
+            from worker_plan_internal.llm_util.model_pricing import estimate_cost
+        except Exception:
+            return 0.0
+
+        token_usage = self._extract_token_usage(event_data) or {}
+        model_name = self._extract_model_name(event_data)
+
+        input_tokens = int(token_usage.get("input_tokens") or 0)
+        output_tokens = int(token_usage.get("output_tokens") or 0)
+        thinking_tokens = int(token_usage.get("thinking_tokens") or 0)
+
+        if input_tokens == 0 and output_tokens == 0 and thinking_tokens == 0:
+            return 0.0
+
+        estimated = estimate_cost(
+            model_name=model_name,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+            thinking_tokens=thinking_tokens,
+        )
+        return estimated if estimated is not None else 0.0
+
     def _load_activity_overview(self, path: Path) -> dict:
         if not path.exists():
             return {
@@ -207,6 +236,8 @@ class TrackActivity(BaseEventHandler):
     def _update_activity_overview(self, event_data: dict) -> None:
         token_usage = self._extract_token_usage(event_data) or {}
         cost = self._extract_cost(event_data)
+        if cost == 0.0 and token_usage:
+            cost = self._estimate_cost_from_tokens(event_data)
         if not token_usage and cost == 0.0:
             return
 
@@ -267,6 +298,8 @@ class TrackActivity(BaseEventHandler):
 
         token_usage = self._extract_token_usage(event_data) or {}
         cost_usd = self._extract_cost(event_data)
+        if cost_usd == 0.0 and token_usage:
+            cost_usd = self._estimate_cost_from_tokens(event_data)
         model_name = self._extract_model_name(event_data)
         upstream_provider, upstream_model = self._split_provider_and_model(model_name)
         if model_name.strip().lower() == "unknown":
@@ -313,6 +346,8 @@ class TrackActivity(BaseEventHandler):
         if current_path is not None and current_path.parent != self.jsonl_file_path.parent:
             return
         cost = self._extract_cost(event_data)
+        if cost == 0.0 and token_usage:
+            cost = self._estimate_cost_from_tokens(event_data)
         if not token_usage and cost == 0.0:
             return
         from worker_plan_internal.llm_util.usage_metrics import record_usage_metric

@@ -15,6 +15,10 @@
             "max_retries": 5
         },
         "model_info_url": "https://openrouter.ai/stepfun/step-3.5-flash",
+        "pricing": {
+            "input_per_million_tokens": 0.10,
+            "output_per_million_tokens": 0.30
+        },
         "pricing_kind": "paid"
     },
     "openrouter-google/gemini-2.5-flash-lite-preview-09-2025": {
@@ -33,6 +37,10 @@
             "max_retries": 5
         },
         "model_info_url": "https://openrouter.ai/google/gemini-2.5-flash-lite-preview-09-2025",
+        "pricing": {
+            "input_per_million_tokens": 0.30,
+            "output_per_million_tokens": 2.55
+        },
         "pricing_kind": "paid"
     },
     "openrouter-qwen-qwen3-5-397b-a17b": {
@@ -51,10 +59,14 @@
             "max_retries": 5
         },
         "model_info_url": "https://openrouter.ai/qwen/qwen3.5-397b-a17b",
+        "pricing": {
+            "input_per_million_tokens": 0.15,
+            "output_per_million_tokens": 1.00
+        },
         "pricing_kind": "paid"
     },
     "openai-gpt-5-mini": {
-        "comment": "This is slow. Requires that you have a OPENAI_API_KEY in the .env file. This is a reasoning model, so it takes MUCH longer to create a plan.",
+        "comment": "This is slow. Requires that you have a OPENAI_API_KEY in the .env file. This is a reasoning model, so it takes MUCH longer to create a plan. $0.25/M input tokens. $2.00/M output tokens.",
         "priority": 5,
         "luigi_workers": 4,
         "class": "OpenAI",
@@ -68,6 +80,10 @@
             "is_chat_model": true,
             "max_tokens": 128000,
             "max_retries": 5
+        },
+        "pricing": {
+            "input_per_million_tokens": 0.25,
+            "output_per_million_tokens": 2.00
         },
         "pricing_kind": "paid"
     }

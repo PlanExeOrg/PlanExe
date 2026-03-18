@@ -70,6 +70,13 @@ Known problems to guard against
   review_lever example, weaker models reproduce that exact syntax 90–100%
   of the time. Always provide at least two structurally distinct examples
   to give models variety to draw from.
+- Template-lock migration. Replacing a copyable opener does not eliminate
+  template lock — weaker models shift to copying subphrases within the
+  new examples (e.g. "the options neglect", "the options assume").
+  Examples must avoid reusable transitional phrases that fit any domain.
+  The agriculture example ("but none of the options price in the
+  idle-wage burden during the 5-month off-season") is the correct
+  structural template: its critique is domain-specific and non-portable.
 """
 
 class Lever(BaseModel):
@@ -97,11 +104,7 @@ class Lever(BaseModel):
         description=(
             "A short critical review of this lever — name the core tension, "
             "then identify a weakness the options miss. "
-            "Examples: "
-            "'This lever governs the tension between centralization and local "
-            "autonomy, but the options overlook transition costs.' "
-            "'Prioritizing speed over reliability carries hidden costs: none of "
-            "the options address rollback complexity.' "
+            "See system prompt section 4 for examples. "
             "Do not use square brackets or placeholder text."
         )
     )
@@ -122,14 +125,15 @@ class Lever(BaseModel):
     @field_validator('options', mode='after')
     @classmethod
     def check_option_count(cls, v):
-        """Reject levers that don't have exactly 3 options.
+        """Reject levers with fewer than 3 options.
 
-        Run 89 (llama, hong_kong_game) produced levers with 2 options that
+        Run 82 (llama, gta_game) produced levers with 2 options that
         silently passed validation and shipped to downstream tasks which
-        assume exactly 3 options per lever.
+        assume at least 3 options per lever. Over-generation (>3) is
+        tolerable; under-generation is not.
         """
-        if len(v) != 3:
-            raise ValueError(f"options must have exactly 3 items, got {len(v)}")
+        if len(v) < 3:
+            raise ValueError(f"options must have at least 3 items, got {len(v)}")
         return v
 
     @field_validator('review_lever', mode='after')
@@ -140,11 +144,11 @@ class Lever(BaseModel):
         PlanExe receives prompts in many non-English languages, so the
         validator must not rely on English markers like "Controls" or
         "Weakness:". Instead we enforce structural properties:
-        - minimum length (at least 20 characters)
+        - minimum length (at least 50 characters)
         - no square-bracket placeholders (e.g. [Tension A])
         """
-        if len(v) < 20:
-            raise ValueError(f"review_lever is too short ({len(v)} chars); expected at least 20")
+        if len(v) < 50:
+            raise ValueError(f"review_lever is too short ({len(v)} chars); expected at least 50")
         if '[' in v or ']' in v:
             raise ValueError("review_lever must not contain square-bracket placeholders")
         return v
@@ -160,9 +164,6 @@ class DocumentDetails(BaseModel):
     levers: list[Lever] = Field(
         min_length=5,
         description="Propose 5 to 7 levers."
-    )
-    summary: str = Field(
-        description="One sentence prescribing a concrete addition to a specific lever. Example: \"Add 'partner with a regional distributor' to Supply Chain Strategy.\""
     )
 
 class LeverCleaned(BaseModel):
@@ -190,17 +191,11 @@ class LeverCleaned(BaseModel):
         description="Exactly 3 options for this lever. No more, no fewer. Each option must be a complete "
                     "strategic approach (a full sentence with an action verb), not a label."
     )
+    # This field description is never serialized to an LLM — LeverCleaned is
+    # only used for cleaned output. Prompt-facing examples live in Lever.review_lever
+    # and IDENTIFY_POTENTIAL_LEVERS_SYSTEM_PROMPT section 4.
     review: str = Field(
-        description=(
-            "A short critical review — name the core tension, then identify "
-            "a weakness the options miss. "
-            "Examples: "
-            "'This lever governs the tension between centralization and local "
-            "autonomy, but the options overlook transition costs.' "
-            "'Prioritizing speed over reliability carries hidden costs: none of "
-            "the options address rollback complexity.' "
-            "Do not use square brackets or placeholder text."
-        )
+        description="A short critical review — names the core tension, then identifies a weakness the options miss."
     )
 
 IDENTIFY_POTENTIAL_LEVERS_SYSTEM_PROMPT = """
@@ -226,12 +221,10 @@ You are an expert strategic analyst. Generate solution space parameters followin
    - For `review_lever`:
      A short critical review — name the core tension, then identify a weakness the options miss.
      Examples:
-     - "This lever governs the tension between centralization and local autonomy, but the options overlook transition costs."
-     - "Prioritizing speed over reliability carries hidden costs: none of the options address rollback complexity."
+     - "Switching from seasonal contract labor to year-round employees stabilizes harvest quality, but none of the options price in the idle-wage burden during the 5-month off-season."
+     - "Routing the light-rail extension through the historic district unlocks ridership but triggers Section 106 heritage review; the options assume permits will clear on the standard timeline."
+     - "Pooling catastrophe risk across three coastal regions diversifies exposure on paper, but a regional hurricane season can correlate all three simultaneously — correlation risk absent from every option."
      Do not use square brackets or placeholder text.
-   - For `summary`:
-     One sentence prescribing a concrete addition to a specific lever.
-     Example: "Add 'partner with a regional distributor for last-mile logistics' to Supply Chain Strategy."
 
 5. **Prohibitions**
    - NO prefixes/labels in options (e.g., "Option A:", "Choice 1:")
@@ -243,7 +236,7 @@ You are an expert strategic analyst. Generate solution space parameters followin
 6. **Option Structure**
    - Maintain parallel grammatical structure across options
    - Ensure options are self-contained descriptions
-   - Each option should be a concrete, actionable approach — not a vague aspiration
+   - Each option should be a concrete, actionable approach (at least 15 words with an action verb) — not a short label or vague aspiration
 """
 
 @dataclass
@@ -279,9 +272,7 @@ class IdentifyPotentialLevers:
                 names_list = ", ".join(f'"{n}"' for n in generated_lever_names)
                 prompt_content = (
                     f"Generate 5 to 7 MORE levers with completely different names. "
-                    f"Do NOT reuse any of these already-generated names: [{names_list}]\n"
-                    f"Each option must be a complete strategic sentence (at least 15 words with an action verb), not a short label.\n"
-                    f"Do not invent percentages, cost savings, or performance deltas — use qualitative language unless the project document supplies the number.\n\n"
+                    f"Do NOT reuse any of these already-generated names: [{names_list}]\n\n"
                     f"{user_prompt}"
                 )
 

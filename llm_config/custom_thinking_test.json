@@ -3,6 +3,7 @@
         "comment": "Qwen 3.5-9B via LM Studio with ThinkingAwareOpenAILike - thinking tokens ENABLED",
         "priority": 0,
         "luigi_workers": 1,
+        "self_improve_sequential": true,
         "class": "ThinkingAwareOpenAILike",
         "arguments": {
             "model": "qwen/qwen3.5-9b",
@@ -29,6 +30,7 @@
         "comment": "Qwen 3.5-35B-A3B (Big Qwen) via LM Studio - thinking DISABLED in config but forced on by LM Studio GUI. max_tokens=16384 to prevent thinking budget exhaustion.",
         "priority": 0,
         "luigi_workers": 1,
+        "self_improve_sequential": true,
         "class": "ThinkingAwareOpenAILike",
         "arguments": {
             "model": "qwen/qwen3.5-35b-a3b",

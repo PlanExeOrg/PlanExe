@@ -8,7 +8,7 @@ By the end of this prompt optimization, the overall plan quality should have bee
 I want to track metrics for how much improvement have happened.
 
 
-## Status (2026-03-17)
+## Status (2026-03-18)
 
 ### Infrastructure
 
@@ -21,7 +21,7 @@ I want to track metrics for how much improvement have happened.
   - Phase 2: `run_code_review.py` — both agents review PlanExe source code, producing `code_*.md` with file:line references.
   - Phase 3: `run_synthesis.py` — single agent reconciles all findings into `synthesis.md` with top 5 ranked directions.
   - Phase 4: `run_assessment.py` — before/after comparison, metric table, keeper verdict (YES/NO/CONDITIONAL), and evaluation of the synthesis recommendation for the next iteration.
-  - `run_analysis.py` — orchestrates phases 1–4 sequentially; stops hard on first phase failure.
+  - `run_analysis.py` — orchestrates phases 1–4 sequentially with retry support (default 3 attempts per phase, 20 min timeout). Cleans up error marker files before retrying.
 - **`run_optimization_iteration.py`** — orchestrates a full loop: implement recommendation → create PR → run experiments → run analysis pipeline. Supports `--skip-implement`, `--skip-runner`, `--skip-analysis`, `--models`.
 - **Conventions**: [`analysis/AGENTS.md`](https://github.com/PlanExeOrg/PlanExe-prompt-lab/blob/main/analysis/AGENTS.md).
 
@@ -45,7 +45,7 @@ Removed: GLM (PR #266, schema-echoing), StepFun (removed from config), nemotron 
 
 Currently optimizing: `identify_potential_levers` (the first step after plan intake).
 
-24 analysis rounds (0–23).
+30 analysis rounds (0–29).
 
 | Iter | PR | Change | Verdict | Runs | Analysis |
 |------|-----|--------|---------|------|----------|
@@ -73,20 +73,34 @@ Currently optimizing: `identify_potential_levers` (the first step after plan int
 | 21 | [#313](https://github.com/PlanExeOrg/PlanExe/pull/313) | Add anti-fabrication reminder to call-2/3 prompts | CONDITIONAL | 53–59 | [analysis/21](https://github.com/PlanExeOrg/PlanExe-prompt-lab/tree/main/analysis/21_identify_potential_levers) |
 | 22 | [#316](https://github.com/PlanExeOrg/PlanExe/pull/316) | Replace two-bullet review_lever prompt with single flowing example | CONDITIONAL | 60–66 | [analysis/22](https://github.com/PlanExeOrg/PlanExe-prompt-lab/tree/main/analysis/22_identify_potential_levers) |
 | 23 | [#326](https://github.com/PlanExeOrg/PlanExe/pull/326) | Add second review_lever example to break template lock | KEEP | 67–73 | [analysis/23](https://github.com/PlanExeOrg/PlanExe-prompt-lab/tree/main/analysis/23_identify_potential_levers) |
+| 24 | [#334](https://github.com/PlanExeOrg/PlanExe/pull/334) | (INVALID — runner ran against main, not PR branch) | INVALID | 75–81 | [analysis/24](https://github.com/PlanExeOrg/PlanExe-prompt-lab/tree/main/analysis/24_identify_potential_levers) |
+| 25 | [#334](https://github.com/PlanExeOrg/PlanExe/pull/334) | Remove unused summary field, slim call-2/3 prefix | YES | 82–88 | [analysis/25](https://github.com/PlanExeOrg/PlanExe-prompt-lab/tree/main/analysis/25_identify_potential_levers) |
+| 26 | [#337](https://github.com/PlanExeOrg/PlanExe/pull/337) | Replace generic review_lever examples with domain-specific ones (agriculture, urban planning, insurance) | YES | 89–95 | [analysis/26](https://github.com/PlanExeOrg/PlanExe-prompt-lab/tree/main/analysis/26_identify_potential_levers) |
+| 27 | [#339](https://github.com/PlanExeOrg/PlanExe/pull/339) | Relax option count validator, raise review min_length to 50, clean up dead code | YES | 96–02 | [analysis/27](https://github.com/PlanExeOrg/PlanExe-prompt-lab/tree/main/analysis/27_identify_potential_levers) |
+| 28 | [#340](https://github.com/PlanExeOrg/PlanExe/pull/340) | Remove template-lock phrase "the options neglect" from example 3, deduplicate field description examples | CONDITIONAL | 03–09 | [analysis/28](https://github.com/PlanExeOrg/PlanExe-prompt-lab/tree/main/analysis/28_identify_potential_levers) |
+| 29 | [#288](https://github.com/PlanExeOrg/PlanExe/pull/288) | Fix zero cost for OpenAI/Anthropic models via fallback pricing + Anthropic token capture | YES | 10–16 | [analysis/29](https://github.com/PlanExeOrg/PlanExe-prompt-lab/tree/main/analysis/29_identify_potential_levers) |
 
 ### Key Improvements So Far
 
-Comparing iteration 0 (baseline) to iteration 14 (current state):
+Comparing iteration 0 (baseline) to iteration 29 (current state):
 
 - **Review format violations**: 67 → ~4 (enforced by validator since iter 13)
 - **Consequence chain violations**: 35 → 7
 - **Bracket placeholder leakage**: ~17 → 0
 - **Template leakage** (naming suffix): 83–100% → 2–10%
+- **review_lever template lock**: llama3.1 100% → 0%, qwen3 ~100% → 6% (broken by domain-specific examples in iter 26)
+- **"The options [verb]" secondary lock**: llama3.1 gta_game 100% → 62.5% (partial fix in iter 28; examples 1 & 2 still use options-as-subject)
 - **Cross-call duplication**: eliminated via novelty-aware follow-ups
 - **Chat-history contamination**: eliminated via fresh context per call
 - **Validation failures discarding valid levers**: eliminated — `max_length=7` removed (iter 12), partial result recovery added (iter 14)
-- **Option count violations**: caught by `check_option_count` validator (iter 13)
-- **Overall success rate**: 88.6% → 91.4% (iter 14, partial recovery)
+- **Option count violations**: caught by `check_option_count` validator (iter 13), relaxed to `< 3` in iter 27
+- **review_lever min_length**: raised from 20 to 50 chars (iter 27) — catches stub reviews
+- **Unused summary field**: removed (iter 25) — eliminated 105 wasted LLM generations per batch
+- **Duplicate example injection**: field description examples removed (iter 28) — ~150-200 token savings per call
+- **Consequences contamination**: "A weakness in this approach is that…" in consequences field eliminated (iter 28, downstream of B2 fix)
+- **Cost tracking**: OpenAI and Anthropic models now report token counts and estimated cost (iter 29)
+- **Overall success rate**: 88.6% → 97.1% (iter 27)
+- **Option word count (llama3.1)**: ~7 → ~12 avg words (iter 25)
 - **Gemini-flash baseline comparison**: name uniqueness 71%→100%, cross-call duplication 15→0, consequence richness +40%, option prefix leakage 16→0 ([comparison](https://github.com/PlanExeOrg/PlanExe-prompt-lab/blob/main/analysis/13_identify_potential_levers/comparison.md))
 
 ### Key Lessons Learned
@@ -98,10 +112,14 @@ Comparing iteration 0 (baseline) to iteration 14 (current state):
 5. **Dual-agent analysis catches real errors.** Codex corrected Claude's success rate miscount in iteration 0. Independent analysis is worth the extra cost.
 6. **Prefer soft prompt guidance over hard Pydantic constraints.** `max_length=7` on the levers field discarded entire LLM responses when a model returned 8 levers. The downstream dedup step already handles extras. Hard caps waste tokens on retries; soft guidance in the prompt is cheaper and more fault-tolerant.
 7. **Recover partial results rather than failing completely.** When a 3-call loop has call 2 or 3 fail, keeping levers from prior successful calls is better than discarding everything. A single validator rejection should not wipe out 10+ valid levers.
+8. **Domain-specific examples break template lock.** Generic examples ("centralization and local autonomy") are portable — models copy them verbatim regardless of plan topic. Domain-specific examples (agriculture, insurance) force models to generate original text. Iteration 26 broke llama3.1 template lock from 100% to 0% with this approach.
+9. **Verify the runner is on the PR branch, not main.** Iteration 24 was invalidated because the runner imported code from main instead of the PR branch. `run_optimization_iteration.py` now verifies this automatically.
+10. **Fixing one of N copyable examples shifts the lock, not breaks it.** Iteration 28 replaced one of three examples using "the options" as grammatical subject. The lock rate dropped from 100% to 62.5% for call 1, but calls 2-3 retained the pattern at ~100%. The remaining examples are still active lock sources. All must be fixed simultaneously.
+11. **Replacement examples can introduce new regressions.** Iteration 28's replacement example 3 introduced fabricated % claims in llama3.1 consequences ("by at least 20%"). Replacement text must be reviewed for quantitative language that models might copy.
 
 ### Current State of `identify_potential_levers.py`
 
-After 23 iterations, the step has these characteristics:
+After 29 iterations, the step has these characteristics:
 
 - System prompt says "5 to 7 levers per response", schema has `min_length=5` (no `max_length` — downstream dedup handles extras)
 - Follow-up calls use novelty-aware prompts (exclude already-generated lever names)
@@ -110,9 +128,13 @@ After 23 iterations, the step has these characteristics:
 - Pydantic validators: `check_option_count` (exactly 3 options), `check_review_format` (structural only — min length + no bracket placeholders, language-agnostic)
 - Partial result recovery: if call 2 or 3 fails, keep levers from prior successful calls instead of discarding everything
 - Quality gate: duplicate name filter (language-agnostic)
-- `review_lever` prompt uses two structurally distinct examples to prevent template lock
+- `review_lever` prompt uses three domain-specific non-portable examples (agriculture, urban planning, insurance) to prevent template lock; example 3 rewritten to remove "the options neglect" (iter 28)
+- `review_lever` field description no longer duplicates system prompt examples (iter 28) — ~150-200 token savings per call
+- `DocumentDetails.summary` field removed (unused, wasted tokens)
+- Call-2/3 prefix slimmed (no duplicate quality/anti-fabrication reminders)
 - `OPTIMIZE_INSTRUCTIONS` documents 6 known problems (including template lock)
 - System prompt: `IDENTIFY_POTENTIAL_LEVERS_SYSTEM_PROMPT` constant in code
+- **Cost tracking**: fallback pricing registry estimates cost from token counts for OpenAI/Anthropic models; Anthropic httpx hook captures token usage that LlamaIndex discards (iter 29)
 
 ### Not Started
 
@@ -123,8 +145,8 @@ After 23 iterations, the step has these characteristics:
 
 ### Next Steps
 
-1. **Reduce remaining llama3.1 template lock** — after iteration 23, llama3.1 still shows ~71% template lock on "This lever governs the tension". Consider adding an explicit anti-pattern prohibition.
-2. **Address gpt-5-nano second-example lock** — gpt-5-nano swapped one template lock for another (now copies the second example's format). May need a third structurally distinct example or different approach.
+1. **Replace all three review_lever examples** — examples 1 and 2 still use "the options" / "none of the options" as grammatical subject, confirmed as active lock sources (gpt-5-nano run 05: "the options neglect"; llama3.1 parasomnia 100% lock rate). Replace all three with critiques whose subject is never options-centric. Ensure no quantitative language to avoid fabricated % regression.
+2. **Fix OPTIMIZE_INSTRUCTIONS self-contradiction** — lines 77-79 praise example 1 as "the correct structural template" while it contains a copyable opener. Fix in same PR as example replacement.
 3. **Build a deterministic evaluator** — compute metrics (uniqueness, option count, template leakage, format compliance) without LLM calls. Makes assessment reproducible and fast.
 4. **Move to the next pipeline step** once `identify_potential_levers` is stable.
 

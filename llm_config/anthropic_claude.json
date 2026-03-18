@@ -2,7 +2,7 @@
     "_comment": "Anthropic Claude models via the Anthropic API. Set ANTHROPIC_API_KEY in .env to a regular API key (sk-ant-api*) or a Claude Code OAuth token (sk-ant-oat*, generated via `claude setup-token` — requires Claude Pro/Max subscription). OAuth tokens are auto-detected and sent via Bearer auth with the required anthropic-beta header.",
 
     "anthropic-claude-haiku-4-5": {
-        "comment": "Haiku 4.5 — fastest and cheapest. Good for most PlanExe runs. ~$0.25 input / $1.25 output per million tokens.",
+        "comment": "Haiku 4.5 — fastest and cheapest. Good for most PlanExe runs. $1.00/M input tokens. $5.00/M output tokens.",
         "luigi_workers": 4,
         "priority": 1,
         "class": "Anthropic",
@@ -14,11 +14,15 @@
             "max_tokens": 8192,
             "max_retries": 5
         },
+        "pricing": {
+            "input_per_million_tokens": 1.00,
+            "output_per_million_tokens": 5.00
+        },
         "pricing_kind": "paid"
     },
 
     "anthropic-claude-haiku-4-5-pinned": {
-        "comment": "Haiku 4.5 — pinned to a specific version for reproducibility.",
+        "comment": "Haiku 4.5 — pinned to a specific version for reproducibility. $1.00/M input tokens. $5.00/M output tokens.",
         "luigi_workers": 4,
         "priority": 1,
         "class": "Anthropic",
@@ -30,11 +34,15 @@
             "max_tokens": 8192,
             "max_retries": 5
         },
+        "pricing": {
+            "input_per_million_tokens": 1.00,
+            "output_per_million_tokens": 5.00
+        },
         "pricing_kind": "paid"
     },
 
     "anthropic-claude-sonnet-4-6": {
-        "comment": "Sonnet 4.6 (latest) — higher quality than Haiku, about 10x more expensive. Good balance of quality and cost for complex plans.",
+        "comment": "Sonnet 4.6 (latest) — higher quality than Haiku, about 10x more expensive. Good balance of quality and cost for complex plans. $3.00/M input tokens. $15.00/M output tokens.",
         "luigi_workers": 4,
         "priority": 1,
         "class": "Anthropic",
@@ -46,11 +54,15 @@
             "max_tokens": 16000,
             "max_retries": 5
         },
+        "pricing": {
+            "input_per_million_tokens": 3.00,
+            "output_per_million_tokens": 15.00
+        },
         "pricing_kind": "paid"
     },
 
     "anthropic-claude-sonnet-4-5": {
-        "comment": "Sonnet 4.5 — previous generation, pinned.",
+        "comment": "Sonnet 4.5 — previous generation, pinned. $3.00/M input tokens. $15.00/M output tokens.",
         "luigi_workers": 4,
         "priority": 1,
         "class": "Anthropic",
@@ -62,11 +74,15 @@
             "max_tokens": 16000,
             "max_retries": 5
         },
+        "pricing": {
+            "input_per_million_tokens": 3.00,
+            "output_per_million_tokens": 15.00
+        },
         "pricing_kind": "paid"
     },
 
     "anthropic-claude-sonnet-4-6-thinking": {
-        "comment": "Sonnet 4.6 with extended thinking enabled (budget_tokens: 10000). Produces higher-quality structured output for complex tasks but significantly increases latency and cost. PlanExe makes 60-100+ calls per plan — use sparingly.",
+        "comment": "Sonnet 4.6 with extended thinking enabled (budget_tokens: 10000). Produces higher-quality structured output for complex tasks but significantly increases latency and cost. PlanExe makes 60-100+ calls per plan — use sparingly. $3.00/M input tokens. $15.00/M output tokens.",
         "luigi_workers": 2,
         "priority": 1,
         "class": "Anthropic",
@@ -79,11 +95,15 @@
             "max_retries": 5,
             "thinking_dict": {"type": "enabled", "budget_tokens": 10000}
         },
+        "pricing": {
+            "input_per_million_tokens": 3.00,
+            "output_per_million_tokens": 15.00
+        },
         "pricing_kind": "paid"
     },
 
     "anthropic-claude-opus-4-6": {
-        "comment": "Opus 4.6 (latest, most capable) — highest quality, highest cost. Best for plans where quality matters more than budget. PlanExe makes 60-100+ calls — expect significant spend per plan.",
+        "comment": "Opus 4.6 (latest, most capable) — highest quality, highest cost. Best for plans where quality matters more than budget. PlanExe makes 60-100+ calls — expect significant spend per plan. $5.00/M input tokens. $25.00/M output tokens.",
         "luigi_workers": 2,
         "priority": 1,
         "class": "Anthropic",
@@ -95,11 +115,15 @@
             "max_tokens": 16000,
             "max_retries": 5
         },
+        "pricing": {
+            "input_per_million_tokens": 5.00,
+            "output_per_million_tokens": 25.00
+        },
         "pricing_kind": "paid"
     },
 
     "anthropic-claude-opus-4-6-thinking": {
-        "comment": "Opus 4.6 with extended thinking (budget_tokens: 16000). Maximum quality — use only when cost is not a concern. High latency per call.",
+        "comment": "Opus 4.6 with extended thinking (budget_tokens: 16000). Maximum quality — use only when cost is not a concern. High latency per call. $5.00/M input tokens. $25.00/M output tokens.",
         "luigi_workers": 1,
         "priority": 1,
         "class": "Anthropic",
@@ -111,6 +135,10 @@
             "max_tokens": 16000,
             "max_retries": 5,
             "thinking_dict": {"type": "enabled", "budget_tokens": 16000}
+        },
+        "pricing": {
+            "input_per_million_tokens": 5.00,
+            "output_per_million_tokens": 25.00
         },
         "pricing_kind": "paid"
     }

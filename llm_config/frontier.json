@@ -15,6 +15,10 @@
             "max_retries": 5
         },
         "model_info_url": "https://openrouter.ai/moonshotai/kimi-k2.5",
+        "pricing": {
+            "input_per_million_tokens": 0.40,
+            "output_per_million_tokens": 2.00
+        },
         "pricing_kind": "paid"
     },
     "openrouter-qwen-qwen3-5-397b-a17b": {
@@ -33,6 +37,10 @@
             "max_retries": 5
         },
         "model_info_url": "https://openrouter.ai/qwen/qwen3.5-397b-a17b",
+        "pricing": {
+            "input_per_million_tokens": 0.15,
+            "output_per_million_tokens": 1.00
+        },
         "pricing_kind": "paid"
     },
     "openrouter-google-gemini-2-5-flash-lite": {
@@ -51,6 +59,10 @@
             "max_retries": 5
         },
         "model_info_url": "https://openrouter.ai/google/gemini-2.5-flash-lite",
+        "pricing": {
+            "input_per_million_tokens": 0.40,
+            "output_per_million_tokens": 2.20
+        },
         "pricing_kind": "paid"
     }
 }

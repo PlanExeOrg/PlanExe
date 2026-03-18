@@ -5,7 +5,7 @@ an iterative loop: implement a fix, test across models, analyze results, and
 decide whether to keep or revert. Each iteration produces an auditable trail
 with a PR, quantitative comparison, and a keeper verdict.
 
-Currently optimizing the `IdentifyPotentialLevers` step (23 iterations
+Currently optimizing the `IdentifyPotentialLevers` step (26 iterations
 completed). The runner infrastructure (progress tracking, CLI, output
 structure) is shared across steps; each new step requires only a custom
 adapter.
@@ -222,6 +222,9 @@ Removed models:
 | 21 | [#313](https://github.com/PlanExeOrg/PlanExe/pull/313) | Add anti-fabrication reminder to call-2/3 prompts | CONDITIONAL |
 | 22 | [#316](https://github.com/PlanExeOrg/PlanExe/pull/316) | Replace two-bullet review_lever prompt with single flowing example | CONDITIONAL |
 | 23 | [#326](https://github.com/PlanExeOrg/PlanExe/pull/326) | Add second review_lever example to break template lock | KEEP |
+| 24 | [#334](https://github.com/PlanExeOrg/PlanExe/pull/334) | (INVALID — runner ran against main, not PR branch) | INVALID |
+| 25 | [#334](https://github.com/PlanExeOrg/PlanExe/pull/334) | Remove unused summary field, slim call-2/3 prefix | YES |
+| 26 | [#337](https://github.com/PlanExeOrg/PlanExe/pull/337) | Replace generic review_lever examples with domain-specific ones | YES |
 
 Full analysis artifacts for each iteration are in
 [PlanExe-prompt-lab/analysis/](https://github.com/PlanExeOrg/PlanExe-prompt-lab/tree/main/analysis).
@@ -235,7 +238,11 @@ Full analysis artifacts for each iteration are in
 3. **Never delete from the history directory.** Runs are permanent records.
 4. **The runner always uses the code constant.** There is no external prompt file
    or CLI override. To change the prompt, modify `identify_potential_levers.py`
-   and merge the PR before running experiments.
+   on the PR branch before running experiments.
+5. **Verify the runner is on the PR branch, not main.** The runner imports code
+   from PlanExe, so it must be on the PR branch to test the PR's changes.
+   `run_optimization_iteration.py` verifies this automatically. Iteration 24
+   was invalidated because the runner ran against main.
 
 ## Architecture
 

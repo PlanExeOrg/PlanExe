@@ -425,10 +425,39 @@ class LLMExecutor:
                 error_id=error_id,
             )
         else:
+            # Try to retrieve token counts captured by an external hook
+            # (e.g. the Anthropic httpx usage hook installed by the runner).
+            extra_kwargs: dict = {}
+            try:
+                from worker_plan_internal.llm_util.usage_metrics import pop_captured_llm_usage
+                usage, model_id = pop_captured_llm_usage()
+                if usage:
+                    input_tokens = usage.get("input_tokens")
+                    output_tokens = usage.get("output_tokens")
+                    if input_tokens is not None:
+                        extra_kwargs["input_tokens"] = int(input_tokens)
+                    if output_tokens is not None:
+                        extra_kwargs["output_tokens"] = int(output_tokens)
+                    # Estimate cost via model_pricing if we have tokens
+                    if input_tokens or output_tokens:
+                        try:
+                            from worker_plan_internal.llm_util.model_pricing import estimate_cost
+                            cost = estimate_cost(
+                                model_name=model_id or llm_model_name,
+                                input_tokens=int(input_tokens or 0),
+                                output_tokens=int(output_tokens or 0),
+                            )
+                            if cost is not None:
+                                extra_kwargs["cost_usd"] = cost
+                        except Exception:
+                            pass
+            except ImportError:
+                pass
             record_usage_metric(
                 model=llm_model_name,
                 duration_seconds=duration,
                 success=True,
+                **extra_kwargs,
             )
 
     def _check_stop_callback(self, last_attempt: LLMAttempt, start_time: float, attempt_index: int) -> None:

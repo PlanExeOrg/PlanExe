@@ -10,8 +10,8 @@
             "model": "claude-haiku-4-5",
             "api_key": "${ANTHROPIC_API_KEY}",
             "temperature": 1.0,
-            "timeout": 60.0,
-            "max_tokens": 8192,
+            "timeout": 120.0,
+            "max_tokens": 16000,
             "max_retries": 5
         },
         "pricing": {
@@ -30,8 +30,8 @@
             "model": "claude-haiku-4-5-20251001",
             "api_key": "${ANTHROPIC_API_KEY}",
             "temperature": 1.0,
-            "timeout": 60.0,
-            "max_tokens": 8192,
+            "timeout": 120.0,
+            "max_tokens": 16000,
             "max_retries": 5
         },
         "pricing": {

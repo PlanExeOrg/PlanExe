@@ -1,13 +1,19 @@
 """
-Run the IdentifyPotentialLevers pipeline step with a candidate system prompt
-against baseline training data and capture the output.
+Run a pipeline step against baseline training data and capture the output.
+
+Supports multiple steps via --step flag (default: identify_potential_levers).
 
 Usage:
     python -m self_improve.runner \
-        --system-prompt-file candidate.txt \
         --baseline-dir /path/to/baseline/train \
         --prompt-lab-dir /path/to/PlanExe-prompt-lab \
         --model ollama-llama3.1
+
+    python -m self_improve.runner \
+        --step identify_documents \
+        --baseline-dir /path/to/baseline/train \
+        --prompt-lab-dir /path/to/PlanExe-prompt-lab \
+        --model anthropic-claude-haiku-4-5-pinned
 """
 import argparse
 import json
@@ -30,6 +36,7 @@ if _worker_plan_dir not in sys.path:
 
 from llama_index.core.instrumentation import get_dispatcher
 from worker_plan_internal.lever.identify_potential_levers import IdentifyPotentialLevers
+from worker_plan_internal.document.identify_documents import IdentifyDocuments
 from worker_plan_internal.llm_util.llm_executor import LLMExecutor, LLMModelFromName
 from worker_plan_internal.llm_util.track_activity import TrackActivity
 from worker_plan_internal.llm_util.usage_metrics import set_usage_metrics_path, record_usage_metric
@@ -37,30 +44,48 @@ from worker_plan_internal.llm_util.usage_metrics import set_usage_metrics_path, 
 logger = logging.getLogger(__name__)
 
 
-
 # Lock for thread-safe writes to shared files and global state
 _file_lock = threading.Lock()
 
-INPUT_FILES = [
-    "001-2-plan.txt",
-    "002-6-identify_purpose.md",
-    "002-8-plan_type.md",
+# ---------------------------------------------------------------------------
+# Step configurations
+# ---------------------------------------------------------------------------
+
+# identify_potential_levers — original step
+_LEVERS_INPUT_FILES = [
+    ("001-2-plan.txt", "plan.txt"),
+    ("002-6-identify_purpose.md", "purpose.md"),
+    ("002-8-plan_type.md", "plan_type.md"),
 ]
 
-FILE_LABELS = [
-    "plan.txt",
-    "purpose.md",
-    "plan_type.md",
+# identify_documents — needs many upstream files
+_DOCUMENTS_INPUT_FILES = [
+    ("002-14-strategic_decisions.md", "strategic_decisions.md"),
+    ("002-19-scenarios.md", "scenarios.md"),
+    ("003-11-consolidate_assumptions_short.md", "assumptions.md"),
+    ("005-2-project_plan.md", "project-plan.md"),
+    ("007-8-related_resources.md", "related-resources.md"),
+    ("014-2-swot_analysis.md", "swot-analysis.md"),
+    ("013-team.md", "team.md"),
+    ("016-2-expert_criticism.md", "expert-review.md"),
 ]
 
+# Separate file for identify_purpose_dict (loaded as JSON, not concatenated)
+_DOCUMENTS_PURPOSE_FILE = "002-5-identify_purpose_raw.json"
 
-def load_user_prompt(plan_dir: Path) -> str:
-    """
-    Read the 3 input files from a plan directory and concatenate them
-    exactly as PotentialLeversTask.run_inner() does.
-    """
+SUPPORTED_STEPS = ["identify_potential_levers", "identify_documents"]
+
+# Default wall-clock timeout per plan (seconds).  Prevents a single stuck LLM
+# call from blocking the entire run.  The Anthropic SDK may retry internally
+# (max_retries × timeout), and LLMExecutor retries on top of that.  600s is
+# generous enough for normal operation but catches true hangs.
+DEFAULT_PLAN_TIMEOUT = 600
+
+
+def _load_user_prompt(plan_dir: Path, input_files: list[tuple[str, str]]) -> str:
+    """Read input files from a plan directory and concatenate them."""
     parts = []
-    for filename, label in zip(INPUT_FILES, FILE_LABELS):
+    for filename, label in input_files:
         file_path = plan_dir / filename
         content = file_path.read_text()
         parts.append(f"File '{label}':\n{content}")
@@ -76,14 +101,70 @@ class PlanResult:
     calls_succeeded: int | None = None
 
 
+def _run_levers(plan_dir: Path, plan_output_dir: Path, llm_executor: LLMExecutor) -> PlanResult:
+    """Execute the identify_potential_levers step."""
+    plan_name = plan_dir.name
+    user_prompt = _load_user_prompt(plan_dir, _LEVERS_INPUT_FILES)
+    result = IdentifyPotentialLevers.execute(llm_executor, user_prompt)
+
+    raw_path = plan_output_dir / "002-9-potential_levers_raw.json"
+    clean_path = plan_output_dir / "002-10-potential_levers.json"
+    result.save_raw(str(raw_path))
+    result.save_clean(str(clean_path))
+
+    expected_calls = 3
+    actual_calls = len(result.responses)
+    if actual_calls < expected_calls:
+        logger.warning(
+            f"{plan_name}: partial recovery — {actual_calls}/{expected_calls} calls succeeded"
+        )
+    return PlanResult(
+        name=plan_name,
+        status="ok",
+        duration_seconds=0,  # filled by caller
+        calls_succeeded=actual_calls,
+    )
+
+
+def _run_documents(plan_dir: Path, plan_output_dir: Path, llm_executor: LLMExecutor) -> PlanResult:
+    """Execute the identify_documents step."""
+    plan_name = plan_dir.name
+    user_prompt = _load_user_prompt(plan_dir, _DOCUMENTS_INPUT_FILES)
+
+    # Load identify_purpose_dict separately (needed by IdentifyDocuments).
+    purpose_path = plan_dir / _DOCUMENTS_PURPOSE_FILE
+    with open(purpose_path) as f:
+        identify_purpose_dict = json.load(f)
+
+    # IdentifyDocuments.execute() takes a raw LLM, not an LLMExecutor.
+    # Wrap it in llm_executor.run() to get retry/fallback behaviour.
+    def execute_fn(llm):
+        return IdentifyDocuments.execute(llm, user_prompt, identify_purpose_dict)
+
+    result = llm_executor.run(execute_fn)
+
+    result.save_raw(str(plan_output_dir / "017-3-identified_documents_raw.json"))
+    result.save_markdown(str(plan_output_dir / "017-4-identified_documents.md"))
+    result.save_json_documents_to_find(str(plan_output_dir / "017-5-identified_documents_to_find.json"))
+    result.save_json_documents_to_create(str(plan_output_dir / "017-6-identified_documents_to_create.json"))
+
+    return PlanResult(
+        name=plan_name,
+        status="ok",
+        duration_seconds=0,  # filled by caller
+        calls_succeeded=1,
+    )
+
+
 def run_single_plan(
     plan_dir: Path,
     output_dir: Path,
     model_names: list[str],
+    step: str = "identify_potential_levers",
 ) -> PlanResult:
     """
-    Run IdentifyPotentialLevers for one plan directory. Writes the raw and
-    clean JSON outputs into output_dir/<plan_name>/.
+    Run a pipeline step for one plan directory. Writes outputs into
+    output_dir/<plan_name>/.
 
     Creates its own LLMExecutor so it's safe to call from multiple threads.
     """
@@ -111,30 +192,18 @@ def run_single_plan(
 
     t0 = time.monotonic()
     try:
-        user_prompt = load_user_prompt(plan_dir)
-        result = IdentifyPotentialLevers.execute(llm_executor, user_prompt)
-
-        raw_path = plan_output_dir / "002-9-potential_levers_raw.json"
-        clean_path = plan_output_dir / "002-10-potential_levers.json"
-        result.save_raw(str(raw_path))
-        result.save_clean(str(clean_path))
+        if step == "identify_potential_levers":
+            pr = _run_levers(plan_dir, plan_output_dir, llm_executor)
+        elif step == "identify_documents":
+            pr = _run_documents(plan_dir, plan_output_dir, llm_executor)
+        else:
+            raise ValueError(f"Unknown step: {step}")
 
         duration = time.monotonic() - t0
+        pr.duration_seconds = round(duration, 2)
+        logger.info(f"{plan_name}: completed in {duration:.1f}s")
+        return pr
 
-        expected_calls = 3
-        actual_calls = len(result.responses)
-        if actual_calls < expected_calls:
-            logger.warning(
-                f"{plan_name}: partial recovery — {actual_calls}/{expected_calls} calls succeeded"
-            )
-
-        logger.info(f"{plan_name}: {len(result.levers)} levers in {duration:.1f}s")
-        return PlanResult(
-            name=plan_name,
-            status="ok",
-            duration_seconds=round(duration, 2),
-            calls_succeeded=actual_calls,
-        )
     except Exception as e:
         duration = time.monotonic() - t0
         logger.error(f"{plan_name}: failed after {duration:.1f}s — {e}")
@@ -297,7 +366,7 @@ def _emit_event(events_path: Path, event: str, **kwargs) -> None:
     logger.info(f"event: {event} {kwargs}")
 
 
-STEP_NAME = "identify_potential_levers"
+DEFAULT_STEP = "identify_potential_levers"
 
 
 def _resolve_workers(model_names: list[str]) -> int:
@@ -391,8 +460,15 @@ def _run_plan_task(
     model_names: list[str],
     events_path: Path,
     outputs_path: Path,
+    step: str = "identify_potential_levers",
+    plan_timeout: int = DEFAULT_PLAN_TIMEOUT,
 ) -> PlanResult:
-    """Run a single plan and record events/output. Thread-safe."""
+    """Run a single plan and record events/output. Thread-safe.
+
+    Enforces *plan_timeout* as a wall-clock ceiling.  If the plan doesn't
+    complete in time, it is recorded as an error (the underlying thread may
+    still be running but results are discarded).
+    """
     plan_name = plan_dir.name
 
     # Set up per-plan log file at outputs/<plan_name>/log.txt.
@@ -411,7 +487,20 @@ def _run_plan_task(
     try:
         _emit_event(events_path, "run_single_plan_start", plan_name=plan_name)
 
-        pr = run_single_plan(plan_dir, output_dir, model_names)
+        # Enforce wall-clock timeout so a stuck LLM call doesn't block forever.
+        from concurrent.futures import ThreadPoolExecutor as _TPE, TimeoutError as _TE
+        with _TPE(max_workers=1) as executor:
+            future = executor.submit(run_single_plan, plan_dir, output_dir, model_names, step)
+            try:
+                pr = future.result(timeout=plan_timeout)
+            except _TE:
+                logger.error(f"{plan_name}: killed after {plan_timeout}s (plan timeout)")
+                pr = PlanResult(
+                    name=plan_name,
+                    status="error",
+                    duration_seconds=float(plan_timeout),
+                    error=f"plan timeout after {plan_timeout}s",
+                )
 
         if pr.status == "ok":
             _emit_event(events_path, "run_single_plan_complete",
@@ -439,9 +528,11 @@ def run(
     plan_dirs: list[Path],
     output_dir: Path,
     model_names: list[str],
+    step: str = "identify_potential_levers",
+    plan_timeout: int = DEFAULT_PLAN_TIMEOUT,
 ) -> None:
     """
-    Iterate over plan directories, run the lever step for each.
+    Iterate over plan directories, run the specified step for each.
 
     Uses luigi_workers from the LLM config to parallelize when > 1.
 
@@ -473,7 +564,7 @@ def run(
     if len(model_names) > 1:
         model_info["fallbacks"] = model_names[1:]
     meta = {
-        "step": "identify_potential_levers",
+        "step": step,
         "model": model_info,
         "workers": workers,
         "system": _collect_system_info(),
@@ -494,13 +585,15 @@ def run(
     if workers <= 1:
         for plan_dir in pending_dirs:
             _run_plan_task(plan_dir, output_dir,
-                           model_names, events_path, outputs_path)
+                           model_names, events_path, outputs_path,
+                           step=step, plan_timeout=plan_timeout)
     else:
         with ThreadPoolExecutor(max_workers=workers) as pool:
             futures = {
                 pool.submit(
                     _run_plan_task, plan_dir, output_dir,
                     model_names, events_path, outputs_path,
+                    step, plan_timeout,
                 ): plan_dir
                 for plan_dir in pending_dirs
             }
@@ -510,7 +603,13 @@ def run(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Run IdentifyPotentialLevers against baseline training data."
+        description="Run a pipeline step against baseline training data."
+    )
+    parser.add_argument(
+        "--step",
+        default=DEFAULT_STEP,
+        choices=SUPPORTED_STEPS,
+        help=f"Pipeline step to run (default: {DEFAULT_STEP}).",
     )
     parser.add_argument(
         "--baseline-dir",
@@ -539,6 +638,12 @@ def main():
         dest="models",
         help="LLM model name. First is primary; additional are fallbacks.",
     )
+    parser.add_argument(
+        "--plan-timeout",
+        type=int,
+        default=DEFAULT_PLAN_TIMEOUT,
+        help=f"Wall-clock timeout per plan in seconds (default: {DEFAULT_PLAN_TIMEOUT}).",
+    )
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -559,7 +664,7 @@ def main():
         parser.error("No plan directories found.")
 
     if args.prompt_lab_dir:
-        run_dir = _history_run_dir(args.prompt_lab_dir, STEP_NAME)
+        run_dir = _history_run_dir(args.prompt_lab_dir, args.step)
         output_dir = run_dir / "outputs"
         print(f"History run: {run_dir}")
     elif args.output_dir:
@@ -567,7 +672,8 @@ def main():
     else:
         parser.error("Either --prompt-lab-dir or --output-dir is required.")
 
-    run(plan_dirs, output_dir, args.models)
+    run(plan_dirs, output_dir, args.models, step=args.step,
+        plan_timeout=args.plan_timeout)
 
     # Summarize from outputs.jsonl
     outputs_path = output_dir.parent / "outputs.jsonl"

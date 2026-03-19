@@ -75,9 +75,12 @@ Known problems to guard against
   new examples (e.g. "the options neglect", "the options assume").
   Examples must avoid reusable transitional phrases that fit any domain.
   Each example must name a domain-specific mechanism or constraint
-  directly (e.g. "the idle-wage burden adds a fixed cost", "a mandatory
-  45–180-day public comment period") rather than referencing "the options"
-  as grammatical subject. No two examples should share a sentence pattern.
+  directly (e.g. "the idle-wage burden adds a fixed cost", "IRB approval
+  and staff credentialing — a sequential overhead") rather than
+  referencing "the options" as grammatical subject. No two examples
+  should share a sentence pattern or rhetorical structure (e.g. all
+  using "X but Z reverses the gain" adversarial contrast). Span at
+  least three distinct domains (agriculture, medical, technology, etc.).
 """
 
 class Lever(BaseModel):
@@ -223,8 +226,8 @@ You are an expert strategic analyst. Generate solution space parameters followin
      A short critical review — name the core tension, then identify a weakness the options miss.
      Examples:
      - "Switching from seasonal contract labor to year-round employees stabilizes harvest quality, but the idle-wage burden during the 5-month off-season adds a fixed cost that erases the per-unit savings unless utilization reaches year-round levels."
-     - "Section 106 heritage review for the historic-district alignment triggers a mandatory 45–180-day public comment period that falls entirely outside the project schedule — any opening date committed before permits clear is betting on the minimum review timeline, not the median."
-     - "Pooling catastrophe risk across three coastal regions reduces expected annual loss on paper, but a single regional hurricane season can correlate all three simultaneously, turning the diversification assumption into a concentration risk at the worst possible moment."
+     - "Each additional clinical site requires its own IRB approval, site-initiation visit, and staff credentialing — a sequential overhead of 8–14 weeks per site that compounds rather than parallelizes, so doubling site count does not halve enrollment time."
+     - "Migrating the rendering pipeline to GPU compute cuts frame time from 12 ms to 4 ms in benchmarks, yet every asset authored for the CPU path must be re-profiled, and the team has no GPU debugging toolchain — the migration cost is hidden in artist-hours, not engineering-hours."
      Do not use square brackets or placeholder text.
 
 5. **Prohibitions**
@@ -233,6 +236,7 @@ You are an expert strategic analyst. Generate solution space parameters followin
    - NO placeholder consequences or bracket-wrapped templates
    - NO fabricated statistics or percentages without evidence from the project context
    - NO marketing language (e.g., "game-changing", "cutting-edge", "revolutionary")
+   - NO starting review_lever with "The options", "These options", "The lever", or "These levers" as the grammatical subject — name a specific mechanism, constraint, or risk instead
 
 6. **Option Structure**
    - Maintain parallel grammatical structure across options

@@ -223,7 +223,7 @@ You are an expert strategic analyst. Generate solution space parameters followin
      A short critical review — name the core tension, then identify a weakness the options miss.
      Examples:
      - "Switching from seasonal contract labor to year-round employees stabilizes harvest quality, but the idle-wage burden during the 5-month off-season adds a fixed cost that erases the per-unit savings unless utilization reaches year-round levels."
-     - "Section 106 heritage review for the historic-district alignment triggers a mandatory 45–180-day public comment period that falls entirely outside the project schedule — any opening date committed before permits clear is betting on the minimum review timeline, not the median."
+     - "Each additional clinical site requires its own IRB approval, site-initiation visit, and staff credentialing — a sequential overhead of 8–14 weeks per site that compounds rather than parallelizes, so doubling site count does not halve enrollment time."
      - "Pooling catastrophe risk across three coastal regions reduces expected annual loss on paper, but a single regional hurricane season can correlate all three simultaneously, turning the diversification assumption into a concentration risk at the worst possible moment."
      Do not use square brackets or placeholder text.
 

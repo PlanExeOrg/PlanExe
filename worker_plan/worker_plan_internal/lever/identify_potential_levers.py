@@ -99,9 +99,6 @@ class Lever(BaseModel):
     Renaming fields or changing descriptions is a prompt change — test with
     a self_improve iteration before merging. See OPTIMIZE_INSTRUCTIONS above.
     """
-    lever_index: int = Field(
-        description="Index of this lever."
-    )
     name: str = Field(
         description="Name of this lever."
     )

@@ -75,20 +75,14 @@ Known problems to guard against
   new examples (e.g. "the options neglect", "the options assume").
   Examples must avoid reusable transitional phrases that fit any domain.
   Each example must name a domain-specific mechanism or constraint
-  directly (e.g. "the idle-wage burden adds a fixed cost", "IRB approval
-  and staff credentialing — a sequential overhead") rather than
-  referencing "the options" as grammatical subject. No two examples
-  should share a sentence pattern or rhetorical structure (e.g. all
-  using "X but Z reverses the gain" adversarial contrast). Span at
-  least three distinct domains (agriculture, medical, technology, etc.).
-  Do NOT add explicit prohibitions naming banned phrases — small models
-  treat the prohibition text as a template and copy the banned phrases.
-- Verbosity amplification. Strong instruction-following models mirror
-  example verbosity, not just structure. A mechanism-dense 50-word
-  example licenses 500-char reviews; multiplied by 21 levers × 3 calls,
-  this can overflow API output limits (haiku gta_game EOF at 40 KB).
-  Keep every review_lever example under 40 words and enforce a length
-  cap in the system prompt.
+  directly rather than referencing "the options" as grammatical subject.
+  No two examples should share a sentence pattern or rhetorical
+  structure. Span at least three distinct domains. Do NOT add explicit
+  prohibitions naming banned phrases — small models treat the
+  prohibition text as a template and copy the banned phrases.
+- Verbosity amplification. Models mirror example verbosity, not just
+  structure. Keep review_lever examples concise and enforce a length
+  cap in the system prompt to prevent output overflow.
 """
 
 class Lever(BaseModel):

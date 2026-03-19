@@ -135,7 +135,7 @@
         "class": "Ollama",
         "arguments": {
             "model": "llama3.1:latest",
-            "temperature": 0.5,
+            "temperature": 0.8,
             "request_timeout": 120.0,
             "is_function_calling_model": false
         },

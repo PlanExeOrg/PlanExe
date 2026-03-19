@@ -14,7 +14,7 @@ import json
 import logging
 import os
 from dataclasses import dataclass
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
@@ -30,12 +30,13 @@ BATCH_SIZE = 5
 # --- Pydantic Models for Data Structuring ---
 
 class InputLever(BaseModel):
-    """Represents a single lever loaded from the initial brainstormed file."""
+    """Represents a single lever loaded from the deduplicated file."""
     lever_id: str
     name: str
     consequences: str
     options: List[str]
     review: str
+    classification: Optional[str] = None
     deduplication_justification: str
 
 class LeverCharacterization(BaseModel):

@@ -11,7 +11,7 @@ import logging
 import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Dict, Any, Literal
+from typing import List, Dict, Any, Literal, Optional
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.llms.llm import LLM
 from pydantic import BaseModel, Field, ValidationError
@@ -20,14 +20,21 @@ from worker_plan_internal.llm_util.llm_executor import LLMExecutor, PipelineStop
 logger = logging.getLogger(__name__)
 
 class LeverClassification(str, Enum):
-    keep   = "keep"
-    absorb = "absorb"
-    remove = "remove"
+    keep_core      = "keep-core"
+    keep_secondary = "keep-secondary"
+    absorb         = "absorb"
+    remove         = "remove"
 
 class LeverClassificationDecision(BaseModel):
     """Minimal per-lever schema. lever_id is assigned by code, not the LLM."""
-    classification: Literal["keep", "absorb", "remove"] = Field(
-        description="What should happen to this lever: keep (distinct), absorb (overlaps another), or remove (fully redundant)."
+    classification: Literal["keep-core", "keep-secondary", "absorb", "remove"] = Field(
+        description=(
+            "What should happen to this lever: "
+            "keep-core (distinct, essential strategic lever), "
+            "keep-secondary (distinct but supporting/operational), "
+            "absorb (overlaps another lever — state which lever id it merges into), "
+            "or remove (fully redundant)."
+        )
     )
     justification: str = Field(
         description="A concise justification for the classification (~80 words). If absorbing, state which lever id it merges into."
@@ -35,7 +42,7 @@ class LeverClassificationDecision(BaseModel):
 
 class LeverDecision(BaseModel):
     lever_id: str
-    classification: Literal["keep", "absorb", "remove"]
+    classification: Literal["keep-core", "keep-secondary", "absorb", "remove"]
     justification: str
 
 class InputLever(BaseModel):
@@ -48,6 +55,9 @@ class InputLever(BaseModel):
 
 class OutputLever(InputLever):
     """The InputLever and the deduplication justification."""
+    classification: Literal["keep-core", "keep-secondary"] = Field(
+        description="Whether this lever is a core strategic lever or a secondary/supporting one."
+    )
     deduplication_justification: str
 
 
@@ -78,7 +88,8 @@ def _call_llm(chat_message_list: List[ChatMessage], llm: LLM) -> dict:
 DEDUPLICATE_SYSTEM_PROMPT = """
 Evaluate each of the provided strategic levers individually. Classify every lever explicitly into one of:
 
-- keep: Lever is distinct, unique, and essential.
+- keep-core: Lever is a distinct, essential strategic decision — it directly shapes the project's success or failure. Methodology, governance, and high-stakes execution levers belong here.
+- keep-secondary: Lever is distinct and useful but supporting or operational — it matters for delivery but is not a top-level strategic choice. Communications, presentation, and routine process levers belong here.
 - absorb: Lever overlaps significantly with another lever. Explicitly state the lever ID it should be merged into.
 - remove: Lever is fully redundant. Removing it loses no meaningful detail. Use this sparingly.
 
@@ -90,7 +101,7 @@ Respect Hierarchy: When absorbing, merge the more specific lever into the more g
 Don't take the more general lever and absorb it into a narrower one.
 Also compare a lever against the group of already-merged levers.
 
-Use "keep" if you lack understanding of what the lever is doing. This way a potential important lever is not getting removed.
+Use "keep-core" if you lack understanding of what the lever is doing. This way a potential important lever is not getting removed.
 Describe what the issue is in the justification.
 
 Don't play it too safe, so you fail to perform the core task: consolidate the levers and get rid of the duplicates.
@@ -162,7 +173,7 @@ class DeduplicateLevers:
         for lever in input_levers:
             lever_json = json.dumps(lever.model_dump(), indent=2)
             lever_prompt = (
-                f"Classify this lever (keep / absorb / remove) with a justification:\n{lever_json}"
+                f"Classify this lever (keep-core / keep-secondary / absorb / remove) with a justification:\n{lever_json}"
             )
             chat_message_list.append(ChatMessage(role=MessageRole.USER, content=lever_prompt))
 
@@ -204,9 +215,9 @@ class DeduplicateLevers:
                     logger.warning(f"Lever {lever.lever_id}: returned None raw.")
 
             if decision is None:
-                logger.warning(f"Lever {lever.lever_id}: classification failed. Defaulting to keep.")
+                logger.warning(f"Lever {lever.lever_id}: classification failed. Defaulting to keep-core.")
                 decision = LeverClassificationDecision(
-                    classification=LeverClassification.keep,
+                    classification=LeverClassification.keep_core,
                     justification="Classification failed after retries. Keeping this lever to avoid data loss."
                 )
                 chat_message_list.append(ChatMessage(
@@ -221,32 +232,32 @@ class DeduplicateLevers:
             ))
 
         # Perform the deduplication.
+        keep_classifications = {LeverClassification.keep_core, LeverClassification.keep_secondary}
         decisions_by_id = {d.lever_id: d for d in decisions}
         output_levers = []
         for lever in input_levers:
             lever_decision = decisions_by_id.get(lever.lever_id)
             if not lever_decision:
-                # Missing decision for this lever. Keep it.
-                deduplication_justification = "Missing deduplication justification. Keeping this lever."
+                # Missing decision for this lever. Keep it as core.
                 output_lever = OutputLever(
                     **lever.model_dump(),
-                    deduplication_justification=deduplication_justification
+                    classification=LeverClassification.keep_core,
+                    deduplication_justification="Missing deduplication justification. Keeping this lever."
                 )
                 output_levers.append(output_lever)
                 continue
 
-            # Check if this is a keeper
-            if lever_decision.classification != LeverClassification.keep:
-                # This is not a keeper
+            # Only keep-core and keep-secondary survive
+            if lever_decision.classification not in keep_classifications:
                 continue
 
-            # This is a keeper
             deduplication_justification = lever_decision.justification.strip()
             if len(deduplication_justification) == 0:
                 deduplication_justification = "Empty explanation. Keeping this lever."
 
             output_lever = OutputLever(
                 **lever.model_dump(),
+                classification=lever_decision.classification,
                 deduplication_justification=deduplication_justification
             )
             output_levers.append(output_lever)

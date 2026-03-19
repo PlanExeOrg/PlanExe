@@ -75,9 +75,20 @@ Known problems to guard against
   new examples (e.g. "the options neglect", "the options assume").
   Examples must avoid reusable transitional phrases that fit any domain.
   Each example must name a domain-specific mechanism or constraint
-  directly (e.g. "the idle-wage burden adds a fixed cost", "a mandatory
-  45–180-day public comment period") rather than referencing "the options"
-  as grammatical subject. No two examples should share a sentence pattern.
+  directly (e.g. "the idle-wage burden adds a fixed cost", "IRB approval
+  and staff credentialing — a sequential overhead") rather than
+  referencing "the options" as grammatical subject. No two examples
+  should share a sentence pattern or rhetorical structure (e.g. all
+  using "X but Z reverses the gain" adversarial contrast). Span at
+  least three distinct domains (agriculture, medical, technology, etc.).
+  Do NOT add explicit prohibitions naming banned phrases — small models
+  treat the prohibition text as a template and copy the banned phrases.
+- Verbosity amplification. Strong instruction-following models mirror
+  example verbosity, not just structure. A mechanism-dense 50-word
+  example licenses 500-char reviews; multiplied by 21 levers × 3 calls,
+  this can overflow API output limits (haiku gta_game EOF at 40 KB).
+  Keep every review_lever example under 40 words and enforce a length
+  cap in the system prompt.
 """
 
 class Lever(BaseModel):
@@ -223,7 +234,7 @@ You are an expert strategic analyst. Generate solution space parameters followin
      A short critical review — name the core tension, then identify a weakness the options miss.
      Examples:
      - "Switching from seasonal contract labor to year-round employees stabilizes harvest quality, but the idle-wage burden during the 5-month off-season adds a fixed cost that erases the per-unit savings unless utilization reaches year-round levels."
-     - "Section 106 heritage review for the historic-district alignment triggers a mandatory 45–180-day public comment period that falls entirely outside the project schedule — any opening date committed before permits clear is betting on the minimum review timeline, not the median."
+     - "Each additional clinical site requires its own IRB approval, site-initiation visit, and staff credentialing — a sequential overhead that compounds rather than parallelizes, so doubling site count does not halve enrollment time."
      - "Pooling catastrophe risk across three coastal regions reduces expected annual loss on paper, but a single regional hurricane season can correlate all three simultaneously, turning the diversification assumption into a concentration risk at the worst possible moment."
      Do not use square brackets or placeholder text.
 
@@ -234,10 +245,11 @@ You are an expert strategic analyst. Generate solution space parameters followin
    - NO fabricated statistics or percentages without evidence from the project context
    - NO marketing language (e.g., "game-changing", "cutting-edge", "revolutionary")
 
-6. **Option Structure**
+6. **Length Limits**
+   - Keep each `review_lever` under 2 sentences (aim for 20–40 words). Name the tension and the missed weakness concisely.
+   - Each option should be a concrete, actionable approach (at least 15 words with an action verb) — not a short label or vague aspiration
    - Maintain parallel grammatical structure across options
    - Ensure options are self-contained descriptions
-   - Each option should be a concrete, actionable approach (at least 15 words with an action verb) — not a short label or vague aspiration
 """
 
 @dataclass

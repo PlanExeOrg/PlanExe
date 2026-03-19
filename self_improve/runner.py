@@ -112,11 +112,14 @@ def _run_levers(plan_dir: Path, plan_output_dir: Path, llm_executor: LLMExecutor
     result.save_raw(str(raw_path))
     result.save_clean(str(clean_path))
 
-    expected_calls = 3
     actual_calls = len(result.responses)
-    if actual_calls < expected_calls:
+    # The adaptive loop uses min_levers=15, max_calls=5 and stops early
+    # when enough levers are accumulated. A 2-call success is normal for
+    # models that produce 8+ levers per call. Only warn if we got fewer
+    # responses than expected for 15 levers (~3 calls at 5-7 levers each).
+    if actual_calls < 3:
         logger.warning(
-            f"{plan_name}: partial recovery — {actual_calls}/{expected_calls} calls succeeded"
+            f"{plan_name}: partial recovery — {actual_calls} calls succeeded"
         )
     return PlanResult(
         name=plan_name,
@@ -511,7 +514,9 @@ def _run_plan_task(
                         plan_name=plan_name, error=pr.error,
                         duration_seconds=pr.duration_seconds)
 
-        if pr.calls_succeeded is not None and pr.calls_succeeded < 3:
+        if (step == "identify_potential_levers"
+                and pr.calls_succeeded is not None
+                and pr.calls_succeeded < 3):
             _emit_event(events_path, "partial_recovery",
                         plan_name=plan_name,
                         calls_succeeded=pr.calls_succeeded,

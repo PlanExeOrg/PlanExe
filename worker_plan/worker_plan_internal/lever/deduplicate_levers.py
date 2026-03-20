@@ -278,7 +278,7 @@ class DeduplicateLevers:
             output_levers.append(output_lever)
 
         return cls(
-            user_prompt=levers_json,
+            user_prompt=project_context,
             system_prompt=system_prompt,
             response=decisions,
             deduplicated_levers=output_levers,

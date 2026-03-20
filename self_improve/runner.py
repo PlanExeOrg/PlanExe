@@ -36,6 +36,7 @@ if _worker_plan_dir not in sys.path:
 
 from llama_index.core.instrumentation import get_dispatcher
 from worker_plan_internal.lever.identify_potential_levers import IdentifyPotentialLevers
+from worker_plan_internal.lever.deduplicate_levers import DeduplicateLevers
 from worker_plan_internal.document.identify_documents import IdentifyDocuments
 from worker_plan_internal.llm_util.llm_executor import LLMExecutor, LLMModelFromName
 from worker_plan_internal.llm_util.track_activity import TrackActivity
@@ -70,10 +71,14 @@ _DOCUMENTS_INPUT_FILES = [
     ("016-2-expert_criticism.md", "expert-review.md"),
 ]
 
+# deduplicate_levers — same context files as levers, plus the clean levers JSON
+_DEDUPLICATE_INPUT_FILES = _LEVERS_INPUT_FILES
+_DEDUPLICATE_LEVERS_FILE = "002-10-potential_levers.json"
+
 # Separate file for identify_purpose_dict (loaded as JSON, not concatenated)
 _DOCUMENTS_PURPOSE_FILE = "002-5-identify_purpose_raw.json"
 
-SUPPORTED_STEPS = ["identify_potential_levers", "identify_documents"]
+SUPPORTED_STEPS = ["identify_potential_levers", "deduplicate_levers", "identify_documents"]
 
 # Default wall-clock timeout per plan (seconds).  Prevents a single stuck LLM
 # call from blocking the entire run.  The Anthropic SDK may retry internally
@@ -126,6 +131,28 @@ def _run_levers(plan_dir: Path, plan_output_dir: Path, llm_executor: LLMExecutor
         status="ok",
         duration_seconds=0,  # filled by caller
         calls_succeeded=actual_calls,
+    )
+
+
+def _run_deduplicate(plan_dir: Path, plan_output_dir: Path, llm_executor: LLMExecutor) -> PlanResult:
+    """Execute the deduplicate_levers step."""
+    plan_name = plan_dir.name
+    project_context = _load_user_prompt(plan_dir, _DEDUPLICATE_INPUT_FILES)
+
+    levers_path = plan_dir / _DEDUPLICATE_LEVERS_FILE
+    with open(levers_path) as f:
+        raw_levers_list = json.load(f)
+
+    result = DeduplicateLevers.execute(llm_executor, project_context=project_context, raw_levers_list=raw_levers_list)
+
+    raw_path = plan_output_dir / "002-11-deduplicated_levers_raw.json"
+    result.save_raw(str(raw_path))
+
+    return PlanResult(
+        name=plan_name,
+        status="ok",
+        duration_seconds=0,  # filled by caller
+        calls_succeeded=len(result.response),
     )
 
 
@@ -197,6 +224,8 @@ def run_single_plan(
     try:
         if step == "identify_potential_levers":
             pr = _run_levers(plan_dir, plan_output_dir, llm_executor)
+        elif step == "deduplicate_levers":
+            pr = _run_deduplicate(plan_dir, plan_output_dir, llm_executor)
         elif step == "identify_documents":
             pr = _run_documents(plan_dir, plan_output_dir, llm_executor)
         else:

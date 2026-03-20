@@ -192,8 +192,6 @@ If this resonates:
 
 ## Appendix: References
 
-- **Farbrausch:** Demo scene group (Werkkzeug, .kkrieger) — procedural generation philosophy. Simon built his own Werkkzeug-style DAG editor and attended demoparties with Chaos and Ryg.
-- **LODA:** [loda-lang.org](https://loda-lang.org/) — integer sequence language with Simon's Rust implementation. Separate project from Farbrausch, focused on mathematical discovery.
 - **Lobster Swarm Proof of Concept:** 3 agents, 308 PRs, 47 days (Feb-Mar 2026)
 - **OpenClaw Architecture:** Agent orchestration platform for multi-agent execution
 - **PlanExe ReviewTeamTask:** Generates fictional team rosters with expertise/roles

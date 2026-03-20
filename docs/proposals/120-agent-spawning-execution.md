@@ -115,19 +115,6 @@ This is orders of magnitude cheaper than waterfall PM oversight.
 
 ---
 
-## Lineage: "Minimal Input → Machine Computes Output"
-
-This idea echoes the **Farbrausch demo scene** philosophy and Simon's own work:
-
-- **Farbrausch** — the legendary demo group behind .kkrieger and Werkkzeug, who pioneered procedural generation: minimal input specifications → machine computes rich output. Simon attended demoparties, spoke with Chaos and Ryg about Werkkzeug, and built his own Werkkzeug-style DAG editor 22 years ago. That lineage — "compute the output, don't enumerate it" — runs directly into PlanExe's architecture.
-- **LODA** ([loda-lang.org](https://loda-lang.org/)) — a language for integer sequences where Simon wrote the Rust implementation. LODA is a separate project from Farbrausch, focused on mathematical discovery through program synthesis.
-
-The shared principle: feed the machine a minimal specification (ingredients), the machine computes an optimized solution (the transformation), humans provide oversight, not step-by-step instructions.
-
-PlanExe is already doing this for *planning*. This proposal extends it to *execution*.
-
----
-
 ## Proof of Concept: 3 Lobsters, 308 PRs, 47 Days
 
 We have working proof that agent-with-SOUL execution works:

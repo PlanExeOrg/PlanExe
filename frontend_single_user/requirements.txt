@@ -15,5 +15,5 @@ python-multipart==0.0.22
 requests==2.32.3
 websockets==15.0.1
 packaging==25.0
-fsspec==2025.12.0
+fsspec==2026.3.0
 python-dotenv==1.1.0

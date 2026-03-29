@@ -48,7 +48,7 @@ class PatternBuilder:
 
     def phrase(self, text: str, replacement: str = '') -> 'PatternBuilder':
         """Word-boundary match with optional trailing comma and whitespace consumed."""
-        return self.regex(rf'\b{re.escape(text)}\b,?\s*', replacement)
+        return self.regex(rf'\b{re.escape(text)},?\s*', replacement)
 
     @property
     def patterns(self) -> List[tuple]:

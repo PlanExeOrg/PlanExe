@@ -42,6 +42,10 @@ class PatternBuilder:
         """Add a regex pattern with IGNORECASE | DOTALL flags."""
         return self.regex(pattern, replacement, flags=re.IGNORECASE | re.DOTALL)
 
+    def word(self, text: str, replacement: str = '') -> 'PatternBuilder':
+        """Add a word-boundary pattern: 'prior to' → r'\\bprior to\\b'."""
+        return self.regex(rf'\b{re.escape(text)}\b', replacement)
+
     @property
     def patterns(self) -> List[tuple]:
         """Return the built pattern list."""
@@ -197,29 +201,29 @@ disclaimer_stripper = TextFixerModule(
 
 b = PatternBuilder()
 # Transition words
-b.regex(r'\bfurthermore\b', 'also')
-b.regex(r'\bmoreover\b', 'also')
-b.regex(r'\badditionally\b', 'also')
-b.regex(r'\bnevertheless\b', 'still')
-b.regex(r'\bconsequently\b', 'so')
-b.regex(r'\bnonetheless\b', 'still')
+b.word('furthermore', 'also')
+b.word('moreover', 'also')
+b.word('additionally', 'also')
+b.word('nevertheless', 'still')
+b.word('consequently', 'so')
+b.word('nonetheless', 'still')
 # Verbose verbs
-b.regex(r'\butilize\b', 'use')
-b.regex(r'\butilization\b', 'use')
-b.regex(r'\bfacilitate\b', 'help')
-b.regex(r'\bleverage\b', 'use')
-b.regex(r'\bcommence\b', 'start')
-b.regex(r'\bimplement\b', 'set up')
+b.word('utilize', 'use')
+b.word('utilization', 'use')
+b.word('facilitate', 'help')
+b.word('leverage', 'use')
+b.word('commence', 'start')
+b.word('implement', 'set up')
 # Verbose phrases → concise equivalents
-b.regex(r'\bprior to\b', 'before')
-b.regex(r'\bsubsequent to\b', 'after')
-b.regex(r'\bin order to\b', 'to')
-b.regex(r'\bdue to the fact that\b', 'because')
-b.regex(r'\bat this point in time\b', 'now')
-b.regex(r'\bin the event that\b', 'if')
-b.regex(r'\bfor the purpose of\b', 'to')
-b.regex(r'\bwith regard to\b', 'about')
-b.regex(r'\bin light of\b', 'given')
+b.word('prior to', 'before')
+b.word('subsequent to', 'after')
+b.word('in order to', 'to')
+b.word('due to the fact that', 'because')
+b.word('at this point in time', 'now')
+b.word('in the event that', 'if')
+b.word('for the purpose of', 'to')
+b.word('with regard to', 'about')
+b.word('in light of', 'given')
 # Note: "leverage" as a NOUN (as in P128 "lever identification") is domain-specific
 # and should NOT be replaced. The pattern above only matches the standalone word,
 # which is almost always the verb form in LLM output.

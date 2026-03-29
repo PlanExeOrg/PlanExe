@@ -1,8 +1,8 @@
 """
-Tests for STM (Semantic Transformation Modules)
+Tests for TextFixer modules
 
 Author: Egon (VoynichLabs), 2026-03-29
-PURPOSE: Verify that each STM module correctly strips its target patterns
+PURPOSE: Verify that each TextFixer module correctly strips its target patterns
          without corrupting surrounding text.
 """
 

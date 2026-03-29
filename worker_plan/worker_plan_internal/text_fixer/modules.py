@@ -1,5 +1,5 @@
 """
-Semantic Transformation Modules (STM) — Post-Processing for LLM Outputs
+TextFixer — Post-Processing Modules for LLM Outputs
 
 Ported from G0DM0D3 (elder-plinius/G0DM0D3) src/stm/modules.ts
 Original author: Elder Plinius
@@ -22,8 +22,8 @@ from typing import Callable, List, Optional
 
 
 @dataclass
-class STMModule:
-    """A single semantic transformation module."""
+class TextFixerModule:
+    """A single text fixer module — one class of regex-based cleanup."""
     id: str
     name: str
     description: str
@@ -81,7 +81,7 @@ _HEDGE_PATTERNS = [
     (re.compile(r'\bI must emphasize that\s+', re.IGNORECASE), ''),
 ]
 
-hedge_reducer = STMModule(
+hedge_reducer = TextFixerModule(
     id='hedge_reducer',
     name='Hedge Reducer',
     description='Removes hedging language for more confident, direct outputs',
@@ -115,7 +115,7 @@ _PREAMBLE_PATTERNS = [
     (re.compile(r'^After careful (?:analysis|review|consideration),?\s*', re.IGNORECASE | re.MULTILINE), ''),
 ]
 
-direct_mode = STMModule(
+direct_mode = TextFixerModule(
     id='direct_mode',
     name='Direct Mode',
     description='Removes preambles and filler phrases',
@@ -157,7 +157,7 @@ _FORMAL_PATTERNS = [
     # almost always corporate filler. The noun "leverage" in financial contexts is fine.
 ]
 
-formal_reducer = STMModule(
+formal_reducer = TextFixerModule(
     id='formal_reducer',
     name='Formal Reducer',
     description='Replaces overly formal vocabulary with plain language',
@@ -183,7 +183,7 @@ _DISCLAIMER_PATTERNS = [
     (re.compile(r'\s*Disclaimer:.*?(?:\n\n|\Z)', re.IGNORECASE | re.DOTALL), ''),
 ]
 
-disclaimer_stripper = STMModule(
+disclaimer_stripper = TextFixerModule(
     id='disclaimer_stripper',
     name='Disclaimer Stripper',
     description='Removes safety disclaimers and "consult a professional" boilerplate',
@@ -197,7 +197,7 @@ disclaimer_stripper = STMModule(
 # =============================================================================
 
 # All available modules, in recommended application order
-ALL_MODULES: List[STMModule] = [
+ALL_MODULES: List[TextFixerModule] = [
     direct_mode,        # Strip preambles first (they're at the start of text)
     hedge_reducer,      # Then strip hedging throughout
     disclaimer_stripper,  # Strip disclaimers (usually at the end)
@@ -211,14 +211,14 @@ DEFAULT_MODULES: List[str] = ['direct_mode', 'hedge_reducer', 'disclaimer_stripp
 MODULE_REGISTRY: dict = {m.id: m for m in ALL_MODULES}
 
 
-def get_module(module_id: str) -> Optional[STMModule]:
+def get_module(module_id: str) -> Optional[TextFixerModule]:
     """Get a module by its ID."""
     return MODULE_REGISTRY.get(module_id)
 
 
 def apply_modules(text: str, module_ids: Optional[List[str]] = None) -> str:
     """
-    Apply STM modules to text in sequence.
+    Apply TextFixer modules to text in sequence.
 
     Args:
         text: The LLM output text to clean up.

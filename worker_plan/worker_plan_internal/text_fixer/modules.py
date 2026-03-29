@@ -46,6 +46,10 @@ class PatternBuilder:
         """Add a word-boundary pattern: 'prior to' → r'\\bprior to\\b'."""
         return self.regex(rf'\b{re.escape(text)}\b', replacement)
 
+    def phrase(self, text: str, replacement: str = '') -> 'PatternBuilder':
+        """Word-boundary match with optional trailing comma and whitespace consumed."""
+        return self.regex(rf'\b{re.escape(text)}\b,?\s*', replacement)
+
     @property
     def patterns(self) -> List[tuple]:
         """Return the built pattern list."""
@@ -92,33 +96,33 @@ def _fix_capitalization(text: str) -> str:
 
 b = PatternBuilder()
 # Epistemic hedges — "I think X" → "X"
-b.regex(r'\bI think\s+that\s+')
-b.regex(r'\bI think\s+')
-b.regex(r'\bI believe\s+that\s+')
-b.regex(r'\bI believe\s+')
-b.regex(r'\bI would say\s+that\s+')
-b.regex(r'\bI would say\s+')
-b.regex(r'\bI would suggest\s+that\s+')
-b.regex(r'\bI would argue\s+that\s+')
-b.regex(r'\bIn my opinion,?\s*')
-b.regex(r'\bFrom my perspective,?\s*')
-b.regex(r'\bFrom my understanding,?\s*')
+b.phrase('I think that')
+b.phrase('I think')
+b.phrase('I believe that')
+b.phrase('I believe')
+b.phrase('I would say that')
+b.phrase('I would say')
+b.phrase('I would suggest that')
+b.phrase('I would argue that')
+b.phrase('in my opinion')
+b.phrase('from my perspective')
+b.phrase('from my understanding')
 # Probability hedges
-b.regex(r'\bperhaps\s+')
-b.regex(r'\bmaybe\s+')
-b.regex(r'\bprobably\s+')
-b.regex(r'\bpossibly\s+')
-b.regex(r'\bconceivably\s+')
+b.phrase('perhaps')
+b.phrase('maybe')
+b.phrase('probably')
+b.phrase('possibly')
+b.phrase('conceivably')
 # Meta-commentary — "it's worth noting that X" → "X"
 b.regex(r"\bIt'?s important to note that\s+")
 b.regex(r"\bIt'?s worth noting that\s+")
 b.regex(r"\bIt'?s worth mentioning that\s+")
-b.regex(r'\bIt should be noted that\s+')
-b.regex(r'\bIt is important to consider that\s+')
-b.regex(r'\bI should mention that\s+')
-b.regex(r'\bI need to point out that\s+')
-b.regex(r'\bI must emphasize that\s+')
-b.regex(r'\bIt bears mentioning that\s+')
+b.phrase('it should be noted that')
+b.phrase('it is important to consider that')
+b.phrase('I should mention that')
+b.phrase('I need to point out that')
+b.phrase('I must emphasize that')
+b.phrase('it bears mentioning that')
 
 hedge_reducer = TextFixerModule(
     id='hedge_reducer',

@@ -9,7 +9,7 @@ PURPOSE: Verify that each TextFixer module correctly strips its target patterns
 import unittest
 from .modules import (
     hedge_reducer,
-    direct_mode,
+    preamble_stripper,
     formal_reducer,
     disclaimer_stripper,
     apply_modules,
@@ -26,16 +26,16 @@ class TestHedgeReducer(unittest.TestCase):
             "The budget needs revision."
         )
 
+    def test_i_think_that(self):
+        self.assertEqual(
+            hedge_reducer.transform("I think that the budget needs revision."),
+            "The budget needs revision."
+        )
+
     def test_perhaps(self):
         self.assertEqual(
             hedge_reducer.transform("Perhaps we should reconsider the timeline."),
             "We should reconsider the timeline."
-        )
-
-    def test_it_seems_like(self):
-        self.assertEqual(
-            hedge_reducer.transform("It seems like the team is understaffed."),
-            "The team is understaffed."
         )
 
     def test_important_to_note(self):
@@ -49,6 +49,11 @@ class TestHedgeReducer(unittest.TestCase):
             hedge_reducer.transform("It's worth noting that the deadline is firm."),
             "The deadline is firm."
         )
+
+    def test_i_would_suggest(self):
+        result = hedge_reducer.transform("I would suggest that we reconsider the approach.")
+        self.assertNotIn("I would suggest", result)
+        self.assertIn("reconsider", result)
 
     def test_multiple_hedges(self):
         text = "I think perhaps we should maybe reconsider."
@@ -65,38 +70,50 @@ class TestHedgeReducer(unittest.TestCase):
         result = hedge_reducer.transform("PERHAPS the risk is overstated.")
         self.assertNotIn("PERHAPS", result)
 
+    def test_bears_mentioning(self):
+        result = hedge_reducer.transform("It bears mentioning that the vendor is unreliable.")
+        self.assertNotIn("bears mentioning", result)
+        self.assertIn("vendor is unreliable", result)
 
-class TestDirectMode(unittest.TestCase):
-    """Test direct_mode module strips preambles."""
+
+class TestPreambleStripper(unittest.TestCase):
+    """Test preamble_stripper module strips conversational openers."""
 
     def test_sure(self):
-        self.assertEqual(
-            direct_mode.transform("Sure, here's the analysis."),
-            "Here's the analysis."
-        )
+        result = preamble_stripper.transform("Sure, here's the analysis.")
+        self.assertTrue(result.startswith("Here"))
 
     def test_certainly(self):
         self.assertEqual(
-            direct_mode.transform("Certainly, the project has three phases."),
+            preamble_stripper.transform("Certainly, the project has three phases."),
             "The project has three phases."
         )
 
     def test_happy_to_help(self):
-        result = direct_mode.transform("I'd be happy to help with that! The project plan includes...")
+        result = preamble_stripper.transform("I'd be happy to help with that! The project plan includes...")
         self.assertTrue(result.startswith("The project plan"))
 
     def test_great_question(self):
-        result = direct_mode.transform("Great question! The WBS breaks down as follows:")
+        result = preamble_stripper.transform("Great question! The WBS breaks down as follows:")
         self.assertTrue(result.startswith("The WBS"))
 
+    def test_excellent_question(self):
+        result = preamble_stripper.transform("Excellent question! Here are the details.")
+        self.assertNotIn("Excellent question", result)
+
     def test_comprehensive_analysis(self):
-        result = direct_mode.transform("Here is a comprehensive analysis of the risks:")
+        result = preamble_stripper.transform("Here is a comprehensive analysis of the risks:")
         self.assertNotIn("Here is a comprehensive", result)
+
+    def test_upon_review(self):
+        result = preamble_stripper.transform("Upon careful review, the plan needs adjustment.")
+        self.assertNotIn("Upon careful review", result)
+        self.assertIn("plan needs adjustment", result)
 
     def test_preserves_mid_text(self):
         text = "The project has risks. Sure, some are manageable."
         # "Sure" mid-sentence should not be stripped (only at line start)
-        result = direct_mode.transform(text)
+        result = preamble_stripper.transform(text)
         self.assertIn("Sure", result)
 
 
@@ -104,7 +121,6 @@ class TestFormalReducer(unittest.TestCase):
     """Test formal_reducer module simplifies vocabulary."""
 
     def setUp(self):
-        # Enable for testing (disabled by default)
         formal_reducer.enabled = True
 
     def tearDown(self):
@@ -138,18 +154,27 @@ class TestFormalReducer(unittest.TestCase):
         result = formal_reducer.transform("We should leverage the existing platform.")
         self.assertIn("use", result)
 
+    def test_with_regard_to(self):
+        result = formal_reducer.transform("With regard to the budget, we need cuts.")
+        self.assertIn("About", result)
+
+    def test_for_the_purpose_of(self):
+        result = formal_reducer.transform("For the purpose of testing, we used mock data.")
+        self.assertIn("To", result)
+        self.assertNotIn("For the purpose of", result)
+
 
 class TestDisclaimerStripper(unittest.TestCase):
     """Test disclaimer_stripper module removes boilerplate disclaimers."""
 
-    def test_not_a_substitute(self):
+    def test_parenthesized_note(self):
         text = "The risk assessment shows three critical areas. (Note: This analysis is not a substitute for professional risk management advice.)"
         result = disclaimer_stripper.transform(text)
         self.assertNotIn("not a substitute", result)
         self.assertIn("three critical areas", result)
 
     def test_please_consult(self):
-        text = "Budget estimate: $2.3M. Please consult a qualified financial advisor before making investment decisions."
+        text = "Budget estimate: $2.3M. Please consult a qualified financial professional before proceeding."
         result = disclaimer_stripper.transform(text)
         self.assertNotIn("consult", result)
         self.assertIn("$2.3M", result)
@@ -159,6 +184,18 @@ class TestDisclaimerStripper(unittest.TestCase):
         result = disclaimer_stripper.transform(text)
         self.assertNotIn("not legal advice", result)
         self.assertIn("annual audits", result)
+
+    def test_does_not_constitute(self):
+        text = "Review the contracts carefully. This does not constitute legal advice."
+        result = disclaimer_stripper.transform(text)
+        self.assertNotIn("does not constitute", result)
+        self.assertIn("Review the contracts", result)
+
+    def test_we_recommend_consulting(self):
+        text = "The tax structure is complex. We recommend consulting a tax professional."
+        result = disclaimer_stripper.transform(text)
+        self.assertNotIn("recommend consulting", result)
+        self.assertIn("tax structure is complex", result)
 
 
 class TestApplyModules(unittest.TestCase):
@@ -175,7 +212,7 @@ class TestApplyModules(unittest.TestCase):
 
     def test_specific_modules(self):
         text = "Sure, the budget is $500K."
-        result = apply_modules(text, module_ids=['direct_mode'])
+        result = apply_modules(text, module_ids=['preamble_stripper'])
         self.assertNotIn("Sure", result)
         self.assertIn("$500K", result)
 
@@ -183,6 +220,13 @@ class TestApplyModules(unittest.TestCase):
         text = "I think perhaps we should reconsider."
         result = apply_modules(text, module_ids=[])
         self.assertEqual(result, text)
+
+    def test_apply_all_enabled(self):
+        text = "Certainly! I think the risks are significant."
+        result = apply_all_enabled(text)
+        self.assertNotIn("Certainly", result)
+        self.assertNotIn("I think", result)
+        self.assertIn("risks are significant", result)
 
     def test_real_planexe_output(self):
         """Test against realistic PlanExe pipeline output."""

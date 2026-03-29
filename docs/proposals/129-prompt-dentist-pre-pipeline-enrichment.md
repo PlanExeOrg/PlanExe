@@ -29,7 +29,15 @@ Variable 1 is the most actionable. Variable 2 needs controlled comparison. Varia
 
 ## The gap
 
-Most users write prompts like "I want to start a snack business" — not "I want to launch 3 SKUs of spicy roasted nuts in 6oz resealable pouches targeting CT/RI via DTC and farmers markets." The difference in plan quality is dramatic, but the pipeline gives no signal that the prompt is too vague.
+Most users write prompts like "I want to start a snack business." That prompt is missing almost everything the pipeline needs to produce a specific plan:
+
+- **Location** — without it, the pipeline guesses jurisdiction. US? UK? Canada? Tax law, food safety regulations, supplier landscape, and market demographics all depend on geography. A plan for CT vs. London vs. Ontario will differ in every operational dimension.
+- **Budget/scale** — "start a business" could mean a $500 farmers market table or a $5M manufacturing line. Without budget or scale signals, the pipeline can't distinguish a moonshot from a micro-business, so it produces something generically mid-range.
+- **Product specifics** — "snack business" gives no grounding. SKU count, packaging format, ingredients, and category all drive downstream task specificity.
+- **Target market** — who buys this? Demographics, channel (DTC, retail, wholesale), and pricing tier all shape the plan.
+- **Timeline** — launching in 3 months vs. 18 months changes every dependency chain.
+
+The SpicedSnackCo_v1 prompt ("launch 3 SKUs of spicy roasted nuts in 6oz resealable pouches targeting CT/RI via DTC and farmers markets") demonstrates the difference. It has product specifics, location, channel, and audience — and the pipeline produced 274 operationally concrete tasks as a result. Even that prompt is still missing budget and timeline, which would push plan quality higher.
 
 The existing `InitialPromptVettedTask` challenges the prompt — but it runs **during** the pipeline, after the expensive generation has already started. By the time vetting identifies gaps, the upstream tasks have already produced output from the vague prompt.
 
@@ -37,9 +45,17 @@ The existing `InitialPromptVettedTask` challenges the prompt — but it runs **d
 
 A lightweight interactive step **before** the pipeline launches that:
 
-1. **Scores the prompt's operational density** — count of specific quantities, named entities, geographic/market/channel references, product specifications, and timeline markers. Compare against a baseline threshold derived from successful runs.
+1. **Scores the prompt across key dimensions** — each dimension is scored independently:
+   - **Location/jurisdiction** — where does this operate? (country, region, city)
+   - **Budget/scale** — what's the financial scope? ($500 side project vs. $5M venture)
+   - **Product/service specifics** — what exactly is being built/sold?
+   - **Target market** — who is the customer? What channel?
+   - **Timeline** — when does this need to launch/complete?
+   - **Constraints** — regulatory, technical, or resource limitations mentioned?
 
-2. **Asks targeted questions to fill gaps** — if the prompt mentions "snack product" but no SKU count, packaging format, or target market, the dentist asks: "How many product variants? What packaging? What geography/channel?" Five to eight questions maximum.
+   A prompt missing location should never score above "fair" regardless of how detailed the product description is — location is load-bearing for regulations, suppliers, and market dynamics.
+
+2. **Asks targeted questions to fill gaps** — the dentist identifies the weakest dimensions and generates focused questions. If the prompt says "snack product" but specifies no geography, budget, or audience, it asks: "Where will you operate? What's your starting budget? Who's your target customer?" Five to eight questions maximum, prioritized by impact on plan quality.
 
 3. **Enriches the prompt** — user answers are folded into an expanded prompt that the pipeline receives. The original prompt is preserved as metadata for comparison.
 

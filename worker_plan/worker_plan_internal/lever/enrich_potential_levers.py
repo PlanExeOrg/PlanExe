@@ -78,6 +78,17 @@ Known problems to guard against
   to reference levers from other batches in synergy/conflict text. The
   full lever list is provided as context precisely to prevent this —
   ensure the prompt makes the full list visually prominent.
+- Consequence echoing without elaboration. When consequences and review
+  are provided in the batch prompt, weak models (e.g. llama3.1)
+  summarize consequences verbatim as the description instead of using
+  them as grounding for a richer explanation of purpose, scope, and
+  success metrics. The description should go beyond what consequences
+  already states.
+- UUID cross-reference format inconsistency. The full_lever_context_str
+  includes lever_id UUIDs, causing models to copy UUIDs into
+  synergy_text and conflict_text in varying formats (full UUID, 8-char
+  truncated, backtick-quoted name, plain name). Models should reference
+  levers by name only in free-text fields.
 """
 
 # The number of levers to process in a single call to the LLM.
@@ -142,6 +153,7 @@ class EnrichPotentialLevers:
     """Holds the results of the characterization process."""
     characterized_levers: List[CharacterizedLever]
     metadata: List[Dict[str, Any]]
+    batches_succeeded: int = 0
 
     @classmethod
     def execute(cls, llm_executor: LLMExecutor, project_context: str, raw_levers_list: list[dict]) -> 'EnrichPotentialLevers':
@@ -160,13 +172,21 @@ class EnrichPotentialLevers:
 
         system_message = ChatMessage(role=MessageRole.SYSTEM, content=ENRICH_LEVERS_SYSTEM_PROMPT.strip())
 
-        # Process levers in batches
+        # Process levers in batches with retry on failure.
+        # On failure, split the batch in half and retry each sub-batch.
+        # If a single-lever batch still fails, log and skip it rather
+        # than aborting the entire plan.
+        batches_succeeded = 0
+        pending_batches = []
         for i in range(0, len(levers_to_characterize), BATCH_SIZE):
             batch = levers_to_characterize[i:i + BATCH_SIZE]
-            if not batch:
-                continue
-            
-            logger.info(f"Processing batch {i//BATCH_SIZE + 1} with {len(batch)} levers...")
+            if batch:
+                pending_batches.append(batch)
+
+        while pending_batches:
+            batch = pending_batches.pop(0)
+            batch_label = f"batch of {len(batch)} levers"
+            logger.info(f"Processing {batch_label}...")
 
             lever_details_for_prompt = "\n\n".join([
                 f"Lever ID: {lever.lever_id}\n"
@@ -200,6 +220,7 @@ class EnrichPotentialLevers:
                 result = llm_executor.run(execute_function)
                 batch_result: BatchCharacterizationResult = result["chat_response"].raw
                 all_metadata.append(result["metadata"])
+                batches_succeeded += 1
 
                 for char in batch_result.characterizations:
                     if char.lever_id in enriched_levers_map:
@@ -214,8 +235,19 @@ class EnrichPotentialLevers:
             except PipelineStopRequested:
                 raise
             except Exception as e:
-                logger.error(f"LLM batch interaction failed for levers {[lever.lever_id for lever in batch]}.", exc_info=True)
-                raise ValueError("LLM batch interaction failed.") from e
+                lever_ids = [lever.lever_id for lever in batch]
+                if len(batch) > 1:
+                    mid = len(batch) // 2
+                    logger.warning(
+                        f"Batch failed for {lever_ids}, splitting into sub-batches of "
+                        f"{mid} and {len(batch) - mid} and retrying."
+                    )
+                    pending_batches.insert(0, batch[mid:])
+                    pending_batches.insert(0, batch[:mid])
+                else:
+                    logger.error(
+                        f"Single-lever batch failed for {lever_ids[0]}, skipping.", exc_info=True
+                    )
 
         final_characterized_levers = []
         for lever_id, data in enriched_levers_map.items():
@@ -229,7 +261,8 @@ class EnrichPotentialLevers:
         
         return cls(
             characterized_levers=final_characterized_levers,
-            metadata=all_metadata
+            metadata=all_metadata,
+            batches_succeeded=batches_succeeded,
         )
     
     def save_raw(self, file_path: str) -> None:

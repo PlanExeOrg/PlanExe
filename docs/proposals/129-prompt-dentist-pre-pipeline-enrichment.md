@@ -1,9 +1,9 @@
 # Proposal 129: The Prompt Dentist — Pre-Pipeline Prompt Enrichment
 
-**Author:** Egon (VoynichLabs), with analysis from a spiced-nut snack product pipeline run
+**Author:** Egon (VoynichLabs), with analysis from a spiced snack product pipeline run
 **Status:** Draft
 **Date:** March 29, 2026
-**Context:** Empirical finding from SpicedNutSnack_v1 pipeline run that challenges Proposal 128's "Execute Plan is always autopilot" conclusion
+**Context:** Empirical finding from SpicedSnackCo_v1 pipeline run that challenges Proposal 128's "Execute Plan is always autopilot" conclusion
 
 ---
 
@@ -11,7 +11,7 @@
 
 Proposal 128 compared two plans (reverse aging lab, ~100-word prompt; cryosleep program, ~900-word prompt) and found that the Execute Plan section (~32K words) was nearly identical regardless of prompt investment. The conclusion: template-driven sections hit a fixed ceiling.
 
-SpicedNutSnack_v1 produced a different result. The Execute Plan section generated 274 tasks with domain-specific descriptions referencing pouch variants, seal windows, aging conditions, heat descriptor governance, and lot evidence matrices — not generic PMO boilerplate. The WBS descriptions totaled ~1,807 words of operationally concrete content rather than a bloated 32K template block.
+SpicedSnackCo_v1 produced a different result. The Execute Plan section generated 274 tasks with domain-specific descriptions referencing pouch variants, seal windows, aging conditions, heat descriptor governance, and lot evidence matrices — not generic PMO boilerplate. The WBS descriptions totaled ~1,807 words of operationally concrete content rather than a bloated 32K template block.
 
 The difference: the prompt was **operationally dense**. It specified 3 SKUs, 6oz resealable pouches, CT/RI market, DTC + farmers markets channel, and a specific audience. Every detail gave the pipeline a grounding anchor to propagate through downstream tasks.
 
@@ -22,7 +22,7 @@ Proposal 128 frames the quality ceiling as a pipeline limitation. This run sugge
 Three variables may contribute:
 
 1. **Prompt domain** — consumer packaged goods has concrete operational vocabulary (SKUs, lot numbers, seal specs). Abstract megaprojects (reverse aging, cryosleep) don't. The LLM fills the vacuum with boilerplate when it has nothing domain-specific to propagate.
-2. **Model** — SpicedNutSnack_v1 used a different model than the P128 comparison runs. Different models may have different boilerplate tendencies.
+2. **Model** — SpicedSnackCo_v1 used a different model than the P128 comparison runs. Different models may have different boilerplate tendencies.
 3. **Prompt structure** — specific product details (3 SKUs, resealable pouches, CT/RI) provide more grounding anchors than directional statements ("reverse the aging process").
 
 Variable 1 is the most actionable. Variable 2 needs controlled comparison. Variable 3 is what this proposal addresses.
@@ -91,7 +91,7 @@ Total: a weekend of work for a basic version. Calibration improves with more run
 
 ## Evidence
 
-**SpicedNutSnack_v1 run (2026-03-29):**
+**SpicedSnackCo_v1 run (2026-03-29):**
 - Prompt: operationally dense (3 SKUs, packaging specs, market, channel, audience)
 - Execute Plan: 274 tasks, ~1,807 words, domain-specific descriptions
 - Result: specificity pulled through to execution layer
@@ -101,7 +101,7 @@ Total: a weekend of work for a basic version. Calibration improves with more run
 - Cryosleep: ~900-word detailed prompt → 293 tasks, ~32K words Execute Plan, slightly less generic
 - Result: template ceiling appeared fixed
 
-**Delta:** the SpicedNutSnack prompt had operational teeth; the P128 prompts didn't. The pipeline performed differently because the input was different, not because the pipeline changed.
+**Delta:** the SpicedSnackCo prompt had operational teeth; the P128 prompts didn't. The pipeline performed differently because the input was different, not because the pipeline changed.
 
 ---
 

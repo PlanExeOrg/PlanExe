@@ -34,6 +34,14 @@ class PatternBuilder:
         self._patterns.append((re.compile(pattern, flags), replacement))
         return self
 
+    def regex_m(self, pattern: str, replacement: str = '') -> 'PatternBuilder':
+        """Add a regex pattern with IGNORECASE | MULTILINE flags."""
+        return self.regex(pattern, replacement, flags=re.IGNORECASE | re.MULTILINE)
+
+    def regex_s(self, pattern: str, replacement: str = '') -> 'PatternBuilder':
+        """Add a regex pattern with IGNORECASE | DOTALL flags."""
+        return self.regex(pattern, replacement, flags=re.IGNORECASE | re.DOTALL)
+
     @property
     def patterns(self) -> List[tuple]:
         """Return the built pattern list."""
@@ -124,24 +132,24 @@ hedge_reducer = TextFixerModule(
 
 b = PatternBuilder()
 # Conversational openers at start of text/paragraph
-b.regex(r'^Sure[,!.]?\s*', flags=re.IGNORECASE | re.MULTILINE)
-b.regex(r'^Of course[,!.]?\s*', flags=re.IGNORECASE | re.MULTILINE)
-b.regex(r'^Certainly[,!.]?\s*', flags=re.IGNORECASE | re.MULTILINE)
-b.regex(r'^Absolutely[,!.]?\s*', flags=re.IGNORECASE | re.MULTILINE)
-b.regex(r'^Great question[!.]?\s*', flags=re.IGNORECASE | re.MULTILINE)
-b.regex(r'^Excellent question[!.]?\s*', flags=re.IGNORECASE | re.MULTILINE)
-b.regex(r"^That'?s a (?:great|good|excellent|interesting) question[!.]?\s*", flags=re.IGNORECASE | re.MULTILINE)
-b.regex(r"^I'?d be happy to help(?: you)?(?: with that)?[.!]?\s*", flags=re.IGNORECASE | re.MULTILINE)
-b.regex(r'^Let me help you with that[.!]?\s*', flags=re.IGNORECASE | re.MULTILINE)
-b.regex(r'^Thanks for (?:asking|sharing|your question)[.!]?\s*', flags=re.IGNORECASE | re.MULTILINE)
-b.regex(r'^I understand (?:your|the) (?:question|concern|request)[.!]?\s*', flags=re.IGNORECASE | re.MULTILINE)
+b.regex_m(r'^Sure[,!.]?\s*')
+b.regex_m(r'^Of course[,!.]?\s*')
+b.regex_m(r'^Certainly[,!.]?\s*')
+b.regex_m(r'^Absolutely[,!.]?\s*')
+b.regex_m(r'^Great question[!.]?\s*')
+b.regex_m(r'^Excellent question[!.]?\s*')
+b.regex_m(r"^That'?s a (?:great|good|excellent|interesting) question[!.]?\s*")
+b.regex_m(r"^I'?d be happy to help(?: you)?(?: with that)?[.!]?\s*")
+b.regex_m(r'^Let me help you with that[.!]?\s*')
+b.regex_m(r'^Thanks for (?:asking|sharing|your question)[.!]?\s*')
+b.regex_m(r'^I understand (?:your|the) (?:question|concern|request)[.!]?\s*')
 # Plan-document preambles (can appear mid-text)
 b.regex(r'\bHere is a comprehensive\s+')
 b.regex(r'\bBelow is a detailed\s+')
 b.regex(r'\bThe following provides?\s+')
-b.regex(r'^Based on (?:the|my|our) (?:analysis|review|assessment|evaluation),?\s*', flags=re.IGNORECASE | re.MULTILINE)
-b.regex(r'^After (?:careful|thorough|detailed) (?:analysis|review|consideration|evaluation),?\s*', flags=re.IGNORECASE | re.MULTILINE)
-b.regex(r'^Upon (?:careful|thorough)? ?(?:review|analysis|examination),?\s*', flags=re.IGNORECASE | re.MULTILINE)
+b.regex_m(r'^Based on (?:the|my|our) (?:analysis|review|assessment|evaluation),?\s*')
+b.regex_m(r'^After (?:careful|thorough|detailed) (?:analysis|review|consideration|evaluation),?\s*')
+b.regex_m(r'^Upon (?:careful|thorough)? ?(?:review|analysis|examination),?\s*')
 
 preamble_stripper = TextFixerModule(
     id='preamble_stripper',
@@ -160,17 +168,17 @@ preamble_stripper = TextFixerModule(
 
 b = PatternBuilder()
 # Parenthesized disclaimer blocks
-b.regex(r'\s*\(Note: This (?:analysis|plan|review|assessment|document) (?:is |should ).*?\)\s*', flags=re.IGNORECASE | re.DOTALL)
+b.regex_s(r'\s*\(Note: This (?:analysis|plan|review|assessment|document) (?:is |should ).*?\)\s*')
 b.regex(r'\s*\(Disclaimer:[^)]*\)\s*')
 # Standalone disclaimer blocks
-b.regex(r'\s*Disclaimer:.*?(?:\n\n|\Z)', flags=re.IGNORECASE | re.DOTALL)
+b.regex_s(r'\s*Disclaimer:.*?(?:\n\n|\Z)')
 # "Consult a professional" variants
 b.regex(r'\s*Please consult (?:a |with )?(?:qualified |professional |licensed )?[^.]*professional[^.]*\.')
 b.regex(r'\s*(?:You should |We recommend )consult(?:ing)? (?:a |with )?[^.]*\.')
 # "Not advice" variants
 b.regex(r'\s*This (?:is not|should not be (?:considered|taken as)|does not constitute) (?:legal|financial|medical|professional|investment|tax) advice[^.]*\.')
 # "Note: This analysis..." (non-parenthesized)
-b.regex(r'\s*Note: This (?:analysis|plan|review|assessment) (?:is |should ).*?(?:\.|$)', flags=re.IGNORECASE | re.MULTILINE)
+b.regex_m(r'\s*Note: This (?:analysis|plan|review|assessment) (?:is |should ).*?(?:\.|$)')
 
 disclaimer_stripper = TextFixerModule(
     id='disclaimer_stripper',

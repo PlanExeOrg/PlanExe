@@ -20,7 +20,7 @@ import json
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List, Optional
+from typing import Callable, List, Optional, Union
 
 
 # =============================================================================
@@ -33,8 +33,8 @@ class PatternBuilder:
     def __init__(self):
         self._patterns: List[tuple] = []
 
-    def regex(self, pattern: str, replacement: str = '', flags: int = re.IGNORECASE) -> None:
-        """Add a regex pattern with its replacement and flags."""
+    def regex(self, pattern: str, replacement: Union[str, Callable] = '', flags: int = re.IGNORECASE) -> None:
+        """Add a regex pattern with its replacement (string or callable) and flags."""
         self._patterns.append((re.compile(pattern, flags), replacement))
 
     def regex_m(self, pattern: str, replacement: str = '') -> None:
@@ -108,10 +108,6 @@ class TextFixerModule:
             result, count = pattern.subn(replacement, result)
             if count > 0:
                 self.hit_counts[i] = self.hit_counts.get(i, 0) + count
-        # Clean up artifacts from removals
-        result = re.sub(r'  +', ' ', result)
-        result = re.sub(r'^\s+', '', result, flags=re.MULTILINE)
-        result = _fix_capitalization(result)
         return result
 
     def reset_counts(self) -> None:
@@ -124,12 +120,20 @@ class TextFixerModule:
         return sum(self.hit_counts.values())
 
 
-def _fix_capitalization(text: str) -> str:
-    """Capitalize sentence starts that were left lowercase after pattern removal."""
-    text = re.sub(r'^([a-z])', lambda m: m.group(1).upper(), text)
-    text = re.sub(r'([.!?]\s+)([a-z])', lambda m: m.group(1) + m.group(2).upper(), text)
-    text = re.sub(r'^([*\-•]\s*)([a-z])', lambda m: m.group(1) + m.group(2).upper(), text, flags=re.MULTILINE)
-    return text
+def _cleanup_spaces(b: PatternBuilder) -> None:
+    """Add space-cleanup patterns to the builder."""
+    b.regex(r'  +', ' ')
+    b.regex_m(r'^\s+', '')
+
+
+def _fix_capitalization(b: PatternBuilder) -> None:
+    """Add capitalization-fix patterns to the builder."""
+    # Start of text
+    b.regex(r'^([a-z])', lambda m: m.group(1).upper())
+    # After sentence-ending punctuation
+    b.regex(r'([.!?]\s+)([a-z])', lambda m: m.group(1) + m.group(2).upper())
+    # Start of markdown list items
+    b.regex_m(r'^([*\-•]\s*)([a-z])', lambda m: m.group(1) + m.group(2).upper())
 
 
 # =============================================================================
@@ -140,6 +144,8 @@ def _load_module(module_data: dict) -> TextFixerModule:
     """Load a TextFixerModule from a JSON module definition."""
     b = PatternBuilder()
     b.load_rules(module_data.get('rules', []))
+    _cleanup_spaces(b)
+    _fix_capitalization(b)
 
     return TextFixerModule(
         id=module_data['id'],

@@ -1,0 +1,180 @@
+{
+    "version": 1,
+    "comment": "TextFixer rules — order matters, applied top to bottom",
+    "modules": [
+        {
+            "id": "preamble_stripper",
+            "name": "Preamble Stripper",
+            "comment": "Removes conversational openers and filler phrases. Applied first because preambles appear at the start of text.",
+            "enabled": true,
+            "rules": [
+                {
+                    "type": "group",
+                    "comment": "Conversational openers — only match at start of line",
+                    "rules": [
+                        { "type": "regex_m", "comment": "Sure, ...", "pattern": "^Sure[,!.]?\\s*" },
+                        { "type": "regex_m", "comment": "Of course, ...", "pattern": "^Of course[,!.]?\\s*" },
+                        { "type": "regex_m", "comment": "Certainly, ...", "pattern": "^Certainly[,!.]?\\s*" },
+                        { "type": "regex_m", "comment": "Absolutely, ...", "pattern": "^Absolutely[,!.]?\\s*" },
+                        { "type": "regex_m", "comment": "Great question!", "pattern": "^Great question[!.]?\\s*" },
+                        { "type": "regex_m", "comment": "Excellent question!", "pattern": "^Excellent question[!.]?\\s*" },
+                        { "type": "regex_m", "comment": "That's a great/good/excellent question", "pattern": "^That'?s a (?:great|good|excellent|interesting) question[!.]?\\s*" },
+                        { "type": "regex_m", "comment": "I'd be happy to help", "pattern": "^I'?d be happy to help(?: you)?(?: with that)?[.!]?\\s*" },
+                        { "type": "regex_m", "comment": "Let me help you with that", "pattern": "^Let me help you with that[.!]?\\s*" },
+                        { "type": "regex_m", "comment": "Thanks for asking/sharing", "pattern": "^Thanks for (?:asking|sharing|your question)[.!]?\\s*" },
+                        { "type": "regex_m", "comment": "I understand your question/concern", "pattern": "^I understand (?:your|the) (?:question|concern|request)[.!]?\\s*" }
+                    ]
+                },
+                {
+                    "type": "group",
+                    "comment": "Plan-document preambles — can appear mid-text after other preamble stripping",
+                    "rules": [
+                        { "type": "phrase", "comment": "Here is a comprehensive ...", "pattern": "Here is a comprehensive" },
+                        { "type": "phrase", "comment": "Below is a detailed ...", "pattern": "Below is a detailed" },
+                        { "type": "phrase", "comment": "The following provides ...", "pattern": "The following provides" },
+                        { "type": "regex_m", "comment": "Based on the/my analysis, ...", "pattern": "^Based on (?:the|my|our) (?:analysis|review|assessment|evaluation),?\\s*" },
+                        { "type": "regex_m", "comment": "After careful analysis, ...", "pattern": "^After (?:careful|thorough|detailed) (?:analysis|review|consideration|evaluation),?\\s*" },
+                        { "type": "regex_m", "comment": "Upon careful review, ...", "pattern": "^Upon (?:careful|thorough)? ?(?:review|analysis|examination),?\\s*" }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "hedge_reducer",
+            "name": "Hedge Reducer",
+            "comment": "Strips hedging and uncertainty language. Applied second to clean up text body after preambles are gone.",
+            "enabled": true,
+            "rules": [
+                {
+                    "type": "group",
+                    "comment": "Epistemic hedges — 'I think X' becomes 'X'. Longer phrases first to avoid partial matches.",
+                    "rules": [
+                        { "type": "phrase", "pattern": "I think that" },
+                        { "type": "phrase", "pattern": "I think" },
+                        { "type": "phrase", "pattern": "I believe that" },
+                        { "type": "phrase", "pattern": "I believe" },
+                        { "type": "phrase", "pattern": "I would say that" },
+                        { "type": "phrase", "pattern": "I would say" },
+                        { "type": "phrase", "pattern": "I would suggest that" },
+                        { "type": "phrase", "pattern": "I would argue that" },
+                        { "type": "phrase", "pattern": "in my opinion" },
+                        { "type": "phrase", "pattern": "from my perspective" },
+                        { "type": "phrase", "pattern": "from my understanding" }
+                    ]
+                },
+                {
+                    "type": "group",
+                    "comment": "Probability hedges — single words that weaken statements",
+                    "rules": [
+                        { "type": "phrase", "pattern": "perhaps" },
+                        { "type": "phrase", "pattern": "maybe" },
+                        { "type": "phrase", "pattern": "probably" },
+                        { "type": "phrase", "pattern": "possibly" },
+                        { "type": "phrase", "pattern": "conceivably" }
+                    ]
+                },
+                {
+                    "type": "group",
+                    "comment": "Meta-commentary — 'it's worth noting that X' becomes 'X'. These add no information.",
+                    "rules": [
+                        { "type": "regex", "comment": "It's important to note that (handles apostrophe variants)", "pattern": "\\bIt'?s important to note that\\s+" },
+                        { "type": "regex", "comment": "It's worth noting that", "pattern": "\\bIt'?s worth noting that\\s+" },
+                        { "type": "regex", "comment": "It's worth mentioning that", "pattern": "\\bIt'?s worth mentioning that\\s+" },
+                        { "type": "phrase", "pattern": "it should be noted that" },
+                        { "type": "phrase", "pattern": "it is important to consider that" },
+                        { "type": "phrase", "pattern": "I should mention that" },
+                        { "type": "phrase", "pattern": "I need to point out that" },
+                        { "type": "phrase", "pattern": "I must emphasize that" },
+                        { "type": "phrase", "pattern": "it bears mentioning that" }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "disclaimer_stripper",
+            "name": "Disclaimer Stripper",
+            "comment": "Removes safety disclaimers and 'consult a professional' boilerplate. Applied third because disclaimers usually appear at the end.",
+            "enabled": true,
+            "rules": [
+                {
+                    "type": "group",
+                    "comment": "Parenthesized disclaimer blocks",
+                    "rules": [
+                        { "type": "regex_s", "comment": "(Note: This analysis is/should ...)", "pattern": "\\s*\\(Note: This (?:analysis|plan|review|assessment|document) (?:is |should ).*?\\)\\s*" },
+                        { "type": "regex", "comment": "(Disclaimer: ...)", "pattern": "\\s*\\(Disclaimer:[^)]*\\)\\s*" }
+                    ]
+                },
+                {
+                    "type": "group",
+                    "comment": "Standalone disclaimer blocks",
+                    "rules": [
+                        { "type": "regex_s", "comment": "Disclaimer: ... (paragraph)", "pattern": "\\s*Disclaimer:.*?(?:\\n\\n|\\Z)" }
+                    ]
+                },
+                {
+                    "type": "group",
+                    "comment": "Consult a professional variants",
+                    "rules": [
+                        { "type": "regex", "comment": "Please consult a ... professional", "pattern": "\\s*Please consult (?:a |with )?(?:qualified |professional |licensed )?[^.]*professional[^.]*\\." },
+                        { "type": "regex", "comment": "You should/We recommend consulting", "pattern": "\\s*(?:You should |We recommend )consult(?:ing)? (?:a |with )?[^.]*\\." }
+                    ]
+                },
+                {
+                    "type": "group",
+                    "comment": "Not advice variants",
+                    "rules": [
+                        { "type": "regex", "comment": "This is not legal/financial/medical advice", "pattern": "\\s*This (?:is not|should not be (?:considered|taken as)|does not constitute) (?:legal|financial|medical|professional|investment|tax) advice[^.]*\\." },
+                        { "type": "regex_m", "comment": "Note: This analysis is/should ...", "pattern": "\\s*Note: This (?:analysis|plan|review|assessment) (?:is |should ).*?(?:\\.|$)" }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "formal_reducer",
+            "name": "Formal Reducer",
+            "comment": "Replaces overly formal vocabulary with plain language. Applied last and disabled by default — some formality is appropriate for plan documents.",
+            "enabled": false,
+            "rules": [
+                {
+                    "type": "group",
+                    "comment": "Transition words — verbose connectives to simple ones",
+                    "rules": [
+                        { "type": "word", "pattern": "furthermore", "replacement": "also" },
+                        { "type": "word", "pattern": "moreover", "replacement": "also" },
+                        { "type": "word", "pattern": "additionally", "replacement": "also" },
+                        { "type": "word", "pattern": "nevertheless", "replacement": "still" },
+                        { "type": "word", "pattern": "consequently", "replacement": "so" },
+                        { "type": "word", "pattern": "nonetheless", "replacement": "still" }
+                    ]
+                },
+                {
+                    "type": "group",
+                    "comment": "Verbose verbs — corporate speak to plain English",
+                    "rules": [
+                        { "type": "word", "pattern": "utilize", "replacement": "use" },
+                        { "type": "word", "pattern": "utilization", "replacement": "use" },
+                        { "type": "word", "pattern": "facilitate", "replacement": "help" },
+                        { "type": "word", "comment": "verb form only — noun 'leverage' in financial context is fine", "pattern": "leverage", "replacement": "use" },
+                        { "type": "word", "pattern": "commence", "replacement": "start" },
+                        { "type": "word", "pattern": "implement", "replacement": "set up" }
+                    ]
+                },
+                {
+                    "type": "group",
+                    "comment": "Verbose phrases — multi-word bloat to concise equivalents",
+                    "rules": [
+                        { "type": "word", "pattern": "prior to", "replacement": "before" },
+                        { "type": "word", "pattern": "subsequent to", "replacement": "after" },
+                        { "type": "word", "pattern": "in order to", "replacement": "to" },
+                        { "type": "word", "pattern": "due to the fact that", "replacement": "because" },
+                        { "type": "word", "pattern": "at this point in time", "replacement": "now" },
+                        { "type": "word", "pattern": "in the event that", "replacement": "if" },
+                        { "type": "word", "pattern": "for the purpose of", "replacement": "to" },
+                        { "type": "word", "pattern": "with regard to", "replacement": "about" },
+                        { "type": "word", "pattern": "in light of", "replacement": "given" }
+                    ]
+                }
+            ]
+        }
+    ]
+}

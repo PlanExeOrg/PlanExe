@@ -10,12 +10,16 @@ Each module is a composable transformer: text in, cleaned text out.
 These run AFTER the LLM generates output, catching patterns that persist
 regardless of prompt quality.
 
+Patterns are defined in rules.json — editable without touching Python code.
+
 SRP: Each module handles one class of text cleanup.
 DRY: Shared apply_modules() chains any combination of modules.
 """
 
+import json
 import re
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import List, Optional
 
 
@@ -90,174 +94,76 @@ def _fix_capitalization(text: str) -> str:
 
 
 # =============================================================================
-# MODULE: Hedge Reducer
-# Strips hedging and uncertainty language that weakens plan documents.
+# JSON Rule Loader
 # =============================================================================
 
-b = PatternBuilder()
-# Epistemic hedges — "I think X" → "X"
-b.phrase('I think that')
-b.phrase('I think')
-b.phrase('I believe that')
-b.phrase('I believe')
-b.phrase('I would say that')
-b.phrase('I would say')
-b.phrase('I would suggest that')
-b.phrase('I would argue that')
-b.phrase('in my opinion')
-b.phrase('from my perspective')
-b.phrase('from my understanding')
-# Probability hedges
-b.phrase('perhaps')
-b.phrase('maybe')
-b.phrase('probably')
-b.phrase('possibly')
-b.phrase('conceivably')
-# Meta-commentary — "it's worth noting that X" → "X"
-b.regex(r"\bIt'?s important to note that\s+")
-b.regex(r"\bIt'?s worth noting that\s+")
-b.regex(r"\bIt'?s worth mentioning that\s+")
-b.phrase('it should be noted that')
-b.phrase('it is important to consider that')
-b.phrase('I should mention that')
-b.phrase('I need to point out that')
-b.phrase('I must emphasize that')
-b.phrase('it bears mentioning that')
+def _load_rule(b: PatternBuilder, rule: dict) -> None:
+    """Load a single rule into a PatternBuilder."""
+    rule_type = rule['type']
+    pattern = rule.get('pattern', '')
+    replacement = rule.get('replacement', '')
 
-hedge_reducer = TextFixerModule(
-    id='hedge_reducer',
-    name='Hedge Reducer',
-    description='Strips hedging and uncertainty language from plan text',
-    patterns=b.patterns,
-    enabled=True,
-)
+    if rule_type == 'group':
+        for sub_rule in rule.get('rules', []):
+            _load_rule(b, sub_rule)
+    elif rule_type == 'regex':
+        b.regex(pattern, replacement)
+    elif rule_type == 'regex_m':
+        b.regex_m(pattern, replacement)
+    elif rule_type == 'regex_s':
+        b.regex_s(pattern, replacement)
+    elif rule_type == 'word':
+        b.word(pattern, replacement)
+    elif rule_type == 'phrase':
+        b.phrase(pattern, replacement)
+    else:
+        raise ValueError(f"Unknown rule type: {rule_type}")
 
 
-# =============================================================================
-# MODULE: Preamble Stripper
-# Removes LLM conversational openers and filler that add no information.
-# =============================================================================
+def _load_module(module_data: dict) -> TextFixerModule:
+    """Load a TextFixerModule from a JSON module definition."""
+    b = PatternBuilder()
+    for rule in module_data.get('rules', []):
+        _load_rule(b, rule)
 
-b = PatternBuilder()
-# Conversational openers at start of text/paragraph
-b.regex_m(r'^Sure[,!.]?\s*')
-b.regex_m(r'^Of course[,!.]?\s*')
-b.regex_m(r'^Certainly[,!.]?\s*')
-b.regex_m(r'^Absolutely[,!.]?\s*')
-b.regex_m(r'^Great question[!.]?\s*')
-b.regex_m(r'^Excellent question[!.]?\s*')
-b.regex_m(r"^That'?s a (?:great|good|excellent|interesting) question[!.]?\s*")
-b.regex_m(r"^I'?d be happy to help(?: you)?(?: with that)?[.!]?\s*")
-b.regex_m(r'^Let me help you with that[.!]?\s*')
-b.regex_m(r'^Thanks for (?:asking|sharing|your question)[.!]?\s*')
-b.regex_m(r'^I understand (?:your|the) (?:question|concern|request)[.!]?\s*')
-# Plan-document preambles (can appear mid-text)
-b.regex(r'\bHere is a comprehensive\s+')
-b.regex(r'\bBelow is a detailed\s+')
-b.regex(r'\bThe following provides?\s+')
-b.regex_m(r'^Based on (?:the|my|our) (?:analysis|review|assessment|evaluation),?\s*')
-b.regex_m(r'^After (?:careful|thorough|detailed) (?:analysis|review|consideration|evaluation),?\s*')
-b.regex_m(r'^Upon (?:careful|thorough)? ?(?:review|analysis|examination),?\s*')
-
-preamble_stripper = TextFixerModule(
-    id='preamble_stripper',
-    name='Preamble Stripper',
-    description='Removes conversational openers and filler phrases',
-    patterns=b.patterns,
-    enabled=True,
-)
+    return TextFixerModule(
+        id=module_data['id'],
+        name=module_data['name'],
+        description=module_data.get('comment', ''),
+        patterns=b.patterns,
+        enabled=module_data.get('enabled', True),
+    )
 
 
-# =============================================================================
-# MODULE: Disclaimer Stripper
-# Removes safety disclaimers and "consult a professional" boilerplate.
-# PlanExe generates plans, not advice — these disclaimers add noise.
-# =============================================================================
+def load_rules(path: Optional[Path] = None) -> List[TextFixerModule]:
+    """Load all modules from a rules JSON file."""
+    if path is None:
+        path = Path(__file__).parent / 'rules.json'
 
-b = PatternBuilder()
-# Parenthesized disclaimer blocks
-b.regex_s(r'\s*\(Note: This (?:analysis|plan|review|assessment|document) (?:is |should ).*?\)\s*')
-b.regex(r'\s*\(Disclaimer:[^)]*\)\s*')
-# Standalone disclaimer blocks
-b.regex_s(r'\s*Disclaimer:.*?(?:\n\n|\Z)')
-# "Consult a professional" variants
-b.regex(r'\s*Please consult (?:a |with )?(?:qualified |professional |licensed )?[^.]*professional[^.]*\.')
-b.regex(r'\s*(?:You should |We recommend )consult(?:ing)? (?:a |with )?[^.]*\.')
-# "Not advice" variants
-b.regex(r'\s*This (?:is not|should not be (?:considered|taken as)|does not constitute) (?:legal|financial|medical|professional|investment|tax) advice[^.]*\.')
-# "Note: This analysis..." (non-parenthesized)
-b.regex_m(r'\s*Note: This (?:analysis|plan|review|assessment) (?:is |should ).*?(?:\.|$)')
+    with open(path, 'r') as f:
+        data = json.load(f)
 
-disclaimer_stripper = TextFixerModule(
-    id='disclaimer_stripper',
-    name='Disclaimer Stripper',
-    description='Removes safety disclaimers and "consult a professional" boilerplate',
-    patterns=b.patterns,
-    enabled=True,
-)
-
-
-# =============================================================================
-# MODULE: Formal Reducer
-# Replaces overly formal vocabulary with plain language equivalents.
-# Off by default — some formality is appropriate for plan documents.
-# =============================================================================
-
-b = PatternBuilder()
-# Transition words
-b.word('furthermore', 'also')
-b.word('moreover', 'also')
-b.word('additionally', 'also')
-b.word('nevertheless', 'still')
-b.word('consequently', 'so')
-b.word('nonetheless', 'still')
-# Verbose verbs
-b.word('utilize', 'use')
-b.word('utilization', 'use')
-b.word('facilitate', 'help')
-b.word('leverage', 'use')
-b.word('commence', 'start')
-b.word('implement', 'set up')
-# Verbose phrases → concise equivalents
-b.word('prior to', 'before')
-b.word('subsequent to', 'after')
-b.word('in order to', 'to')
-b.word('due to the fact that', 'because')
-b.word('at this point in time', 'now')
-b.word('in the event that', 'if')
-b.word('for the purpose of', 'to')
-b.word('with regard to', 'about')
-b.word('in light of', 'given')
-# Note: "leverage" as a NOUN (as in P128 "lever identification") is domain-specific
-# and should NOT be replaced. The pattern above only matches the standalone word,
-# which is almost always the verb form in LLM output.
-
-formal_reducer = TextFixerModule(
-    id='formal_reducer',
-    name='Formal Reducer',
-    description='Replaces overly formal vocabulary with plain language',
-    patterns=b.patterns,
-    enabled=False,  # Off by default — some formality is appropriate for plan documents
-)
+    return [_load_module(m) for m in data.get('modules', [])]
 
 
 # =============================================================================
 # MODULE REGISTRY & PUBLIC API
 # =============================================================================
 
-# All available modules, in recommended application order
-ALL_MODULES: List[TextFixerModule] = [
-    preamble_stripper,    # Strip openers first (they're at the start of text)
-    hedge_reducer,        # Then strip hedging throughout
-    disclaimer_stripper,  # Strip disclaimers (usually at the end)
-    formal_reducer,       # Vocabulary cleanup last (least aggressive)
-]
+# Load modules from rules.json at import time
+ALL_MODULES: List[TextFixerModule] = load_rules()
 
-# Default module set for PlanExe pipeline tasks
-DEFAULT_MODULES: List[str] = ['preamble_stripper', 'hedge_reducer', 'disclaimer_stripper']
+# Default module set — all enabled modules
+DEFAULT_MODULES: List[str] = [m.id for m in ALL_MODULES if m.enabled]
 
 # Registry for lookup by ID
 MODULE_REGISTRY: dict = {m.id: m for m in ALL_MODULES}
+
+# Convenience accessors for individual modules
+preamble_stripper = MODULE_REGISTRY.get('preamble_stripper')
+hedge_reducer = MODULE_REGISTRY.get('hedge_reducer')
+disclaimer_stripper = MODULE_REGISTRY.get('disclaimer_stripper')
+formal_reducer = MODULE_REGISTRY.get('formal_reducer')
 
 
 def get_module(module_id: str) -> Optional[TextFixerModule]:
@@ -272,7 +178,7 @@ def apply_modules(text: str, module_ids: Optional[List[str]] = None) -> str:
     Args:
         text: The LLM output text to clean up.
         module_ids: List of module IDs to apply, in order.
-                    If None, applies DEFAULT_MODULES.
+                    If None, applies all enabled modules.
 
     Returns:
         Cleaned text with all specified modules applied.

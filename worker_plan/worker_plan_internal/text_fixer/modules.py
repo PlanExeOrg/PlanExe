@@ -33,28 +33,27 @@ class PatternBuilder:
     def __init__(self):
         self._patterns: List[tuple] = []
 
-    def regex(self, pattern: str, replacement: str = '', flags: int = re.IGNORECASE) -> 'PatternBuilder':
+    def regex(self, pattern: str, replacement: str = '', flags: int = re.IGNORECASE) -> None:
         """Add a regex pattern with its replacement and flags."""
         self._patterns.append((re.compile(pattern, flags), replacement))
-        return self
 
-    def regex_m(self, pattern: str, replacement: str = '') -> 'PatternBuilder':
+    def regex_m(self, pattern: str, replacement: str = '') -> None:
         """Add a regex pattern with IGNORECASE | MULTILINE flags."""
         return self.regex(pattern, replacement, flags=re.IGNORECASE | re.MULTILINE)
 
-    def regex_s(self, pattern: str, replacement: str = '') -> 'PatternBuilder':
+    def regex_s(self, pattern: str, replacement: str = '') -> None:
         """Add a regex pattern with IGNORECASE | DOTALL flags."""
         return self.regex(pattern, replacement, flags=re.IGNORECASE | re.DOTALL)
 
-    def word(self, text: str, replacement: str = '') -> 'PatternBuilder':
+    def word(self, text: str, replacement: str = '') -> None:
         """Add a word-boundary pattern: 'prior to' → r'\\bprior to\\b'."""
         return self.regex(rf'\b{re.escape(text)}\b', replacement)
 
-    def phrase(self, text: str, replacement: str = '') -> 'PatternBuilder':
+    def phrase(self, text: str, replacement: str = '') -> None:
         """Word-boundary match with optional trailing comma and whitespace consumed."""
         return self.regex(rf'\b{re.escape(text)}\b,?\s*', replacement)
 
-    def load_rule(self, rule: dict) -> 'PatternBuilder':
+    def load_rule(self, rule: dict) -> None:
         """Load a rule dict from JSON into this builder. Handles nested groups."""
         rule_type = rule['type']
         pattern = rule.get('pattern', '')
@@ -75,13 +74,11 @@ class PatternBuilder:
             self.phrase(pattern, replacement)
         else:
             raise ValueError(f"Unknown rule type: {rule_type}")
-        return self
 
-    def load_rules(self, rules: list) -> 'PatternBuilder':
+    def load_rules(self, rules: list) -> None:
         """Load a list of rule dicts from JSON."""
         for rule in rules:
             self.load_rule(rule)
-        return self
 
     @property
     def patterns(self) -> List[tuple]:

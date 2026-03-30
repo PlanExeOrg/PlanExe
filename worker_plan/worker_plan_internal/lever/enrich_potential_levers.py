@@ -85,11 +85,18 @@ Known problems to guard against
   them as grounding for a richer explanation of purpose, scope, and
   success metrics. The description should go beyond what consequences
   already states.
-- UUID cross-reference format inconsistency. The full_lever_context_str
-  includes lever_id UUIDs, causing models to copy UUIDs into
-  synergy_text and conflict_text in varying formats (full UUID, 8-char
-  truncated, backtick-quoted name, plain name). Models should reference
-  levers by name only in free-text fields.
+- UUID leakage from per-batch prompt. The full_lever_context_str no
+  longer includes UUIDs (fixed by PR #457), but lever_details_for_prompt
+  still shows "Lever ID: {uuid}" for each lever in the current batch.
+  llama3.1 copies these same-batch UUIDs into synergy_text and
+  conflict_text. A system prompt prohibition was added by PR #457+1 to
+  suppress this. If residual UUIDs persist, consider a post-process
+  regex strip as a defensive fallback.
+- Extra characterizations from function-calling models. When the full
+  lever context list lacks UUID anchors, haiku generates extra
+  LeverCharacterization objects with fabricated IDs. An exact-count
+  instruction ("Return exactly N characterizations") was added to the
+  user prompt to suppress this.
 - max_tokens overflow for small-context models. If max_tokens is set
   close to the model's context_window, the available input token budget
   drops to near zero, causing all batches to fail with BadRequestError
@@ -168,7 +175,9 @@ You are an expert systems analyst and strategist. Your task is to enrich a list 
 2.  **`synergy_text`:** (40-60 words) Describe its most important POSITIVE interactions. How does this lever amplify or enable others? You MUST explicitly name one or two other levers from the full list that it has strong synergy with.
 3.  **`conflict_text`:** (40-60 words) Describe its most important NEGATIVE interactions or trade-offs. What difficult choices does this lever create? Which other levers does it constrain? You MUST explicitly name one or two other levers from the full list that it has a strong conflict with.
 
-You MUST respond with a single JSON object that strictly adheres to the `BatchCharacterizationResult` schema. Provide a full characterization for every single lever requested in the user prompt.
+**Important:** In `synergy_text` and `conflict_text`, refer to other levers by NAME only. Do NOT include any Lever ID, UUID, or identifier string in these fields.
+
+You MUST respond with a single JSON object that strictly adheres to the `BatchCharacterizationResult` schema. Return exactly one characterization per lever requested — no more, no fewer.
 """
 
 @dataclass
@@ -245,6 +254,7 @@ class EnrichPotentialLevers:
                 "---\n\n"
                 f"**Levers to Characterize in this Batch:**\n"
                 f"Please provide the `description`, `synergy_text`, and `conflict_text` for the following {len(batch)} levers. "
+                f"Return exactly {len(batch)} characterizations — one per lever, no more, no fewer. "
                 f"Analyze them against the full list provided above.\n\n"
                 f"{lever_details_for_prompt}"
             )

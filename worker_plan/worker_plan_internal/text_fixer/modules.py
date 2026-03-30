@@ -98,17 +98,30 @@ class TextFixerModule:
     description: str
     patterns: List[tuple] = field(default_factory=list)
     enabled: bool = True
+    hit_counts: dict = field(default_factory=dict, repr=False)
 
     def transform(self, text: str) -> str:
-        """Apply all patterns in this module to the input text."""
+        """Apply all patterns in this module to the input text.
+        Tracks how many substitutions each pattern made in hit_counts."""
         result = text
-        for pattern, replacement in self.patterns:
-            result = pattern.sub(replacement, result)
+        for i, (pattern, replacement) in enumerate(self.patterns):
+            result, count = pattern.subn(replacement, result)
+            if count > 0:
+                self.hit_counts[i] = self.hit_counts.get(i, 0) + count
         # Clean up artifacts from removals
         result = re.sub(r'  +', ' ', result)
         result = re.sub(r'^\s+', '', result, flags=re.MULTILINE)
         result = _fix_capitalization(result)
         return result
+
+    def reset_counts(self) -> None:
+        """Reset all hit counters to zero."""
+        self.hit_counts.clear()
+
+    @property
+    def total_hits(self) -> int:
+        """Total number of substitutions across all patterns."""
+        return sum(self.hit_counts.values())
 
 
 def _fix_capitalization(text: str) -> str:

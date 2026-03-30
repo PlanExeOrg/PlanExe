@@ -261,5 +261,39 @@ Furthermore, the timeline assumes no regulatory delays. It's worth noting that F
         self.assertIn("12-18 months", result)
 
 
+class TestHitCounts(unittest.TestCase):
+    """Test pattern hit tracking."""
+
+    def test_counts_substitutions(self):
+        hedge_reducer.reset_counts()
+        hedge_reducer.transform("I think the plan is good. I think the budget is tight.")
+        self.assertEqual(hedge_reducer.total_hits, 2)
+
+    def test_tracks_by_rule_index(self):
+        hedge_reducer.reset_counts()
+        hedge_reducer.transform("I think perhaps we should reconsider.")
+        # At least two different pattern indices should have hits
+        self.assertGreaterEqual(len(hedge_reducer.hit_counts), 2)
+
+    def test_reset_clears_counts(self):
+        hedge_reducer.reset_counts()
+        hedge_reducer.transform("I think the plan is solid.")
+        self.assertGreater(hedge_reducer.total_hits, 0)
+        hedge_reducer.reset_counts()
+        self.assertEqual(hedge_reducer.total_hits, 0)
+        self.assertEqual(len(hedge_reducer.hit_counts), 0)
+
+    def test_no_match_no_count(self):
+        hedge_reducer.reset_counts()
+        hedge_reducer.transform("The budget is $500,000.")
+        self.assertEqual(hedge_reducer.total_hits, 0)
+
+    def test_counts_accumulate(self):
+        hedge_reducer.reset_counts()
+        hedge_reducer.transform("I think the plan is good.")
+        hedge_reducer.transform("I think the budget is tight.")
+        self.assertEqual(hedge_reducer.total_hits, 2)
+
+
 if __name__ == '__main__':
     unittest.main()

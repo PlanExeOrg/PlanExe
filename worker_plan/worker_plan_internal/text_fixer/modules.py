@@ -54,6 +54,35 @@ class PatternBuilder:
         """Word-boundary match with optional trailing comma and whitespace consumed."""
         return self.regex(rf'\b{re.escape(text)}\b,?\s*', replacement)
 
+    def load_rule(self, rule: dict) -> 'PatternBuilder':
+        """Load a rule dict from JSON into this builder. Handles nested groups."""
+        rule_type = rule['type']
+        pattern = rule.get('pattern', '')
+        replacement = rule.get('replacement', '')
+
+        if rule_type == 'group':
+            for sub_rule in rule.get('rules', []):
+                self.load_rule(sub_rule)
+        elif rule_type == 'regex':
+            self.regex(pattern, replacement)
+        elif rule_type == 'regex_m':
+            self.regex_m(pattern, replacement)
+        elif rule_type == 'regex_s':
+            self.regex_s(pattern, replacement)
+        elif rule_type == 'word':
+            self.word(pattern, replacement)
+        elif rule_type == 'phrase':
+            self.phrase(pattern, replacement)
+        else:
+            raise ValueError(f"Unknown rule type: {rule_type}")
+        return self
+
+    def load_rules(self, rules: list) -> 'PatternBuilder':
+        """Load a list of rule dicts from JSON."""
+        for rule in rules:
+            self.load_rule(rule)
+        return self
+
     @property
     def patterns(self) -> List[tuple]:
         """Return the built pattern list."""
@@ -97,34 +126,10 @@ def _fix_capitalization(text: str) -> str:
 # JSON Rule Loader
 # =============================================================================
 
-def _load_rule(b: PatternBuilder, rule: dict) -> None:
-    """Load a single rule into a PatternBuilder."""
-    rule_type = rule['type']
-    pattern = rule.get('pattern', '')
-    replacement = rule.get('replacement', '')
-
-    if rule_type == 'group':
-        for sub_rule in rule.get('rules', []):
-            _load_rule(b, sub_rule)
-    elif rule_type == 'regex':
-        b.regex(pattern, replacement)
-    elif rule_type == 'regex_m':
-        b.regex_m(pattern, replacement)
-    elif rule_type == 'regex_s':
-        b.regex_s(pattern, replacement)
-    elif rule_type == 'word':
-        b.word(pattern, replacement)
-    elif rule_type == 'phrase':
-        b.phrase(pattern, replacement)
-    else:
-        raise ValueError(f"Unknown rule type: {rule_type}")
-
-
 def _load_module(module_data: dict) -> TextFixerModule:
     """Load a TextFixerModule from a JSON module definition."""
     b = PatternBuilder()
-    for rule in module_data.get('rules', []):
-        _load_rule(b, rule)
+    b.load_rules(module_data.get('rules', []))
 
     return TextFixerModule(
         id=module_data['id'],

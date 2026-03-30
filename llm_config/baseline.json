@@ -31,7 +31,7 @@
             "timeout": 60.0,
             "is_function_calling_model": false,
             "is_chat_model": true,
-            "max_tokens": 8192,
+            "max_tokens": 128000,
             "max_retries": 5
         },
         "model_info_url": "https://openrouter.ai/openai/gpt-oss-20b",

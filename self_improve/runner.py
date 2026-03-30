@@ -181,7 +181,7 @@ def _run_enrich(plan_dir: Path, plan_output_dir: Path, llm_executor: LLMExecutor
         name=plan_name,
         status="ok",
         duration_seconds=0,  # filled by caller
-        calls_succeeded=1,
+        calls_succeeded=result.batches_succeeded,
     )
 
 

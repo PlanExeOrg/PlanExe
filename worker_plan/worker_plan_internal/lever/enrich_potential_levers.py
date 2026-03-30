@@ -13,6 +13,7 @@ PROMPT> python -m worker_plan_internal.lever.enrich_potential_levers
 import json
 import logging
 import os
+import time
 from dataclasses import dataclass
 from typing import List, Dict, Any, Optional
 
@@ -78,10 +79,30 @@ Known problems to guard against
   to reference levers from other batches in synergy/conflict text. The
   full lever list is provided as context precisely to prevent this —
   ensure the prompt makes the full list visually prominent.
+- Consequence echoing without elaboration. When consequences and review
+  are provided in the batch prompt, weak models (e.g. llama3.1)
+  summarize consequences verbatim as the description instead of using
+  them as grounding for a richer explanation of purpose, scope, and
+  success metrics. The description should go beyond what consequences
+  already states.
+- UUID cross-reference format inconsistency. The full_lever_context_str
+  includes lever_id UUIDs, causing models to copy UUIDs into
+  synergy_text and conflict_text in varying formats (full UUID, 8-char
+  truncated, backtick-quoted name, plain name). Models should reference
+  levers by name only in free-text fields.
 """
 
 # The number of levers to process in a single call to the LLM.
 BATCH_SIZE = 5
+
+# Retry guards: limit how aggressively failed batches are re-split.
+MAX_RETRY_DEPTH = 1          # max number of splits before skipping
+MAX_RETRY_BUDGET_SECONDS = 300  # stop retrying after this many seconds
+
+# Models with num_output below this threshold get a smaller batch size
+# to avoid output-token overflow on structured JSON responses.
+SMALL_OUTPUT_THRESHOLD = 16384
+SMALL_OUTPUT_BATCH_SIZE = 2
 
 # --- Pydantic Models for Data Structuring ---
 
@@ -142,6 +163,7 @@ class EnrichPotentialLevers:
     """Holds the results of the characterization process."""
     characterized_levers: List[CharacterizedLever]
     metadata: List[Dict[str, Any]]
+    batches_succeeded: int = 0
 
     @classmethod
     def execute(cls, llm_executor: LLMExecutor, project_context: str, raw_levers_list: list[dict]) -> 'EnrichPotentialLevers':
@@ -150,23 +172,43 @@ class EnrichPotentialLevers:
         if not levers_to_characterize:
             raise ValueError("The list of levers to characterize cannot be empty.")
 
-        logger.info(f"Characterizing {len(levers_to_characterize)} levers in batches of {BATCH_SIZE}.")
-        
+        # C1: Adaptive batch size — probe model metadata to avoid output overflow
+        batch_size = BATCH_SIZE
+        try:
+            if llm_executor.llm_models:
+                probe_llm = llm_executor.llm_models[0].create_llm()
+                num_output = probe_llm.metadata.num_output
+                if num_output < SMALL_OUTPUT_THRESHOLD:
+                    batch_size = SMALL_OUTPUT_BATCH_SIZE
+                    logger.info(f"Adaptive batch_size={batch_size} for model with num_output={num_output}")
+        except Exception:
+            logger.debug("Could not probe model metadata for adaptive batch size, using default", exc_info=True)
+
+        logger.info(f"Characterizing {len(levers_to_characterize)} levers in batches of {batch_size}.")
+
         # Prepare the full list of lever names and IDs for context in the prompt
         full_lever_context_str = "\n".join([f"- {lever.lever_id}: {lever.name}" for lever in levers_to_characterize])
-        
+
         enriched_levers_map = {lever.lever_id: lever.model_dump() for lever in levers_to_characterize}
         all_metadata = []
 
         system_message = ChatMessage(role=MessageRole.SYSTEM, content=ENRICH_LEVERS_SYSTEM_PROMPT.strip())
 
-        # Process levers in batches
-        for i in range(0, len(levers_to_characterize), BATCH_SIZE):
-            batch = levers_to_characterize[i:i + BATCH_SIZE]
-            if not batch:
-                continue
-            
-            logger.info(f"Processing batch {i//BATCH_SIZE + 1} with {len(batch)} levers...")
+        # Process levers in batches with retry on failure.
+        # On failure, split the batch in half and retry each sub-batch.
+        # Guards: depth limit (MAX_RETRY_DEPTH) and time budget (MAX_RETRY_BUDGET_SECONDS).
+        batches_succeeded = 0
+        retry_start_time = time.monotonic()
+        pending_batches: list[tuple[list[InputLever], int]] = []  # (batch, depth)
+        for i in range(0, len(levers_to_characterize), batch_size):
+            batch = levers_to_characterize[i:i + batch_size]
+            if batch:
+                pending_batches.append((batch, 0))
+
+        while pending_batches:
+            batch, depth = pending_batches.pop(0)
+            batch_label = f"batch of {len(batch)} levers (depth={depth})"
+            logger.info(f"Processing {batch_label}...")
 
             lever_details_for_prompt = "\n\n".join([
                 f"Lever ID: {lever.lever_id}\n"
@@ -200,6 +242,7 @@ class EnrichPotentialLevers:
                 result = llm_executor.run(execute_function)
                 batch_result: BatchCharacterizationResult = result["chat_response"].raw
                 all_metadata.append(result["metadata"])
+                batches_succeeded += 1
 
                 for char in batch_result.characterizations:
                     if char.lever_id in enriched_levers_map:
@@ -214,8 +257,31 @@ class EnrichPotentialLevers:
             except PipelineStopRequested:
                 raise
             except Exception as e:
-                logger.error(f"LLM batch interaction failed for levers {[lever.lever_id for lever in batch]}.", exc_info=True)
-                raise ValueError("LLM batch interaction failed.") from e
+                lever_ids = [lever.lever_id for lever in batch]
+                elapsed = time.monotonic() - retry_start_time
+                can_retry = (
+                    len(batch) > 1
+                    and depth < MAX_RETRY_DEPTH
+                    and elapsed < MAX_RETRY_BUDGET_SECONDS
+                )
+                if can_retry:
+                    mid = len(batch) // 2
+                    logger.warning(
+                        f"Batch failed for {lever_ids}, splitting into sub-batches of "
+                        f"{mid} and {len(batch) - mid} and retrying (depth={depth + 1}, elapsed={elapsed:.0f}s)."
+                    )
+                    pending_batches.insert(0, (batch[mid:], depth + 1))
+                    pending_batches.insert(0, (batch[:mid], depth + 1))
+                else:
+                    if len(batch) == 1:
+                        logger.error(
+                            f"Single-lever batch failed for {lever_ids[0]}, skipping.", exc_info=True
+                        )
+                    else:
+                        logger.error(
+                            f"Batch failed for {lever_ids}, skipping (depth={depth}, elapsed={elapsed:.0f}s).",
+                            exc_info=True,
+                        )
 
         final_characterized_levers = []
         for lever_id, data in enriched_levers_map.items():
@@ -226,10 +292,11 @@ class EnrichPotentialLevers:
                     logger.error(f"Pydantic validation failed for characterized lever '{lever_id}'. Error: {e}")
             else:
                 logger.error(f"Characterization incomplete for lever '{lever_id}'. Skipping this lever.")
-        
+
         return cls(
             characterized_levers=final_characterized_levers,
-            metadata=all_metadata
+            metadata=all_metadata,
+            batches_succeeded=batches_succeeded,
         )
     
     def save_raw(self, file_path: str) -> None:

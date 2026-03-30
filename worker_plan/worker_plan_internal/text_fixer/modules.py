@@ -11,16 +11,20 @@ These run AFTER the LLM generates output, catching patterns that persist
 regardless of prompt quality.
 
 Patterns are defined in rules.json — editable without touching Python code.
+Multiple rule files can be loaded (e.g. per-language: rules_zh.json, rules_ja.json).
 
 SRP: Each module handles one class of text cleanup.
-DRY: Shared apply_modules() chains any combination of modules.
+DRY: Shared TextFixer.apply() chains any combination of modules.
 """
 
 import json
+import logging
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Callable, List, Optional, Union
+from typing import Callable, Dict, List, Optional, Union
+
+logger = logging.getLogger(__name__)
 
 
 # =============================================================================
@@ -43,19 +47,19 @@ class PatternBuilder:
 
     def regex_m(self, pattern: str, replacement: str = '') -> None:
         """Add a regex pattern with IGNORECASE | MULTILINE flags."""
-        return self.regex(pattern, replacement, flags=re.IGNORECASE | re.MULTILINE)
+        self.regex(pattern, replacement, flags=re.IGNORECASE | re.MULTILINE)
 
     def regex_s(self, pattern: str, replacement: str = '') -> None:
         """Add a regex pattern with IGNORECASE | DOTALL flags."""
-        return self.regex(pattern, replacement, flags=re.IGNORECASE | re.DOTALL)
+        self.regex(pattern, replacement, flags=re.IGNORECASE | re.DOTALL)
 
     def word(self, text: str, replacement: str = '') -> None:
         """Add a word-boundary pattern: 'prior to' → r'\\bprior to\\b'."""
-        return self.regex(rf'\b{re.escape(text)}\b', replacement)
+        self.regex(rf'\b{re.escape(text)}\b', replacement)
 
     def phrase(self, text: str, replacement: str = '') -> None:
         """Word-boundary match with optional trailing comma and whitespace consumed."""
-        return self.regex(rf'\b{re.escape(text)}\b,?\s*', replacement)
+        self.regex(rf'\b{re.escape(text)}\b,?\s*', replacement)
 
     def load_rule(self, rule: dict) -> None:
         """Load a rule dict from JSON into this builder. Handles nested groups."""
@@ -124,6 +128,10 @@ class TextFixerModule:
         return sum(self.hit_counts.values())
 
 
+# =============================================================================
+# Post-processing patterns (appended to every module)
+# =============================================================================
+
 def _cleanup_spaces(b: PatternBuilder) -> None:
     """Add space-cleanup patterns to the builder."""
     b.regex(r'  +', ' ')
@@ -132,98 +140,125 @@ def _cleanup_spaces(b: PatternBuilder) -> None:
 
 def _fix_capitalization(b: PatternBuilder) -> None:
     """Add capitalization-fix patterns to the builder."""
-    # Start of text
     b.regex_advanced(r'^([a-z])', lambda m: m.group(1).upper(), re.IGNORECASE)
-    # After sentence-ending punctuation
     b.regex_advanced(r'([.!?]\s+)([a-z])', lambda m: m.group(1) + m.group(2).upper(), re.IGNORECASE)
-    # Start of markdown list items
     b.regex_advanced(r'^([*\-•]\s*)([a-z])', lambda m: m.group(1) + m.group(2).upper(), re.IGNORECASE | re.MULTILINE)
 
 
 # =============================================================================
-# JSON Rule Loader
+# TextFixer — catalog of modules, loaded on demand
 # =============================================================================
 
-def _load_module(module_data: dict) -> TextFixerModule:
-    """Load a TextFixerModule from a JSON module definition."""
-    b = PatternBuilder()
-    b.load_rules(module_data.get('rules', []))
-    _cleanup_spaces(b)
-    _fix_capitalization(b)
-
-    return TextFixerModule(
-        id=module_data['id'],
-        name=module_data['name'],
-        description=module_data.get('comment', ''),
-        patterns=b.patterns,
-        enabled=module_data.get('enabled', True),
-    )
-
-
-def load_rules(path: Optional[Path] = None) -> List[TextFixerModule]:
-    """Load all modules from a rules JSON file."""
-    if path is None:
-        path = Path(__file__).parent / 'rules.json'
-
-    with open(path, 'r') as f:
-        data = json.load(f)
-
-    return [_load_module(m) for m in data.get('modules', [])]
-
-
-# =============================================================================
-# MODULE REGISTRY & PUBLIC API
-# =============================================================================
-
-# Load modules from rules.json at import time
-ALL_MODULES: List[TextFixerModule] = load_rules()
-
-# Default module set — all enabled modules
-DEFAULT_MODULES: List[str] = [m.id for m in ALL_MODULES if m.enabled]
-
-# Registry for lookup by ID
-MODULE_REGISTRY: dict = {m.id: m for m in ALL_MODULES}
-
-# Convenience accessors for individual modules
-preamble_stripper = MODULE_REGISTRY.get('preamble_stripper')
-hedge_reducer = MODULE_REGISTRY.get('hedge_reducer')
-disclaimer_stripper = MODULE_REGISTRY.get('disclaimer_stripper')
-formal_reducer = MODULE_REGISTRY.get('formal_reducer')
-
-
-def get_module(module_id: str) -> Optional[TextFixerModule]:
-    """Get a module by its ID."""
-    return MODULE_REGISTRY.get(module_id)
-
-
-def apply_modules(text: str, module_ids: Optional[List[str]] = None) -> str:
+class TextFixer:
     """
-    Apply TextFixer modules to text in sequence.
+    A catalog of TextFixerModules, loaded from JSON rule files.
 
-    Args:
-        text: The LLM output text to clean up.
-        module_ids: List of module IDs to apply, in order.
-                    If None, applies all enabled modules.
-
-    Returns:
-        Cleaned text with all specified modules applied.
+    Usage:
+        fixer = TextFixer()
+        fixer.load(Path('rules.json'))
+        result = fixer.apply(text)
+        result = fixer.apply(text, module_ids=['hedge_reducer'])
     """
-    if module_ids is None:
-        module_ids = DEFAULT_MODULES
 
-    result = text
-    for module_id in module_ids:
-        module = MODULE_REGISTRY.get(module_id)
-        if module and module.enabled:
-            result = module.transform(result)
+    def __init__(self):
+        self._modules: Dict[str, TextFixerModule] = {}
 
-    return result
+    def load(self, filepath: Path) -> None:
+        """Load modules from a JSON rules file. Can be called multiple times
+        to load additional rule files (e.g. per-language)."""
+        logger.debug(f"TextFixer.load. filepath: {filepath!r}")
+        with open(filepath, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+        for module_data in data.get('modules', []):
+            module_id = module_data.get('id')
+            if not module_id:
+                logger.error(f"Missing 'id' in module definition in {filepath}. Skipping.")
+                continue
+
+            if module_id in self._modules:
+                logger.warning(f"Duplicate module id '{module_id}' in {filepath}. Overwriting.")
+
+            b = PatternBuilder()
+            b.load_rules(module_data.get('rules', []))
+            _cleanup_spaces(b)
+            _fix_capitalization(b)
+
+            module = TextFixerModule(
+                id=module_id,
+                name=module_data.get('name', module_id),
+                description=module_data.get('comment', ''),
+                patterns=b.patterns,
+                enabled=module_data.get('enabled', True),
+            )
+            self._modules[module_id] = module
+
+    @classmethod
+    def default_rules_path(cls) -> Path:
+        """Return the path to the default rules.json file."""
+        return Path(__file__).parent / 'rules.json'
+
+    def get_module(self, module_id: str) -> Optional[TextFixerModule]:
+        """Get a module by its ID. Returns None if not found."""
+        return self._modules.get(module_id)
+
+    def module_ids(self) -> List[str]:
+        """Return all loaded module IDs in insertion order."""
+        return list(self._modules.keys())
+
+    def enabled_module_ids(self) -> List[str]:
+        """Return IDs of all enabled modules in insertion order."""
+        return [m.id for m in self._modules.values() if m.enabled]
+
+    def all_modules(self) -> List[TextFixerModule]:
+        """Return all loaded modules in insertion order."""
+        return list(self._modules.values())
+
+    def apply(self, text: str, module_ids: Optional[List[str]] = None) -> str:
+        """
+        Apply modules to text in sequence.
+
+        Args:
+            text: The LLM output text to clean up.
+            module_ids: List of module IDs to apply, in order.
+                        If None, applies all enabled modules.
+
+        Returns:
+            Cleaned text with all specified modules applied.
+        """
+        if module_ids is None:
+            module_ids = self.enabled_module_ids()
+
+        result = text
+        for module_id in module_ids:
+            module = self._modules.get(module_id)
+            if module is None:
+                logger.warning(f"Unknown module '{module_id}', skipping.")
+                continue
+            if module.enabled:
+                result = module.transform(result)
+
+        return result
+
+    def reset_all_counts(self) -> None:
+        """Reset hit counters on all loaded modules."""
+        for module in self._modules.values():
+            module.reset_counts()
 
 
-def apply_all_enabled(text: str) -> str:
-    """Apply all enabled modules in recommended order."""
-    result = text
-    for module in ALL_MODULES:
-        if module.enabled:
-            result = module.transform(result)
-    return result
+# =============================================================================
+# Convenience functions (backward compatible)
+# =============================================================================
+
+def apply_modules(text: str, module_ids: Optional[List[str]] = None, rules_path: Optional[Path] = None) -> str:
+    """Convenience function: load default rules and apply modules."""
+    fixer = TextFixer()
+    fixer.load(rules_path or TextFixer.default_rules_path())
+    return fixer.apply(text, module_ids)
+
+
+def apply_all_enabled(text: str, rules_path: Optional[Path] = None) -> str:
+    """Convenience function: load default rules and apply all enabled modules."""
+    fixer = TextFixer()
+    fixer.load(rules_path or TextFixer.default_rules_path())
+    return fixer.apply(text)

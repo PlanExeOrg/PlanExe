@@ -166,6 +166,11 @@ class EnrichPotentialLevers:
     characterized_levers: List[CharacterizedLever]
     metadata: List[Dict[str, Any]]
     batches_succeeded: int = 0
+    errors: List[Dict[str, Any]] = None
+
+    def __post_init__(self):
+        if self.errors is None:
+            self.errors = []
 
     @classmethod
     def execute(cls, llm_executor: LLMExecutor, project_context: str, raw_levers_list: list[dict]) -> 'EnrichPotentialLevers':
@@ -201,6 +206,7 @@ class EnrichPotentialLevers:
         # On failure, split the batch in half and retry each sub-batch.
         # Guards: depth limit (MAX_RETRY_DEPTH) and time budget (MAX_RETRY_BUDGET_SECONDS).
         batches_succeeded = 0
+        errors: list[dict[str, Any]] = []
         retry_start_time = time.monotonic()
         pending_batches: list[tuple[list[InputLever], int]] = []  # (batch, depth)
         for i in range(0, len(levers_to_characterize), batch_size):
@@ -256,6 +262,7 @@ class EnrichPotentialLevers:
                         })
                     else:
                         logger.warning(f"LLM returned characterization for an unknown lever_id: '{char.lever_id}'")
+                        errors.append({"type": "unknown_lever_id", "lever_id": char.lever_id})
 
             except PipelineStopRequested:
                 raise
@@ -267,12 +274,14 @@ class EnrichPotentialLevers:
                     and depth < MAX_RETRY_DEPTH
                     and elapsed < MAX_RETRY_BUDGET_SECONDS
                 )
+                error_str = f"{type(e).__name__}: {e}"
                 if can_retry:
                     mid = len(batch) // 2
                     logger.warning(
                         f"Batch failed for {lever_ids}, splitting into sub-batches of "
                         f"{mid} and {len(batch) - mid} and retrying (depth={depth + 1}, elapsed={elapsed:.0f}s)."
                     )
+                    errors.append({"type": "batch_retry", "lever_ids": lever_ids, "depth": depth, "error": error_str})
                     pending_batches.insert(0, (batch[mid:], depth + 1))
                     pending_batches.insert(0, (batch[:mid], depth + 1))
                 else:
@@ -285,6 +294,7 @@ class EnrichPotentialLevers:
                             f"Batch failed for {lever_ids}, skipping (depth={depth}, elapsed={elapsed:.0f}s).",
                             exc_info=True,
                         )
+                    errors.append({"type": "batch_skipped", "lever_ids": lever_ids, "depth": depth, "error": error_str})
 
         final_characterized_levers = []
         for lever_id, data in enriched_levers_map.items():
@@ -293,19 +303,23 @@ class EnrichPotentialLevers:
                     final_characterized_levers.append(CharacterizedLever(**data))
                 except ValidationError as e:
                     logger.error(f"Pydantic validation failed for characterized lever '{lever_id}'. Error: {e}")
+                    errors.append({"type": "validation_error", "lever_id": lever_id, "error": str(e)})
             else:
                 logger.error(f"Characterization incomplete for lever '{lever_id}'. Skipping this lever.")
+                errors.append({"type": "incomplete", "lever_id": lever_id})
 
         return cls(
             characterized_levers=final_characterized_levers,
             metadata=all_metadata,
             batches_succeeded=batches_succeeded,
+            errors=errors,
         )
     
     def save_raw(self, file_path: str) -> None:
         """Saves the characterized levers to a JSON file."""
         output_data = {
             "metadata": self.metadata,
+            "errors": self.errors,
             "characterized_levers": [lever.model_dump() for lever in self.characterized_levers]
         }
         with open(file_path, 'w') as f:

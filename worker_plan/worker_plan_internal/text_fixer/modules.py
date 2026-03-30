@@ -33,9 +33,13 @@ class PatternBuilder:
     def __init__(self):
         self._patterns: List[tuple] = []
 
-    def regex(self, pattern: str, replacement: Union[str, Callable] = '', flags: int = re.IGNORECASE) -> None:
-        """Add a regex pattern with its replacement (string or callable) and flags."""
+    def regex_advanced(self, pattern: str, replacement: Union[str, Callable], flags: int) -> None:
+        """Add a regex pattern with its replacement (string or callable) and flags. All params required."""
         self._patterns.append((re.compile(pattern, flags), replacement))
+
+    def regex(self, pattern: str, replacement: str = '', flags: int = re.IGNORECASE) -> None:
+        """Add a regex pattern with its replacement and flags."""
+        self.regex_advanced(pattern, replacement, flags)
 
     def regex_m(self, pattern: str, replacement: str = '') -> None:
         """Add a regex pattern with IGNORECASE | MULTILINE flags."""
@@ -129,11 +133,11 @@ def _cleanup_spaces(b: PatternBuilder) -> None:
 def _fix_capitalization(b: PatternBuilder) -> None:
     """Add capitalization-fix patterns to the builder."""
     # Start of text
-    b.regex(r'^([a-z])', lambda m: m.group(1).upper())
+    b.regex_advanced(r'^([a-z])', lambda m: m.group(1).upper(), re.IGNORECASE)
     # After sentence-ending punctuation
-    b.regex(r'([.!?]\s+)([a-z])', lambda m: m.group(1) + m.group(2).upper())
+    b.regex_advanced(r'([.!?]\s+)([a-z])', lambda m: m.group(1) + m.group(2).upper(), re.IGNORECASE)
     # Start of markdown list items
-    b.regex_m(r'^([*\-•]\s*)([a-z])', lambda m: m.group(1) + m.group(2).upper())
+    b.regex_advanced(r'^([*\-•]\s*)([a-z])', lambda m: m.group(1) + m.group(2).upper(), re.IGNORECASE | re.MULTILINE)
 
 
 # =============================================================================

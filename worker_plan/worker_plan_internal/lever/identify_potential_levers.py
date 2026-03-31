@@ -113,21 +113,19 @@ class Lever(BaseModel):
             "What happens when this lever is pulled? Describe the direct effect and "
             "at least one downstream implication or trade-off. Be concise and grounded — "
             "only cite numbers if the project context provides evidence for them. "
-            "Do NOT include 'Controls ... vs.', 'Weakness:', or other review/critique text in this field — "
-            "those belong exclusively in review_lever. "
-            "Target length: 2–4 sentences."
+            "Focus on cause-effect relationships and factual outcomes; "
+            "save critical assessments for the review_lever field. "
+            "Target length: 2–3 sentences."
         )
     )
     options: list[str] = Field(
-        description="Exactly 3 options for this lever. No more, no fewer. Each option must be a complete "
-                    "strategic approach (a full sentence with an action verb), not a label."
+        description="Exactly 3 options for this lever. No more, no fewer. Each option is one sentence — "
+                    "a concrete strategic approach with an action verb."
     )
     review_lever: str = Field(
         description=(
-            "A short critical review: identify the primary trade-off "
-            "this lever introduces, then state the specific gap the "
-            "three options leave unaddressed. "
-            "See system prompt section 4 for examples. "
+            "1–2 sentences: the primary trade-off this lever introduces "
+            "and the gap the three options leave unaddressed. "
             "Do not use square brackets or placeholder text."
         )
     )
@@ -210,14 +208,14 @@ class LeverCleaned(BaseModel):
             "What happens when this lever is pulled? Describe the direct effect and "
             "at least one downstream implication or trade-off. Be concise and grounded — "
             "only cite numbers if the project context provides evidence for them. "
-            "Do NOT include 'Controls ... vs.', 'Weakness:', or other review/critique text in this field — "
-            "those belong exclusively in review_lever. "
-            "Target length: 2–4 sentences."
+            "Focus on cause-effect relationships and factual outcomes; "
+            "save critical assessments for the review_lever field. "
+            "Target length: 2–3 sentences."
         )
     )
     options: list[str] = Field(
-        description="Exactly 3 options for this lever. No more, no fewer. Each option must be a complete "
-                    "strategic approach (a full sentence with an action verb), not a label."
+        description="Exactly 3 options for this lever. No more, no fewer. Each option is one sentence — "
+                    "a concrete strategic approach with an action verb."
     )
     review: str = Field(
         description="Critical review of this lever."

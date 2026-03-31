@@ -113,8 +113,8 @@ class Lever(BaseModel):
             "What happens when this lever is pulled? Describe the direct effect and "
             "at least one downstream implication or trade-off. Be concise and grounded — "
             "only cite numbers if the project context provides evidence for them. "
-            "Do NOT include 'Controls ... vs.', 'Weakness:', or other review/critique text in this field — "
-            "those belong exclusively in review_lever. "
+            "Focus on cause-effect relationships and factual outcomes; "
+            "save critical assessments for the review_lever field. "
             "Target length: 2–4 sentences."
         )
     )
@@ -210,8 +210,8 @@ class LeverCleaned(BaseModel):
             "What happens when this lever is pulled? Describe the direct effect and "
             "at least one downstream implication or trade-off. Be concise and grounded — "
             "only cite numbers if the project context provides evidence for them. "
-            "Do NOT include 'Controls ... vs.', 'Weakness:', or other review/critique text in this field — "
-            "those belong exclusively in review_lever. "
+            "Focus on cause-effect relationships and factual outcomes; "
+            "save critical assessments for the review_lever field. "
             "Target length: 2–4 sentences."
         )
     )

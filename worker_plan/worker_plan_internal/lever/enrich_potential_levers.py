@@ -85,11 +85,16 @@ Known problems to guard against
   them as grounding for a richer explanation of purpose, scope, and
   success metrics. The description should go beyond what consequences
   already states.
-- UUID cross-reference format inconsistency. The full_lever_context_str
-  includes lever_id UUIDs, causing models to copy UUIDs into
-  synergy_text and conflict_text in varying formats (full UUID, 8-char
-  truncated, backtick-quoted name, plain name). Models should reference
-  levers by name only in free-text fields.
+- UUID leakage into free-text fields. Full UUIDs in the prompt cause
+  models to copy them into synergy_text and conflict_text. Fixed by
+  removing UUIDs from full_lever_context_str (PR #457) and replacing
+  full UUIDs with integer indices in lever_details_for_prompt. Do NOT
+  use negative prohibitions naming "UUID" or "Lever ID" — small models
+  (llama3.1) treat the prohibition as a template and copy the banned
+  phrases. Use positive framing ("refer to levers by name") instead.
+  Short hex prefixes (6-char) degrade function-calling models (haiku)
+  which fabricate sequential strings instead of copying the prefix.
+  Integer indices work universally for both model types.
 - max_tokens overflow for small-context models. If max_tokens is set
   close to the model's context_window, the available input token budget
   drops to near zero, causing all batches to fail with BadRequestError
@@ -131,7 +136,7 @@ class InputLever(BaseModel):
 
 class LeverCharacterization(BaseModel):
     """Structured response for a single lever's enrichment from the LLM."""
-    lever_id: str = Field(description="The uuid of the lever")
+    lever_id: str = Field(description="The integer identifier of the lever, as shown in the prompt")
     description: str = Field(
         description="A comprehensive description (80-100 words) of the lever's purpose, scope, and key success metrics."
     )
@@ -168,7 +173,9 @@ You are an expert systems analyst and strategist. Your task is to enrich a list 
 2.  **`synergy_text`:** (40-60 words) Describe its most important POSITIVE interactions. How does this lever amplify or enable others? You MUST explicitly name one or two other levers from the full list that it has strong synergy with.
 3.  **`conflict_text`:** (40-60 words) Describe its most important NEGATIVE interactions or trade-offs. What difficult choices does this lever create? Which other levers does it constrain? You MUST explicitly name one or two other levers from the full list that it has a strong conflict with.
 
-You MUST respond with a single JSON object that strictly adheres to the `BatchCharacterizationResult` schema. Provide a full characterization for every single lever requested in the user prompt.
+In `synergy_text` and `conflict_text`, always refer to other levers by their name — for example, write "Policy Advocacy Strategy", not an identifier.
+
+You MUST respond with a single JSON object that strictly adheres to the `BatchCharacterizationResult` schema. Return exactly one characterization per lever requested — no more, no fewer.
 """
 
 @dataclass
@@ -230,14 +237,20 @@ class EnrichPotentialLevers:
             batch_label = f"batch of {len(batch)} levers (depth={depth})"
             logger.info(f"Processing {batch_label}...")
 
-            lever_details_for_prompt = "\n\n".join([
-                f"Lever ID: {lever.lever_id}\n"
-                f"Name: {lever.name}\n"
-                f"Consequences: {lever.consequences}\n"
-                f"Options: {json.dumps(lever.options)}\n"
-                f"Review: {lever.review}"
-                for lever in batch
-            ])
+            # Use integer indices instead of full UUIDs to prevent models
+            # from copying UUIDs into free-text fields.
+            index_to_full = {}
+            lever_details_for_prompt_parts = []
+            for idx, lever in enumerate(batch, start=1):
+                index_to_full[str(idx)] = lever.lever_id
+                lever_details_for_prompt_parts.append(
+                    f"Lever {idx}\n"
+                    f"Name: {lever.name}\n"
+                    f"Consequences: {lever.consequences}\n"
+                    f"Options: {json.dumps(lever.options)}\n"
+                    f"Review: {lever.review}"
+                )
+            lever_details_for_prompt = "\n\n".join(lever_details_for_prompt_parts)
 
             user_prompt = (
                 f"**Project Context:**\n{project_context}\n\n"
@@ -245,6 +258,7 @@ class EnrichPotentialLevers:
                 "---\n\n"
                 f"**Levers to Characterize in this Batch:**\n"
                 f"Please provide the `description`, `synergy_text`, and `conflict_text` for the following {len(batch)} levers. "
+                f"Return exactly {len(batch)} characterizations — one per lever, no more, no fewer. "
                 f"Analyze them against the full list provided above.\n\n"
                 f"{lever_details_for_prompt}"
             )
@@ -265,8 +279,10 @@ class EnrichPotentialLevers:
                 batches_succeeded += 1
 
                 for char in batch_result.characterizations:
-                    if char.lever_id in enriched_levers_map:
-                        enriched_levers_map[char.lever_id].update({
+                    # Map integer index back to full UUID
+                    full_id = index_to_full.get(char.lever_id, char.lever_id)
+                    if full_id in enriched_levers_map:
+                        enriched_levers_map[full_id].update({
                             'description': char.description,
                             'synergy_text': char.synergy_text,
                             'conflict_text': char.conflict_text

@@ -1,5 +1,10 @@
 FROM python:3.13-slim
 
+# Accept commit hash from docker-compose build arg or Railway's built-in variable.
+ARG GIT_COMMIT_HASH=unknown
+ARG RAILWAY_GIT_COMMIT_SHA
+ENV PLANEXE_GIT_COMMIT_HASH=${RAILWAY_GIT_COMMIT_SHA:-${GIT_COMMIT_HASH}}
+
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PLANEXE_CONFIG_PATH=/app \

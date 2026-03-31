@@ -181,6 +181,8 @@ services:
     build:
       context: .
       dockerfile: frontend_multi_user/Dockerfile
+      args:
+        GIT_COMMIT_HASH: ${GIT_COMMIT_HASH:-unknown}
     container_name: frontend_multi_user
     depends_on:
       database_postgres:

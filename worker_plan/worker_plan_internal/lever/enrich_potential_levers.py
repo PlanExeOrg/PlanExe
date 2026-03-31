@@ -135,15 +135,15 @@ class InputLever(BaseModel):
 
 class LeverCharacterization(BaseModel):
     """Structured response for a single lever's enrichment from the LLM."""
-    lever_id: str = Field(description="The uuid of the lever")
+    lever_id: str = Field(description="The hexadecimal uuid of the lever, without XML tags")
     description: str = Field(
-        description="A comprehensive description (80-100 words) of the lever's purpose, scope, and key success metrics."
+        description="A concise description (50-70 words) of the lever's purpose, scope, and key success metrics. Add new insight beyond what consequences and review already state."
     )
     synergy_text: str = Field(
-        description="A free-form text (40-60 words) describing this lever's most prominent synergistic effects with other levers in the full list. Name the specific levers it enhances."
+        description="A brief text (20-40 words) naming one or two other levers this lever amplifies or enables, and why."
     )
     conflict_text: str = Field(
-        description="A free-form text (40-60 words) describing this lever's most prominent conflicts or trade-offs with other levers in the full list. Name the specific levers it constrains."
+        description="A brief text (20-40 words) naming one or two other levers this lever constrains or trades off against, and why."
     )
 
 class BatchCharacterizationResult(BaseModel):
@@ -167,10 +167,12 @@ You are an expert systems analyst and strategist. Your task is to enrich a list 
 
 **Full Context:** You will be given the overall project plan and the FULL list of ALL levers for context. You must analyze each lever in the batch against this full list.
 
+**Lever identifiers:** Each lever in the batch is wrapped in `<lever>uuid</lever>` XML tags. When returning `lever_id`, extract and return only the hexadecimal uuid string inside the tags — strip the XML tags themselves.
+
 **Output Requirements (for each lever in the batch):**
-1.  **`description`:** (80-100 words) Clearly explain the lever's purpose, what it controls, its objectives, and key success metrics.
-2.  **`synergy_text`:** (40-60 words) Describe its most important POSITIVE interactions. How does this lever amplify or enable others? You MUST explicitly name one or two other levers from the full list that it has strong synergy with.
-3.  **`conflict_text`:** (40-60 words) Describe its most important NEGATIVE interactions or trade-offs. What difficult choices does this lever create? Which other levers does it constrain? You MUST explicitly name one or two other levers from the full list that it has a strong conflict with.
+1.  **`description`:** (50-70 words) Explain the lever's purpose, scope, and key success metrics. Add new insight beyond what the consequences and review fields already state.
+2.  **`synergy_text`:** (20-40 words) Name one or two other levers from the full list that this lever amplifies or enables, and briefly explain why.
+3.  **`conflict_text`:** (20-40 words) Name one or two other levers from the full list that this lever constrains or trades off against, and briefly explain why.
 
 In `synergy_text` and `conflict_text`, always refer to other levers by their name — for example, write "Policy Advocacy Strategy", not an identifier.
 

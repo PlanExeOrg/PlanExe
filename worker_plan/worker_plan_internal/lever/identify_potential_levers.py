@@ -111,23 +111,22 @@ class Lever(BaseModel):
     consequences: str = Field(
         description=(
             "What happens when this lever is pulled? Describe the direct effect and "
-            "at least one downstream implication or trade-off. Be concise and grounded — "
-            "only cite numbers if the project context provides evidence for them. "
-            "Do NOT include 'Controls ... vs.', 'Weakness:', or other review/critique text in this field — "
-            "those belong exclusively in review_lever. "
-            "Target length: 2–4 sentences."
+            "at least one downstream implication or trade-off. "
+            "Use numbers only when the project context provides them directly — "
+            "do not calculate, derive, or estimate figures. "
+            "Save critical assessments for the review_lever field. "
+            "Target length: 2–3 sentences."
         )
     )
     options: list[str] = Field(
-        description="Exactly 3 options for this lever. No more, no fewer. Each option must be a complete "
-                    "strategic approach (a full sentence with an action verb), not a label."
+        description="Exactly 3 options for this lever. No more, no fewer. Each option is one sentence — "
+                    "a concrete strategic approach with an action verb. "
+                    "Use numbers only when the project context provides them directly."
     )
     review_lever: str = Field(
         description=(
-            "A short critical review: identify the primary trade-off "
-            "this lever introduces, then state the specific gap the "
-            "three options leave unaddressed. "
-            "See system prompt section 4 for examples. "
+            "One sentence (20–40 words): identify the key risk or constraint "
+            "that the proposed options collectively do not resolve. "
             "Do not use square brackets or placeholder text."
         )
     )
@@ -208,16 +207,17 @@ class LeverCleaned(BaseModel):
     consequences: str = Field(
         description=(
             "What happens when this lever is pulled? Describe the direct effect and "
-            "at least one downstream implication or trade-off. Be concise and grounded — "
-            "only cite numbers if the project context provides evidence for them. "
-            "Do NOT include 'Controls ... vs.', 'Weakness:', or other review/critique text in this field — "
-            "those belong exclusively in review_lever. "
-            "Target length: 2–4 sentences."
+            "at least one downstream implication or trade-off. "
+            "Use numbers only when the project context provides them directly — "
+            "do not calculate, derive, or estimate figures. "
+            "Save critical assessments for the review_lever field. "
+            "Target length: 2–3 sentences."
         )
     )
     options: list[str] = Field(
-        description="Exactly 3 options for this lever. No more, no fewer. Each option must be a complete "
-                    "strategic approach (a full sentence with an action verb), not a label."
+        description="Exactly 3 options for this lever. No more, no fewer. Each option is one sentence — "
+                    "a concrete strategic approach with an action verb. "
+                    "Use numbers only when the project context provides them directly."
     )
     review: str = Field(
         description="Critical review of this lever."
@@ -231,7 +231,7 @@ You are an expert strategic analyst. Generate solution space parameters followin
    - Each lever's `options` field must contain exactly 3 qualitative strategic choices as plain strings.
 
 2. **Lever Quality Standards**
-   - Consequences: describe the direct effect of pulling this lever, then at least one downstream implication or trade-off. Be concise and grounded — only cite specific numbers if the project context provides evidence for them. Do not fabricate percentages or cost estimates. Target length: 2–4 sentences.
+   - Consequences: describe the direct effect of pulling this lever, then at least one downstream implication or trade-off. Use numbers only when the project context provides them directly — do not calculate, derive, or estimate figures. Target length: 2–3 sentences.
    - Options MUST:
      • Represent genuinely distinct strategic pathways (not just labels)
      • Include at least one unconventional or non-obvious approach
@@ -244,7 +244,7 @@ You are an expert strategic analyst. Generate solution space parameters followin
 
 4. **Validation Protocols**
    - For `review_lever`:
-     A short critical review — identify the primary trade-off this lever introduces, then state the specific gap the three options leave unaddressed.
+     One sentence identifying the key risk or constraint that the proposed options collectively do not resolve.
      Examples:
      - "Switching from seasonal contract labor to year-round employees stabilizes harvest quality, but the idle-wage burden during the 5-month off-season adds a fixed cost that erases the per-unit savings unless utilization reaches year-round levels."
      - "Each additional clinical site requires its own IRB approval, site-initiation visit, and staff credentialing — a sequential overhead that compounds rather than parallelizes, so doubling site count does not halve enrollment time."
@@ -255,11 +255,11 @@ You are an expert strategic analyst. Generate solution space parameters followin
    - NO prefixes/labels in options (e.g., "Option A:", "Choice 1:")
    - NO generic option labels (e.g., "Optimize X", "Tolerate Y")
    - NO placeholder consequences or bracket-wrapped templates
-   - NO fabricated statistics or percentages without evidence from the project context
+   - NO calculated, derived, or estimated figures — use only numbers that appear verbatim in the project context
    - NO marketing language (e.g., "game-changing", "cutting-edge", "revolutionary")
 
 6. **Length Limits**
-   - Keep each `review_lever` to one sentence (20–40 words). State the trade-off and the gap concisely.
+   - Keep each `review_lever` to one sentence (20–40 words). Identify the key unresolved risk concisely.
    - Each option should be a concrete, actionable approach (at least 15 words with an action verb) — not a short label or vague aspiration
    - Maintain parallel grammatical structure across options
    - Ensure options are self-contained descriptions

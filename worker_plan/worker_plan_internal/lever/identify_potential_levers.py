@@ -109,27 +109,13 @@ class Lever(BaseModel):
         description="Name of this lever."
     )
     consequences: str = Field(
-        description=(
-            "What happens when this lever is pulled? Describe the direct effect and "
-            "at least one downstream implication or trade-off. Be concise and grounded — "
-            "only cite numbers if the project context provides evidence for them. "
-            "Do NOT include 'Controls ... vs.', 'Weakness:', or other review/critique text in this field — "
-            "those belong exclusively in review_lever. "
-            "Target length: 2–4 sentences."
-        )
+        description="Direct effect and one downstream implication (30–60 words)."
     )
     options: list[str] = Field(
-        description="Exactly 3 options for this lever. No more, no fewer. Each option must be a complete "
-                    "strategic approach (a full sentence with an action verb), not a label."
+        description="Exactly 3 options. Each is one sentence (15–25 words) — a concrete strategic approach."
     )
     review_lever: str = Field(
-        description=(
-            "A short critical review: identify the primary trade-off "
-            "this lever introduces, then state the specific gap the "
-            "three options leave unaddressed. "
-            "See system prompt section 4 for examples. "
-            "Do not use square brackets or placeholder text."
-        )
+        description="Critical review (20–40 words). No square brackets or placeholders."
     )
     @field_validator('options', mode='before')
     @classmethod
@@ -206,18 +192,10 @@ class LeverCleaned(BaseModel):
         description="Name of this lever."
     )
     consequences: str = Field(
-        description=(
-            "What happens when this lever is pulled? Describe the direct effect and "
-            "at least one downstream implication or trade-off. Be concise and grounded — "
-            "only cite numbers if the project context provides evidence for them. "
-            "Do NOT include 'Controls ... vs.', 'Weakness:', or other review/critique text in this field — "
-            "those belong exclusively in review_lever. "
-            "Target length: 2–4 sentences."
-        )
+        description="Direct effect and one downstream implication (30–60 words)."
     )
     options: list[str] = Field(
-        description="Exactly 3 options for this lever. No more, no fewer. Each option must be a complete "
-                    "strategic approach (a full sentence with an action verb), not a label."
+        description="Exactly 3 options. Each is one sentence (15–25 words) — a concrete strategic approach."
     )
     review: str = Field(
         description="Critical review of this lever."
@@ -231,7 +209,7 @@ You are an expert strategic analyst. Generate solution space parameters followin
    - Each lever's `options` field must contain exactly 3 qualitative strategic choices as plain strings.
 
 2. **Lever Quality Standards**
-   - Consequences: describe the direct effect of pulling this lever, then at least one downstream implication or trade-off. Be concise and grounded — only cite specific numbers if the project context provides evidence for them. Do not fabricate percentages or cost estimates. Target length: 2–4 sentences.
+   - Consequences: describe the direct effect of pulling this lever, then at least one downstream implication or trade-off. Be concise and grounded — only cite numbers the project context provides directly. Target length: 30–60 words.
    - Options MUST:
      • Represent genuinely distinct strategic pathways (not just labels)
      • Include at least one unconventional or non-obvious approach
@@ -244,8 +222,7 @@ You are an expert strategic analyst. Generate solution space parameters followin
 
 4. **Validation Protocols**
    - For `review_lever`:
-     A short critical review — identify the primary trade-off this lever introduces, then state the specific gap the three options leave unaddressed.
-     Examples:
+     A one-sentence critical review (20–40 words). Examples:
      - "Switching from seasonal contract labor to year-round employees stabilizes harvest quality, but the idle-wage burden during the 5-month off-season adds a fixed cost that erases the per-unit savings unless utilization reaches year-round levels."
      - "Each additional clinical site requires its own IRB approval, site-initiation visit, and staff credentialing — a sequential overhead that compounds rather than parallelizes, so doubling site count does not halve enrollment time."
      - "Pooling catastrophe risk across three coastal regions reduces expected annual loss on paper, but a single regional hurricane season can correlate all three simultaneously, turning the diversification assumption into a concentration risk at the worst possible moment."
@@ -259,8 +236,8 @@ You are an expert strategic analyst. Generate solution space parameters followin
    - NO marketing language (e.g., "game-changing", "cutting-edge", "revolutionary")
 
 6. **Length Limits**
-   - Keep each `review_lever` to one sentence (20–40 words). State the trade-off and the gap concisely.
-   - Each option should be a concrete, actionable approach (at least 15 words with an action verb) — not a short label or vague aspiration
+   - Keep each `review_lever` to 20–40 words.
+   - Each option: 15–25 words, a concrete actionable approach with an action verb.
    - Maintain parallel grammatical structure across options
    - Ensure options are self-contained descriptions
 """
@@ -301,6 +278,7 @@ class IdentifyPotentialLevers:
                 names_list = ", ".join(f'"{n}"' for n in generated_lever_names)
                 prompt_content = (
                     f"Generate 5 to 7 MORE levers with completely different names. "
+                    f"Each review_lever must be a genuine critical assessment — not a restatement of the consequence. "
                     f"Do NOT reuse any of these already-generated names: [{names_list}]\n\n"
                     f"{user_prompt}"
                 )

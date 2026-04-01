@@ -128,7 +128,7 @@ def _run_levers(plan_dir: Path, plan_output_dir: Path, llm_executor: LLMExecutor
     # when enough levers are accumulated. A 2-call success is normal for
     # models that produce 8+ levers per call. Only warn if we got fewer
     # responses than expected for 15 levers (~3 calls at 5-7 levers each).
-    if actual_calls < 3:
+    if actual_calls < 2:
         logger.warning(
             f"{plan_name}: partial recovery — {actual_calls} calls succeeded"
         )

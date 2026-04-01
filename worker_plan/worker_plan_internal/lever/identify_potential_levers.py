@@ -112,7 +112,8 @@ class Lever(BaseModel):
         description=(
             "What happens when this lever is pulled? Describe the direct effect and "
             "at least one downstream implication or trade-off. Be concise and grounded — "
-            "only cite numbers if the project context provides evidence for them. "
+            "use numbers only when the project context provides them directly — "
+            "do not calculate, derive, or estimate figures. "
             "Do NOT include 'Controls ... vs.', 'Weakness:', or other review/critique text in this field — "
             "those belong exclusively in review_lever. "
             "Target length: 2–4 sentences."
@@ -209,7 +210,8 @@ class LeverCleaned(BaseModel):
         description=(
             "What happens when this lever is pulled? Describe the direct effect and "
             "at least one downstream implication or trade-off. Be concise and grounded — "
-            "only cite numbers if the project context provides evidence for them. "
+            "use numbers only when the project context provides them directly — "
+            "do not calculate, derive, or estimate figures. "
             "Do NOT include 'Controls ... vs.', 'Weakness:', or other review/critique text in this field — "
             "those belong exclusively in review_lever. "
             "Target length: 2–4 sentences."
@@ -231,7 +233,7 @@ You are an expert strategic analyst. Generate solution space parameters followin
    - Each lever's `options` field must contain exactly 3 qualitative strategic choices as plain strings.
 
 2. **Lever Quality Standards**
-   - Consequences: describe the direct effect of pulling this lever, then at least one downstream implication or trade-off. Be concise and grounded — only cite specific numbers if the project context provides evidence for them. Do not fabricate percentages or cost estimates. Target length: 2–4 sentences.
+   - Consequences: describe the direct effect of pulling this lever, then at least one downstream implication or trade-off. Be concise and grounded — use numbers only when the project context provides them directly — do not calculate, derive, or estimate figures. Target length: 2–4 sentences.
    - Options MUST:
      • Represent genuinely distinct strategic pathways (not just labels)
      • Include at least one unconventional or non-obvious approach

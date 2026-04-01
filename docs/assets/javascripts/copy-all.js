@@ -2,8 +2,8 @@
   "use strict";
 
   function getPageText(content) {
-    var clone = content.cloneNode(true);
-    var wrapper = clone.querySelector(".copy-all-wrapper");
+    const clone = content.cloneNode(true);
+    const wrapper = clone.querySelector(".copy-all-wrapper");
     if (wrapper) {
       wrapper.remove();
     }
@@ -11,7 +11,7 @@
   }
 
   function fallbackCopyText(text) {
-    var textarea = document.createElement("textarea");
+    const textarea = document.createElement("textarea");
     textarea.value = text;
     textarea.setAttribute("readonly", "");
     textarea.style.position = "absolute";
@@ -23,7 +23,7 @@
   }
 
   function showCopied(button) {
-    var original = button.textContent;
+    const original = button.textContent;
     button.textContent = "Copied!";
     button.classList.add("copy-all-button--done");
     window.setTimeout(function () {
@@ -33,7 +33,7 @@
   }
 
   function ensureCopyAllButton() {
-    var content = document.querySelector("article.md-content__inner");
+    const content = document.querySelector("article.md-content__inner");
     if (!content) {
       return;
     }
@@ -42,17 +42,17 @@
       return;
     }
 
-    var wrapper = document.createElement("div");
+    const wrapper = document.createElement("div");
     wrapper.className = "copy-all-wrapper";
 
-    var button = document.createElement("button");
+    const button = document.createElement("button");
     button.type = "button";
     button.className = "copy-all-button md-button";
     button.setAttribute("aria-label", "Copy entire page");
     button.textContent = "Copy all";
 
     button.addEventListener("click", function () {
-      var text = getPageText(content);
+      const text = getPageText(content);
       if (!text) {
         return;
       }
@@ -77,7 +77,7 @@
     content.prepend(wrapper);
   }
 
-  if (window.document$ && typeof window.document$.subscribe === "function") {
+  if (window.document$ && typeof window.document$.subscribe ==== "function") {
     window.document$.subscribe(ensureCopyAllButton);
   } else {
     window.addEventListener("DOMContentLoaded", ensureCopyAllButton);

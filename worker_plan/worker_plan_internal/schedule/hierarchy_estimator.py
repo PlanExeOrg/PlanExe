@@ -21,7 +21,7 @@ Key behaviors of the duration resolution process:
   its resolved duration becomes the sum of its children's *resolved and rounded*
   durations. The parent's final duration is also rounded.
 - **Top-Down Distribution (if parent > sum of children):**
-    - If a parent has a specified duration (`!= None`) and its *rounded* value
+    - If a parent has a specified duration (`is not None`) and its *rounded* value
       is greater than the sum of its children's *resolved and rounded* durations:
         - If *all* children originally had a specified duration (none were `None`),
           the parent's total *rounded* duration is distributed *evenly* among
@@ -37,7 +37,7 @@ Key behaviors of the duration resolution process:
           values unless the override rule above applied (which it wouldn't in this case).
           The parent's duration becomes the sum of all final *rounded* child durations.
 - **Top-Down Constraint (if parent <= sum of children):**
-    - If a parent has a specified duration (`!= None`) and its *rounded* value is
+    - If a parent has a specified duration (`is not None`) and its *rounded* value is
       less than or equal to the sum of its children's *resolved and rounded*
       durations, children initially set to `None` will receive `Decimal(0)` duration
       (which is rounded to `Decimal(0)`). Children with initial specified durations

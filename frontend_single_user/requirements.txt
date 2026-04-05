@@ -9,7 +9,7 @@ starlette==0.50.0
 jinja2==3.1.6
 markupsafe==3.0.3
 anyio==4.13.0
-aiofiles==23.2.1
+aiofiles==25.1.0
 orjson==3.11.8
 python-multipart==0.0.22
 requests==2.33.1

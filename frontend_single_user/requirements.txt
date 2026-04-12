@@ -11,7 +11,7 @@ markupsafe==3.0.3
 anyio==4.13.0
 aiofiles==23.2.1
 orjson==3.11.8
-python-multipart==0.0.22
+python-multipart==0.0.26
 requests==2.33.1
 websockets==16.0
 packaging==26.0

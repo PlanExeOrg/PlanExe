@@ -4,6 +4,6 @@
 # what is needed if running mcp_critic in isolation.
 
 mcp==1.27.0
-pydantic==2.12.5
+pydantic==2.13.2
 llama-index-core==0.14.20
 httpx==0.28.1

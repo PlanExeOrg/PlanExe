@@ -9,7 +9,7 @@ dependencies = [
     "flask-login==0.6.3",
     "flask-sqlalchemy==3.1.1",
     "flask-wtf==1.2.2",
-    "authlib==1.6.9",
+    "authlib==1.6.11",
     "psycopg2-binary==2.9.11",
     "requests==2.33.1",
     "stripe==14.4.1",

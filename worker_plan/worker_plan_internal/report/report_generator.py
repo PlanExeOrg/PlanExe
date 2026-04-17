@@ -110,15 +110,13 @@ class ReportGenerator:
         html = markdown.markdown(markdown_content, extensions=['fenced_code'])
         self.report_item_list.append(ReportDocumentItem(document_title, html, css_classes=css_classes))
         
-    def append_markdown(self, document_title: str, file_path: Path, css_classes: list[str] = [], caption_html: Optional[str] = None):
+    def append_markdown(self, document_title: str, file_path: Path, css_classes: list[str] = []):
         """Append a markdown document to the report."""
         md_data = self.read_markdown_file(file_path)
         if md_data is None:
             logging.warning(f"Document: '{document_title}'. Could not read markdown file: {file_path}")
             return
         html = markdown.markdown(md_data)
-        if caption_html:
-            html = caption_html + html
         self.report_item_list.append(ReportDocumentItem(document_title, html, css_classes=css_classes))
     
     def append_markdown_with_tables(self, document_title: str, file_path: Path, css_classes: list[str] = []):
@@ -353,7 +351,7 @@ def main():
     
     report_generator = ReportGenerator()
     report_generator.append_markdown('Initial Plan', input_path / FilenameEnum.INITIAL_PLAN.value)
-    report_generator.append_markdown('Pitch', input_path / FilenameEnum.PITCH_MARKDOWN.value, caption_html='<p>Persuasive elevator pitch.</p>')
+    report_generator.append_markdown('Pitch', input_path / FilenameEnum.PITCH_MARKDOWN.value)
     report_generator.append_markdown('Assumptions', input_path / FilenameEnum.CONSOLIDATE_ASSUMPTIONS_FULL_MARKDOWN.value)
     report_generator.append_markdown('SWOT Analysis', input_path / FilenameEnum.SWOT_MARKDOWN.value)
     report_generator.append_markdown('Team', input_path / FilenameEnum.TEAM_MARKDOWN.value)

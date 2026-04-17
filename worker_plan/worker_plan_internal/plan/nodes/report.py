@@ -71,7 +71,7 @@ class ReportTask(PlanTask):
         rg = ReportGenerator()
         rg.append_markdown('Executive Summary', self.input()['executive_summary']['markdown'].path)
         rg.append_html('Gantt Interactive', self.input()['create_schedule']['dhtmlx_html'].path)
-        rg.append_markdown('Pitch', self.input()['pitch_markdown']['markdown'].path)
+        rg.append_markdown('Pitch', self.input()['pitch_markdown']['markdown'].path, caption_html='<p>Persuasive elevator pitch.</p>')
         rg.append_markdown('Project Plan', self.input()['project_plan']['markdown'].path)
         rg.append_markdown('Strategic Decisions', self.input()['strategic_decisions_markdown']['markdown'].path)
         rg.append_markdown('Scenarios', self.input()['scenarios_markdown']['markdown'].path)

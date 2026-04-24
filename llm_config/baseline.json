@@ -156,7 +156,7 @@
         "pricing_kind": "paid"
     },
     "openrouter-deepseek-v4-flash": {
-        "comment": "Released Apr 24, 2026. MoE (284B total / 13B activated), efficiency-optimized. 1,048,576 context. $0.14/M input tokens. $0.28/M output tokens.",
+        "comment": "Released Apr 24, 2026. MoE (284B total / 13B activated). 1,048,576 context. $0.14/M input tokens. $0.28/M output tokens.",
         "luigi_workers": 4,
         "class": "OpenRouter",
         "arguments": {

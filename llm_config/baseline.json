@@ -86,6 +86,28 @@
         },
         "pricing_kind": "free"
     },
+    "openrouter-tencent-hy3-preview-free": {
+        "comment": "Released Apr 22, 2026. Tencent MoE designed for agentic workflows, configurable reasoning levels. 262,144 context. $0/M input tokens. $0/M output tokens.",
+        "luigi_workers": 4,
+        "model_info_url": "https://openrouter.ai/tencent/hy3-preview",
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "tencent/hy3-preview:free",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 0.1,
+            "timeout": 60.0,
+            "context_window": 262144,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 8192,
+            "max_retries": 5
+        },
+        "pricing": {
+            "input_per_million_tokens": 0,
+            "output_per_million_tokens": 0
+        },
+        "pricing_kind": "free"
+    },
     "openrouter-gemini-2.0-flash-001": {
         "comment": "This is very fast. Created Feb 25, 2025. 1,048,576 context. $0.075/M input tokens. $0.30/M output tokens.",
         "priority": 1,

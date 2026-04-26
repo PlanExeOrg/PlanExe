@@ -101,7 +101,7 @@ dependencies = [
     "soupsieve==2.8.1",
     "SQLAlchemy==2.0.45",
     "starlette==0.50.0",
-    "striprtf==0.0.26",
+    "striprtf==0.0.31",
     "tenacity==9.1.4",
     "tiktoken==0.12.0",
     "tokenizers==0.22.1",

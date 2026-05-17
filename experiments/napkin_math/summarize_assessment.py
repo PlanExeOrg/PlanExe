@@ -728,12 +728,22 @@ def render_decision_implications(mc: dict | None, params: dict | None) -> list[s
                 f"({(1 - prob) * 100:.1f}%). External commitments built on this "
                 f"gate are exposed."
             )
-        else:  # MARGINAL
-            consequence = (
-                f"The `{cond}` requirement passes {prob * 100:.1f}% of runs — "
-                f"close enough to coin-flip that downstream commitments should "
-                f"not assume it holds."
-            )
+        else:  # MARGINAL (50–80% pass rate)
+            # The MARGINAL band spans a large range. A 51% pass is genuinely
+            # coin-flip; a 79% pass is one slip from ROBUST. Bucket the
+            # wording so the language tracks the position within the band.
+            if prob >= 0.70:
+                consequence = (
+                    f"The `{cond}` requirement passes {prob * 100:.1f}% of runs — "
+                    f"just below the ROBUST band. The gate passes in most runs, "
+                    f"but downstream commitments should not treat it as secure."
+                )
+            else:
+                consequence = (
+                    f"The `{cond}` requirement passes {prob * 100:.1f}% of runs — "
+                    f"close to coin-flip. Downstream commitments should not "
+                    f"assume it holds."
+                )
         drivers = quartile.get(r["id"]) or []
         top = max(drivers, key=lambda d: abs(d.get("delta_pp", 0)), default=None)
         if is_saturated_failure(r["probability"], top):
@@ -941,13 +951,37 @@ def render_suggested_next_actions(mc: dict | None, params: dict | None) -> list[
         "",
     ]
     if failing:
+        # Distinguish DOOM (<20%) from FRAGILE (20–50%) and name the worst
+        # gate by id + pass rate. "N gates fail" by itself understates a
+        # 0.0% DOOM the way "1 gate fails" understates total structural
+        # failure.
+        doom_sorted = sorted(
+            (r for r in thresholds if r["verdict"] == "DOOM"),
+            key=lambda r: r["probability"] if r["probability"] is not None else 1.0,
+        )
+        fragile_sorted = sorted(
+            (r for r in thresholds if r["verdict"] == "FRAGILE"),
+            key=lambda r: r["probability"] if r["probability"] is not None else 1.0,
+        )
+        worst = doom_sorted[0] if doom_sorted else fragile_sorted[0]
+        worst_pct = (worst["probability"] or 0) * 100
+        band_parts = []
+        if doom_sorted:
+            band_parts.append(
+                f"{len(doom_sorted)} declared gate{'s' if len(doom_sorted) != 1 else ''} in the DOOM band"
+            )
+        if fragile_sorted:
+            band_parts.append(
+                f"{len(fragile_sorted)} in the FRAGILE band"
+            )
+        band_summary = "; ".join(band_parts)
         rows.append(
-            "1. To answer whether the plan is viable, lead with the gate verdicts above — not the source plan's narrative. "
-            f"{len(failing)} gate(s) currently fail at the 50% pass-rate bar."
+            f"1. To answer whether the plan is viable, lead with the gate verdicts above — not the source plan's narrative. "
+            f"{band_summary}. Worst: `{worst['id']}` at {worst_pct:.1f}% pass rate under current bounds."
         )
     else:
         rows.append(
-            "1. To answer whether the plan is viable, lead with the gate verdicts above. No gate currently fails the 50% pass-rate bar — but read the bounds and trust boundaries before treating that as a green light."
+            "1. To answer whether the plan is viable, lead with the gate verdicts above. No declared gate is in the DOOM or FRAGILE band — but read the bounds and trust boundaries before treating that as a green light."
         )
     rows.append(
         "2. To prioritise data-gathering, inspect `missing_value_priority` in `montecarlo.json`. The top-scored entries are the cheapest improvements to the simulation's predictive value."

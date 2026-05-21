@@ -187,6 +187,48 @@ def test_ledger_does_not_include_source_text_or_label() -> None:
     assert "1.0" not in ledger
 
 
+# ─── prior-source stamp ───────────────────────────────────────────────────
+
+def test_ledger_omits_prior_source_when_no_path_supplied() -> None:
+    """Backwards compatible: callers that pass only ``prior_params``
+    (no ``prior_path``) get a ledger without a ``Prior source:`` stamp.
+    The stamp is opt-in so existing programmatic users keep working."""
+    params = _build_params(key_values=[_kv("alpha")])
+    ledger = prepare.build_prior_signal_ledger(params)
+    assert "Prior source:" not in ledger
+
+
+def test_ledger_stamps_prior_source_relative_to_napkin_math_dir() -> None:
+    """When the prior path lives under NAPKIN_MATH_DIR, the stamp is the
+    relative tail (e.g. ``output/v58/<slug>/parameters.json``). This makes
+    the stamp stable across worktrees so the orchestrator's grep can
+    match deterministically."""
+    params = _build_params(key_values=[_kv("alpha")])
+    prior_path = prepare.NAPKIN_MATH_DIR / "output" / "v58" / "demo_slug" / "parameters.json"
+    ledger = prepare.build_prior_signal_ledger(params, prior_path=prior_path)
+    assert "Prior source: `output/v58/demo_slug/parameters.json`" in ledger
+
+
+def test_ledger_stamps_absolute_prior_source_when_outside_napkin_math_dir(
+    tmp_path: Path,
+) -> None:
+    """Prior paths outside NAPKIN_MATH_DIR fall back to absolute. The
+    orchestrator's grep can still target the baseline+slug suffix."""
+    params = _build_params(key_values=[_kv("alpha")])
+    elsewhere = tmp_path / "v58" / "demo_slug" / "parameters.json"
+    elsewhere.parent.mkdir(parents=True)
+    elsewhere.write_text("{}")
+    ledger = prepare.build_prior_signal_ledger(params, prior_path=elsewhere)
+    assert f"Prior source: `{elsewhere}`" in ledger
+
+
+def test_render_prior_source_strips_napkin_math_prefix() -> None:
+    rendered = prepare.render_prior_source(
+        prepare.NAPKIN_MATH_DIR / "output" / "v49" / "demo_slug" / "parameters.json"
+    )
+    assert rendered == "output/v49/demo_slug/parameters.json"
+
+
 # ─── build_combined_digest end-to-end ─────────────────────────────────────
 
 def _make_minimal_planexe_dir(planexe_dir: Path) -> None:
@@ -275,6 +317,11 @@ def test_main_with_prior_writes_ledger_into_combined_digest(monkeypatch) -> None
         text = (outdir / "extract_parameters_input.md").read_text(encoding="utf-8")
     assert "# Prior Signal Ledger" in text
     assert "`alpha` [key_values/id]" in text
+    # The ledger must also stamp where the prior came from so the
+    # orchestrator's Stage 1 preflight can verify the digest was built
+    # against the named accepted baseline.
+    assert "Prior source: `" in text
+    assert "prior_parameters.json`" in text
 
 
 def test_main_without_prior_omits_ledger_from_combined_digest(monkeypatch) -> None:

@@ -103,8 +103,11 @@ already has at least one earlier version on disk, Stage 0 MUST pass
 `prepare_extract_input.py`. The script appends a `# Prior Signal Ledger`
 section to `extract_parameters_input.md` listing the prior iteration's
 named signals (entry ids and output_names with their section,
-formula_hint, and depends_on). The extract LLM uses that ledger to
-decide which prior signals to preserve and which to record in
+formula_hint, and depends_on), and stamps a `Prior source:
+\`<path>\`` line so the Stage 1 preflight (below) can confirm the
+digest was built against the intended accepted baseline rather than an
+arbitrary or probe prior. The extract LLM uses the ledger to decide
+which prior signals to preserve and which to record in
 `dropped_signals` with `origin: "prior_baseline"`. Without the ledger,
 the LLM cannot emit prior-baseline-origin drops, and the
 source-preservation audit cannot classify v(N-1) → v(N) signal loss.
@@ -135,14 +138,29 @@ being resumed from a previous run:
    under `output/`. The user names it (or confirms a suggested
    immediately-preceding integer version); if no accepted prior
    exists, this is a first-iteration extraction.
-2. If a prior exists, run this preflight check on the digest:
+2. If a prior exists, run **two** preflight checks on the digest.
+   Presence is necessary but not sufficient — a ledger built from the
+   wrong prior (e.g. a probe dir) still passes the presence check, so
+   also verify the source stamp:
 
    ```sh
+   # (a) Ledger present?
    grep -q '# Prior Signal Ledger' $D/extract_parameters_input.md
+
+   # (b) Ledger built from the named accepted baseline?
+   #     The ledger is stamped with `Prior source:
+   #     output/<baseline>/<slug>/parameters.json` (relative to
+   #     experiments/napkin_math/) when prepare_extract_input.py was
+   #     given a prior under that tree, or with an absolute path
+   #     otherwise. Match the baseline+slug suffix:
+   grep -q "Prior source:.*$BASELINE/$SLUG/parameters.json" \
+     $D/extract_parameters_input.md
    ```
 
-   - Exit 0 → ledger present → proceed to Stage 1.
-   - Non-zero → ledger absent → STOP. Two acceptable resolutions
+   - Both exit 0 → ledger present and built from the intended baseline
+     → proceed to Stage 1.
+   - (a) non-zero (ledger absent) **or** (b) non-zero (ledger built
+     from a different prior) → STOP. Two acceptable resolutions
      (offer both to the user, do not pick silently):
      - **Regenerate Stage 0 with `--prior`.** Delete
        `extract_parameters_input.md` (and the four `compress_*.md`
@@ -214,9 +232,12 @@ Two scenarios:
 **(a) Fresh start from a PlanExe-web report.** User points at
 `/Users/neoneye/git/PlanExe-web/<date>_<slug>/` and a target version.
 Create `output/<version>/<slug>/` if it doesn't exist. Run stage 0 first.
-If a prior version of this slug already exists under `output/`, resolve
-the most-recent prior `parameters.json` and pass it as `--prior` to
-Stage 0 per "Prior-baseline context for reruns".
+If a prior accepted baseline exists for this slug under `output/`, ask
+the user to name (or confirm) the accepted baseline — typically the
+immediately-preceding integer-numbered version — and pass it as
+`--prior` to Stage 0 per "Prior-baseline context for reruns". Never
+auto-select a letter-suffixed dir (`v52a`, `v53b`, `v57a_<topic>`, …)
+as the prior; those are experimental probes.
 
 **(b) Resume from a partially populated output directory.** User points
 at `output/<version>/<slug>/`. List the dir, classify which stages are
@@ -357,7 +378,7 @@ presence only — never by sibling-directory comparison.
 | Present | First missing | Action |
 |---|---|---|
 | nothing | digest | If user gave a PlanExe-web dir, run Stage 0. If they only gave the output dir, ask for the source dir. When a prior version exists for this slug under `output/`, pass `--prior` per "Prior-baseline context for reruns". |
-| 8 compress files + digest | `parameters.json` | Run the Stage 1 preflight from "Prior-baseline context for reruns", then Stage 1. If a prior accepted baseline exists for the slug and the digest lacks `# Prior Signal Ledger`, do not proceed — repair the digest or record an explicit waiver. |
+| 8 compress files + digest | `parameters.json` | Run the Stage 1 preflight from "Prior-baseline context for reruns" (ledger present AND `Prior source:` matches the named baseline), then Stage 1. If either check fails, do not proceed — repair the digest or record an explicit waiver. |
 | + `parameters.json` | `validation.json` | Run Stage 2. If validation reports errors, fix the parameters and re-validate before continuing. |
 | + `validation.json` (valid) | `bounds.json` | Run Stage 3. |
 | + `bounds.json` | `calculations.py` | Run Stage 4. |

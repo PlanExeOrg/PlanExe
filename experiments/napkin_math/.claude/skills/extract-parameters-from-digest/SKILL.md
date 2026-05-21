@@ -30,6 +30,15 @@ It mixes two formats:
 The system prompt at `system-prompt.txt` explains how to read both
 formats.
 
+The digest may also end with a `# Prior Signal Ledger (advisory)`
+section listing the previous iteration's named signals. When present,
+preserve still-supported prior signals and record drops in
+`dropped_signals` with `origin: "prior_baseline"` per the "Prior Signal
+Ledger" rules in `system-prompt.txt`. When absent, treat the extraction
+as a first-iteration baseline. The orchestrator (`run-napkin-math-pipeline`)
+controls whether the ledger appears by passing `--prior` to
+`prepare_extract_input.py`.
+
 Output schema and hard limits are identical to `extract-parameters-from-full`, so the
 two skills can be compared head-to-head on the same plan.
 

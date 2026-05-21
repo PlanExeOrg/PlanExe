@@ -49,7 +49,7 @@ paths and a one-line task; do not paste file contents into the prompt.
 
 | Stage | How to dispatch |
 |---|---|
-| 0. Digest | `Bash` → `prepare_extract_input.py --planexe-dir <PlanExe-web/...> --output-dir <target>` |
+| 0. Digest | `Bash` → `prepare_extract_input.py --planexe-dir <PlanExe-web/...> --output-dir <target> [--prior <prior-version>/<plan-slug>/parameters.json]` (see "Prior-baseline context for reruns" below) |
 | 1. Parameters | `Agent` with the sibling skill name `extract-parameters-from-digest`; prompt: "Read `<target>/extract_parameters_input.md` per `system-prompt.txt`, write the result to `<target>/parameters.json`." |
 | 2. Validation | `Bash` → `validate_parameters.py --parameters … --output …` |
 | 3. Bounds | `Agent` with `generate-bounds`; prompt: "Read `<target>/parameters.json` per the generate-bounds rules, write `<target>/bounds.json`." |
@@ -94,6 +94,38 @@ later stage sees, and destroys the comparability the user is trying
 to preserve. If the user wants a stage re-run, they will delete its
 output file first; absence of the file is the signal to run, presence
 is the signal to leave alone.
+
+## Prior-baseline context for reruns
+
+When a pipeline rerun produces a new version v(N) for a plan slug that
+already has at least one earlier version on disk, Stage 0 MUST pass
+`--prior <prior-version>/<plan-slug>/parameters.json` to
+`prepare_extract_input.py`. The script appends a `# Prior Signal Ledger`
+section to `extract_parameters_input.md` listing the prior iteration's
+named signals (entry ids and output_names with their section,
+formula_hint, and depends_on). The extract LLM uses that ledger to
+decide which prior signals to preserve and which to record in
+`dropped_signals` with `origin: "prior_baseline"`. Without the ledger,
+the LLM cannot emit prior-baseline-origin drops, and the
+source-preservation audit cannot classify v(N-1) → v(N) signal loss.
+
+**Selecting the prior.** The prior is the most-recent earlier version's
+`parameters.json` for the same plan slug under
+`experiments/napkin_math/output/`. Resolve it by inspecting the sibling
+version directories that contain the slug; do not derive it from mtime.
+If the user names a specific prior version (e.g. "compare v(N) against
+v49"), use the one the user named.
+
+**When to omit `--prior`.** First-iteration extractions only — there is
+no earlier `parameters.json` for the slug on disk. The script's
+`build_prior_signal_ledger` returns a "first-iteration baseline" stub
+when handed an empty prior, which is not the same as omitting `--prior`
+entirely; pass `--prior` only when a real prior exists.
+
+**Resume mode.** If `extract_parameters_input.md` is already present in
+the target dir, Stage 0 does not re-run, and `--prior` does not apply —
+the digest is the pinned input. `--prior` is meaningful only when Stage
+0 actually runs.
 
 ## The two cardinal rules
 
@@ -145,6 +177,9 @@ Two scenarios:
 **(a) Fresh start from a PlanExe-web report.** User points at
 `/Users/neoneye/git/PlanExe-web/<date>_<slug>/` and a target version.
 Create `output/<version>/<slug>/` if it doesn't exist. Run stage 0 first.
+If a prior version of this slug already exists under `output/`, resolve
+the most-recent prior `parameters.json` and pass it as `--prior` to
+Stage 0 per "Prior-baseline context for reruns".
 
 **(b) Resume from a partially populated output directory.** User points
 at `output/<version>/<slug>/`. List the dir, classify which stages are
@@ -191,8 +226,15 @@ Stage 0 — digest preparation (creates the 8 compress files + the digest):
 ```sh
 $PY $NM/prepare_extract_input.py \
   --planexe-dir /Users/neoneye/git/PlanExe-web/<date>_<slug> \
-  --output-dir  $NM/output/<version>/<plan-slug>
+  --output-dir  $NM/output/<version>/<plan-slug> \
+  --prior       $NM/output/<prior-version>/<plan-slug>/parameters.json
 ```
+
+Omit `--prior` only on first-iteration extractions for a plan slug that
+has no earlier `parameters.json` on disk. Otherwise the rerun produces a
+digest without the `# Prior Signal Ledger` and the extract LLM cannot
+record prior-baseline-origin drops. See "Prior-baseline context for
+reruns" above.
 
 Stage 2 — validation:
 
@@ -277,7 +319,7 @@ presence only — never by sibling-directory comparison.
 
 | Present | First missing | Action |
 |---|---|---|
-| nothing | digest | If user gave a PlanExe-web dir, run Stage 0. If they only gave the output dir, ask for the source dir. |
+| nothing | digest | If user gave a PlanExe-web dir, run Stage 0. If they only gave the output dir, ask for the source dir. When a prior version exists for this slug under `output/`, pass `--prior` per "Prior-baseline context for reruns". |
 | 8 compress files + digest | `parameters.json` | Run Stage 1. |
 | + `parameters.json` | `validation.json` | Run Stage 2. If validation reports errors, fix the parameters and re-validate before continuing. |
 | + `validation.json` (valid) | `bounds.json` | Run Stage 3. |

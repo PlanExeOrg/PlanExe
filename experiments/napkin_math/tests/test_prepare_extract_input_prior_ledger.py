@@ -231,6 +231,104 @@ def test_build_combined_digest_appends_ledger_when_prior_provided() -> None:
     assert summary_idx < ledger_idx
 
 
+def _write_minimal_compressed_sections(outdir: Path) -> None:
+    """Write the four ``compress_<name>.md`` files build_combined_digest
+    expects under ``outdir``. Used to stand in for run_compress_full
+    output when exercising ``main()`` without invoking the real
+    compressor."""
+    for name in ("selected_scenario", "review_plan", "premortem",
+                 "expert_criticism"):
+        (outdir / f"compress_{name}.md").write_text(
+            f"# {name.replace('_', ' ').title()}\n\nCompressed body.\n",
+            encoding="utf-8",
+        )
+
+
+def test_main_with_prior_writes_ledger_into_combined_digest(monkeypatch) -> None:
+    """End-to-end CLI contract: invoking ``main()`` with ``--prior``
+    appends ``# Prior Signal Ledger`` to ``extract_parameters_input.md``.
+    This locks the wiring on the orchestrator side — a refactor that
+    drops ``--prior`` from ``main()`` or stops feeding it into
+    ``build_combined_digest`` will fail this test."""
+    with tempfile.TemporaryDirectory() as td:
+        tmpdir = Path(td)
+        planexe = tmpdir / "planexe"
+        planexe.mkdir()
+        _make_minimal_planexe_dir(planexe)
+        outdir = tmpdir / "out"
+        outdir.mkdir()
+        _write_minimal_compressed_sections(outdir)
+        prior = _build_params(key_values=[_kv("alpha")])
+        prior_path = tmpdir / "prior_parameters.json"
+        prior_path.write_text(json.dumps(prior), encoding="utf-8")
+
+        monkeypatch.setattr(prepare, "run_compress",
+                            lambda planexe_dir, output_dir, llm: None)
+        monkeypatch.setattr(sys, "argv", [
+            "prepare_extract_input.py",
+            "--planexe-dir", str(planexe),
+            "--output-dir", str(outdir),
+            "--prior", str(prior_path),
+        ])
+        prepare.main()
+
+        text = (outdir / "extract_parameters_input.md").read_text(encoding="utf-8")
+    assert "# Prior Signal Ledger" in text
+    assert "`alpha` [key_values/id]" in text
+
+
+def test_main_without_prior_omits_ledger_from_combined_digest(monkeypatch) -> None:
+    """Mirror of the with-prior test. The no-prior path stays clean —
+    no ledger is appended, no first-iteration stub leaks in unless
+    ``--prior`` was supplied."""
+    with tempfile.TemporaryDirectory() as td:
+        tmpdir = Path(td)
+        planexe = tmpdir / "planexe"
+        planexe.mkdir()
+        _make_minimal_planexe_dir(planexe)
+        outdir = tmpdir / "out"
+        outdir.mkdir()
+        _write_minimal_compressed_sections(outdir)
+
+        monkeypatch.setattr(prepare, "run_compress",
+                            lambda planexe_dir, output_dir, llm: None)
+        monkeypatch.setattr(sys, "argv", [
+            "prepare_extract_input.py",
+            "--planexe-dir", str(planexe),
+            "--output-dir", str(outdir),
+        ])
+        prepare.main()
+
+        text = (outdir / "extract_parameters_input.md").read_text(encoding="utf-8")
+    assert "Prior Signal Ledger" not in text
+
+
+def test_main_with_missing_prior_path_fails_loud(monkeypatch) -> None:
+    """``--prior`` pointing at a non-existent path must exit non-zero
+    rather than silently skip the ledger. This is the contract the
+    orchestrator relies on: a typoed prior path is a loud failure, not
+    a silent first-iteration extraction."""
+    with tempfile.TemporaryDirectory() as td:
+        tmpdir = Path(td)
+        planexe = tmpdir / "planexe"
+        planexe.mkdir()
+        _make_minimal_planexe_dir(planexe)
+        outdir = tmpdir / "out"
+        outdir.mkdir()
+
+        monkeypatch.setattr(prepare, "run_compress",
+                            lambda planexe_dir, output_dir, llm: None)
+        monkeypatch.setattr(sys, "argv", [
+            "prepare_extract_input.py",
+            "--planexe-dir", str(planexe),
+            "--output-dir", str(outdir),
+            "--prior", str(tmpdir / "does_not_exist.json"),
+        ])
+        import pytest
+        with pytest.raises(SystemExit):
+            prepare.main()
+
+
 def test_build_combined_digest_ledger_section_uses_authoritative_framing() -> None:
     with tempfile.TemporaryDirectory() as td:
         tmpdir = Path(td)

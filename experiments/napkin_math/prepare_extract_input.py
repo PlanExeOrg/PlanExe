@@ -29,6 +29,14 @@ reads the full PlanExe HTML report).
 Defaults to a sibling ``output/<planexe-dir-name>/`` directory next to this
 script. Override with ``--output-dir`` or ``--llm``.
 
+When rerunning the pipeline at version v(N) for a plan slug that already
+has an earlier version on disk, pass ``--prior <prior parameters.json>``
+to append a compact ``# Prior Signal Ledger`` to the combined digest.
+That ledger is the wiring point for the source-preservation audit and
+the extract LLM's ``dropped_signals`` rules; without it, a rerun cannot
+emit prior-baseline-origin drops. See
+``.claude/skills/run-napkin-math-pipeline/SKILL.md`` for orchestration.
+
 PROMPT> python experiments/napkin_math/prepare_extract_input.py \\
             --planexe-dir /Users/neoneye/git/PlanExe-web/20260215_nuuk_clay_workshop
 """

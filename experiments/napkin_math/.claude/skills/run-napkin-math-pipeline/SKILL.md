@@ -109,23 +109,60 @@ decide which prior signals to preserve and which to record in
 the LLM cannot emit prior-baseline-origin drops, and the
 source-preservation audit cannot classify v(N-1) → v(N) signal loss.
 
-**Selecting the prior.** The prior is the most-recent earlier version's
-`parameters.json` for the same plan slug under
-`experiments/napkin_math/output/`. Resolve it by inspecting the sibling
-version directories that contain the slug; do not derive it from mtime.
-If the user names a specific prior version (e.g. "compare v(N) against
-v49"), use the one the user named.
+**Selecting the prior.** The prior is an *accepted baseline* the user
+names — typically the immediately-preceding integer-numbered version
+(for a rerun at v59, the prior is `v58/<plan-slug>/parameters.json`;
+for a comparison against v49, the prior is
+`v49/<plan-slug>/parameters.json`). Letter-suffixed dirs (`v52a`,
+`v53b`, `v57a_<topic>`, …) are experimental probes, not accepted
+baselines; never auto-select one. If the user has not named the
+baseline, ask — do not derive it from mtime or "most-recent earlier
+version on disk."
 
-**When to omit `--prior`.** First-iteration extractions only — there is
-no earlier `parameters.json` for the slug on disk. The script's
-`build_prior_signal_ledger` returns a "first-iteration baseline" stub
-when handed an empty prior, which is not the same as omitting `--prior`
-entirely; pass `--prior` only when a real prior exists.
+**When to omit `--prior`.** First-iteration extractions only — the plan
+slug has no earlier `parameters.json` on disk under any accepted
+baseline. The script's `build_prior_signal_ledger` returns a
+"first-iteration baseline" stub when handed an empty prior, which is
+not the same as omitting `--prior` entirely; pass `--prior` only when a
+real prior exists.
 
-**Resume mode.** If `extract_parameters_input.md` is already present in
-the target dir, Stage 0 does not re-run, and `--prior` does not apply —
-the digest is the pinned input. `--prior` is meaningful only when Stage
-0 actually runs.
+**Stage 1 preflight (mandatory).** Before invoking the extract skill,
+the orchestrator MUST verify that the prior-baseline context is wired
+correctly — regardless of whether Stage 0 just ran or the digest is
+being resumed from a previous run:
+
+1. Establish whether a prior accepted baseline exists for this slug
+   under `output/`. The user names it (or confirms a suggested
+   immediately-preceding integer version); if no accepted prior
+   exists, this is a first-iteration extraction.
+2. If a prior exists, run this preflight check on the digest:
+
+   ```sh
+   grep -q '# Prior Signal Ledger' $D/extract_parameters_input.md
+   ```
+
+   - Exit 0 → ledger present → proceed to Stage 1.
+   - Non-zero → ledger absent → STOP. Two acceptable resolutions
+     (offer both to the user, do not pick silently):
+     - **Regenerate Stage 0 with `--prior`.** Delete
+       `extract_parameters_input.md` (and the four `compress_*.md`
+       files if a fresh compression is also desired) and re-run Stage 0
+       with `--prior <baseline>/<plan-slug>/parameters.json`. The
+       pinned-digest cardinal rule does not apply here: the digest is
+       being repaired, not re-rolled for convenience.
+     - **Record an explicit waiver.** Write a one-line file
+       `$D/.no_prior_waiver` naming the reason the rerun is proceeding
+       without the prior ledger (e.g. "v(N-1) parameters.json was
+       lost; rebuilding without comparability"). The waiver file is
+       the *only* path that lets Stage 1 proceed with absent ledger
+       when a prior exists.
+
+   This closes the v58 failure mode: a digest produced without
+   `--prior` cannot enter Stage 1 unnoticed.
+
+3. If no prior exists for the slug (first-iteration extraction),
+   record that explicitly: a missing `# Prior Signal Ledger` is
+   expected. No waiver file needed.
 
 ## The two cardinal rules
 
@@ -320,7 +357,7 @@ presence only — never by sibling-directory comparison.
 | Present | First missing | Action |
 |---|---|---|
 | nothing | digest | If user gave a PlanExe-web dir, run Stage 0. If they only gave the output dir, ask for the source dir. When a prior version exists for this slug under `output/`, pass `--prior` per "Prior-baseline context for reruns". |
-| 8 compress files + digest | `parameters.json` | Run Stage 1. |
+| 8 compress files + digest | `parameters.json` | Run the Stage 1 preflight from "Prior-baseline context for reruns", then Stage 1. If a prior accepted baseline exists for the slug and the digest lacks `# Prior Signal Ledger`, do not proceed — repair the digest or record an explicit waiver. |
 | + `parameters.json` | `validation.json` | Run Stage 2. If validation reports errors, fix the parameters and re-validate before continuing. |
 | + `validation.json` (valid) | `bounds.json` | Run Stage 3. |
 | + `bounds.json` | `calculations.py` | Run Stage 4. |

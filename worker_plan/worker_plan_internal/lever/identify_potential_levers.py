@@ -294,6 +294,61 @@ You are an expert strategic analyst. Generate solution space parameters followin
    - Ensure options are self-contained descriptions
 """
 
+def raise_if_no_levers_survived(levers_cleaned: list, all_constraint_checks: list[dict]) -> None:
+    """Fail loud when constraint checking rejected every generated lever.
+
+    This happens when the plan prompt is self-contradictory: a negative
+    constraint bans a concept that is also the plan's core subject. The
+    clearest example is a plan explicitly about "AI agents" that lists "AI"
+    among its banned words — the ConstraintChecker then flags every lever as
+    violating "Do not use AI", so all of them are filtered out and nothing
+    remains.
+
+    Returning an empty list here is dangerous: PotentialLeversTask would
+    "succeed" with an empty potential_levers.json, and the failure would only
+    surface two stages later in TriageLeversTask as the misleading "No input
+    levers to deduplicate." Raising here blames the real cause and names the
+    constraint(s) responsible.
+
+    TODO: Detect a self-contradictory prompt earlier — ideally during
+    constraint extraction or at the redline gate — so the run stops before
+    spending tokens generating levers that are guaranteed to be rejected by
+    their own banned words.
+    """
+    if levers_cleaned:
+        return
+
+    # Count how many distinct levers each constraint rejected. A single lever's
+    # check may list the same constraint more than once, so collapse to a set
+    # per lever before tallying — otherwise the "rejected N lever(s)" count can
+    # exceed the number of levers generated.
+    violation_counts: dict[str, int] = {}
+    for check in all_constraint_checks:
+        rejected_by = {
+            violation.get("constraint_text", "(unknown constraint)")
+            for violation in check.get("constraint_violations", [])
+            if violation.get("status") == "violated"
+        }
+        for text in rejected_by:
+            violation_counts[text] = violation_counts.get(text, 0) + 1
+
+    generated_count = len(all_constraint_checks)
+    if violation_counts:
+        ranked = sorted(violation_counts.items(), key=lambda item: item[1], reverse=True)
+        dominant = "; ".join(f'"{text}" (rejected {count} lever(s))' for text, count in ranked[:3])
+        raise ValueError(
+            f"All {generated_count} generated levers were rejected by the constraint check, "
+            f"leaving none for the downstream tasks. Most rejections came from: {dominant}. "
+            f"This usually means a negative constraint contradicts the plan's core subject "
+            f"(e.g. banning \"AI\" in a plan that is explicitly about AI agents). "
+            f"Revise the plan's banned words / negative constraints so they do not exclude the plan's main topic."
+        )
+    raise ValueError(
+        f"IdentifyPotentialLevers produced 0 levers "
+        f"(generated {generated_count}, none survived filtering)."
+    )
+
+
 @dataclass
 class IdentifyPotentialLevers:
     system_prompt: Optional[str]
@@ -515,6 +570,11 @@ class IdentifyPotentialLevers:
                 review=lever.review_lever,
             )
             levers_cleaned.append(lever_cleaned)
+
+        # Fail loud when constraint checking rejected every generated lever,
+        # rather than silently returning an empty list (see
+        # raise_if_no_levers_survived for why this matters).
+        raise_if_no_levers_survived(levers_cleaned, all_constraint_checks)
 
         metadata = {}
         for metadata_index, metadata_item in enumerate(metadata_list, start=1):

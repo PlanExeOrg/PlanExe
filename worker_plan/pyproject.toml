@@ -16,7 +16,7 @@ dependencies = [
     "attrs==25.4.0",
     "beautifulsoup4==4.14.3",
     "certifi==2026.4.22",
-    "charset-normalizer==3.4.6",
+    "charset-normalizer==3.4.7",
     "click==8.3.1",
     "colorlog==6.10.1",
     "dataclasses-json==0.6.7",

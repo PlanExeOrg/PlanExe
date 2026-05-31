@@ -7,5 +7,5 @@ sqlalchemy-utils==0.42.1
 pydantic==2.13.4
 fastapi==0.136.3
 python-multipart==0.0.29
-uvicorn[standard]==0.47.0
+uvicorn[standard]==0.48.0
 httpx==0.28.1

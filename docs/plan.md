@@ -104,6 +104,8 @@ Detect silly prompts, and maybe show a banner that it's garbage input.
 Currently PlanExe fails to recognize the comedic/weird prompts. Prompt has a playful tone, that isn't your typical enterprise project.
 It yields a non-sense plan. Instead it would make more sense to respond with a similar playful tone.
 
+**Self-contradictory prompts:** A prompt can ban its own subject. The observed case: a plan explicitly about *"AI agents"* that listed `AI` among its banned words. The constraint checker then (correctly) rejects every generated lever as violating "Do not use AI", `IdentifyPotentialLevers` produces zero levers, and the run dies several stages later with a misleading `No input levers to deduplicate`. As of PR #766 this fails loud at the source and names the offending constraint, but the real fix is to catch the contradiction up front — at constraint extraction or the redline gate — and tell the user before any levers are generated, so no tokens are spent on a run that cannot succeed. The detector should be language-agnostic and not rely on exact word matches (a banned concept can reappear as a synonym), and it should distinguish a genuine contradiction from a narrow, legitimate exclusion.
+
 **Ask for expert help:** Establish contact between people, for reviewing a plan, for executing the plan, for getting funding.
 The “Ask for expert help” section, serve the content from planexe.org. Either as an iframe or as javascript or be generated dynamic?
 

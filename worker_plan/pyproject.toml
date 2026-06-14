@@ -73,7 +73,7 @@ dependencies = [
     "nest-asyncio==1.6.0",
     "networkx==3.6.1",
     "numpy==2.4.6",
-    "ollama==0.6.1",
+    "ollama==0.6.2",
     "openai==2.38.0",
     "orjson==3.11.8",
     "packaging==26.2",

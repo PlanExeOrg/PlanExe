@@ -104,7 +104,7 @@ dependencies = [
     "striprtf==0.0.26",
     "tenacity==9.1.4",
     "tiktoken==0.13.0",
-    "tokenizers==0.22.1",
+    "tokenizers==0.23.1",
     "tornado==6.5.4",
     "tqdm==4.67.1",
     "transformers==4.57.3",

@@ -47,6 +47,7 @@ The generated plans are written to `run/<timestamped-output-dir>`.
 ## Troubleshooting and next steps
 - For Docker tips, see [docker.md](docker.md).
 - For OpenRouter-specific notes, see [openrouter.md](ai_providers/openrouter.md).
+- For Requesty (an OpenAI-compatible gateway) notes, see [requesty.md](ai_providers/requesty.md).
 - If the UI fails to load or plans don’t start, check worker logs: `docker compose logs -f worker_plan`.
  - Learn how to write better prompts: [Prompt writing guide](prompt_writing_guide.md)
 

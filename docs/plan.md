@@ -104,6 +104,8 @@ Detect silly prompts, and maybe show a banner that it's garbage input.
 Currently PlanExe fails to recognize the comedic/weird prompts. Prompt has a playful tone, that isn't your typical enterprise project.
 It yields a non-sense plan. Instead it would make more sense to respond with a similar playful tone.
 
+**Replace constraints:** Intentionally break the hard constraints that yield crappy plans, so users gets better plans. Users often specify a budget of 0, here replace with a with a more fitting budget. Eventually update the initial prompt with a rewritten prompt, that fixes the worst issues.
+
 **Ask for expert help:** Establish contact between people, for reviewing a plan, for executing the plan, for getting funding.
 The “Ask for expert help” section, serve the content from planexe.org. Either as an iframe or as javascript or be generated dynamic?
 

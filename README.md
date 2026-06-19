@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/planexeorg-planexe-badge.png)](https://mseep.ai/app/planexeorg-planexe)
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)"

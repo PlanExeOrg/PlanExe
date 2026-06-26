@@ -12,7 +12,7 @@ dependencies = [
     "aiohttp==3.13.5",
     "aiosignal==1.4.0",
     "annotated-types==0.7.0",
-    "anyio==4.13.0",
+    "anyio==4.14.0",
     "attrs==25.4.0",
     "beautifulsoup4==4.14.3",
     "certifi==2026.4.22",

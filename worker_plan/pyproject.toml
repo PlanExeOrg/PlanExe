@@ -75,7 +75,7 @@ dependencies = [
     "numpy==2.4.6",
     "ollama==0.6.2",
     "openai==2.43.0",
-    "orjson==3.11.8",
+    "orjson==3.11.9",
     "packaging==26.2",
     "pandas==2.3.3",
     "pillow==12.2.0",

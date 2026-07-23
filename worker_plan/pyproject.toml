@@ -28,7 +28,7 @@ dependencies = [
     "filelock==3.20.3",
     "filetype==1.2.0",
     "frozenlist==1.8.0",
-    "fsspec==2025.12.0",
+    "fsspec==2026.6.0",
     "greenlet==3.5.3",
     "h11==0.16.0",
     "httpcore==1.0.9",

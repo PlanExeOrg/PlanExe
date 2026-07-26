@@ -87,7 +87,7 @@ dependencies = [
     "python-dateutil==2.9.0.post0",
     "python-dotenv==1.2.2",
     "python-multipart==0.0.32",
-    "pytz==2026.1.post1",
+    "pytz==2026.3.post1",
     "PyYAML==6.0.3",
     "regex==2026.4.4",
     "requests==2.33.1",

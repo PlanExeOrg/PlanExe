@@ -13,7 +13,7 @@ dependencies = [
     "psycopg2-binary==2.9.12",
     "requests==2.34.2",
     "stripe==15.3.1",
-    "python-dotenv==1.2.2",
+    "python-dotenv==1.2.3",
     "sqlalchemy-utils==0.42.1",
     "WTForms==3.2.2", # This is an older version of WTForms. Since WTForms 3.2.1 breaks the "edit" button in the admin panel.
     "gunicorn==26.0.0"

@@ -1,7 +1,7 @@
 """
 PlanExe MCP Cloud — route registration
 
-FastMCP tool registration, MCP prompts, and all FastAPI route handlers.
+MCP tool registration, MCP prompts, and all FastAPI route handlers.
 Called by ``server_boot.py`` during application assembly.
 """
 import asyncio
@@ -11,7 +11,7 @@ from typing import Any, Callable, Optional
 
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, StreamingResponse
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 from mcp.types import ToolAnnotations
 
 from mcp_cloud.app import (
@@ -49,9 +49,9 @@ logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
-# FastMCP tool registration
+# MCP tool registration
 # ---------------------------------------------------------------------------
-def _register_tools(server: FastMCP) -> None:
+def _register_tools(server: MCPServer) -> None:
     handler_map = {
         "example_plans": example_plans,
         "example_prompts": example_prompts,
@@ -77,7 +77,7 @@ def _register_tools(server: FastMCP) -> None:
         )(handler)
 
     # Inject the canonical outputSchema from TOOL_DEFINITIONS into each
-    # FastMCP tool so that list_tools advertises the schema we control.
+    # registered tool so that list_tools advertises the schema we control.
     #
     # We set the schema as an instance attribute on the Tool, which shadows
     # the cached_property (Tool.output_schema reads fn_metadata.output_schema).
@@ -95,16 +95,16 @@ def _register_tools(server: FastMCP) -> None:
             continue
         if "oneOf" in schema:
             continue
-        fastmcp_tool = server._tool_manager.get_tool(tool_def.name)
-        if fastmcp_tool is None:
+        registered_tool = server._tool_manager.get_tool(tool_def.name)
+        if registered_tool is None:
             continue
-        fastmcp_tool.__dict__["output_schema"] = schema
+        registered_tool.__dict__["output_schema"] = schema
 
 
 # ---------------------------------------------------------------------------
 # MCP Prompts
 # ---------------------------------------------------------------------------
-def _register_prompts(server: FastMCP) -> None:
+def _register_prompts(server: MCPServer) -> None:
     @server.prompt()
     def getting_started() -> str:
         """Quick-start guide for using PlanExe to create a project plan."""
@@ -148,8 +148,8 @@ def _register_prompts(server: FastMCP) -> None:
         )
 
 
-def register_tools_and_prompts(server: FastMCP) -> None:
-    """Register all MCP tools and prompts on the FastMCP server."""
+def register_tools_and_prompts(server: MCPServer) -> None:
+    """Register all MCP tools and prompts on the MCP server."""
     _register_tools(server)
     _register_prompts(server)
 
@@ -169,7 +169,7 @@ async def options_mcp() -> Response:
 async def head_mcp_trailing_slash() -> Response:
     """Handle HEAD /mcp/ for health-check probes (e.g. Smithery scanner).
 
-    The mounted FastMCP Streamable HTTP app does not support HEAD and returns
+    The mounted Streamable HTTP app does not support HEAD and returns
     405.  This explicit route intercepts the request so scanners get a clean
     200 instead of bouncing off the sub-app.
     """
@@ -184,14 +184,14 @@ async def head_mcp_trailing_slash() -> Response:
 # ---------------------------------------------------------------------------
 def register_routes(
     app: FastAPI,
-    fastmcp_server: FastMCP,
-    get_fastmcp: Callable[..., FastMCP],
+    mcp_server: MCPServer,
+    get_mcp_server: Callable[..., MCPServer],
 ) -> None:
     """Register all HTTP route handlers on the FastAPI app.
 
     Must be called before ``app.mount("/mcp", ...)`` so that explicit routes
     like ``/mcp/tools`` and ``/mcp/tools/call`` take priority over the mounted
-    FastMCP sub-app.
+    MCP sub-app.
     """
     from mcp_cloud.server_boot import (
         AUTH_REQUIRED,
@@ -211,7 +211,7 @@ def register_routes(
     @app.post("/mcp/tools/call", response_model=MCPToolCallResponse)
     async def call_tool(
         payload: MCPToolCallRequest,
-        fastmcp_server: FastMCP = Depends(get_fastmcp),
+        mcp_server: MCPServer = Depends(get_mcp_server),
     ) -> MCPToolCallResponse:
         """
         Call an MCP tool by name with arguments.
@@ -232,25 +232,25 @@ def register_routes(
             content, error = _normalize_tool_result(result)
             return MCPToolCallResponse(content=content, error=error)
 
-        return await call_tool_via_registry(fastmcp_server, payload.tool, arguments)
+        return await call_tool_via_registry(mcp_server, payload.tool, arguments)
 
     # -- Tools list endpoint -----------------------------------------------
 
     @app.get("/mcp/tools")
-    async def list_tools(fastmcp_server: FastMCP = Depends(get_fastmcp)) -> dict[str, Any]:
+    async def list_tools(mcp_server: MCPServer = Depends(get_mcp_server)) -> dict[str, Any]:
         """List all available MCP tools."""
-        tools = await fastmcp_server.list_tools()
+        tools = await mcp_server.list_tools()
         sanitized = []
         for tool in tools:
             tool_entry = {
                 "name": tool.name,
                 "description": tool.description,
-                "inputSchema": tool.inputSchema,
+                "inputSchema": tool.input_schema,
             }
             if tool.title:
                 tool_entry["title"] = tool.title
-            if tool.outputSchema:
-                tool_entry["outputSchema"] = tool.outputSchema
+            if tool.output_schema:
+                tool_entry["outputSchema"] = tool.output_schema
             if tool.annotations:
                 tool_entry["annotations"] = tool.annotations
             if tool.icons:

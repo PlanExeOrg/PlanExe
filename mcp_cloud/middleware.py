@@ -546,7 +546,7 @@ class _NormalizeMcpPath:
 
     Smithery (and possibly other registries) POST to ``/mcp`` but refuse to
     follow 307 redirects.  By rewriting the path *before* routing, the mounted
-    FastMCP sub-app receives the request directly — no HTTP redirect needed.
+    MCP sub-app receives the request directly — no HTTP redirect needed.
     """
 
     def __init__(self, app: Any) -> None:
@@ -656,6 +656,6 @@ def apply_middleware(app: Any) -> None:
     """Register middleware on the FastAPI app. Called by server_boot after routes are mounted."""
     app.middleware("http")(enforce_api_key)
     # Rewrite /mcp -> /mcp/ at the ASGI level so clients that refuse to follow
-    # 307 redirects (e.g. Smithery) still reach the mounted FastMCP app.
+    # 307 redirects (e.g. Smithery) still reach the mounted MCP app.
     # Added last so it becomes the outermost middleware (runs first).
     app.add_middleware(_NormalizeMcpPath)

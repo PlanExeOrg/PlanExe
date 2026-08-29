@@ -24,7 +24,7 @@ class TestPlanCreateTool(unittest.TestCase):
     def test_plan_create_visible_schema_exposes_prompt_and_model_profile(self):
         tools = asyncio.run(handle_list_tools())
         plan_create_tool = next(tool for tool in tools if tool.name == "plan_create")
-        properties = plan_create_tool.inputSchema.get("properties", {})
+        properties = plan_create_tool.input_schema.get("properties", {})
         self.assertIn("prompt", properties)
         self.assertIn("model_profile", properties)
 
@@ -42,12 +42,12 @@ class TestPlanCreateTool(unittest.TestCase):
             result = asyncio.run(handle_plan_create(arguments))
 
         self.assertIsInstance(result, CallToolResult)
-        self.assertIsInstance(result.structuredContent, dict)
-        self.assertIn("plan_id", result.structuredContent)
-        self.assertIn("created_at", result.structuredContent)
-        self.assertIsInstance(uuid.UUID(result.structuredContent["plan_id"]), uuid.UUID)
+        self.assertIsInstance(result.structured_content, dict)
+        self.assertIn("plan_id", result.structured_content)
+        self.assertIn("created_at", result.structured_content)
+        self.assertIsInstance(uuid.UUID(result.structured_content["plan_id"]), uuid.UUID)
         # New plan should not have deduplicated key
-        self.assertNotIn("deduplicated", result.structuredContent)
+        self.assertNotIn("deduplicated", result.structured_content)
 
     def test_plan_create_dedup_returns_existing_plan(self):
         """When _find_recent_duplicate_plan returns a plan, plan_create returns it with deduplicated=True."""
@@ -70,9 +70,9 @@ class TestPlanCreateTool(unittest.TestCase):
             result = asyncio.run(handle_plan_create(arguments))
 
         self.assertIsInstance(result, CallToolResult)
-        self.assertIsInstance(result.structuredContent, dict)
-        self.assertEqual(result.structuredContent["plan_id"], str(existing_id))
-        self.assertTrue(result.structuredContent["deduplicated"])
+        self.assertIsInstance(result.structured_content, dict)
+        self.assertEqual(result.structured_content["plan_id"], str(existing_id))
+        self.assertTrue(result.structured_content["deduplicated"])
 
     def test_find_recent_duplicate_plan_returns_none_when_window_zero(self):
         """Opt-out: window_seconds=0 always returns None."""

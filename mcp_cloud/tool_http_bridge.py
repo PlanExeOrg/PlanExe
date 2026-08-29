@@ -2,7 +2,7 @@
 PlanExe MCP Cloud — tool HTTP bridge
 
 Pydantic request/response models, MCP result normalization, and thin
-async wrapper functions that connect FastMCP tool registrations to the
+async wrapper functions that connect MCP tool registrations to the
 handler implementations in ``mcp_cloud.app``.
 """
 import json
@@ -10,7 +10,7 @@ import logging
 from typing import Annotated, Any, Literal, Optional, Sequence
 
 from pydantic import BaseModel, Field
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 from mcp.types import CallToolResult, ContentBlock, TextContent
 
 from mcp_cloud.app import (
@@ -126,7 +126,7 @@ ResultArtifactInput = Literal["report", "zip"]
 
 
 # ---------------------------------------------------------------------------
-# FastMCP tool wrapper functions
+# MCP tool wrapper functions
 # ---------------------------------------------------------------------------
 async def plan_create(
     prompt: str,
@@ -255,11 +255,11 @@ async def send_feedback(
 # Registry-based tool call (used by REST endpoint)
 # ---------------------------------------------------------------------------
 async def call_tool_via_registry(
-    server: FastMCP,
+    server: MCPServer,
     tool_name: str,
     arguments: dict[str, Any],
 ) -> MCPToolCallResponse:
-    """Call tools via the FastMCP registry."""
+    """Call tools via the MCP tool registry."""
     try:
         result = await server.call_tool(tool_name, arguments)
     except Exception as e:

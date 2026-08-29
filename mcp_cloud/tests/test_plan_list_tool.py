@@ -35,9 +35,9 @@ class TestPlanListTool(unittest.TestCase):
             result = asyncio.run(handle_plan_list({"user_api_key": "pex_test", "limit": 10}))
 
         self.assertIsInstance(result, CallToolResult)
-        self.assertFalse(result.isError)
-        self.assertEqual(len(result.structuredContent["plans"]), 2)
-        self.assertIn("Returned 2 plan(s)", result.structuredContent["message"])
+        self.assertFalse(result.is_error)
+        self.assertEqual(len(result.structured_content["plans"]), 2)
+        self.assertIn("Returned 2 plan(s)", result.structured_content["message"])
 
     def test_plan_list_empty_result(self):
         user_context = {"user_id": "user-1", "credits_balance": 10.0}
@@ -45,9 +45,9 @@ class TestPlanListTool(unittest.TestCase):
              patch("mcp_cloud.handlers._list_plans_sync", return_value=[]):
             result = asyncio.run(handle_plan_list({"user_api_key": "pex_test"}))
 
-        self.assertFalse(result.isError)
-        self.assertEqual(result.structuredContent["plans"], [])
-        self.assertIn("Returned 0 plan(s)", result.structuredContent["message"])
+        self.assertFalse(result.is_error)
+        self.assertEqual(result.structured_content["plans"], [])
+        self.assertIn("Returned 0 plan(s)", result.structured_content["message"])
 
     def test_plan_list_clamps_limit(self):
         """Limit is clamped to [1, 50]."""
@@ -66,15 +66,15 @@ class TestPlanListTool(unittest.TestCase):
         with patch("mcp_cloud.handlers._resolve_user_from_api_key", return_value=None):
             result = asyncio.run(handle_plan_list({"user_api_key": "pex_bad"}))
 
-        self.assertTrue(result.isError)
-        self.assertEqual(result.structuredContent["error"]["code"], "INVALID_USER_API_KEY")
+        self.assertTrue(result.is_error)
+        self.assertEqual(result.structured_content["error"]["code"], "INVALID_USER_API_KEY")
 
     def test_plan_list_requires_key_when_env_set(self):
         with patch.dict("os.environ", {"PLANEXE_MCP_REQUIRE_USER_KEY": "true"}):
             result = asyncio.run(handle_plan_list({"limit": 5}))
 
-        self.assertTrue(result.isError)
-        self.assertEqual(result.structuredContent["error"]["code"], "USER_API_KEY_REQUIRED")
+        self.assertTrue(result.is_error)
+        self.assertEqual(result.structured_content["error"]["code"], "USER_API_KEY_REQUIRED")
 
     def test_plan_list_no_key_when_not_required(self):
         """When key is not required and not provided, returns all tasks (user_id=None)."""
@@ -82,7 +82,7 @@ class TestPlanListTool(unittest.TestCase):
              patch("mcp_cloud.handlers._list_plans_sync", return_value=[]) as mock_list:
             result = asyncio.run(handle_plan_list({"limit": 5}))
 
-        self.assertFalse(result.isError)
+        self.assertFalse(result.is_error)
         # user_id should be None
         self.assertIsNone(mock_list.call_args[0][0])
 

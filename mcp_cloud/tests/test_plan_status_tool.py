@@ -28,12 +28,12 @@ class TestPlanStatusTool(unittest.TestCase):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
         self.assertIsInstance(result, CallToolResult)
-        self.assertIsInstance(result.structuredContent, dict)
-        self.assertEqual(result.structuredContent["plan_id"], plan_id)
-        self.assertIn("state", result.structuredContent)
-        self.assertIn("progress_percentage", result.structuredContent)
-        self.assertIsInstance(result.structuredContent["progress_percentage"], float)
-        self.assertEqual(result.structuredContent["progress_percentage"], 100.0)
+        self.assertIsInstance(result.structured_content, dict)
+        self.assertEqual(result.structured_content["plan_id"], plan_id)
+        self.assertIn("state", result.structured_content)
+        self.assertIn("progress_percentage", result.structured_content)
+        self.assertIsInstance(result.structured_content["progress_percentage"], float)
+        self.assertEqual(result.structured_content["progress_percentage"], 100.0)
 
     def test_plan_status_falls_back_to_zip_snapshot_files_when_primary_source_empty(self):
         plan_id = str(uuid.uuid4())
@@ -56,7 +56,7 @@ class TestPlanStatusTool(unittest.TestCase):
         ):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
-        files = result.structuredContent["files"]
+        files = result.structured_content["files"]
         self.assertEqual(len(files), 1)
         self.assertEqual(files[0]["path"], "plan.txt")
         self.assertEqual(files[0]["updated_at"], "2026-03-08T23:49:53Z")
@@ -79,15 +79,15 @@ class TestPlanStatusTool(unittest.TestCase):
         ):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
-        self.assertEqual(result.structuredContent["state"], "processing")
+        self.assertEqual(result.structured_content["state"], "processing")
 
     def test_plan_status_returns_plan_not_found_error(self):
         plan_id = str(uuid.uuid4())
         with patch("mcp_cloud.handlers._get_plan_status_snapshot_sync", return_value=None):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
-        self.assertTrue(result.isError)
-        self.assertEqual(result.structuredContent["error"]["code"], "PLAN_NOT_FOUND")
+        self.assertTrue(result.is_error)
+        self.assertEqual(result.structured_content["error"]["code"], "PLAN_NOT_FOUND")
 
 
     def test_plan_status_completed_normalizes_steps(self):
@@ -110,7 +110,7 @@ class TestPlanStatusTool(unittest.TestCase):
         ):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
-        sc = result.structuredContent
+        sc = result.structured_content
         self.assertEqual(sc["progress_percentage"], 100.0)
         self.assertEqual(sc["steps_completed"], 30)
         self.assertEqual(sc["steps_total"], 30)
@@ -136,7 +136,7 @@ class TestPlanStatusTool(unittest.TestCase):
         ):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
-        sc = result.structuredContent
+        sc = result.structured_content
         self.assertEqual(sc["steps_completed"], 23)
         self.assertEqual(sc["steps_total"], 30)
 
@@ -161,7 +161,7 @@ class TestPlanStatusTool(unittest.TestCase):
         ):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
-        sc = result.structuredContent
+        sc = result.structured_content
         self.assertEqual(sc["steps_completed"], 15)
         self.assertEqual(sc["steps_total"], 30)
 
@@ -185,7 +185,7 @@ class TestPlanStatusTool(unittest.TestCase):
         ):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
-        sc = result.structuredContent
+        sc = result.structured_content
         self.assertIsNone(sc["steps_completed"])
         self.assertIsNone(sc["steps_total"])
         self.assertIsNone(sc["current_step"])
@@ -212,7 +212,7 @@ class TestPlanStatusTool(unittest.TestCase):
         ):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
-        self.assertEqual(result.structuredContent["current_step"], "SWOT Analysis")
+        self.assertEqual(result.structured_content["current_step"], "SWOT Analysis")
 
     def test_plan_status_stopped_returns_stopped_state(self):
         """User-stopped plan has state='stopped' and no stop_reason field."""
@@ -232,8 +232,8 @@ class TestPlanStatusTool(unittest.TestCase):
         ):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
-        self.assertEqual(result.structuredContent["state"], "stopped")
-        self.assertNotIn("stop_reason", result.structuredContent)
+        self.assertEqual(result.structured_content["state"], "stopped")
+        self.assertNotIn("stop_reason", result.structured_content)
 
     def test_plan_status_actual_failure_has_no_stop_reason(self):
         """Failed plan response does not contain stop_reason field."""
@@ -253,9 +253,9 @@ class TestPlanStatusTool(unittest.TestCase):
         ):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
-        self.assertEqual(result.structuredContent["state"], "failed")
-        self.assertNotIn("stop_reason", result.structuredContent)
-        self.assertIn("error", result.structuredContent)
+        self.assertEqual(result.structured_content["state"], "failed")
+        self.assertNotIn("stop_reason", result.structured_content)
+        self.assertIn("error", result.structured_content)
 
     def test_plan_status_failed_includes_failure_diagnostics(self):
         """Failed plan with all four diagnostic fields populated surfaces them in response."""
@@ -283,7 +283,7 @@ class TestPlanStatusTool(unittest.TestCase):
         ):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
-        sc = result.structuredContent
+        sc = result.structured_content
         self.assertEqual(sc["state"], "failed")
         self.assertIn("error", sc)
         err = sc["error"]
@@ -315,7 +315,7 @@ class TestPlanStatusTool(unittest.TestCase):
         ):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
-        sc = result.structuredContent
+        sc = result.structured_content
         self.assertEqual(sc["state"], "failed")
         self.assertIn("error", sc)
         err = sc["error"]
@@ -352,7 +352,7 @@ class TestPlanStatusTool(unittest.TestCase):
         ):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
-        timing = result.structuredContent["timing"]
+        timing = result.structured_content["timing"]
         self.assertIn("last_progress_at", timing)
         self.assertIsInstance(timing["last_progress_at"], str)
         self.assertIn("2026-03-12", timing["last_progress_at"])
@@ -383,7 +383,7 @@ class TestPlanStatusTool(unittest.TestCase):
         ):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
-        timing = result.structuredContent["timing"]
+        timing = result.structured_content["timing"]
         self.assertIn("last_progress_at", timing)
         self.assertIsNone(timing["last_progress_at"])
 
@@ -412,7 +412,7 @@ class TestPlanStatusTool(unittest.TestCase):
         ):
             result = asyncio.run(handle_plan_status({"plan_id": plan_id}))
 
-        sc = result.structuredContent
+        sc = result.structured_content
         self.assertEqual(sc["state"], "processing")
         self.assertNotIn("error", sc)
 

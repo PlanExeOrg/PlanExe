@@ -16,7 +16,6 @@ def _startup_log(msg: str) -> None:
 _startup_log("db_setup.py: begin imports")
 
 from flask import Flask
-from mcp.server import Server
 from pydantic import BaseModel
 from sqlalchemy import inspect, text
 from worker_plan_api.model_profile import ModelProfileEnum
@@ -281,8 +280,6 @@ PLANEXE_SERVER_INSTRUCTIONS = (
     "Feedback is fire-and-forget and never blocks the workflow. "
     "New users: create an account and obtain an API key at https://home.planexe.org/ ."
 )
-
-mcp_cloud_server = Server("planexe-mcp-cloud", instructions=PLANEXE_SERVER_INSTRUCTIONS)
 
 WORKER_PLAN_URL = os.environ.get("PLANEXE_WORKER_PLAN_URL", "http://worker_plan:8000")
 

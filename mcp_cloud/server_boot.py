@@ -1,7 +1,7 @@
 """
 PlanExe MCP Cloud — server bootstrap
 
-Configuration constants, FastMCP / FastAPI creation, and application lifespan.
+Configuration constants, MCP / FastAPI creation, and application lifespan.
 This module is the canonical source for all env-var-derived settings.
 """
 import asyncio
@@ -27,7 +27,8 @@ _startup_log("server_boot.py: begin imports")
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
+from mcp.server.transport_security import TransportSecuritySettings
 
 _startup_log("server_boot.py: 3rd-party imports done")
 
@@ -146,35 +147,44 @@ if not CORS_ORIGINS:
 
 
 # ---------------------------------------------------------------------------
-# FastMCP server creation
+# MCP server creation
 # ---------------------------------------------------------------------------
-_startup_log("server_boot.py: creating FastMCP server")
+_startup_log("server_boot.py: creating MCP server")
 
-fastmcp_server = FastMCP(
+mcp_server = MCPServer(
     name="planexe-mcp-server",
     instructions=PLANEXE_SERVER_INSTRUCTIONS,
-    host=HTTP_HOST,
-    port=HTTP_PORT,
-    streamable_http_path="/",
-    json_response=True,
-    stateless_http=True,
+    version=SERVER_VERSION,
 )
 
 # Tool registration and MCP prompts are applied by route_registration.
 from mcp_cloud.route_registration import register_routes, register_tools_and_prompts
-register_tools_and_prompts(fastmcp_server)
+register_tools_and_prompts(mcp_server)
 
-fastmcp_http_app = fastmcp_server.streamable_http_app()
+# Transport settings live on streamable_http_app() rather than the server.
+#
+# transport_security is set explicitly because the SDK turns on DNS rebinding
+# protection by itself when host is a loopback address, restricting Host and
+# Origin to localhost.  This server is reached over the LAN in development
+# (see mcp_cloud/README.md) and through the Railway proxy in production, so the
+# implicit localhost-only allowlist would reject legitimate clients.  Access is
+# controlled by the API-key middleware and the CORS origins configured above.
+mcp_http_app = mcp_server.streamable_http_app(
+    streamable_http_path="/",
+    json_response=True,
+    stateless_http=True,
+    transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
+)
 
 
 # ---------------------------------------------------------------------------
 # FastAPI dependency
 # ---------------------------------------------------------------------------
-def _get_fastmcp(request: Request) -> FastMCP:
-    fastmcp_server = getattr(request.app.state, "fastmcp_server", None)
-    if fastmcp_server is None:
+def _get_mcp_server(request: Request) -> MCPServer:
+    mcp_server = getattr(request.app.state, "mcp_server", None)
+    if mcp_server is None:
         raise HTTPException(status_code=503, detail="mcp_cloud not initialized")
-    return fastmcp_server
+    return mcp_server
 
 
 # ---------------------------------------------------------------------------
@@ -183,11 +193,11 @@ def _get_fastmcp(request: Request) -> FastMCP:
 @asynccontextmanager
 async def _lifespan(app: FastAPI):
     from mcp_cloud.middleware import _sweep_rate_buckets
-    app.state.fastmcp_server = fastmcp_server
+    app.state.mcp_server = mcp_server
     stop_event = asyncio.Event()
     sweeper_task = asyncio.create_task(_sweep_rate_buckets(stop_event))
     try:
-        async with fastmcp_server.session_manager.run():
+        async with mcp_server.session_manager.run():
             yield
     finally:
         stop_event.set()
@@ -214,14 +224,14 @@ app.add_middleware(
     allow_headers=["*"],  # Allow any header (e.g. X-API-Key) for CORS preflight
 )
 
-# Register all routes (must happen before mounting FastMCP sub-app).
-register_routes(app, fastmcp_server, _get_fastmcp)
+# Register all routes (must happen before mounting the MCP sub-app).
+register_routes(app, mcp_server, _get_mcp_server)
 
 # Mount the Streamable HTTP MCP endpoint AFTER the explicit /mcp/tools and
 # /mcp/tools/call routes so that those routes take priority.  Starlette checks
 # routes in registration order; if the mount were first it would shadow the
 # REST endpoints with a 404 from the sub-app.
-app.mount("/mcp", fastmcp_http_app)
+app.mount("/mcp", mcp_http_app)
 
 # Apply middleware from middleware.py.
 from mcp_cloud.middleware import apply_middleware

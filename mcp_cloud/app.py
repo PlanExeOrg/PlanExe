@@ -7,16 +7,13 @@ The actual implementations live in the focused modules under ``mcp_cloud/``.
 """
 import asyncio
 
-from mcp.server.stdio import stdio_server
-
-# -- db_setup: Flask app, DB, constants, request classes, MCP Server ----------
+# -- db_setup: Flask app, DB, constants, request classes ---------------------
 from mcp_cloud.db_setup import (  # noqa: F401
     app,
     db,
     build_postgres_uri_from_env,
     ensure_planitem_stop_columns,
     PLANEXE_SERVER_INSTRUCTIONS,
-    mcp_cloud_server as mcp_cloud,
     WORKER_PLAN_URL,
     REPORT_FILENAME,
     REPORT_CONTENT_TYPE,
@@ -178,12 +175,17 @@ async def main():
         db.create_all()
         logger.info("Database initialized")
 
-    async with stdio_server() as streams:
-        await mcp_cloud.run(
-            streams[0],
-            streams[1],
-            mcp_cloud.create_initialization_options()
-        )
+    # Imported here rather than at module scope: route_registration reaches
+    # back into this module, so a top-level import would be circular.
+    from mcp.server.mcpserver import MCPServer
+    from mcp_cloud.route_registration import register_tools_and_prompts
+
+    server = MCPServer(
+        name="planexe-mcp-server",
+        instructions=PLANEXE_SERVER_INSTRUCTIONS,
+    )
+    register_tools_and_prompts(server)
+    await server.run_stdio_async()
 
 if __name__ == "__main__":
     asyncio.run(main())

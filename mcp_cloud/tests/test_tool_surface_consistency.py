@@ -182,12 +182,12 @@ class TestCloudToolSurfaceConsistency(unittest.TestCase):
         self.assertIn("objective, scope, constraints, timeline, stakeholders, budget/resources, and success criteria", prompt_schema)
 
 
-class TestFastMCPCanonicalOutputSchema(unittest.TestCase):
-    """FastMCP tools must advertise the canonical outputSchema from TOOL_DEFINITIONS."""
+class TestMCPServerCanonicalOutputSchema(unittest.TestCase):
+    """Registered tools must advertise the canonical outputSchema from TOOL_DEFINITIONS."""
 
-    def test_fastmcp_flat_tools_use_canonical_output_schema(self):
+    def test_flat_tools_use_canonical_output_schema(self):
         """Flat-schema tools must have their canonical outputSchema injected."""
-        from mcp_cloud.http_server import fastmcp_server
+        from mcp_cloud.http_server import mcp_server
 
         for tool_def in cloud_app.TOOL_DEFINITIONS:
             if tool_def.output_schema is None:
@@ -195,20 +195,20 @@ class TestFastMCPCanonicalOutputSchema(unittest.TestCase):
             if "oneOf" in tool_def.output_schema:
                 continue  # oneOf schemas are tested separately
             with self.subTest(tool=tool_def.name):
-                fastmcp_tool = fastmcp_server._tool_manager.get_tool(tool_def.name)
+                registered_tool = mcp_server._tool_manager.get_tool(tool_def.name)
                 self.assertIsNotNone(
-                    fastmcp_tool,
-                    f"FastMCP tool {tool_def.name!r} not registered",
+                    registered_tool,
+                    f"MCP tool {tool_def.name!r} not registered",
                 )
                 self.assertEqual(
-                    fastmcp_tool.output_schema,
+                    registered_tool.output_schema,
                     tool_def.output_schema,
-                    f"FastMCP tool {tool_def.name!r} outputSchema does not match TOOL_DEFINITIONS",
+                    f"MCP tool {tool_def.name!r} outputSchema does not match TOOL_DEFINITIONS",
                 )
 
-    def test_fastmcp_oneof_tools_have_no_output_schema(self):
+    def test_oneof_tools_have_no_output_schema(self):
         """oneOf schemas must NOT be advertised — MCP clients reject them."""
-        from mcp_cloud.http_server import fastmcp_server
+        from mcp_cloud.http_server import mcp_server
 
         oneof_tools = [
             td.name for td in cloud_app.TOOL_DEFINITIONS
@@ -217,22 +217,22 @@ class TestFastMCPCanonicalOutputSchema(unittest.TestCase):
         self.assertTrue(len(oneof_tools) > 0, "Expected at least one oneOf tool")
         for name in oneof_tools:
             with self.subTest(tool=name):
-                fastmcp_tool = fastmcp_server._tool_manager.get_tool(name)
+                registered_tool = mcp_server._tool_manager.get_tool(name)
                 self.assertIsNone(
-                    fastmcp_tool.output_schema,
-                    f"FastMCP tool {name!r} must not advertise oneOf outputSchema",
+                    registered_tool.output_schema,
+                    f"MCP tool {name!r} must not advertise oneOf outputSchema",
                 )
 
-    def test_all_tool_definitions_registered_in_fastmcp(self):
-        """Every tool in TOOL_DEFINITIONS must be registered in the FastMCP server."""
-        from mcp_cloud.http_server import fastmcp_server
+    def test_all_tool_definitions_registered_in_mcp_server(self):
+        """Every tool in TOOL_DEFINITIONS must be registered in the MCP server."""
+        from mcp_cloud.http_server import mcp_server
 
         for tool_def in cloud_app.TOOL_DEFINITIONS:
             with self.subTest(tool=tool_def.name):
-                fastmcp_tool = fastmcp_server._tool_manager.get_tool(tool_def.name)
+                registered_tool = mcp_server._tool_manager.get_tool(tool_def.name)
                 self.assertIsNotNone(
-                    fastmcp_tool,
-                    f"TOOL_DEFINITIONS has {tool_def.name!r} but FastMCP does not",
+                    registered_tool,
+                    f"TOOL_DEFINITIONS has {tool_def.name!r} but the MCP server does not",
                 )
 
     def test_plan_file_info_canonical_schema_has_three_oneof_variants(self):
@@ -296,17 +296,17 @@ class TestFastMCPCanonicalOutputSchema(unittest.TestCase):
                     f"not Annotated[CallToolResult, ...]",
                 )
 
-    def test_fastmcp_plan_file_info_not_derived_from_pydantic(self):
+    def test_plan_file_info_not_derived_from_pydantic(self):
         """plan_file_info must not have a schema derived from PlanFileInfoOutput."""
-        from mcp_cloud.http_server import fastmcp_server
+        from mcp_cloud.http_server import mcp_server
         from mcp_cloud.tool_models import PlanFileInfoOutput
 
-        fastmcp_tool = fastmcp_server._tool_manager.get_tool("plan_file_info")
+        registered_tool = mcp_server._tool_manager.get_tool("plan_file_info")
         pydantic_schema = PlanFileInfoOutput.model_json_schema()
         # oneOf schemas are not advertised, so output_schema should be None.
         # Either way, it must NOT equal the flat Pydantic derivation.
         self.assertNotEqual(
-            fastmcp_tool.output_schema,
+            registered_tool.output_schema,
             pydantic_schema,
             "plan_file_info outputSchema looks like it was derived from "
             "PlanFileInfoOutput instead of using the canonical schema",

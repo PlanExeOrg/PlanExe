@@ -21,10 +21,10 @@ class TestSendFeedbackTool(unittest.TestCase):
             }))
 
         self.assertIsInstance(result, CallToolResult)
-        self.assertFalse(result.isError)
-        self.assertIn("feedback_id", result.structuredContent)
-        self.assertIn("received_at", result.structuredContent)
-        self.assertEqual(result.structuredContent["message"], "Feedback received. Thank you.")
+        self.assertFalse(result.is_error)
+        self.assertIn("feedback_id", result.structured_content)
+        self.assertIn("received_at", result.structured_content)
+        self.assertEqual(result.structured_content["message"], "Feedback received. Thank you.")
 
     def test_feedback_success_all_fields(self):
         """Feedback with all optional fields succeeds."""
@@ -43,8 +43,8 @@ class TestSendFeedbackTool(unittest.TestCase):
                 "rating": 3,
             }))
 
-        self.assertFalse(result.isError)
-        self.assertIn("feedback_id", result.structuredContent)
+        self.assertFalse(result.is_error)
+        self.assertIn("feedback_id", result.structured_content)
 
     def test_feedback_invalid_category(self):
         """Invalid category returns INVALID_FEEDBACK error."""
@@ -53,8 +53,8 @@ class TestSendFeedbackTool(unittest.TestCase):
             "message": "test",
         }))
 
-        self.assertTrue(result.isError)
-        self.assertEqual(result.structuredContent["error"]["code"], "INVALID_FEEDBACK")
+        self.assertTrue(result.is_error)
+        self.assertEqual(result.structured_content["error"]["code"], "INVALID_FEEDBACK")
 
     def test_feedback_missing_message(self):
         """Missing required message field returns INVALID_FEEDBACK error."""
@@ -62,8 +62,8 @@ class TestSendFeedbackTool(unittest.TestCase):
             "category": "mcp",
         }))
 
-        self.assertTrue(result.isError)
-        self.assertEqual(result.structuredContent["error"]["code"], "INVALID_FEEDBACK")
+        self.assertTrue(result.is_error)
+        self.assertEqual(result.structured_content["error"]["code"], "INVALID_FEEDBACK")
 
     def test_feedback_plan_not_found(self):
         """plan_id that doesn't exist returns PLAN_NOT_FOUND error."""
@@ -74,8 +74,8 @@ class TestSendFeedbackTool(unittest.TestCase):
                 "plan_id": "nonexistent-uuid",
             }))
 
-        self.assertTrue(result.isError)
-        self.assertEqual(result.structuredContent["error"]["code"], "PLAN_NOT_FOUND")
+        self.assertTrue(result.is_error)
+        self.assertEqual(result.structured_content["error"]["code"], "PLAN_NOT_FOUND")
 
     def test_feedback_rating_out_of_range(self):
         """Rating outside 1-5 returns INVALID_FEEDBACK error."""
@@ -85,8 +85,8 @@ class TestSendFeedbackTool(unittest.TestCase):
             "rating": 10,
         }))
 
-        self.assertTrue(result.isError)
-        self.assertEqual(result.structuredContent["error"]["code"], "INVALID_FEEDBACK")
+        self.assertTrue(result.is_error)
+        self.assertEqual(result.structured_content["error"]["code"], "INVALID_FEEDBACK")
 
     def test_feedback_db_failure_returns_success(self):
         """DB write failure is logged but success is returned (fire-and-forget)."""
@@ -96,9 +96,9 @@ class TestSendFeedbackTool(unittest.TestCase):
                 "message": "test feedback",
             }))
 
-        self.assertFalse(result.isError)
-        self.assertIn("feedback_id", result.structuredContent)
-        self.assertEqual(result.structuredContent["message"], "Feedback received. Thank you.")
+        self.assertFalse(result.is_error)
+        self.assertIn("feedback_id", result.structured_content)
+        self.assertEqual(result.structured_content["message"], "Feedback received. Thank you.")
 
     def test_feedback_all_categories_accepted(self):
         """All 4 defined categories are accepted."""
@@ -109,7 +109,7 @@ class TestSendFeedbackTool(unittest.TestCase):
                     "category": category,
                     "message": f"Test {category}",
                 }))
-            self.assertFalse(result.isError, f"Category {category} should be accepted")
+            self.assertFalse(result.is_error, f"Category {category} should be accepted")
 
     def test_feedback_invalid_user_api_key(self):
         """Invalid user_api_key returns INVALID_USER_API_KEY error."""
@@ -120,8 +120,8 @@ class TestSendFeedbackTool(unittest.TestCase):
                 "user_api_key": "pex_bad_key",
             }))
 
-        self.assertTrue(result.isError)
-        self.assertEqual(result.structuredContent["error"]["code"], "INVALID_USER_API_KEY")
+        self.assertTrue(result.is_error)
+        self.assertEqual(result.structured_content["error"]["code"], "INVALID_USER_API_KEY")
 
     def test_feedback_requires_key_when_env_set(self):
         """When PLANEXE_MCP_REQUIRE_USER_KEY is true, missing key returns error."""
@@ -131,8 +131,8 @@ class TestSendFeedbackTool(unittest.TestCase):
                 "message": "test",
             }))
 
-        self.assertTrue(result.isError)
-        self.assertEqual(result.structuredContent["error"]["code"], "USER_API_KEY_REQUIRED")
+        self.assertTrue(result.is_error)
+        self.assertEqual(result.structured_content["error"]["code"], "USER_API_KEY_REQUIRED")
 
     def test_feedback_no_key_when_not_required(self):
         """When key is not required and not provided, feedback succeeds."""
@@ -143,7 +143,7 @@ class TestSendFeedbackTool(unittest.TestCase):
                 "message": "test",
             }))
 
-        self.assertFalse(result.isError)
+        self.assertFalse(result.is_error)
 
     def test_feedback_passes_user_id_from_api_key(self):
         """Valid user_api_key resolves user_id and passes it to _create_feedback_sync."""

@@ -26,7 +26,6 @@ from mcp_cloud.db_setup import (
     PlanListRequest,
     SendFeedbackRequest,
     ModelProfilesRequest,
-    mcp_cloud_server,
 )
 from mcp_cloud.auth import _resolve_user_from_api_key
 from mcp_cloud.db_queries import (
@@ -60,7 +59,6 @@ from mcp_cloud.schemas import TOOL_DEFINITIONS
 logger = logging.getLogger(__name__)
 
 
-@mcp_cloud_server.list_tools()
 async def handle_list_tools() -> list[Tool]:
     """List all available MCP tools."""
     return [
@@ -74,7 +72,6 @@ async def handle_list_tools() -> list[Tool]:
         for definition in TOOL_DEFINITIONS
     ]
 
-@mcp_cloud_server.call_tool()
 async def handle_call_tool(name: str, arguments: dict[str, Any]) -> CallToolResult:
     """Dispatch MCP tool calls and return structured JSON errors for unknown tools."""
     start = time.monotonic()
@@ -90,7 +87,7 @@ async def handle_call_tool(name: str, arguments: dict[str, Any]) -> CallToolResu
             )
         result = await handler(arguments)
         elapsed_ms = (time.monotonic() - start) * 1000
-        if result.isError:
+        if result.is_error:
             logger.info("tool_call tool=%s result=error duration_ms=%.0f", name, elapsed_ms)
         else:
             logger.info("tool_call tool=%s result=ok duration_ms=%.0f", name, elapsed_ms)

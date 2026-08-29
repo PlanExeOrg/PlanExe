@@ -53,7 +53,7 @@ class TestPlanFileInfoTool(unittest.TestCase):
             ):
                 result = asyncio.run(handle_plan_file_info({"plan_id": plan_id}))
 
-        payload = result.structuredContent
+        payload = result.structured_content
         self.assertEqual(payload["download_size"], len(content_bytes))
         self.assertEqual(payload["content_type"], "text/html; charset=utf-8")
         self.assertNotIn("download_path", payload)
@@ -75,7 +75,7 @@ class TestPlanFileInfoTool(unittest.TestCase):
             ):
                 result = asyncio.run(handle_plan_file_info({"plan_id": plan_id, "artifact": "zip"}))
 
-        payload = result.structuredContent
+        payload = result.structured_content
         self.assertEqual(payload["download_size"], len(content_bytes))
         self.assertEqual(payload["content_type"], ZIP_CONTENT_TYPE)
 
@@ -94,7 +94,7 @@ class TestPlanFileInfoTool(unittest.TestCase):
             ):
                 result = asyncio.run(handle_plan_file_info({"plan_id": plan_id, "artifact": "zip"}))
 
-        payload = result.structuredContent
+        payload = result.structured_content
         self.assertEqual(payload["download_size"], len(content_bytes))
         self.assertEqual(payload["content_type"], ZIP_CONTENT_TYPE)
 
@@ -108,8 +108,8 @@ class TestPlanFileInfoTool(unittest.TestCase):
         with patch("mcp_cloud.handlers._get_plan_for_report_sync", return_value=plan_snapshot):
             result = asyncio.run(handle_plan_file_info({"plan_id": plan_id}))
 
-        self.assertFalse(result.isError)
-        self.assertEqual(result.structuredContent, {"ready": False, "reason": "processing"})
+        self.assertFalse(result.is_error)
+        self.assertEqual(result.structured_content, {"ready": False, "reason": "processing"})
 
     def test_plan_file_info_not_ready_preserves_structured_content(self):
         """Not-ready responses must carry structuredContent so MCP clients see the payload."""
@@ -122,8 +122,8 @@ class TestPlanFileInfoTool(unittest.TestCase):
         with patch("mcp_cloud.handlers._get_plan_for_report_sync", return_value=plan_snapshot):
             result = asyncio.run(handle_plan_file_info({"plan_id": plan_id, "artifact": "report"}))
 
-        self.assertFalse(result.isError)
-        sc = result.structuredContent
+        self.assertFalse(result.is_error)
+        sc = result.structured_content
         self.assertIsNotNone(sc, "structuredContent must be present for not-ready responses")
         self.assertFalse(sc["ready"])
         self.assertEqual(sc["reason"], "processing")
@@ -143,8 +143,8 @@ class TestPlanFileInfoTool(unittest.TestCase):
             ):
                 result = asyncio.run(handle_plan_file_info({"plan_id": plan_id, "artifact": "zip"}))
 
-        self.assertFalse(result.isError)
-        sc = result.structuredContent
+        self.assertFalse(result.is_error)
+        sc = result.structured_content
         self.assertIsNotNone(sc)
         self.assertFalse(sc["ready"])
         self.assertEqual(sc["reason"], "processing")
@@ -155,8 +155,8 @@ class TestPlanFileInfoTool(unittest.TestCase):
         with patch("mcp_cloud.handlers._get_plan_for_report_sync", return_value=None):
             result = asyncio.run(handle_plan_file_info({"plan_id": plan_id}))
 
-        self.assertTrue(result.isError)
-        sc = result.structuredContent
+        self.assertTrue(result.is_error)
+        sc = result.structured_content
         self.assertIsNotNone(sc, "Error responses must include structuredContent")
         self.assertEqual(sc["error"]["code"], "PLAN_NOT_FOUND")
 
@@ -172,7 +172,7 @@ class TestPlanFileInfoTool(unittest.TestCase):
         with patch("mcp_cloud.handlers._get_plan_for_report_sync", return_value=plan_snapshot):
             result = asyncio.run(handle_plan_file_info({"plan_id": plan_id}))
 
-        sc = result.structuredContent
+        sc = result.structured_content
         content_text = result.content[0].text
         self.assertEqual(json.loads(content_text), sc)
 
@@ -192,8 +192,8 @@ class TestPlanFileInfoTool(unittest.TestCase):
             ):
                 result = asyncio.run(handle_plan_file_info({"plan_id": plan_id, "artifact": "report"}))
 
-        self.assertFalse(result.isError)
-        sc = result.structuredContent
+        self.assertFalse(result.is_error)
+        sc = result.structured_content
         self.assertIsNotNone(sc)
         self.assertIn("content_type", sc)
         self.assertIn("sha256", sc)
@@ -211,8 +211,8 @@ class TestPlanFileInfoTool(unittest.TestCase):
         with patch("mcp_cloud.handlers._get_plan_for_report_sync", return_value=plan_snapshot):
             result = asyncio.run(handle_plan_file_info({"plan_id": plan_id, "artifact": "report"}))
 
-        self.assertFalse(result.isError)
-        sc = result.structuredContent
+        self.assertFalse(result.is_error)
+        sc = result.structured_content
         self.assertIsNotNone(sc)
         self.assertEqual(sc["error"]["code"], "generation_failed")
         self.assertIn("Out of memory", sc["error"]["message"])
@@ -228,8 +228,8 @@ class TestPlanFileInfoTool(unittest.TestCase):
         with patch("mcp_cloud.handlers._get_plan_for_report_sync", return_value=plan_snapshot):
             result = asyncio.run(handle_plan_file_info({"plan_id": plan_id, "artifact": "report"}))
 
-        self.assertFalse(result.isError)
-        self.assertEqual(result.structuredContent["error"]["code"], "generation_failed")
+        self.assertFalse(result.is_error)
+        self.assertEqual(result.structured_content["error"]["code"], "generation_failed")
 
     def test_report_expires_at_present_when_download_url_set(self):
         """expires_at must be an ISO 8601 UTC timestamp when download_url is present."""
@@ -251,7 +251,7 @@ class TestPlanFileInfoTool(unittest.TestCase):
                 with patch.object(_dt_mod, "_get_download_base_url", return_value="https://example.com"):
                     result = asyncio.run(handle_plan_file_info({"plan_id": plan_id, "artifact": "report"}))
 
-        sc = result.structuredContent
+        sc = result.structured_content
         self.assertIn("download_url", sc)
         self.assertIn("expires_at", sc)
         expires = datetime.fromisoformat(sc["expires_at"])
@@ -277,7 +277,7 @@ class TestPlanFileInfoTool(unittest.TestCase):
                 with patch.object(_dt_mod, "_get_download_base_url", return_value="https://example.com"):
                     result = asyncio.run(handle_plan_file_info({"plan_id": plan_id, "artifact": "zip"}))
 
-        sc = result.structuredContent
+        sc = result.structured_content
         self.assertIn("download_url", sc)
         self.assertIn("expires_at", sc)
         expires = datetime.fromisoformat(sc["expires_at"])
@@ -299,7 +299,7 @@ class TestPlanFileInfoTool(unittest.TestCase):
             ):
                 result = asyncio.run(handle_plan_file_info({"plan_id": plan_id}))
 
-        sc = result.structuredContent
+        sc = result.structured_content
         self.assertNotIn("download_url", sc)
         self.assertNotIn("expires_at", sc)
 

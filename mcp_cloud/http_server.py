@@ -2,10 +2,10 @@
 PlanExe MCP Cloud — HTTP server (backward-compatibility re-export shim)
 
 All implementation has moved to focused modules:
-- server_boot.py     — config, FastMCP/FastAPI creation, lifespan, entry point
+- server_boot.py     — config, MCP/FastAPI creation, lifespan, entry point
 - middleware.py       — CORS, auth, rate limiting, body size, enforce_api_key
 - tool_http_bridge.py — request/response models, result normalization, tool wrappers
-- route_registration.py — FastMCP tool registration, MCP prompts, route handlers
+- route_registration.py — MCP tool registration, MCP prompts, route handlers
 
 This module re-exports public symbols so that existing tests and the
 Dockerfile entry point (``python -m mcp_cloud.http_server``) continue
@@ -30,7 +30,7 @@ from mcp_cloud.server_boot import (  # noqa: F401
     _split_csv_env,
     _startup_log,
     app,
-    fastmcp_server,
+    mcp_server,
 )
 
 # --- middleware exports (auth, CORS, rate limiting) -----------------------

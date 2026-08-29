@@ -26,11 +26,11 @@ class TestPlanResumeTool(unittest.TestCase):
             result = asyncio.run(handle_plan_resume({"plan_id": plan_id}))
 
         self.assertIsInstance(result, CallToolResult)
-        self.assertFalse(result.isError)
-        self.assertEqual(result.structuredContent["plan_id"], plan_id)
-        self.assertEqual(result.structuredContent["state"], "pending")
-        self.assertEqual(result.structuredContent["model_profile"], "baseline")
-        self.assertEqual(result.structuredContent["resume_count"], 1)
+        self.assertFalse(result.is_error)
+        self.assertEqual(result.structured_content["plan_id"], plan_id)
+        self.assertEqual(result.structured_content["state"], "pending")
+        self.assertEqual(result.structured_content["model_profile"], "baseline")
+        self.assertEqual(result.structured_content["resume_count"], 1)
 
     def test_plan_resume_includes_sse_url(self):
         plan_id = str(uuid.uuid4())
@@ -48,16 +48,16 @@ class TestPlanResumeTool(unittest.TestCase):
         ):
             result = asyncio.run(handle_plan_resume({"plan_id": plan_id}))
 
-        self.assertFalse(result.isError)
-        self.assertEqual(result.structuredContent["sse_url"], f"{base_url}/sse/plan/{plan_id}")
+        self.assertFalse(result.is_error)
+        self.assertEqual(result.structured_content["sse_url"], f"{base_url}/sse/plan/{plan_id}")
 
     def test_plan_resume_returns_plan_not_found(self):
         plan_id = str(uuid.uuid4())
         with patch("mcp_cloud.handlers._resume_plan_sync", return_value=None):
             result = asyncio.run(handle_plan_resume({"plan_id": plan_id}))
 
-        self.assertTrue(result.isError)
-        self.assertEqual(result.structuredContent["error"]["code"], "PLAN_NOT_FOUND")
+        self.assertTrue(result.is_error)
+        self.assertEqual(result.structured_content["error"]["code"], "PLAN_NOT_FOUND")
 
     def test_plan_resume_returns_plan_not_resumable(self):
         plan_id = str(uuid.uuid4())
@@ -65,8 +65,8 @@ class TestPlanResumeTool(unittest.TestCase):
         with patch("mcp_cloud.handlers._resume_plan_sync", return_value=payload):
             result = asyncio.run(handle_plan_resume({"plan_id": plan_id}))
 
-        self.assertTrue(result.isError)
-        self.assertEqual(result.structuredContent["error"]["code"], "PLAN_NOT_RESUMABLE")
+        self.assertTrue(result.is_error)
+        self.assertEqual(result.structured_content["error"]["code"], "PLAN_NOT_RESUMABLE")
 
     def test_plan_resume_returns_pipeline_version_mismatch(self):
         plan_id = str(uuid.uuid4())
@@ -74,8 +74,8 @@ class TestPlanResumeTool(unittest.TestCase):
         with patch("mcp_cloud.handlers._resume_plan_sync", return_value=payload):
             result = asyncio.run(handle_plan_resume({"plan_id": plan_id}))
 
-        self.assertTrue(result.isError)
-        self.assertEqual(result.structuredContent["error"]["code"], "PIPELINE_VERSION_MISMATCH")
+        self.assertTrue(result.is_error)
+        self.assertEqual(result.structured_content["error"]["code"], "PIPELINE_VERSION_MISMATCH")
 
     def test_plan_resume_default_model_profile(self):
         """plan_resume should default model_profile to baseline."""

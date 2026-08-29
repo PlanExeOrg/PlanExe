@@ -289,6 +289,8 @@ def stripe_webhook():
     event: Any = None
     try:
         if webhook_secret:
+            if sig_header is None:
+                raise ValueError("Missing Stripe-Signature header")
             event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
         else:
             event = json.loads(payload)

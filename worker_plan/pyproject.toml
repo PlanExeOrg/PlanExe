@@ -64,7 +64,7 @@ dependencies = [
     "Markdown==3.10.3",
     "markdown-it-py==4.2.0",
     "MarkupSafe==3.0.3",
-    "marshmallow==3.26.2",
+    "marshmallow==4.3.1",
     "mdurl==0.1.2",
     # "mistralai==1.5.2",
     "multidict==6.7.1",

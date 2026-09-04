@@ -61,7 +61,7 @@ dependencies = [
     "llama-parse==0.6.94",
     "lockfile==0.12.2",
     "luigi==3.8.1",
-    "Markdown==3.10.2",
+    "Markdown==3.10.3",
     "markdown-it-py==4.2.0",
     "MarkupSafe==3.0.3",
     "marshmallow==3.26.2",

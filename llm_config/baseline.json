@@ -196,9 +196,54 @@
         },
         "pricing_kind": "free"
     },
-    "openrouter-gemini-2.5-flash-lite-preview-09-2025": {
-        "comment": "Created Sep 25, 2025. 1,048,576 context. $0.10/M input tokens. $0.40/M output tokens.",
+    "openrouter-z-ai-glm-5.3-flash": {
+        "comment": "2026 Aug 26. $0.075 input. $0.25 output. Per M tokens.",
+        "priority": 2,
+        "luigi_workers": 4,
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "z-ai/glm-5.3-flash",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 1,
+            "timeout": 60.0,
+            "context_window": 1048576,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 32000,
+            "max_retries": 5
+        },
+        "model_info_url": "https://openrouter.ai/z-ai/glm-5.3-flash",
+        "pricing": {
+            "input_per_million_tokens": 0.075,
+            "output_per_million_tokens": 0.25
+        },
+        "pricing_kind": "paid"
+    },
+    "openrouter-deepseek-deepseek-v4-flash-0731": {
+        "comment": "2026 Jul 31. $0.04998 input. $0.09996 output. Per M tokens.",
         "priority": 1,
+        "luigi_workers": 4,
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "deepseek/deepseek-v4-flash-0731",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 1,
+            "timeout": 60.0,
+            "context_window": 1048576,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 32000,
+            "max_retries": 5
+        },
+        "model_info_url": "https://openrouter.ai/deepseek/deepseek-v4-flash-0731",
+        "pricing": {
+            "input_per_million_tokens": 0.05,
+            "output_per_million_tokens": 0.1
+        },
+        "pricing_kind": "paid"
+    },
+    "openrouter-gemini-2.5-flash-lite-preview-09-2025": {
+        "comment": "No longer available. Created Sep 25, 2025. 1,048,576 context. $0.10/M input tokens. $0.40/M output tokens.",
         "luigi_workers": 4,
         "class": "OpenRouter",
         "arguments": {
@@ -220,7 +265,7 @@
         "pricing_kind": "paid"
     },
     "openrouter-gemini-2.0-flash-001": {
-        "comment": "Created Feb 25, 2025. 1,048,576 context. $0.10/M input tokens. $0.40/M output tokens. Alas price have increased and throughput dropped to roughly half its original speed. It was my favorite model, cheap and fast.",
+        "comment": "No longer available. Created Feb 25, 2025. 1,048,576 context. $0.10/M input tokens. $0.40/M output tokens. Alas price have increased and throughput dropped to roughly half its original speed. It was my favorite model, cheap and fast.",
         "luigi_workers": 4,
         "model_info_url": "https://openrouter.ai/google/gemini-2.0-flash-001",
         "class": "OpenRouter",
@@ -265,7 +310,7 @@
     },
     "openrouter-openai-gpt-4o-mini": {
         "comment": "This is medium fast. Created Jul 18, 2024. 128,000 context. Starting at $0.15/M input tokens. Starting at $0.60/M output tokens.",
-        "priority": 2,
+        "priority": 4,
         "luigi_workers": 4,
         "class": "OpenRouter",
         "arguments": {

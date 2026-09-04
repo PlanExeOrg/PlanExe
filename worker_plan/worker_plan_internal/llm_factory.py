@@ -265,15 +265,14 @@ def get_llm(llm_name: Optional[str] = None, model_profile: Optional[ModelProfile
     if class_name == "OpenRouter" and SEND_APP_INFO_TO_OPENROUTER:
         # https://openrouter.ai/rankings
         # https://openrouter.ai/docs/api-reference/overview#headers
-        arguments_extra = {
-            "additional_kwargs": {
-                "extra_headers": {
-                    "HTTP-Referer": "https://github.com/PlanExeOrg/PlanExe",
-                    "X-Title": "PlanExe - the premier planning tool for AI agents"
-                }
-            }
+        # Merge into any additional_kwargs from the config (e.g. extra_body
+        # with OpenRouter provider routing) rather than replacing them.
+        additional_kwargs = dict(arguments.get("additional_kwargs", {}))
+        additional_kwargs["extra_headers"] = {
+            "HTTP-Referer": "https://github.com/PlanExeOrg/PlanExe",
+            "X-Title": "PlanExe - the premier planning tool for AI agents"
         }
-        arguments.update(arguments_extra)
+        arguments["additional_kwargs"] = additional_kwargs
 
     # Ensure a request timeout is set so LLM calls don't hang indefinitely.
     # Ollama uses "request_timeout"; all others (OpenRouter, Anthropic, LMStudio)

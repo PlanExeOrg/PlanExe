@@ -220,7 +220,7 @@
         "pricing_kind": "paid"
     },
     "openrouter-deepseek-deepseek-v4-flash-0731": {
-        "comment": "2026 Jul 31. $0.04998 input. $0.09996 output. Per M tokens.",
+        "comment": "2026 Jul 31. $0.04998 input. $0.09996 output. Per M tokens. Pinned to the Baidu fp8 endpoint (no fallbacks) so OpenRouter does not route between the ~30 providers hosting this model.",
         "priority": 1,
         "luigi_workers": 4,
         "class": "OpenRouter",
@@ -233,7 +233,12 @@
             "is_function_calling_model": false,
             "is_chat_model": true,
             "max_tokens": 32000,
-            "max_retries": 5
+            "max_retries": 5,
+            "additional_kwargs": {
+                "extra_body": {
+                    "provider": {"order": ["baidu/fp8"], "allow_fallbacks": false}
+                }
+            }
         },
         "model_info_url": "https://openrouter.ai/deepseek/deepseek-v4-flash-0731",
         "pricing": {

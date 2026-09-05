@@ -135,6 +135,28 @@
         },
         "pricing_kind": "paid"
     },
+    "openrouter-ling-3.0-flash-fin-free": {
+        "comment": "Released Aug 27, 2026. Finance-focused MoE from inclusionAI built on Ling 3.0 Flash, 5.1B active of 124B params. Single provider (Novita). 262,144 context, 32,768 max output. $0/M input tokens. $0/M output tokens.",
+        "luigi_workers": 4,
+        "model_info_url": "https://openrouter.ai/inclusionai/ling-3.0-flash-fin",
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "inclusionai/ling-3.0-flash-fin:free",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 0.1,
+            "timeout": 60.0,
+            "context_window": 262144,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 32000,
+            "max_retries": 5
+        },
+        "pricing": {
+            "input_per_million_tokens": 0,
+            "output_per_million_tokens": 0
+        },
+        "pricing_kind": "free"
+    },
     "openrouter-ling-3.0-flash-sante-free": {
         "comment": "Released Sep 4, 2026. Health/medicine-focused MoE from inclusionAI built on Ling 3.0 Flash, 5.1B active of 124B params. Single provider (Novita). 262,144 context, 32,768 max output. $0/M input tokens. $0/M output tokens.",
         "luigi_workers": 4,

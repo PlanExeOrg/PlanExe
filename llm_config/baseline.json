@@ -135,9 +135,8 @@
         },
         "pricing_kind": "paid"
     },
-    "openrouter-nemotron-3.5-lightning-free": {
+    "xopenrouter-nemotron-3.5-lightning-free": {
         "comment": "Released Aug 11, 2026. NVIDIA MoE, 3B active of 30B params, built for high-throughput agentic work. Single provider (Nvidia, nvfp4). 1,000,000 context, 65,536 max output. $0/M input tokens. $0/M output tokens.",
-        "priority": 1,
         "luigi_workers": 4,
         "model_info_url": "https://openrouter.ai/nvidia/nemotron-3.5-lightning",
         "class": "OpenRouter",
@@ -210,6 +209,7 @@
     },
     "openrouter-laguna-s-2.1-free": {
         "comment": "Released Jul 21, 2026. Poolside coding-agent model, 8B active of 118B params. Single provider (Poolside, fp4). 262,144 context, 32,768 max output. $0/M input tokens. $0/M output tokens.",
+        "priority": 1,
         "luigi_workers": 4,
         "model_info_url": "https://openrouter.ai/poolside/laguna-s-2.1",
         "class": "OpenRouter",

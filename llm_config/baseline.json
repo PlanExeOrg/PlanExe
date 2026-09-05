@@ -108,6 +108,33 @@
         },
         "pricing_kind": "paid"
     },
+    "openrouter-ling-3.0-flash": {
+        "comment": "Released Jul 23, 2026. General-purpose MoE from inclusionAI, 5.1B active of 124B params, built for token efficiency. Pinned to Novita (no fallbacks): the only other provider, DeepInfra, is 3x the price with a 131k context. 262,144 context, 32,768 max output. $0.021/M input tokens. $0.063/M output tokens.",
+        "luigi_workers": 4,
+        "model_info_url": "https://openrouter.ai/inclusionai/ling-3.0-flash",
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "inclusionai/ling-3.0-flash",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 0.1,
+            "timeout": 60.0,
+            "context_window": 262144,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 32000,
+            "max_retries": 5,
+            "additional_kwargs": {
+                "extra_body": {
+                    "provider": {"order": ["novita"], "allow_fallbacks": false}
+                }
+            }
+        },
+        "pricing": {
+            "input_per_million_tokens": 0.021,
+            "output_per_million_tokens": 0.063
+        },
+        "pricing_kind": "paid"
+    },
     "openrouter-ling-3.0-flash-sante-free": {
         "comment": "Released Sep 4, 2026. Health/medicine-focused MoE from inclusionAI built on Ling 3.0 Flash, 5.1B active of 124B params. Single provider (Novita). 262,144 context, 32,768 max output. $0/M input tokens. $0/M output tokens.",
         "luigi_workers": 4,

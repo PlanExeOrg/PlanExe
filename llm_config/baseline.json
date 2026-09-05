@@ -184,6 +184,29 @@
         },
         "pricing_kind": "paid"
     },
+    "openrouter-mercury-2.5-preview": {
+        "comment": "Released Aug 31, 2026. Inception's diffusion LLM: generates and refines many tokens in parallel instead of sequentially, marketed as the fastest reasoning model. Single provider (Inception). 260,000 context, 65,536 max output. $0.04/M input tokens. $0.15/M output tokens.",
+        "priority": 1,
+        "luigi_workers": 4,
+        "model_info_url": "https://openrouter.ai/inception/mercury-2.5-preview",
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "inception/mercury-2.5-preview",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 0.1,
+            "timeout": 60.0,
+            "context_window": 260000,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 32000,
+            "max_retries": 5
+        },
+        "pricing": {
+            "input_per_million_tokens": 0.04,
+            "output_per_million_tokens": 0.15
+        },
+        "pricing_kind": "paid"
+    },
     "openrouter-solar-pro4": {
         "comment": "Released Aug 10, 2026. Upstage's cost-efficient model for long-horizon and document-heavy tasks. Hosted only by Upstage (two endpoints, one zero-data-retention, same price). 524,288 context, 131,072 max output. $0.03/M input tokens. $0.12/M output tokens.",
         "priority": 2,
@@ -251,9 +274,8 @@
         },
         "pricing_kind": "free"
     },
-    "openrouter-ling-3.0-flash-fin-free": {
+    "xopenrouter-ling-3.0-flash-fin-free": {
         "comment": "Released Aug 27, 2026. Finance-focused MoE from inclusionAI built on Ling 3.0 Flash, 5.1B active of 124B params. Single provider (Novita). 262,144 context, 32,768 max output. $0/M input tokens. $0/M output tokens.",
-        "priority": 1,
         "luigi_workers": 4,
         "model_info_url": "https://openrouter.ai/inclusionai/ling-3.0-flash-fin",
         "class": "OpenRouter",

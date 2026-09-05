@@ -135,6 +135,99 @@
         },
         "pricing_kind": "paid"
     },
+    "openrouter-nemotron-3.5-lightning-free": {
+        "comment": "Released Aug 11, 2026. NVIDIA MoE, 3B active of 30B params, built for high-throughput agentic work. Single provider (Nvidia, nvfp4). 1,000,000 context, 65,536 max output. $0/M input tokens. $0/M output tokens.",
+        "luigi_workers": 4,
+        "model_info_url": "https://openrouter.ai/nvidia/nemotron-3.5-lightning",
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "nvidia/nemotron-3.5-lightning:free",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 0.1,
+            "timeout": 60.0,
+            "context_window": 1000000,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 32000,
+            "max_retries": 5
+        },
+        "pricing": {
+            "input_per_million_tokens": 0,
+            "output_per_million_tokens": 0
+        },
+        "pricing_kind": "free"
+    },
+    "openrouter-nemotron-3.5-lightning": {
+        "comment": "Released Aug 11, 2026. NVIDIA MoE, 3B active of 30B params, built for high-throughput agentic work. Pinned to DeepInfra bf16 (no fallbacks); CoreWeave is the only alternative at a slightly higher price. 262,144 context, 131,072 max output. $0.08/M input tokens. $0.20/M output tokens.",
+        "luigi_workers": 4,
+        "model_info_url": "https://openrouter.ai/nvidia/nemotron-3.5-lightning",
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "nvidia/nemotron-3.5-lightning",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 0.1,
+            "timeout": 60.0,
+            "context_window": 262144,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 32000,
+            "max_retries": 5,
+            "additional_kwargs": {
+                "extra_body": {
+                    "provider": {"order": ["deepinfra/bf16"], "allow_fallbacks": false}
+                }
+            }
+        },
+        "pricing": {
+            "input_per_million_tokens": 0.08,
+            "output_per_million_tokens": 0.2
+        },
+        "pricing_kind": "paid"
+    },
+    "openrouter-solar-pro4": {
+        "comment": "Released Aug 10, 2026. Upstage's cost-efficient model for long-horizon and document-heavy tasks. Hosted only by Upstage (two endpoints, one zero-data-retention, same price). 524,288 context, 131,072 max output. $0.03/M input tokens. $0.12/M output tokens.",
+        "luigi_workers": 4,
+        "model_info_url": "https://openrouter.ai/upstage/solar-pro4",
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "upstage/solar-pro4",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 0.1,
+            "timeout": 60.0,
+            "context_window": 524288,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 32000,
+            "max_retries": 5
+        },
+        "pricing": {
+            "input_per_million_tokens": 0.03,
+            "output_per_million_tokens": 0.12
+        },
+        "pricing_kind": "paid"
+    },
+    "openrouter-laguna-s-2.1-free": {
+        "comment": "Released Jul 21, 2026. Poolside coding-agent model, 8B active of 118B params. Single provider (Poolside, fp4). 262,144 context, 32,768 max output. $0/M input tokens. $0/M output tokens.",
+        "luigi_workers": 4,
+        "model_info_url": "https://openrouter.ai/poolside/laguna-s-2.1",
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "poolside/laguna-s-2.1:free",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 0.1,
+            "timeout": 60.0,
+            "context_window": 262144,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 32000,
+            "max_retries": 5
+        },
+        "pricing": {
+            "input_per_million_tokens": 0,
+            "output_per_million_tokens": 0
+        },
+        "pricing_kind": "free"
+    },
     "openrouter-dots-3-note-preview-free": {
         "comment": "Released Aug 14, 2026. Open-weight MoE from Dots Studio, 16B active of 280B params, lightest of the Dots 3 family. Single provider (AtlasCloud, fp8). 512,000 context, 460,800 max output. $0/M input tokens. $0/M output tokens.",
         "luigi_workers": 4,

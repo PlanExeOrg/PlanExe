@@ -4,7 +4,7 @@ flask-sqlalchemy==3.1.1
 psycopg2-binary==2.9.12
 python-dotenv==1.2.3
 sqlalchemy-utils==0.42.1
-pydantic==2.13.4
+pydantic==2.13.5
 fastapi==0.141.1
 python-multipart==0.0.32
 uvicorn[standard]==0.52.4

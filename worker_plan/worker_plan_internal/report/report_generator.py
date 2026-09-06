@@ -154,14 +154,18 @@ class ReportGenerator:
         markdown_content = f"```csv\n{csv_text}```"
         self.report_markdown_item_list.append(ReportMarkdownItem(document_title, markdown_content))
 
-    def append_html(self, document_title: str, file_path: Path, css_classes: list[str] = []):
+    def append_html(self, document_title: str, file_path: Path, css_classes: list[str] = [], subtitle: Optional[str] = None):
         """Append an HTML document to the report.
 
         HTML-only: not added to the markdown report (the markdown output is intended for LLM consumption,
         and embedded JavaScript/HTML widgets are not useful there).
+
+        subtitle: optional one-line intro shown as the first paragraph of the section, above the embedded HTML.
         """
         with open(file_path, 'r') as f:
             html_raw = f.read()
+
+        subtitle_html = f"<p>{escape(subtitle)}</p>\n" if subtitle else ""
 
         # Extract the html_head content between <!--HTML_HEAD_START--> and <!--HTML_HEAD_END-->
         html_head_match = re.search(r'<!--HTML_HEAD_START-->(.*)<!--HTML_HEAD_END-->', html_raw, re.DOTALL)
@@ -175,11 +179,11 @@ class ReportGenerator:
         html_body_match = re.search(r'<!--HTML_BODY_CONTENT_START-->(.*)<!--HTML_BODY_CONTENT_END-->', html_raw, re.DOTALL)
         if html_body_match:
             html_body = html_body_match.group(1)
-            self.report_html_item_list.append(ReportDocumentItem(document_title, html_body))
+            self.report_html_item_list.append(ReportDocumentItem(document_title, subtitle_html + html_body, css_classes=css_classes))
         else:
             logging.warning(f"Document: '{document_title}'. Could not find HTML_BODY_CONTENT_START and HTML_BODY_CONTENT_END in {file_path}")
             # If no markers found, use the entire content as the body
-            self.report_html_item_list.append(ReportDocumentItem(document_title, html_raw, css_classes=css_classes))
+            self.report_html_item_list.append(ReportDocumentItem(document_title, subtitle_html + html_raw, css_classes=css_classes))
 
         # Extract the html_body_script content between <!--HTML_BODY_SCRIPT_START--> and <!--HTML_BODY_SCRIPT_END-->
         html_body_script_match = re.search(r'<!--HTML_BODY_SCRIPT_START-->(.*)<!--HTML_BODY_SCRIPT_END-->', html_raw, re.DOTALL)

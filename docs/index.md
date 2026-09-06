@@ -41,7 +41,7 @@ PlanExe generates a **single HTML report** (a self-contained artifact you can op
 Open the sample report and do this:
 
 1. Read **Executive Summary** to see the top-level deliverables, budget, risks, and next steps.
-2. Jump to **Gantt Interactive** to see how the goal gets broken down into many concrete tasks.
+2. Jump to **Gantt** to see how the goal gets broken down into many concrete tasks.
 3. Open **Premortem** to see what could go wrong and what to do about it.
 
 ---

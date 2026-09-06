@@ -90,7 +90,7 @@ dependencies = [
     "pytz==2026.3.post1",
     "PyYAML==6.0.3",
     "regex==2026.4.4",
-    "requests==2.33.1",
+    "requests==2.34.2",
     "rich==15.0.0",
     "safehttpx==0.1.7",
     "semantic-version==2.10.0",

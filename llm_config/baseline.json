@@ -164,7 +164,7 @@
     },
     "openrouter-mercury-2.5-preview": {
         "comment": "Released Aug 31, 2026. Inception's diffusion LLM: generates and refines many tokens in parallel instead of sequentially, marketed as the fastest reasoning model. Single provider (Inception). 260,000 context, 65,536 max output. $0.04/M input tokens. $0.15/M output tokens.",
-        "priority": 1,
+        "priority": 2,
         "luigi_workers": 4,
         "model_info_url": "https://openrouter.ai/inception/mercury-2.5-preview",
         "class": "OpenRouter",
@@ -185,9 +185,32 @@
         },
         "pricing_kind": "paid"
     },
+    "openrouter-muse-spark-1.2-contributor": {
+        "comment": "This is very fast, slightly faster than mercury-2.5-preview, but gemini-2.5-flash-lite yields more accurate text. Released Aug 21, 2026. Meta's cheaper contributor tier of Muse Spark 1.2, a reasoning model, so it uses more tokens than non-reasoning models. Single provider (Meta), moderated. 1,048,576 context, 943,718 max output. $0.10/M input tokens. $0.20/M output tokens.",
+        "priority": 1,
+        "luigi_workers": 4,
+        "model_info_url": "https://openrouter.ai/meta/muse-spark-1.2-contributor",
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "meta/muse-spark-1.2-contributor",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 0.1,
+            "timeout": 60.0,
+            "context_window": 1048576,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 32000,
+            "max_retries": 5
+        },
+        "pricing": {
+            "input_per_million_tokens": 0.10,
+            "output_per_million_tokens": 0.20
+        },
+        "pricing_kind": "paid"
+    },
     "openrouter-solar-pro4": {
         "comment": "Released Aug 10, 2026. Upstage's cost-efficient model for long-horizon and document-heavy tasks. Hosted only by Upstage (two endpoints, one zero-data-retention, same price). 524,288 context, 131,072 max output. $0.03/M input tokens. $0.12/M output tokens.",
-        "priority": 2,
+        "priority": 3,
         "luigi_workers": 4,
         "model_info_url": "https://openrouter.ai/upstage/solar-pro4",
         "class": "OpenRouter",
@@ -249,6 +272,28 @@
         "pricing": {
             "input_per_million_tokens": 0.05,
             "output_per_million_tokens": 0.10
+        },
+        "pricing_kind": "paid"
+    },
+    "openrouter-laguna-xs-2.1": {
+        "comment": "Slow. Released Jul 2, 2026. Poolside's 33B-A3B coding agent model, successor to Laguna XS.2. Single provider (Poolside, fp8). 262,144 context, 32,768 max output. $0.06/M input tokens. $0.12/M output tokens.",
+        "luigi_workers": 4,
+        "model_info_url": "https://openrouter.ai/poolside/laguna-xs-2.1",
+        "class": "OpenRouter",
+        "arguments": {
+            "model": "poolside/laguna-xs-2.1",
+            "api_key": "${OPENROUTER_API_KEY}",
+            "temperature": 0.1,
+            "timeout": 60.0,
+            "context_window": 262144,
+            "is_function_calling_model": false,
+            "is_chat_model": true,
+            "max_tokens": 32000,
+            "max_retries": 5
+        },
+        "pricing": {
+            "input_per_million_tokens": 0.06,
+            "output_per_million_tokens": 0.12
         },
         "pricing_kind": "paid"
     },
@@ -413,7 +458,7 @@
     },
     "openrouter-openai-gpt-4o-mini": {
         "comment": "This is medium fast. Created Jul 18, 2024. 128,000 context. Starting at $0.15/M input tokens. Starting at $0.60/M output tokens.",
-        "priority": 4,
+        "priority": 5,
         "luigi_workers": 4,
         "class": "OpenRouter",
         "arguments": {
@@ -436,7 +481,7 @@
     },
     "openrouter-qwen3-30b-a3b": {
         "comment": "This is slow. Created Apr 28, 2025. 40,960 context. $0.08/M input tokens. $0.28/M output tokens.",
-        "priority": 3,
+        "priority": 4,
         "luigi_workers": 4,
         "class": "OpenRouter",
         "arguments": {

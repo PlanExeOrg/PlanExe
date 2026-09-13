@@ -109,7 +109,7 @@ dependencies = [
     "typing_extensions==4.16.0",
     "tzdata==2026.2",
     "urllib3==2.7.0",
-    "uvicorn==0.40.0",
+    "uvicorn==0.52.4",
     "websockets==16.0",
     "wrapt==2.2.1",
     "yarl==1.24.2",

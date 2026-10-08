@@ -18,7 +18,7 @@
 > [PlanExe2](https://github.com/PlanExeOrg/PlanExe2).
 
 <p align="center">
-  Turn a complex project brief into an editable planning baseline in about 15 minutes.
+  Turn a complex project brief into an editable planning baseline in roughly 65–90 minutes.
 </p>
 
 <p align="center">
@@ -62,8 +62,8 @@ the output commonly includes:
 - Documents to create, documents to find, and data to collect
 - An editable bundle of Markdown, JSON, and CSV source artifacts
 
-The planning pipeline can use cloud models or run with local models so sensitive
-project material can remain on systems you control.
+PlanExe v2 runs on your own machine and makes its model calls through the
+Claude Code CLI, using your Claude subscription.
 
 ## Built for complex projects
 
@@ -115,23 +115,23 @@ planning—not as proof that a project is safe, feasible, funded, or approved.
    any report that interests you.
 2. [Generate your own plan with PlanExe v2](https://github.com/PlanExeOrg/PlanExe2).
 
-## Why run PlanExe on your own infrastructure?
+## Why run PlanExe on your own machine?
 
-Some project data should not be sent to third-party services. Running PlanExe
-with local models can help you:
+PlanExe v2 is a small Python program that you clone and run yourself. There is
+no hosted service and no PlanExe account. Running it locally lets you:
 
-- Keep trade secrets, confidential strategies, and sensitive project material
-  within systems you control
-- Work offline or inside an air-gapped environment
-- Continue planning when a model provider is unavailable in your country
-- Reduce dependence on vendor censorship, changing usage policies, account
-  restrictions, pricing changes, or service shutdowns
-- Choose models that fit your language, values, hardware, and project
-- Preserve access to your planning process and editable project files over time
+- Keep every generated plan as files on your own disk
+- Edit any intermediate file and regenerate only the work that depends on it
+- Resume an interrupted run without repeating the work already finished
+- Read the log of every prompt and response behind the report
+- Get started with nothing more than Python 3.11 and the Claude Code CLI
 
-Self-hosting does not remove your legal, ethical, security, or professional
-responsibilities. It gives you greater control over the models, infrastructure,
-and information involved.
+PlanExe v2 sends your project brief and the intermediate planning material to
+Anthropic through the Claude Code CLI. Do not use it for material that must not
+leave systems you control.
+
+Running PlanExe yourself does not remove your legal, ethical, security, or
+professional responsibilities.
 
 For setup instructions, see the
 [PlanExe v2 repository](https://github.com/PlanExeOrg/PlanExe2).

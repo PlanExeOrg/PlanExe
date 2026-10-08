@@ -12,6 +12,11 @@
   <strong>Planning complex projects should not require a consulting-firm budget.</strong>
 </p>
 
+> [!IMPORTANT]
+> **PlanExe v2 is here, and it is better than v1.**
+> This repository is PlanExe v1. For new plans, use
+> [PlanExe2](https://github.com/PlanExeOrg/PlanExe2).
+
 <p align="center">
   <a href="https://app.mach-ai.com/planexe_early_access">
     <img src="https://img.shields.io/badge/%F0%9F%9A%80%20Try%20PlanExe%20in%20your%20browser-Generate%20a%20free%20plan-2ea44f?style=for-the-badge" alt="Try PlanExe in your browser — generate a free plan" height="48">
@@ -23,9 +28,8 @@
 </p>
 
 <p align="center">
-  <a href="https://home.planexe.org/"><strong>Create an account</strong></a> &nbsp;|&nbsp;
-  <a href="https://planexe.org/examples/"><strong>See example plans</strong></a> &nbsp;|&nbsp;
-  <a href="https://docs.planexe.org/getting_started/"><strong>Getting started guide</strong></a>
+  <a href="https://github.com/PlanExeOrg/PlanExe2"><strong>PlanExe v2</strong></a> &nbsp;|&nbsp;
+  <a href="https://planexe.org/examples/"><strong>See example plans</strong></a>
 </p>
 
 ---

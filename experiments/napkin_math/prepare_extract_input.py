@@ -29,6 +29,14 @@ reads the full PlanExe HTML report).
 Defaults to a sibling ``output/<planexe-dir-name>/`` directory next to this
 script. Override with ``--output-dir`` or ``--llm``.
 
+When rerunning the pipeline at version v(N) for a plan slug that already
+has an earlier version on disk, pass ``--prior <prior parameters.json>``
+to append a compact ``# Prior Signal Ledger`` to the combined digest.
+That ledger is the wiring point for the source-preservation audit and
+the extract LLM's ``dropped_signals`` rules; without it, a rerun cannot
+emit prior-baseline-origin drops. See
+``.claude/skills/run-napkin-math-pipeline/SKILL.md`` for orchestration.
+
 PROMPT> python experiments/napkin_math/prepare_extract_input.py \\
             --planexe-dir /Users/neoneye/git/PlanExe-web/20260215_nuuk_clay_workshop
 """
@@ -156,7 +164,24 @@ defines the universe of prior-baseline signals the audit will check.
 """
 
 
-def build_prior_signal_ledger(prior_params: dict) -> str:
+def render_prior_source(prior_path: Path) -> str:
+    """Render the prior path stably across worktrees. When the path is
+    under ``NAPKIN_MATH_DIR``, return the suffix (e.g.
+    ``output/v58/<slug>/parameters.json``); otherwise return the
+    absolute path. The result is what gets stamped into the ledger and
+    what the orchestrator's Stage 1 preflight greps for to confirm the
+    digest was generated against the intended accepted baseline.
+    """
+    resolved = prior_path.resolve()
+    try:
+        return str(resolved.relative_to(NAPKIN_MATH_DIR))
+    except ValueError:
+        return str(resolved)
+
+
+def build_prior_signal_ledger(
+    prior_params: dict, prior_path: Path | None = None,
+) -> str:
     """Build a compact markdown ledger listing the prior baseline's
     named signals — entry ids and output_names across the five sections
     that carry them. Intentionally narrow: no source_text, no labels,
@@ -168,6 +193,12 @@ def build_prior_signal_ledger(prior_params: dict) -> str:
     structural relationships survive. Signals are deduplicated: a name
     that appears as both an id and an output_name is listed once with
     kind = ``id`` (the more authoritative reading).
+
+    When ``prior_path`` is supplied, a ``Prior source: `<path>``` line
+    is stamped between the header and the signal list. This lets the
+    orchestrator's Stage 1 preflight verify the ledger was built
+    against the named accepted baseline, not against an arbitrary or
+    probe prior.
     """
     seen: dict[str, dict[str, Any]] = {}
     for section in SECTIONS_WITH_IDS_FOR_LEDGER:
@@ -196,7 +227,11 @@ def build_prior_signal_ledger(prior_params: dict) -> str:
                 "formula_hint": entry.get("formula_hint"),
                 "depends_on": entry.get("depends_on") or [],
             })
-    lines: list[str] = [PRIOR_LEDGER_HEADER.rstrip(), "", "## Signals", ""]
+    lines: list[str] = [PRIOR_LEDGER_HEADER.rstrip(), ""]
+    if prior_path is not None:
+        lines.append(f"Prior source: `{render_prior_source(prior_path)}`")
+        lines.append("")
+    lines.extend(["## Signals", ""])
     for name in sorted(seen):
         meta = seen[name]
         lines.append(f"- `{name}` [{meta['section']}/{meta['kind']}]")
@@ -213,7 +248,9 @@ def build_prior_signal_ledger(prior_params: dict) -> str:
 
 
 def build_combined_digest(
-    planexe_dir: Path, output_dir: Path, prior_params: dict | None = None,
+    planexe_dir: Path, output_dir: Path,
+    prior_params: dict | None = None,
+    prior_path: Path | None = None,
 ) -> Path:
     """Concatenate the 137-recommended extraction bundle, in 137's order, with
     a legend at the top. Compressed sections come from ``output_dir/compress_*.md``;
@@ -228,6 +265,11 @@ def build_combined_digest(
     intentionally narrow — names, sections, formula_hints and depends_on
     only — so it acts as a preservation budget rather than a phrasing
     target.
+
+    When ``prior_path`` is also supplied, the ledger is stamped with a
+    ``Prior source: `<path>``` line so the orchestrator's Stage 1
+    preflight can verify the digest was built against the intended
+    accepted baseline.
     """
     parts: list[str] = [LEGEND.rstrip(), "", "---", ""]
     found_any = False
@@ -258,7 +300,9 @@ def build_combined_digest(
             f"that the raw section files exist under {planexe_dir}."
         )
     if prior_params is not None:
-        parts.append(build_prior_signal_ledger(prior_params).rstrip())
+        parts.append(
+            build_prior_signal_ledger(prior_params, prior_path=prior_path).rstrip()
+        )
         parts.append("")
     combined = output_dir / "extract_parameters_input.md"
     combined.write_text("\n".join(parts).rstrip() + "\n", encoding="utf-8")
@@ -320,18 +364,23 @@ def main() -> None:
     print(f"LLM         : {args.llm or '(run_compress_full default)'}\n")
 
     prior_params: dict | None = None
+    prior_path: Path | None = None
     if args.prior is not None:
-        prior_path: Path = args.prior.resolve()
-        if not prior_path.is_file():
-            raise SystemExit(f"--prior not found or not a file: {prior_path}")
+        resolved_prior: Path = args.prior.resolve()
+        if not resolved_prior.is_file():
+            raise SystemExit(f"--prior not found or not a file: {resolved_prior}")
         try:
-            prior_params = json.loads(prior_path.read_text(encoding="utf-8"))
+            prior_params = json.loads(resolved_prior.read_text(encoding="utf-8"))
         except json.JSONDecodeError as exc:
             raise SystemExit(f"--prior is not valid JSON: {exc}") from exc
-        print(f"Prior        : {prior_path}\n")
+        print(f"Prior        : {resolved_prior}\n")
+        prior_path = resolved_prior
 
     run_compress(planexe_dir, output_dir, args.llm)
-    combined = build_combined_digest(planexe_dir, output_dir, prior_params=prior_params)
+    combined = build_combined_digest(
+        planexe_dir, output_dir,
+        prior_params=prior_params, prior_path=prior_path,
+    )
 
     print(f"\nWrote combined digest: {combined}")
     print("Feed this file to the extract-parameters-from-digest skill.")

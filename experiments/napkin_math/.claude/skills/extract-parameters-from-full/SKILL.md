@@ -17,6 +17,18 @@ Wraps the quantitative-triage system prompt at `system-prompt.txt` (next to this
 
 Not for: full report summarisation, narrative analysis, code generation. The system prompt explicitly forbids those.
 
+The input may also end with a `# Prior Signal Ledger (advisory)` section
+listing the previous iteration's named signals. When present, preserve
+still-supported prior signals and record drops in `dropped_signals` with
+`origin: "prior_baseline"` per the "Prior Signal Ledger" rules in
+`system-prompt.txt`. Absence of the ledger is ambiguous on its own
+(first-iteration vs. a rerun whose Stage 0 was called without
+`--prior`); the orchestrator (`run-napkin-math-pipeline`) disambiguates
+it via the Stage 1 preflight before invoking this skill. When invoked
+standalone, treat absent-ledger as first-iteration only when the caller
+has confirmed there is no prior accepted baseline for the slug on disk;
+otherwise stop and ask.
+
 ## Workflow
 
 1. **Get the report path.** If the user did not provide one, ask. Do not guess.

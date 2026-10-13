@@ -187,6 +187,48 @@ def test_ledger_does_not_include_source_text_or_label() -> None:
     assert "1.0" not in ledger
 
 
+# ─── prior-source stamp ───────────────────────────────────────────────────
+
+def test_ledger_omits_prior_source_when_no_path_supplied() -> None:
+    """Backwards compatible: callers that pass only ``prior_params``
+    (no ``prior_path``) get a ledger without a ``Prior source:`` stamp.
+    The stamp is opt-in so existing programmatic users keep working."""
+    params = _build_params(key_values=[_kv("alpha")])
+    ledger = prepare.build_prior_signal_ledger(params)
+    assert "Prior source:" not in ledger
+
+
+def test_ledger_stamps_prior_source_relative_to_napkin_math_dir() -> None:
+    """When the prior path lives under NAPKIN_MATH_DIR, the stamp is the
+    relative tail (e.g. ``output/v58/<slug>/parameters.json``). This makes
+    the stamp stable across worktrees so the orchestrator's grep can
+    match deterministically."""
+    params = _build_params(key_values=[_kv("alpha")])
+    prior_path = prepare.NAPKIN_MATH_DIR / "output" / "v58" / "demo_slug" / "parameters.json"
+    ledger = prepare.build_prior_signal_ledger(params, prior_path=prior_path)
+    assert "Prior source: `output/v58/demo_slug/parameters.json`" in ledger
+
+
+def test_ledger_stamps_absolute_prior_source_when_outside_napkin_math_dir(
+    tmp_path: Path,
+) -> None:
+    """Prior paths outside NAPKIN_MATH_DIR fall back to absolute. The
+    orchestrator's grep can still target the baseline+slug suffix."""
+    params = _build_params(key_values=[_kv("alpha")])
+    elsewhere = tmp_path / "v58" / "demo_slug" / "parameters.json"
+    elsewhere.parent.mkdir(parents=True)
+    elsewhere.write_text("{}")
+    ledger = prepare.build_prior_signal_ledger(params, prior_path=elsewhere)
+    assert f"Prior source: `{elsewhere}`" in ledger
+
+
+def test_render_prior_source_strips_napkin_math_prefix() -> None:
+    rendered = prepare.render_prior_source(
+        prepare.NAPKIN_MATH_DIR / "output" / "v49" / "demo_slug" / "parameters.json"
+    )
+    assert rendered == "output/v49/demo_slug/parameters.json"
+
+
 # ─── build_combined_digest end-to-end ─────────────────────────────────────
 
 def _make_minimal_planexe_dir(planexe_dir: Path) -> None:
@@ -229,6 +271,109 @@ def test_build_combined_digest_appends_ledger_when_prior_provided() -> None:
     ledger_idx = text.index("Prior Signal Ledger")
     summary_idx = text.index("Executive summary text")
     assert summary_idx < ledger_idx
+
+
+def _write_minimal_compressed_sections(outdir: Path) -> None:
+    """Write the four ``compress_<name>.md`` files build_combined_digest
+    expects under ``outdir``. Used to stand in for run_compress_full
+    output when exercising ``main()`` without invoking the real
+    compressor."""
+    for name in ("selected_scenario", "review_plan", "premortem",
+                 "expert_criticism"):
+        (outdir / f"compress_{name}.md").write_text(
+            f"# {name.replace('_', ' ').title()}\n\nCompressed body.\n",
+            encoding="utf-8",
+        )
+
+
+def test_main_with_prior_writes_ledger_into_combined_digest(monkeypatch) -> None:
+    """End-to-end CLI contract: invoking ``main()`` with ``--prior``
+    appends ``# Prior Signal Ledger`` to ``extract_parameters_input.md``.
+    This locks the wiring on the orchestrator side — a refactor that
+    drops ``--prior`` from ``main()`` or stops feeding it into
+    ``build_combined_digest`` will fail this test."""
+    with tempfile.TemporaryDirectory() as td:
+        tmpdir = Path(td)
+        planexe = tmpdir / "planexe"
+        planexe.mkdir()
+        _make_minimal_planexe_dir(planexe)
+        outdir = tmpdir / "out"
+        outdir.mkdir()
+        _write_minimal_compressed_sections(outdir)
+        prior = _build_params(key_values=[_kv("alpha")])
+        prior_path = tmpdir / "prior_parameters.json"
+        prior_path.write_text(json.dumps(prior), encoding="utf-8")
+
+        monkeypatch.setattr(prepare, "run_compress",
+                            lambda planexe_dir, output_dir, llm: None)
+        monkeypatch.setattr(sys, "argv", [
+            "prepare_extract_input.py",
+            "--planexe-dir", str(planexe),
+            "--output-dir", str(outdir),
+            "--prior", str(prior_path),
+        ])
+        prepare.main()
+
+        text = (outdir / "extract_parameters_input.md").read_text(encoding="utf-8")
+    assert "# Prior Signal Ledger" in text
+    assert "`alpha` [key_values/id]" in text
+    # The ledger must also stamp where the prior came from so the
+    # orchestrator's Stage 1 preflight can verify the digest was built
+    # against the named accepted baseline.
+    assert "Prior source: `" in text
+    assert "prior_parameters.json`" in text
+
+
+def test_main_without_prior_omits_ledger_from_combined_digest(monkeypatch) -> None:
+    """Mirror of the with-prior test. The no-prior path stays clean —
+    no ledger is appended, no first-iteration stub leaks in unless
+    ``--prior`` was supplied."""
+    with tempfile.TemporaryDirectory() as td:
+        tmpdir = Path(td)
+        planexe = tmpdir / "planexe"
+        planexe.mkdir()
+        _make_minimal_planexe_dir(planexe)
+        outdir = tmpdir / "out"
+        outdir.mkdir()
+        _write_minimal_compressed_sections(outdir)
+
+        monkeypatch.setattr(prepare, "run_compress",
+                            lambda planexe_dir, output_dir, llm: None)
+        monkeypatch.setattr(sys, "argv", [
+            "prepare_extract_input.py",
+            "--planexe-dir", str(planexe),
+            "--output-dir", str(outdir),
+        ])
+        prepare.main()
+
+        text = (outdir / "extract_parameters_input.md").read_text(encoding="utf-8")
+    assert "Prior Signal Ledger" not in text
+
+
+def test_main_with_missing_prior_path_fails_loud(monkeypatch) -> None:
+    """``--prior`` pointing at a non-existent path must exit non-zero
+    rather than silently skip the ledger. This is the contract the
+    orchestrator relies on: a typoed prior path is a loud failure, not
+    a silent first-iteration extraction."""
+    with tempfile.TemporaryDirectory() as td:
+        tmpdir = Path(td)
+        planexe = tmpdir / "planexe"
+        planexe.mkdir()
+        _make_minimal_planexe_dir(planexe)
+        outdir = tmpdir / "out"
+        outdir.mkdir()
+
+        monkeypatch.setattr(prepare, "run_compress",
+                            lambda planexe_dir, output_dir, llm: None)
+        monkeypatch.setattr(sys, "argv", [
+            "prepare_extract_input.py",
+            "--planexe-dir", str(planexe),
+            "--output-dir", str(outdir),
+            "--prior", str(tmpdir / "does_not_exist.json"),
+        ])
+        import pytest
+        with pytest.raises(SystemExit):
+            prepare.main()
 
 
 def test_build_combined_digest_ledger_section_uses_authoritative_framing() -> None:

@@ -6,6 +6,6 @@ python-dotenv==1.2.3
 sqlalchemy-utils==0.42.1
 pydantic==2.13.5
 fastapi==0.141.1
-python-multipart==0.0.32
+python-multipart==0.0.33
 uvicorn[standard]==0.52.4
 httpx==0.28.1

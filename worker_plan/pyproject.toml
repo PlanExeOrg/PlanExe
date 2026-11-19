@@ -76,7 +76,7 @@ dependencies = [
     "openai==2.43.0",
     "orjson==3.11.9",
     "packaging==26.2",
-    "pandas==2.3.3",
+    "pandas==3.0.5",
     "pillow==12.3.0",
     "propcache==0.4.1",
     "pydantic==2.13.4",
